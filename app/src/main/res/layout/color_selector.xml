@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/linelayout"
+        android:gravity="left|center" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:paddingLeft="10dp"
+            android:text="图层透明度:"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/symbol_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:padding="7dp" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:padding="7dp"
+            android:text="当前值:"
+            android:textColor="@color/balck"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/toumingdu"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="7dp"
+            android:textColor="@color/balck"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/symbo_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/offlineclose"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="重置"
+            android:textColor="@color/balck"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="预览"
+                    android:textColor="@color/balck"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/color_17"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/white"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1" >
+
+                <com.otitan.color.SansumColorSelecter
+                    android:id="@+id/color_seleter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </com.otitan.color.SansumColorSelecter>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@color/blue"
+            android:gravity="left|center" >
+            
+            <RadioButton
+                android:id="@+id/layer_render_btn_sure"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/offlineclose"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="确    定"
+                android:textColor="#ffffff" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+            <RadioButton
+                android:id="@+id/layer_render_btn_cancle"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/offlineclose"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="取    消"
+                android:textColor="#ffffff" />
+            
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

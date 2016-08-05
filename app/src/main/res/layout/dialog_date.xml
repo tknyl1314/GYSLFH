@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/linelayout"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left|center"
+                android:padding="10dp"
+                android:text="@string/select_time"
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_gravity="center"
+            android:background="#282828" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp" >
+
+            <com.otitan.util.WheelView
+                android:id="@+id/wheel_year"
+                android:layout_width="60dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="1dp" />
+
+            <com.otitan.util.WheelView
+                android:id="@+id/wheel_month"
+                android:layout_width="60dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/wheel_year" />
+
+            <com.otitan.util.WheelView
+                android:id="@+id/wheel_date"
+                android:layout_width="60dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/wheel_month" />
+
+            <com.otitan.util.WheelView
+                android:id="@+id/wheel_hour"
+                android:layout_width="60dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/wheel_date" />
+
+            <com.otitan.util.WheelView
+                android:id="@+id/wheel_minute"
+                android:layout_width="60dp"
+                android:layout_height="170dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_toRightOf="@id/wheel_hour" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_gravity="center"
+            android:background="@drawable/selectbg" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp" >
+
+            <Button
+                android:id="@+id/date_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="60dp"
+                android:background="@drawable/background_view_rounded_blue"
+                android:src="@drawable/date_btn_sure"
+                android:text="确定"
+                android:padding="7dp"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/date_cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp"
+                android:background="@drawable/background_view_rounded_blue"
+                android:src="@drawable/date_btn_quxiao"
+                android:padding="7dp"
+                android:text="取消" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

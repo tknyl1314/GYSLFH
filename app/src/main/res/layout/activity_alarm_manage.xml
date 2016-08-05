@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ManageActivity" 
+    android:focusable="true"  
+    android:focusableInTouchMode="true" 
+    android:orientation="vertical" >
+    
+     <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/alarm_manage_returnBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/dialog_exit_buttonstyle"
+            android:src="@drawable/btn_return" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="接警管理"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <!-- <ImageButton
+            android:id="@+id/alarm_manage_imgBtn_upSure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button"
+            android:src="@drawable/tijao" /> -->
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dip"
+        android:background="#cbcbcb" />
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="35dp" 
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:text="报警地址:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="通知区县:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/sp_dq"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_weight="2"
+                android:background="@color/blue"
+                android:gravity="center"
+                android:alpha="0.6"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="报警电话:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/et_alarmnumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/edittextstyle"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="是否火灾:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+            <Spinner
+                android:id="@+id/sp_isfire"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:entries="@array/isfire"
+                android:prompt="@string/sp_prompt"
+                android:background="@color/blue"
+                android:alpha="0.6"
+                android:textSize="16sp" 
+                />
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="当前编号:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/et_number"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/edittextstyle"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+           <Button 
+                 android:id="@+id/btn_serch"
+                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="查询"
+                android:background="@drawable/button_blue_bg"
+                />
+           <Button 
+                android:id="@+id/btn_refresh"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="刷新"
+                android:background="@drawable/button_blue_bg"/>
+      </LinearLayout>
+      <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="35dp" 
+        android:orientation="horizontal"
+        android:layout_marginRight="120dp"
+        android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:text="相同接警号:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_equalalarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="接警时间从:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+            
+             <TextView
+                android:id="@+id/tv_starttime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/edittextstyle"
+                android:gravity="center"
+                android:hint="点击选择时间"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+              
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="到:"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_endtime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:hint="点击选择时间"
+                android:background="@drawable/edittextstyle"
+                android:textColor="@color/balck"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="最近时间:"
+                android:textColor="#282828"
+                android:textSize="16sp" />
+            <Spinner
+                android:id="@+id/sp_neartime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:entries="@array/neartime"
+                android:prompt="@string/sp_prompt"
+                android:background="@color/blue"
+                android:alpha="0.6"
+               />
+           
+          <!--  <Button 
+                 android:id="@+id/btn_huoqing"
+                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="火情"
+                android:background="@color/blue"/>
+           <Button 
+                android:id="@+id/btn_export"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="导出"
+                android:background="@color/blue"/> -->
+      </LinearLayout>
+       <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#cbcbcb" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="@color/blue"
+        android:alpha="0.6"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.3"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="序号"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_dailyid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="相同警号"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="3"
+            android:text="报警地址"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_phonenumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:text="报警电话"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_dq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:text="通知区县"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_isfire"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="是否火灾"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_firetype"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="火灾类型"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_backstate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="状态"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tv_alarmtime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:text="报警时间"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+       <!-- <ListView
+          android:id="@+id/lv_alarm_manage"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:paddingBottom="45dp"        
+          android:layout_marginTop="5dp" >
+      </ListView> -->
+       <com.handmark.pulltorefresh.library.PullToRefreshListView  
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"  
+        android:id="@+id/pullToRefresh"  
+        android:layout_width="match_parent"  
+        android:layout_height="match_parent"
+         android:paddingBottom="45dp"        
+        android:layout_marginTop="5dp"  
+        ptr:ptrDrawable="@drawable/default_ptr_flip"   
+        ptr:ptrAnimationStyle="flip"  
+        ptr:ptrHeaderBackground="#383838"  
+        ptr:ptrHeaderTextColor="#FFFFFF"  
+        />
+      
+
+      <LinearLayout
+          android:layout_width="match_parent"
+           android:layout_height="45dp" 
+           android:orientation="horizontal"
+           android:background="@color/white"
+           android:layout_alignParentBottom="true"
+           android:gravity="center_vertical">
+          <TextView
+              android:id="@+id/tv_iteminfo"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginRight="20dp"
+              android:textColor="@color/balck"
+              android:gravity="right|center_vertical"/>
+      </LinearLayout>
+        
+    </RelativeLayout>
+     
+     
+</LinearLayout>

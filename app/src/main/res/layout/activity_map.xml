@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    
+    android:orientation="vertical" >
+
+    <com.esri.android.map.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+    </com.esri.android.map.MapView>
+
+    <include
+        android:id="@+id/tuceng_control"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/imgbtn_tucengcontrol"
+        layout="@layout/tuceng"
+        android:background="#1b85cf"
+        android:visibility="gone" />
+ <!--    <include
+        android:id="@+id/include_serch"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        
+        layout="@layout/include_serch" /> -->
+        <ImageButton
+        android:id="@+id/imgbtn_tucengcontrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dimingsearch"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/map_tools_bg"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/tuceng" />
+        
+         <include
+        android:id="@+id/dimingsearch"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        layout="@layout/diming_search" />
+         
+
+     <!-- 态势标绘   -->    
+              <ImageButton
+        android:id="@+id/imgbtn_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgbtn_tucengcontrol"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/map_tools_bg"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/map_tools_plot"
+        />
+
+    <com.otitan.util.ZoomControlView
+        android:id="@+id/ZoomControlView"
+        android:layout_width="48dp"
+        android:layout_height="96dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="10dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_view_rounded"
+        android:gravity="left|center_vertical"
+        android:orientation="horizontal" >
+
+        <!--
+             <ImageButton
+            android:id="@+id/btn_tcControl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:src="@drawable/tc_control_large"
+            android:textSize="18sp"
+            android:visibility="visible" />
+            android:text="图层控制"
+        -->
+
+        <Button
+            android:id="@+id/btn_tcControl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_tuceng"
+            android:textSize="@dimen/mobile_16" />
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+        <!--
+             <ImageButton
+            android:id="@+id/btn_upfireInfo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:src="@drawable/up_fireinfo_pad" />
+        -->
+
+        <Button
+            android:id="@+id/btn_upfireInfo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/menu_hqupload"
+            android:textSize="@dimen/mobile_16" />
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+        <!--
+             <ImageButton
+            android:id="@+id/btn_jiejing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:src="@drawable/jiejingrecord_pad" />
+        -->
+
+        <Button
+            android:id="@+id/btn_jiejing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_jiejing"
+            android:textSize="@dimen/mobile_16" />
+        <!--
+        <View
+            android:id="@+id/view3"
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+        -->
+
+
+        <!--
+             <ImageButton
+            android:id="@+id/btn_fireLocation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:src="@drawable/drhq_pad" />
+        -->
+
+        <Button
+            android:id="@+id/btn_fireLocation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:text="当日火情"
+            android:textSize="@dimen/mobile_16"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+
+        <Button
+            android:id="@+id/btn_fireINFO"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/menu_hqtongji"
+            android:textSize="@dimen/mobile_16" />
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+        <!--
+             <ImageButton
+            android:id="@+id/btn_huijing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/button"
+            android:src="@drawable/huijng_pad" />
+        -->
+
+        <Button
+            android:id="@+id/btn_huijing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_huijing"
+            android:text=""
+            android:textSize="@dimen/mobile_16" />
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+        <Button
+            android:id="@+id/btn_jiejingmanage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_jjmanage"
+            android:textSize="@dimen/mobile_16" />
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#cbcbcb" />
+
+        <Button
+            android:id="@+id/btn_zbdw"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bt_nobgd"
+            android:visibility="gone"
+            android:text="坐标定位"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+        <!-- 个人中心 -->
+        <Button
+            android:id="@+id/btn_sbzx"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/menu_uaercenter"
+            android:textSize="@dimen/mobile_16" />
+        <!--
+             <ImageButton
+            android:id="@+id/btn_jiejingmanage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/button"           
+            android:src="@drawable/huijng_pad" />
+        -->
+    </LinearLayout>
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        layout="@layout/map_tools" />
+
+</RelativeLayout>

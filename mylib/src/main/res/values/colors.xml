@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+	<color name="unclassified">#FFFFFF</color>
+	<color name="residential">#FFFFFF</color>
+	<color name="living_street">#FFFFFF</color>
+	<color name="service">#FFFFFF</color>
+    -->
+
+    <!-- copied -->
+
+    <!-- Android standard ICS color -->
+    <!-- Android standard ICS color -->
+    <color name="transparent">#00000000</color>
+    <!-- Android standard ICS color -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- 表格控件 -->
+    <color name="shadow_start">#80000000</color>
+    <color name="shadow_end">#00000000</color>
+    <!-- Xlistview控件 -->
+    <color name="title_color">#333333</color>
+
+</resources>

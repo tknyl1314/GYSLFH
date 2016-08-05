@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <ImageButton android:id="@+id/btn_plot_ARROW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_arrow"
+        android:text="箭头标绘"/>
+    <ImageButton android:id="@+id/btn_plot_JUNGLE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_jungle"
+        android:text="集结地标绘"/>
+    <ImageButton android:id="@+id/btn_plot_FIREAREA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_firearea"
+        android:text="火场范围标绘"/>
+    <ImageButton android:id="@+id/btn_plot_FIREBREAK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_break"
+        android:text="防火带标绘"/>
+
+    <ImageButton android:id="@+id/btn_plot_FIREPOINT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_firept"
+        android:text="火点标绘"/>
+
+    <ImageButton android:id="@+id/btn_plot_FLAG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_flag"
+        android:text="旗帜标绘"/>
+</LinearLayout>

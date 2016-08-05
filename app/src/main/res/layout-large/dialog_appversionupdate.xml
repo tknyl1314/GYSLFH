@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="360dp"
+        android:layout_height="240dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/linelayout"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/layout_exit"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp" >
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/ico" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textSize="20sp"
+                android:text="@string/soft_update_title"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:layout_below="@id/layout_exit"
+            android:background="#1b85cf" />
+        
+        <TextView
+            android:id="@+id/vertionupdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="@string/soft_update_info"
+            android:textColor="@android:color/black" />
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/vertionupdate"
+            android:background="#cbcbcb" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/viewLine" >
+
+            <Button
+                android:id="@+id/unUpdate_now_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:background="@drawable/button_seletor"
+                android:text="@string/soft_update_later"
+                android:textColor="@android:color/black" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#cbcbcb" />
+
+            <Button
+                android:id="@+id/update_now_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:background="@drawable/button_seletor"
+                android:text="@string/soft_update_updatebtn"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

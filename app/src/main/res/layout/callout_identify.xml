@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+   <!--  <TextView
+        android:id="@+id/callout_title"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:background="@color/blue"
+        android:gravity="center"
+        android:text="基本信息"
+        android:textColor="@color/white"
+        android:textSize="18sp" /> -->
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="基本信息"
+            android:textSize="18sp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/bt_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/image_click_bg"
+            android:contentDescription="关闭"
+            android:src="@drawable/bt_close" />
+    </LinearLayout>
+   
+        <LinearLayout
+            android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+         <ScrollView 
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        >
+        <TextView
+            android:id="@+id/callout_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/balck" />
+        </ScrollView>
+    </LinearLayout>
+    
+   
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/callout_nav"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/blue"
+            android:text="导航"
+            android:textColor="@color/white" />
+
+        
+        <Button
+            android:id="@+id/callout_view"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@color/blue"
+            android:text="视频监控"
+            android:visibility="gone"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

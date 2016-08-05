@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+     android:background="@drawable/dialog_you"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_view_rounded"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/background_view_rounded"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:hint="输入小地名"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" >
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:background="@drawable/background_view_rounded_image"
+            android:contentDescription="@null"
+            android:onClick="searchButton"
+            android:padding="15dp"
+            android:src="@drawable/icon_tab_search_selected" />
+        
+        <ImageView
+            android:id="@+id/close_btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:visibility="gone"
+            android:background="@drawable/background_view_rounded_blue"
+            android:contentDescription="@null"
+            android:padding="15dp"
+            android:src="@drawable/close" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1b85cf" />
+
+    <ListView
+        android:id="@+id/listView_result"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        android:background="@drawable/background_view_rounded" >
+    </ListView>
+
+</LinearLayout>

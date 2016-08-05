@@ -1,0 +1,63 @@
+<resources>
+    <!-- <string name="app_name">GYSLFH</string>
+    <string name="action_settings">Settings</string>-->
+
+    <!-- 贵阳防火 -->
+    <string name="app_name">贵阳防火Beta</string>
+    <string name="startname">贵阳市森林防火监控指挥综合管理平台</string>
+    <!-- 枣庄防火 -->
+    <!--
+    <string name="app_name">枣庄防火</string>
+    <string name="startname">枣庄市森林防火监控指挥综合管理平台</string>
+
+    -->
+
+    <!-- 贵阳服务地址服务地址 -->
+    <!-- <string name="webservice">http://gis.gyforest.com:8088/fireservice/FireService/WebService1.asmx</string> -->
+
+    <!-- 公司服务地址 -->
+    <!--   <string name="webservice">http://titanah.imwork.net:8099/SLFH/FireService/WebService1.asmx</string> -->
+    <!-- <string name="webservice">http://192.168.1.16:8099/SLFH/FireService/WebService1.asmx</string> -->
+    <!-- 长坡岭服务地址 222.85.147.93 -->
+    <string name="webservice">http://www.gyslfh.com:8037/FireService/WebService1.asmx</string>
+    <string name="versionxml">http://www.gyslfh.com:8037/apk/version.xml</string>
+    <!-- 本地服务地址 -->
+    <!--   <string name="webservice"> http://localhost:8082/FireService/WebService1.asmx</string> -->
+
+
+    <!--   <string name="webservice">http://192.168.1.103/WebServices/FireService/WebService1.asmx</string> -->
+    <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>
+    <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
+    <string name="title_activity_frame">FrameActivity</string>
+    <string name="title_activity_hui_jing">HuiJingActivity</string>
+    <string name="title_activity_jie_jing">JieJingActivity</string>
+    <string name="title_activity_huo_qing">HuoQingActivity</string>
+    <string name="title_activity_huo_dian">HuoDianActivity</string>
+    <string name="contentDescription"></string>
+    <string name="select_time">选 择 时 间</string>
+    <string name="xiaodimingsearch">小地名查询</string>
+
+    <!-- 版本更新 -->
+    <string name="soft_update_title">软件更新</string>
+    <string name="soft_update_info">检测到新版本,是否更新?</string>
+    <string name="soft_update_updatebtn">更新</string>
+    <string name="soft_update_later">稍后更新</string>
+    <string name="soft_updating">正&#160;在&#160;更&#160;新</string>
+    <string name="btn_edit_discard">取&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;消</string>
+    <string name="btn_dingwei">定&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;位</string>
+    <string name="btn_update">修&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;改</string>
+    <string name="title_activity_jjxxgl">JJXXGLActivity</string>
+    <string name="sp_prompt">-请选择-</string>
+
+    <!-- 图片浏览 -->
+    <string name="title_activity_alarm__edit">接警信息编辑</string>
+
+    <!-- 创建默认文件夹名称 -->
+
+    <!-- 视频监控 -->
+    <string name="but_up">向上</string>
+    <string name="but_down">向下</string>
+    <string name="but_left">向左</string>
+    <string name="but_right">向右</string>
+
+</resources>

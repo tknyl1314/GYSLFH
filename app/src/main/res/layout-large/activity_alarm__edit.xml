@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".JJLRActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp" >
+
+        <ImageButton
+            android:id="@+id/jjedit_returnBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/dialog_exit_buttonstyle"
+            android:src="@drawable/btn_return" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="接警信息编辑"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/jjedit_imgBtn_upSure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button"
+            android:src="@drawable/tijao" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#cbcbcb" />
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        style="@drawable/linelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:background="@drawable/linelayout" >
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="序号:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+            <EditText
+                android:id="@+id/jjedit_xuhao"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="当日编号:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+            <EditText
+                android:id="@+id/jjedit_DAILYID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textSize="18sp" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="相同警号:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+            <EditText
+                android:id="@+id/jjedit_UNIONID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" 
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="接警来源:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="接警时间:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/jjedit_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:gravity="left|center"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="报警地址:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+
+            <EditText
+                android:id="@+id/jjedit_ADRESS"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="报警电话:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/jjedit_tel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+        
+         <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="是否火灾:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/jjedit_isfire"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+        
+          <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="火灾类型:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/jjedit_firetype"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+        
+           <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="报警时间:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/jjedit_RECEIPTTIME"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:editable="false"
+                android:textSize="18sp" />
+        </LinearLayout>
+        
+
+<!--         <LinearLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="55dp" -->
+<!--             android:layout_marginTop="4dp" > -->
+            
+<!--             <TextView  -->
+<!--                 android:layout_width="155dp" -->
+<!--                 android:layout_height="match_parent" -->
+<!--                 android:text="经度:" -->
+<!--                 android:gravity="center" -->
+<!--                 android:padding="7dp" -->
+<!--                 android:textColor="#282828" -->
+<!--                 android:textSize="22sp" -->
+<!--                 /> -->
+            
+<!--             <EditText  -->
+<!--                 android:layout_width="0dp" -->
+<!--                 android:layout_height="match_parent" -->
+<!--                 android:layout_weight="1" -->
+<!--                 android:background="@drawable/edittextstyle" -->
+<!--                 android:ems="10" -->
+<!--                 android:textSize="18sp" -->
+<!--                 /> -->
+            
+<!--             <TextView  -->
+<!--                 android:layout_width="155dp" -->
+<!--                 android:layout_height="match_parent" -->
+<!--                 android:text="纬度:" -->
+<!--                 android:gravity="center" -->
+<!--                 android:padding="7dp" -->
+<!--                 android:textColor="#282828" -->
+<!--                 android:textSize="22sp" -->
+<!--                 /> -->
+<!--             <EditText  -->
+<!--                 android:layout_width="0dp" -->
+<!--                 android:layout_height="match_parent" -->
+<!--                 android:layout_weight="1" -->
+<!--                 android:background="@drawable/edittextstyle" -->
+<!--                 android:ems="10" -->
+<!--                 android:layout_marginRight="3dp" -->
+<!--                 android:textSize="18sp" -->
+<!--                 /> -->
+<!--         </LinearLayout> -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="155dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="市局出警情况:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/jjedit_chujingqingkuang"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/edittextstyle"
+                android:ems="10"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+      
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="通知的区县:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/edittextstyle">
+                <LinearLayout
+                android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:orientation="vertical">
+            
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_yyq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="云岩区"
+                    android:textColor="#282828"
+                    />
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_nmq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="南明区"
+                    android:textColor="#282828"
+                    />
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_byq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="白云区"
+                    android:textColor="#282828"
+                    />
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_xfx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="息烽县"
+                    android:textColor="#282828"
+                    />
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_wdq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="乌当区"
+                    android:textColor="#282828"
+                    />
+              
+                </LinearLayout>
+                 <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+                   <CheckBox 
+                    android:id="@+id/ck_jjedit_qzs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="清镇市"
+                    android:textColor="#282828"
+                    />
+                <CheckBox 
+                    android:id="@+id/ck_jjedit_xwx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="修文县"
+                    android:textColor="#282828"
+                    />
+                
+               
+
+                    <CheckBox
+                        android:id="@+id/ck_jjedit_kyx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开阳县"
+                        android:textColor="#282828" />
+
+                    <CheckBox
+                        android:id="@+id/ck_jjedit_hxq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="花溪区"
+                        android:textColor="#282828" />
+
+                    <CheckBox
+                        android:id="@+id/ck_jjedit_gshq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="观山湖区"
+                        android:textColor="#282828" />
+                    <!--
+                     <CheckBox 
+                    android:id="@+id/jkq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="经济技术开发区"
+                    android:textColor="#282828"
+                    />
+                    -->
+                </LinearLayout>
+
+<!--             <Spinner -->
+<!--                 android:id="@+id/tongzhiquxian" -->
+<!--                 android:layout_width="match_parent" -->
+<!--                 android:layout_height="match_parent" -->
+<!--                 android:layout_marginRight="3dp" -->
+<!--                 android:background="@drawable/edittextstyle" -->
+<!--                 android:ems="10" -->
+<!--                 android:textSize="18sp" /> -->
+                   </LinearLayout>
+                </LinearLayout>
+        </LinearLayout>
+        </ScrollView>
+</LinearLayout>

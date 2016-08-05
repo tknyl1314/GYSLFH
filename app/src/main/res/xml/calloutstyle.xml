@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        <calloutViewStyle anchor="5" 
+        backgroundAlpha="255" 
+        backgroundColor="#e00000" 
+        cornerCurve="10" 
+        frameColor="#000000" 
+        titleTextColor="#ffffff" 
+        titleTextSize="20" 
+        titleTextStyle="1"
+        titleTextTypeface="serif" />
+    -->
+    <!--
+      <calloutViewStyle
+        anchor="5"
+        backgroundAlpha="255"
+        backgroundColor="#66FFCC"
+        flat="true"
+        frameColor="#000000"
+        style.getCornerCurve="0"
+        titleTextColor="#000000"
+        titleTextSize="10;"
+        titleTextStyle="0;"
+        titleTextTypeFace="0;" />
+    -->
+   <!--  <calloutViewStyle
+        anchor="9dip"
+        backgroundColor="#bf1e1d1d"
+        cornerCurve="15dip"
+        flat="true"
+        frameColor="#ffdcdada" /> -->
+   <!--   <calloutViewStyle
+        anchor="9dip"
+        backgroundColor="#1b85cf"
+        cornerCurve="15dip"
+        flat="true"
+        frameColor="#ffdcdada" /> -->
+         <calloutViewStyle
+        anchor="9dip"
+        backgroundColor="#98F5FF"
+        cornerCurve="15dip"
+        flat="true"
+        frameColor="#ffdcdada" /> 
+    
+
+</resources>

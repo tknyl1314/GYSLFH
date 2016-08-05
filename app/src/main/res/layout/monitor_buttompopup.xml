@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/transparent_gray"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+         <Button
+                    android:id="@+id/btn_Login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/blue"
+                    android:text="登陆"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/btn_Preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="预览"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                  <Button
+                    android:id="@+id/btn_ptz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="云台控制"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                   <Button
+                    android:id="@+id/btn_capture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="截屏"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                   <Button
+                    android:id="@+id/btn_Record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="声音"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+    </LinearLayout>
+
+</LinearLayout>

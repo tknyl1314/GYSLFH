@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/hddw_returnBtn"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/dialog_exit_buttonstyle"
+                android:src="@drawable/btn_return" />
+
+            <View
+                android:layout_width="0.1dip"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="#1b85cf" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:gravity="center"
+                android:text="当日火情"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.25dip"
+            android:background="#1b85cf" />
+
+        <ListView
+            android:id="@+id/huodianlistView"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:divider="@null" />
+
+        <!--
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/pbg"
+        android:orientation="horizontal"
+        android:paddingLeft="3dip"
+        android:paddingTop="3dip" >
+
+        <Button
+            android:id="@+id/chat_prev_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittextstyle"
+            android:text="上一页" />
+
+        <Button
+            android:id="@+id/chat_next_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittextstyle"
+            android:text="下一页" />
+
+        <TextView
+            android:id="@+id/tiaozhuan_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittextstyle"
+            android:gravity="center"
+            android:text="1/1" />
+
+        <Button
+            android:id="@+id/chat_page_tiao"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittextstyle"
+            android:text="跳转" />
+    </LinearLayout>
+        -->
+
+    </LinearLayout>
+
+</LinearLayout>

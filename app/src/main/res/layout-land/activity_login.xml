@@ -1,0 +1,123 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/system_bg"
+    android:baselineAligned="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="horizontal"
+    tools:context=".LoginActivity" >
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center|right" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="60dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/logo_large" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center|left" >
+
+        <RelativeLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content" >
+
+            <RelativeLayout
+                android:id="@+id/loginText"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:background="@drawable/login_text_large" >
+
+                <com.otitan.customui.DropdownEdittext
+                    android:id="@+id/login_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignLeft="@+id/login_password"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp" />
+             <!--        <EditText
+                    android:id="@+id/login_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignLeft="@+id/login_password"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp" />  -->
+
+                <EditText
+                    android:id="@+id/login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/login_name"
+                    android:layout_marginLeft="66dp"
+                    android:layout_marginRight="5dp"
+                    android:cursorVisible="true"
+                     android:background="@color/white"
+                    android:ems="10"
+                    android:textCursorDrawable="@drawable/test_cursor"
+                    android:gravity="left|center"
+                    android:inputType="textPassword"
+                    android:textColor="@color/balck" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/linearLayout_cb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/loginText"
+                android:layout_marginTop="10dp" >
+
+                <CheckBox
+                    android:id="@+id/checkBoxPass"
+                    style="@style/CustomCheckboxTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:background="@drawable/checkbox_style"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxlogin"
+                    style="@style/autoLoginCheckboxTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="40dp"
+                    android:background="@drawable/loginautocheckboxstyle"
+                    android:checked="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/loginText"
+                android:layout_below="@id/linearLayout_cb"
+                android:layout_marginTop="10dp" >
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:onClick="loginSure"
+                    android:text="登     录"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

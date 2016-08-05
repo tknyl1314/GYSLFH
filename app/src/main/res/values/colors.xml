@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="none_color">#00000000</color>
+    <color name="actionbar_bg">#aa000000</color>
+    <color name="tagedit_field_text">@android:color/white</color>
+    <color name="tagedit_field_bg">#d8000000</color>
+    <color name="preset_text">@android:color/white</color>
+    <color name="preset_bg">#ff666666</color>
+    <color name="ccc_red">#b9121b</color>
+    <color name="ccc_blue">#0000bb</color>
+    <color name="ccc_darkred">#4c1b1b</color>
+    <color name="ccc_beige">#f6e497</color>
+    <color name="ccc_white">#fcfae1</color>
+    <color name="ccc_ocher">#ffffb9</color>
+    <color name="grey">#0F0F0F</color>
+    <color name="stroke">#000</color>
+    <color name="problem">#F0F</color>
+    <color name="motorway">#809BC0</color>
+    <color name="trunk">#7FC97F</color>
+    <color name="primary">#E46D71</color>
+    <color name="secondary">#FDBF6F</color>
+    <color name="tertiary">#FCFA74</color>
+    <!--
+	<color name="unclassified">#FFFFFF</color>
+	<color name="residential">#FFFFFF</color>
+	<color name="living_street">#FFFFFF</color>
+	<color name="service">#FFFFFF</color>
+    -->
+    <color name="pedestrian">#EEEEEE</color>
+    <color name="cycleway">#D0E9D0</color>
+    <color name="footway">#DCA86B</color>
+    <color name="bridleway">#70B971</color>
+    <color name="tracktype">#C69C49</color>
+    <color name="river">#B5D6F1</color>
+    <color name="tram">#656565</color>
+    <color name="station">#D80000</color>
+    <color name="halt">#EF2B2B</color>
+    <color name="power">#BABABA</color>
+    <color name="building">#CC9999</color>
+    <color name="leisure">#BDE3CB</color>
+    <color name="college">#DFAFDD</color>
+    <color name="parking">#F7EFB7</color>
+    <color name="forest">#71BE80</color>
+    <color name="retail">#FEEAEA</color>
+    <color name="commercial">#FBFEC8</color>
+    <color name="water">#B5D6F1</color>
+    <color name="bug_open">#F00</color>
+    <color name="bug_closed">#00F</color>
+
+    <!-- copied -->
+    <drawable name="screen_background_black">#ff000000</drawable>
+    <drawable name="translucent_background">#e0000000</drawable>
+    <drawable name="transparent_background">#00000000</drawable>
+
+    <color name="ccc_green">#73B273</color>
+    <color name="contents_text">#ff000000</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+    <color name="result_minor_text">#ffc0c0c0</color>
+    <color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
+    <color name="result_text">#ffffffff</color>
+    <color name="result_view">#b0000000</color>
+    <color name="status_text">#ffffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="half_transparent">#e0000000</color>
+    <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="item_common">#F111</color>
+    <color name="item_1">#F222</color>
+    <color name="item_2">#F000</color>
+    <color name="orange">#FFF48B00</color>
+    <color name="darkorange">#FF824600</color>
+    <color name="transparent_gray">#A000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#bfbfbf</color>
+    <color name="gray1">#e5e0e0</color>
+    
+    <color name="blue">#368bc1</color>
+    <color name="half_tran">#00000000</color>
+    <color name="balck">#000000</color>
+    <color name="green">#00ff00</color>
+    <color name="color_1">#FFFFFF</color>
+    <color name="color_2">#FCFF2C</color>
+    <color name="color_3">#FF835D</color>
+    <color name="color_4">#FE0002</color>
+    <color name="color_5">#FF49C8</color>
+    <color name="color_6">#CB85FF</color>
+    <color name="color_7">#38A8FE</color>
+    <color name="color_8">#0001FC</color>
+    <color name="color_9">#16CC79</color>
+    <color name="color_10">#019333</color>
+    <color name="color_11">#036830</color>
+    <color name="color_12">#A5A5A5</color>
+    <color name="color_13">#727272</color>
+    <color name="color_14">#303030</color>
+    <color name="color_15">#000000</color>
+    <color name="color_16">#72b372</color>
+    <color name="color_while">#FFFFFF</color>
+    <color name="color_black">#000000</color>
+    <color name="featurecolor">#73B273</color>
+    <!-- 象牙色 -->
+    <!-- 亮黄色 -->
+    <!-- 黄色 -->
+    <!-- 雪白色 -->
+    <!-- 花白色 -->
+    <!-- 柠檬绸色 -->
+    <!-- 米绸色 -->
+    <!-- 海贝色 -->
+    <!-- 淡紫红 -->
+    <!-- 番木色 -->
+    <!-- 白杏色 -->
+    <!-- 浅玫瑰色 -->
+    <!-- 桔黄色 -->
+    <!-- 鹿皮色 -->
+    <!-- 纳瓦白 -->
+    <!-- 桃色 -->
+    <!-- 金色 -->
+    <!-- 粉红色 -->
+    <!-- 亮粉红色 -->
+    <!-- 亮肉色 -->
+    <!-- 珊瑚色 -->
+    <!-- 热粉红色 -->
+    <!-- 西红柿色 -->
+    <!-- 红橙色 -->
+    <!-- 深粉红色 -->
+    <!-- 紫红色 -->
+    <!-- 红紫色 -->
+    <color name="red">#ff0000</color> <!-- 红色 -->
+    <!-- 老花色 -->
+    <!-- 亮金黄色 -->
+    <!-- 亚麻色 -->
+    <!-- 古董白 -->
+    <!-- 鲜肉色 -->
+    <!-- 幽灵白 -->
+    <!-- 薄荷色 -->
+    <!-- 烟白色 -->
+    <!-- 米色 -->
+    <!-- 浅黄色 -->
+    <!-- 沙褐色 -->
+    <!-- 天蓝色 -->
+    <!-- 蜜色 -->
+    <!-- 艾利斯兰 -->
+    <!-- 黄褐色 -->
+    <!-- 亮珊瑚色 -->
+    <!-- 苍麒麟色 -->
+    <!-- 紫罗兰色 -->
+    <!-- 暗肉色 -->
+    <!-- 淡紫色 -->
+    <!-- 亮青色 -->
+    <!-- 实木色 -->
+    <!-- 洋李色 -->
+    <!-- 淡灰色 -->
+    <!-- 暗深红色 -->
+    <!-- 苍紫罗兰色 -->
+    <!-- 金麒麟色 -->
+    <!-- 淡紫色 -->
+    <!-- 蓟色 -->
+    <!-- 亮灰色 -->
+    <!-- 亮灰色 -->
+    <!-- 茶色 -->
+    <!-- 巧可力色 -->
+    <!-- 秘鲁色 -->
+    <!-- 印第安红 -->
+    <!-- 中紫罗兰色 -->
+    <!-- 银色 -->
+    <!-- 暗黄褐色 -->
+    <!-- 褐玫瑰红 -->
+    <!-- 中粉紫色 -->
+    <!-- 暗金黄色 -->
+    <!-- 火砖色 -->
+    <!-- 粉蓝色 -->
+    <!-- 亮钢兰色 -->
+    <!-- 苍宝石绿 -->
+    <!-- 黄绿色 -->
+    <!-- 亮蓝色 -->
+    <!-- 暗灰色 -->
+    <!-- 暗灰色 -->
+    <!-- 褐色 -->
+    <!-- 赭色 -->
+    <!-- 暗紫色 -->
+    <!-- 苍绿色 -->
+    <!-- 暗紫罗兰色 -->
+    <!-- 中紫色 -->
+    <!-- 亮绿色 -->
+    <!-- 暗海兰色 -->
+    <!-- 重褐色 -->
+    <!-- 暗洋红 -->
+    <!-- 暗红色 -->
+    <!-- 紫罗兰蓝色 -->
+    <!-- 亮天蓝色 -->
+    <!-- 天蓝色 -->
+    <!-- 橄榄色 -->
+    <!-- 紫色 -->
+    <!-- 粟色 -->
+    <!-- 碧绿色 -->
+    <!-- 黄绿色 -->
+    <!-- 草绿色 -->
+    <!-- 中暗蓝色 -->
+    <!-- 亮蓝灰 -->
+    <!-- 亮蓝灰 -->
+    <!-- 灰石色 -->
+    <!-- 灰石色 -->
+    <!-- 深绿褐色 -->
+    <!-- 石蓝色 -->
+    <!-- 暗灰色 -->
+    <!-- 暗灰色 -->
+    <!-- 中绿色 -->
+    <!-- 菊兰色 -->
+    <!-- 军兰色 -->
+    <!-- 暗橄榄绿 -->
+    <!-- 靛青色 -->
+    <!-- 中绿宝石 -->
+    <!-- 暗灰蓝色 -->
+    <!-- 钢兰色 -->
+    <!-- 皇家蓝 -->
+    <!-- 青绿色 -->
+    <!-- 中海蓝 -->
+    <!-- 橙绿色 -->
+    <!-- 暗瓦灰色 -->
+    <!-- 暗瓦灰色 -->
+    <!-- 海绿色 -->
+    <!-- 森林绿 -->
+    <!-- 亮海蓝色 -->
+    <!-- 闪兰色 -->
+    <!-- 中灰兰色 -->
+    <!-- 浅绿色 -->
+    <!-- 青色 -->
+    <!-- 春绿色 -->
+    <!-- 酸橙色 -->
+    <!-- 中春绿色 -->
+    <!-- 暗宝石绿 -->
+    <!-- 深天蓝色 -->
+    <!-- 暗青色 -->
+    <!-- 水鸭色 -->
+    <!-- 暗绿色 -->
+    <!-- 蓝色 -->
+    <!-- 中兰色 -->
+    <!-- 暗蓝色 -->
+    <!-- 海军色 -->
+    <color name="black">#000000</color> <!-- 黑色 -->
+    <color name="transparent2">#8000</color> <!-- 透明 -->
+    <!-- 透明 -->
+    <!-- 上传图片添加的颜色 -->
+    <color name="base_start_color_default">#FFFFFF</color>
+    <color name="base_end_color_default">#FFFFFF</color>
+    <color name="base_start_color_pressed">#fffcfcfc</color>
+    <color name="base_end_color_pressed">#ffd7d7d7</color>
+
+</resources>

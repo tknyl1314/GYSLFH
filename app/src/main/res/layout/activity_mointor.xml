@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+     android:focusable="true"  
+	 android:focusableInTouchMode="true" 
+    android:fillViewport="true" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <SurfaceView
+            android:id="@+id/Sur_Player"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="0dp"
+            android:background="#0000ff00" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/monitor_ytkz"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center" >
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_up"
+                            android:textColor="@color/white"
+                            android:visibility="invisible" />
+
+                        <Button
+                            android:id="@+id/bt_up"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_up"
+                            android:textColor="@color/white" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_up"
+                            android:textColor="@color/white"
+                            android:visibility="invisible" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:id="@+id/bt_left"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_left"
+                            android:textColor="@color/white" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_up"
+                            android:textColor="@color/white"
+                            android:visibility="invisible" />
+
+                        <Button
+                            android:id="@+id/bt_rigth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_right"
+                            android:textColor="@color/white" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_down"
+                            android:textColor="@color/white"
+                            android:visibility="invisible" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_down"
+                            android:textColor="@color/white" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/blue"
+                            android:text="@string/but_down"
+                            android:textColor="@color/white"
+                            android:visibility="invisible" />
+                    </TableRow>
+                </TableLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/btn_Login"
+                    android:layout_width="60dip"
+                    android:layout_height="40dip"
+                    android:background="@color/blue"
+                    android:text="登陆"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/btn_Preview"
+                    android:layout_width="60dip"
+                    android:layout_height="40dip"
+                    android:layout_below="@+id/btn_Login"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/blue"
+                    android:text="预览"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/btn_Playback"
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:layout_below="@+id/TV_User"
+                    android:text="Playback"
+                    android:textColor="#ff000000"
+                    android:typeface="sans"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_ParamCfg"
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:layout_alignLeft="@+id/btn_Playback"
+                    android:layout_below="@+id/btn_Playback"
+                    android:text="Sub(CIF)"
+                    android:textColor="#ff000000"
+                    android:typeface="sans"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_Capture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/btn_ParamCfg"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignRight="@+id/btn_Login"
+                    android:layout_alignTop="@+id/btn_ParamCfg"
+                    android:text="Capture"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_Record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/btn_ParamCfg"
+                    android:layout_alignLeft="@+id/btn_Preview"
+                    android:layout_alignRight="@+id/btn_Preview"
+                    android:layout_below="@+id/btn_Preview"
+                    android:text="Record"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_Talk"
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:layout_below="@+id/btn_Capture"
+                    android:layout_toLeftOf="@+id/btn_Record"
+                    android:text="Talk"
+                    android:textColor="#ff000000"
+                    android:typeface="sans"
+                    android:visibility="gone" />
+
+                <Button
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:layout_alignBaseline="@+id/btn_PTZ"
+                    android:layout_alignBottom="@+id/btn_PTZ"
+                    android:layout_toRightOf="@+id/btn_PTZ"
+                    android:text="Other"
+                    android:textColor="#ff000000"
+                    android:typeface="sans"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_PTZ"
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:layout_alignBaseline="@+id/btn_Talk"
+                    android:layout_alignBottom="@+id/btn_Talk"
+                    android:layout_toLeftOf="@+id/btn_ParamCfg"
+                    android:text="PTZ(L)"
+                    android:textColor="#ff000000"
+                    android:typeface="sans"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

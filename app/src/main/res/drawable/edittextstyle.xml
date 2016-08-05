@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <solid android:color="@color/transparent" />
+ <!-- 线性布局内部为白色 -->
+    <stroke
+        android:width="1px"
+        android:color="#cbcbcb" />
+ <!-- 线条边框颜色 -->
+    <corners
+        android:bottomLeftRadius="1dp"
+        android:bottomRightRadius="1dp"
+        android:topLeftRadius="1dp"
+        android:topRightRadius="1dp" />
+ <!-- 各个边角的弯曲弧度 -->
+ <padding 
+     android:left="5dp"
+     />
+
+</shape>

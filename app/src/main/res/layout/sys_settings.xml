@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_you"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:text="系统配置"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/settings_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/offlineclose"
+            android:contentDescription="@null"
+            android:padding="7dp"
+            android:src="@drawable/close" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="是否开启GPS"
+                android:textColor="#2578b8" />
+
+            <CheckBox
+                android:id="@+id/radio_btn_setting_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="20dp"
+                android:button="@drawable/checkbox_style1"
+                android:checked="true"
+                android:textColor="#2578b8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:gravity="left|center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="是否上传行进轨迹"
+                android:textColor="#2578b8" />
+
+            <CheckBox
+                android:id="@+id/radio_btn_setting_guiji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:button="@drawable/checkbox_style1"
+                android:checked="false"
+                android:textColor="#2578b8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:gravity="left|center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="是否显示行进轨迹"
+                android:textColor="#2578b8" />
+
+            <CheckBox
+                android:id="@+id/radio_btn_setting_zongji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:button="@drawable/checkbox_style1"
+                android:checked="false"
+                android:textColor="#2578b8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:gravity="left|center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="10dp"
+                android:text="定位时间间隔"
+                android:textColor="#2578b8" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/time_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:minWidth="80dp"
+                    android:paddingLeft="5dp"
+                    android:text="5"
+                    android:textCursorDrawable="@null" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="0.5dp"
+                    android:background="@color/blue" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="秒"
+                android:textColor="#2578b8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:gravity="left|center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="10dp"
+                android:text="定位距离间隔"
+                android:textColor="#2578b8" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/distance_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:minWidth="80dp"
+                    android:paddingLeft="5dp"
+                    android:text="50"
+                    android:textCursorDrawable="@null" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="0.5dp"
+                    android:background="@color/blue" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="米"
+                android:textColor="#2578b8" />
+        </LinearLayout>
+
+        <!-- <LinearLayout -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="40dp" -->
+        <!-- android:layout_marginBottom="20dp" -->
+        <!-- android:layout_marginLeft="20dp" -->
+        <!-- android:layout_marginRight="20dp" -->
+        <!-- android:layout_marginTop="5dp" -->
+        <!-- android:background="@drawable/linelayout" -->
+        <!-- android:gravity="left|center" -->
+        <!-- android:orientation="horizontal" > -->
+
+
+        <!-- <TextView -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:paddingLeft="10dp" -->
+        <!-- android:text="图层透明度:" -->
+        <!-- android:textColor="@color/blue" -->
+        <!-- android:textSize="16sp" /> -->
+
+
+        <!-- <SeekBar -->
+        <!-- android:id="@+id/symbol_seekbar" -->
+        <!-- android:layout_width="0dp" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginLeft="10dp" -->
+        <!-- android:layout_weight="1" /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:layout_width="80dp" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_marginLeft="10dp" -->
+        <!-- android:gravity="center" -->
+        <!-- android:text="当前值:" -->
+        <!-- android:textColor="@color/balck" -->
+        <!-- android:textSize="16sp" /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/toumingdu" -->
+        <!-- android:layout_width="80dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:paddingLeft="7dp" -->
+        <!-- android:textColor="@color/balck" -->
+        <!-- android:gravity="center" -->
+        <!-- android:textSize="16sp" /> -->
+
+
+        <!-- <Button -->
+        <!-- android:id="@+id/symbo_reset" -->
+        <!-- android:layout_width="60dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@drawable/offlineclose" -->
+        <!-- android:gravity="center" -->
+        <!-- android:text="重置" -->
+        <!-- android:textSize="16sp" /> -->
+        <!-- </LinearLayout> -->
+    </LinearLayout>
+
+</LinearLayout>

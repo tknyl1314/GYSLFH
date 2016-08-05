@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources >
+    
+    <string-array name="data_sx">
+        <item>贵阳市</item>
+        <item>观山湖区</item>
+        <item>云岩区</item>
+        <item>南明区</item>
+        <item>乌当区</item>
+        <item>花溪区</item>
+        <item>白云区</item>
+        <item>经济技术开发区</item>
+        <item>清镇市</item>
+        <item>开阳县</item>
+        <item>息烽县</item>
+        <item>修文县</item>
+        <item>顺海林场</item>
+        <item>长坡岭林场</item>
+    </string-array>
+    <string-array name="issure">
+        <item>--请选择--</item>
+        <item>是</item>
+        <item>不是</item>
+        <item>正在核实</item>
+        <item>不在本地区</item>
+    </string-array>
+    <string-array name="isfire">
+        <item>--请选择--</item>
+        <item>是</item>
+        <item>不是</item>
+        <item>正在核实</item>
+        <item>不在本地区</item>
+    </string-array>
+    <string-array name="neartime">
+        <item>--请选择--</item>
+        <item>1小时</item>
+        <item>3小时</item>
+        <item>今天</item>
+        <item>本周</item>
+        <item>本月</item>
+    </string-array>
+    <string-array name="senlinhuozai">
+        <item>--请选择--</item>
+        <item>森林火灾</item>
+    </string-array>
+    <string-array name="huozaileixing">
+        <item>--请选择--</item>
+        <item>烧灰积肥</item>
+        <item>荒火</item>
+        <item>未发现火源</item>
+    </string-array>
+    <string-array name="currentqingkuang">
+        <item>--请选择--</item>
+        <item>已经熄灭</item>
+        <item>正在燃烧</item>
+    </string-array>
+    <string-array name="counties">
+        <item>--请选择--</item>
+        <item>贵阳市区</item>
+        <item>云岩区</item>
+        <item>南明区</item>
+        <item>白云区</item>
+        <item>息烽县</item>
+        <item>乌当区</item>
+        <item>清镇市</item>
+        <item>修文县</item>
+        <item>开阳县</item>
+        <item>花溪区</item>
+        <item>小河区</item>
+        <item>金阳新区</item>
+        <item>顺海林场</item>
+        <item>长坡岭林场</item>
+    </string-array>
+    <string-array name="huojingresource">
+        <item>--请选择--</item>
+        <item>110</item>
+        <item>119</item>
+        <item>市民</item>
+        <item>森林防火部门</item>
+        <item>机场空管</item>
+        <item>其他</item>
+    </string-array>
+    
+     <string-array name="firetype">
+        <item>--请选择--</item>
+        <item>烧荒积肥</item>
+        <item>森林火灾</item>
+        <item>荒火</item>
+        <item>未发现火源</item>
+    </string-array>
+
+</resources>
