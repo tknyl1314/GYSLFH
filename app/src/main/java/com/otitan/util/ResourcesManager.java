@@ -83,8 +83,11 @@ public class ResourcesManager implements Serializable
 		String[] paths = null;
 		try
 		{
-			paths = (String[]) sm.getClass().getMethod("getVolumePaths", null)
-					.invoke(sm, null);
+
+			/*paths = (String[]) sm.getClass().getMethod("getVolumePaths", new Class<Object>)
+					.invoke(sm, new Object[0]);*/
+			paths = (String[]) sm.getClass().getMethod("getVolumePaths").invoke(sm);
+
 		} catch (IllegalArgumentException e)
 		{
 			e.printStackTrace();

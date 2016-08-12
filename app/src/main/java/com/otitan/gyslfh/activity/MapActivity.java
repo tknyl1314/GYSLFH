@@ -506,7 +506,7 @@ public class MapActivity extends Activity {
 
 			@Override
 			public void postAction(float arg0, float arg1, double arg2) {
-				if(listpts.size()>0){
+				if(listpts!=null&&listpts.size()>0){
 					trackgraphiclayer.removeAll();
 					showGuiJi();
 				}
@@ -1290,9 +1290,26 @@ public class MapActivity extends Activity {
 					//接警管理
 					Intent manageintent = new Intent(MapActivity.this,
 							AlarmManageActivity.class);
-					String result = websUtil.serchHuoJing(loginName, "", "", "",
-							"", "", "", "", "", "", 1, 0);
-					if (result.equals("网络异常"))
+					if(!MyApplication.IntetnetISVisible){
+						ToastUtil.setToast(MapActivity.this, "当前网络不可用");
+						return;
+					}
+					try {
+						ProgressDialogUtil.startProgressDialog(MapActivity.this);
+						String result = websUtil.serchHuoJing(loginName, "", "", "",
+								"", "", "", "", "", "", 1, 0);
+
+						manageintent.putExtra("result", result);
+						manageintent.putExtra("username", loginName);
+						startActivity(manageintent);
+						ProgressDialogUtil.stopProgressDialog();
+					}catch(Exception e){
+						e.printStackTrace();
+						ToastUtil.setToast(MapActivity.this, "数据获取失败");
+					}
+
+
+					/*if (result.equals("网络异常"))
 					{
 						ToastUtil.setToast(MapActivity.this, "数据获取异常");
 					} else
@@ -1301,7 +1318,7 @@ public class MapActivity extends Activity {
 						manageintent.putExtra("result", result);
 						manageintent.putExtra("username", loginName);
 						startActivity(manageintent);
-					}
+					}*/
 
 
 					break;
@@ -2036,7 +2053,29 @@ public class MapActivity extends Activity {
 
 				// 接警管理
 				case R.id.btn_jiejingmanage:
-					ProgressDialogUtil.startProgressDialog(MapActivity.this);
+					if(NetUtil.onNetChange(mcontext)){
+						ProgressDialogUtil.startProgressDialog(MapActivity.this);
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								Message msg=new Message();
+								String result = websUtil.serchHuoJing(loginName, "", "", "",
+										"", "", "", "", "", "", 1, 0);
+								if (result.equals("网络异常")) {
+									msg.obj = "网络异常";
+								}
+								else{
+									msg.obj = result;
+								}
+								msg.what = R.id.btn_jiejingmanage;
+								handler.sendMessage(msg);
+							}
+						}).start();
+					}else {
+						ToastUtil.setToast(MapActivity.this, "网络异常，请检查网络");
+					}
+					/*ProgressDialogUtil.startProgressDialog(MapActivity.this);
 					new Thread(new Runnable() {
 
 						@Override
@@ -2053,7 +2092,7 @@ public class MapActivity extends Activity {
 							msg.what = R.id.btn_jiejingmanage;
 							handler.sendMessage(msg);
 						}
-					}).start();
+					}).start();*/
 
 					break;
 				// 导航点击

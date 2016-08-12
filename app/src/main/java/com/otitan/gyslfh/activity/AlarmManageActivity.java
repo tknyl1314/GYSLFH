@@ -3,6 +3,7 @@ package com.otitan.gyslfh.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -37,8 +38,10 @@ import com.otitan.adapter.AlarmManageAdapter;
 import com.otitan.entity.DateDialog;
 import com.otitan.entity.ReceiveAlarmInfo;
 import com.otitan.gyslfh.R;
+import com.otitan.service.WebServiceUtil;
 import com.otitan.util.PadUtil;
-import com.otitan.util.WebServiceUtil;
+import com.otitan.util.ProgressDialogUtil;
+import com.otitan.util.ToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,14 +52,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import Util.ProgressDialogUtil;
 import tablefixheaders.MatrixTableAdapter;
 import tablefixheaders.TableFixHeaders;
 
 @SuppressLint("ShowToast")
 public class AlarmManageActivity extends Activity implements OnClickListener, MatrixTableAdapter.IMatrixTableListener {
 
-
+   Context mcontext;
 	//页面控件
     private DrawerLayout mDrawerLayout;
     private Spinner isfire,neartime,dqspinner;
@@ -120,38 +122,40 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		}
 		
 	};
-
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mcontext=this;
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.alarm_manage);
-		if (PadUtil.isPad(this)) {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		}
-		//获取数据
+		 setContentView(R.layout.alarm_manage);
+		 if (PadUtil.isPad(this)) {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			}
+	    //获取数据
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 		Intent intent =getIntent();
-		username=intent.getStringExtra("username");
+	    username=intent.getStringExtra("username");
 		result=intent.getStringExtra("result");
-
+		
 		try {
 			//获取查询结果的总数
 			totalnum = new JSONObject(result).getString("totalnum");
 		} catch (JSONException e) {
 			e.printStackTrace();
+			ToastUtil.setToast(AlarmManageActivity.this, "获取查询总数失败");
 		}
 		searchStrings=new String[]{username,"","","","","","","","","",ischagang+""};//初始化查询数组
 		orsearchStrings=new String[]{username,"","","","--请选择--","","--请选择--","","","--请选择--",ischagang+""};//初始化上一次查询数组
 		headerstring = new String[]{"序号","当日编号","相同警号","报警地址","报警电话","通知区县","是否火灾","火灾类型","市局出警","接警时间"};
-		tableData=new String[Integer.parseInt(totalnum+10)][headerstring.length];
+		tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
 		tableData[0]=headerstring;
 		receiveAlarmInfos =getresultformjson(result);//解析服务端查询数据
-
+	   
 		//获取服务接口
 		webService=new WebServiceUtil(getApplicationContext());
-
+		
 		//初始化控件
 		intiview();
 	}
@@ -165,10 +169,10 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		alarmnumber = (EditText) findViewById(R.id.et_alarmnumber);
 		number = (EditText) findViewById(R.id.et_number);
 		equalalarm = (EditText) findViewById(R.id.et_equalalarm);
-
+		
 		starttime = (TextView) findViewById(R.id.tv_starttime);
 		endtime = (TextView) findViewById(R.id.tv_endtime);
-
+		
 		isfire = (Spinner) findViewById(R.id.sp_isfire);
 		neartime = (Spinner) findViewById(R.id.sp_neartime);
 		dqspinner=(Spinner) findViewById(R.id.sp_dq);
@@ -176,13 +180,13 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		btn_return=(ImageButton) findViewById(R.id.jiejingmanage_returnBtn);
 		//是否查岗
 		cb_ischagang=(CheckBox) findViewById(R.id.cb_ischagang);
-
+		
 		//查询时间选择事件
 		starttime.setOnClickListener(this);
 		endtime.setOnClickListener(this);
 		btn_return.setOnClickListener(this);
 		table.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				int dd=v.getId();
@@ -200,11 +204,11 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 				Log.e("table", rownum+"");
 			}
 		});
-
+	
 		//表格点击事件
 		//是否查岗设置监听事件
 		cb_ischagang.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
+			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
@@ -228,7 +232,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		iteminfo.setText("查询总数为："+totalnum+"   当前已加载" + n + "条数据");
 		//数据加载完成
 		ProgressDialogUtil.stopProgressDialog();
-
+		
 		//设置侧滑监听
 		/*mDrawerToggle = new ActionBarDrawerToggle(alarm_manageActivity.this, mDrawerLayout, R.drawable.ic_launcher, R.string.drawer_open,
 				R.string.drawer_close) {
@@ -278,21 +282,21 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if(resultCode==RESULT_OK){
-			new GetTableDataTask().execute(searchStrings);
-			currentpage=1;
-			//获取查询结果总数
-			getresultinfoformjson(result);
-			tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
-			tableData[0]=headerstring;
-			getresultformjson(result);
-			matrixTableAdapter = new MatrixTableAdapter<String>(AlarmManageActivity.this,tableData,n);
-			matrixTableAdapter.setMatrixTableListener(AlarmManageActivity.this);//设置加载更多监听
-			table.setAdapter(matrixTableAdapter);
-			//matrixTableAdapter.notifyDataSetChanged();
-		}
-
+		
+			if(resultCode==RESULT_OK){
+				new GetTableDataTask().execute(searchStrings);
+				currentpage=1;
+				//获取查询结果总数
+				getresultinfoformjson(result);
+				tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
+				tableData[0]=headerstring;
+				getresultformjson(result);
+				matrixTableAdapter = new MatrixTableAdapter<String>(AlarmManageActivity.this,tableData,n);
+				matrixTableAdapter.setMatrixTableListener(AlarmManageActivity.this);//设置加载更多监听
+				table.setAdapter(matrixTableAdapter);
+				//matrixTableAdapter.notifyDataSetChanged();
+			}
+		
 	}
 	//获取查询参数
 	protected void getSerchstrings() {
@@ -325,7 +329,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 	}
 	//获取查询结果
 	protected void getSerchdata() {
-
+		
 		//记录上次查询参数
 		int i=0;
 		for (String str : searchStrings) {
@@ -334,7 +338,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		}
 		//清空数据存储获取新的查询个数
 		receiveAlarmInfos.clear();
-
+		
 		new GetTableDataTask().execute(searchStrings);
 		currentpage=1;
 		//获取查询结果总数
@@ -345,7 +349,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		matrixTableAdapter = new MatrixTableAdapter<String>(AlarmManageActivity.this,tableData,n);
 		matrixTableAdapter.setMatrixTableListener(AlarmManageActivity.this);//设置加载更多监听
 		table.setAdapter(matrixTableAdapter);
-
+	
 		//pulltorefresh
 		//new GetDataTask().execute(searchStrings);
 	}
@@ -356,7 +360,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		n=receiveAlarmInfos.size();
 		iteminfo.setText("查询总数为："+totalnum+"   当前已加载" + n + "条数据");
 	}
-
+	
 	//根据用户等级初始化可查询地区
 	private void initsqspinner(String UNITID, String dqlevel) {
 
@@ -378,7 +382,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 	}
 	//初始化pullToRefresh控件
 	private void initpullToRefresh() {
-
+		
 		pullToRefresh.setMode(Mode.PULL_FROM_END);//设置刷新模式
 		setListAdapter(receiveAlarmInfos);//设置数据adapter
 		//初始化下拉和上拉布局
@@ -402,8 +406,8 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 
 				ProgressDialogUtil.startProgressDialog(AlarmManageActivity.this);
 				new GetDataTask().execute(searchStrings);
-			}
-		});
+			}  
+        });
 	}
 	private class GetTableDataTask extends AsyncTask<String, Void, String>
 	{
@@ -413,10 +417,11 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 			if (currentpage > Integer.parseInt(totalpage)) {
 				return null;
 			}
-			result=webService.serchHuoJing(params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],currentpage,ischagang);
 			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			result=webService.serchHuoJing(params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],currentpage,ischagang);
+
+				//Thread.sleep(1000);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return result;
@@ -429,7 +434,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 			iteminfo.setText("查询总数为："+totalnum+"   当前已加载" + n + "条数据");
 			//ProgressDialogUtil.stopProgressDialog();
 		}
-
+		
 	}
 	//异步查询数据
 	private class GetDataTask extends AsyncTask<String, Void, String> {
@@ -440,7 +445,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		}
 
 		protected String doInBackground(String... params) {
-
+			
 			if (currentpage > Integer.parseInt(totalpage)) {
 				return null;
 			}
@@ -455,14 +460,14 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		}
 
 		protected void onPostExecute(final String result) {
-
+			
 			if (result != null) {
 				if(flag==1){
 					receiveAlarmInfos.clear();
 					flag=0;
-				}
+				}				
 				receiveAlarmInfos.addAll(getresultformjson(result));
-
+				
 				HashMap<Integer, Boolean> isSelected = new HashMap<Integer, Boolean>();
 				for (int i = 0; i < receiveAlarmInfos.size(); i++) {
 					isSelected.put(i, false);
@@ -486,6 +491,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 			super.onPostExecute(result);
 		}
 	}
+	//获取查询总数
 	private String getresultinfoformjson(String houjingresult) {
 		JSONObject jsonobject;
 		try {
@@ -494,10 +500,10 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
+	
 		return totalnum;
 	}
-
+	
 	//解析返回的json
 	private List<ReceiveAlarmInfo> getresultformjson(String houjingresult) {
 		List<ReceiveAlarmInfo> receiveAlarmInfos = new ArrayList<ReceiveAlarmInfo>();
@@ -529,39 +535,40 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 			handler.sendMessage(msg);*/
 
 		} catch (JSONException e) {
-			//ToastUtil.makeText(AlarmManageActivity.this, e.toString(), 0);
-			e.printStackTrace();
+			ToastUtil.makeText(AlarmManageActivity.this, e.toString(), 0);
+			//e.printStackTrace();
 		}
 		return receiveAlarmInfos;
 	}
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.tv_starttime:
-				Dialog jiejingStartDateDialog = new DateDialog(AlarmManageActivity.this,
-						starttime);
-				jiejingStartDateDialog.show();
-				break;
-			case R.id.tv_endtime:
-				Dialog jiejingEndDateDialog = new DateDialog(AlarmManageActivity.this,endtime);
-				jiejingEndDateDialog.show();
-				break;
-			case R.id.jiejingmanage_returnBtn:
-				AlarmManageActivity.this.finish();
-			case R.id.table:
-				//获取当前选择feature 的 id
-				int rownum=table.getDowny()/table.getViewHight()+table.getFirstRow();
-				Toast.makeText(AlarmManageActivity.this, rownum+"", Toast.LENGTH_SHORT).show();
-				break;
-			default:
-				break;
+		case R.id.tv_starttime:
+			Dialog jiejingStartDateDialog = new DateDialog(AlarmManageActivity.this,
+					starttime);
+			jiejingStartDateDialog.show();
+			break;
+		case R.id.tv_endtime:
+			Dialog jiejingEndDateDialog = new DateDialog(AlarmManageActivity.this,endtime);
+			jiejingEndDateDialog.show();
+			break;
+		case R.id.jiejingmanage_returnBtn:
+			AlarmManageActivity.this.finish();
+			break;
+		case R.id.table:
+			//获取当前选择feature 的 id
+			int rownum=table.getDowny()/table.getViewHight()+table.getFirstRow();
+			Toast.makeText(AlarmManageActivity.this, rownum+"", Toast.LENGTH_SHORT).show();
+			break;
+		default:
+			break;
 		}
 	}
 	@Override
 	public void onLoadMore(int row) {
 		currentpage++;
 		new GetTableDataTask().execute(searchStrings);
-		getresultformjson(result);
+		//getresultformjson(result);
 	}
 	@Override
 	protected void onStop() {
@@ -581,7 +588,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
+		
 		searchStrings=new String[]{username,"","","","","","","","","",ischagang+""};//初始化查询数组
 		orsearchStrings=new String[]{username,"","","","--请选择--","","--请选择--","","","--请选择--",ischagang+""};//初始化上一次查询数组
 		headerstring=new String[]{"序号","当日编号","相同警号","报警地址","报警电话","通知区县","是否火灾","火灾类型","市局出警","接警时间"};
@@ -592,12 +599,14 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		webService=new WebServiceUtil(getApplicationContext());
 		//初始化控件
 		intiview();
-
+		
 	}
+
 
 	//保存界面数据重绘时调用
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 	}
   

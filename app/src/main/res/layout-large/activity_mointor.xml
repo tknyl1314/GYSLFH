@@ -6,19 +6,73 @@
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
+
     <LinearLayout
+        android:id="@+id/Play"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <SurfaceView
-            android:id="@+id/Sur_Player"
+        <!--  <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+              android:layout_weight="2"> -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:background="#0000ff00" />
+            android:layout_weight="2">
+
+            <SurfaceView
+                android:id="@+id/Sur_Player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0000ff00" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+
+                >
+                <Button
+                    android:id="@+id/btn_nomorview"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:textColor="@color/white"
+                    android:text="可见光"
+                    />
+                <Button
+                    android:id="@+id/btn_monitorview"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="防盗"
+                    android:textColor="@color/white"
+                    />
+                <Button
+                    android:id="@+id/btn_irview"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:textColor="@color/white"
+                    android:text="红外"
+                    />
+                <Button
+                    android:id="@+id/btn_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:textColor="@color/white"
+                    android:text="语音对讲"
+                    />
+            </LinearLayout>
+
+        </FrameLayout>
+
 
         <LinearLayout
+            android:id="@+id/widget_Play"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -34,61 +88,83 @@
                 android:visibility="gone"
                 android:orientation="horizontal"
                 android:gravity="center" >
+                <Button
+                    android:id="@+id/bt_zoomout"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="缩小"
+                    android:textColor="@color/white" />
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
+                <Button
+                    android:id="@+id/bt_up"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="@string/but_up"
+                    android:textColor="@color/white" />
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
 
-              
+                <Button
+                    android:id="@+id/bt_left"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="@string/but_left"
+                    android:textColor="@color/white" />
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
 
+                <Button
+                    android:id="@+id/bt_rigth"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="@string/but_right"
+                    android:textColor="@color/white" />
 
-                        <Button
-                            android:id="@+id/bt_up"
-                            android:layout_width="80dp"
-                            android:layout_height="40dp"
-                            android:background="@color/blue"
-                            android:text="@string/but_up"
-                            android:textColor="@color/white" />
-                   <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
 
-                        <Button
-                            android:id="@+id/bt_left"
-                            android:layout_width="80dp"
-                            android:layout_height="40dp"
-                            android:background="@color/blue"
-                            android:text="@string/but_left"
-                            android:textColor="@color/white" />
-                   <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
+                <Button
+                    android:id="@+id/bt_down"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="@string/but_down"
+                    android:textColor="@color/white" />
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
 
-                        <Button
-                            android:id="@+id/bt_rigth"
-                            android:layout_width="80dp"
-                            android:layout_height="40dp"
-                            android:background="@color/blue"
-                            android:text="@string/but_right"
-                            android:textColor="@color/white" />
-                  
-                   <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
-
-                        <Button
-                            android:id="@+id/bt_down"
-                            android:layout_width="80dp"
-                            android:layout_height="40dp"
-                            android:background="@color/blue"
-                            android:text="@string/but_down"
-                            android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/bt_zoomin"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="放大"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/monitor_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -105,136 +181,147 @@
                     android:textColor="@color/white"
                     android:typeface="sans" />
                 <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
                 <Button
                     android:id="@+id/btn_Preview"
                     android:layout_width="0dp"
                     android:layout_height="40dip"
                     android:layout_weight="1"
-                     android:background="@drawable/background_view_rounded_blue"
+                    android:background="@drawable/background_view_rounded_blue"
                     android:text="预览"
                     android:textColor="@color/white"
                     android:typeface="sans" />
-                  <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
-                  <Button
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
+                <Button
                     android:id="@+id/btn_ptz"
                     android:layout_width="0dp"
                     android:layout_height="40dip"
                     android:layout_weight="1"
-                     android:background="@drawable/background_view_rounded_blue"
+                    android:background="@drawable/background_view_rounded_blue"
                     android:text="云台控制"
                     android:textColor="@color/white"
                     android:typeface="sans" />
-                    <View
-                        android:layout_width="0.3dp"
-                       android:layout_height="30dp"
-                       android:layout_gravity="center"
-                        android:background="#cbcbcb" />
-                   <Button
+                <View
+                    android:layout_width="0.3dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#cbcbcb" />
+                <Button
                     android:id="@+id/btn_capture"
                     android:layout_width="0dp"
                     android:layout_height="40dip"
                     android:layout_weight="1"
-                     android:background="@drawable/background_view_rounded_blue"
+                    android:background="@drawable/background_view_rounded_blue"
                     android:text="截屏"
                     android:textColor="@color/white"
                     android:typeface="sans" />
-                   <Button
-                    android:id="@+id/btn_capture"
+
+                <Button
+                    android:id="@+id/btn_call"
                     android:layout_width="0dp"
                     android:layout_height="40dip"
                     android:layout_weight="1"
-                    android:background="@color/blue"
-                    android:text="截屏"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="一键报警"
+                    android:textColor="@color/white"
+                    android:typeface="sans" />
+                <Button
+                    android:id="@+id/btn_monitorsetting"
+                    android:layout_width="0dp"
+                    android:layout_height="40dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:text="设置"
+                    android:textColor="@color/white"
                     android:visibility="gone"
-                    android:textColor="@color/white"
                     android:typeface="sans" />
-                
 
-                <!-- <Button
-                    android:id="@+id/btn_Playback"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:layout_below="@+id/TV_User"
-                    android:text="Playback"
-                    android:textColor="#ff000000"
-                    android:typeface="sans"
-                    android:visibility="gone" />
+                <!--
+         <Button
+             android:id="@+id/btn_Playback"
+             android:layout_width="100dip"
+             android:layout_height="40dip"
+             android:layout_below="@+id/TV_User"
+             android:text="Playback"
+             android:textColor="#ff000000"
+             android:typeface="sans"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_ParamCfg"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:layout_alignLeft="@+id/btn_Playback"
-                    android:layout_below="@+id/btn_Playback"
-                    android:text="Sub(CIF)"
-                    android:textColor="#ff000000"
-                    android:typeface="sans"
-                    android:visibility="gone" />
+         <Button
+             android:id="@+id/btn_ParamCfg"
+             android:layout_width="100dip"
+             android:layout_height="40dip"
+             android:layout_alignLeft="@+id/btn_Playback"
+             android:layout_below="@+id/btn_Playback"
+             android:text="Sub(CIF)"
+             android:textColor="#ff000000"
+             android:typeface="sans"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_Capture"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/btn_ParamCfg"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignRight="@+id/btn_Login"
-                    android:layout_alignTop="@+id/btn_ParamCfg"
-                    android:text="Capture"
-                    android:visibility="gone" />
+         <Button
+             android:id="@+id/btn_Capture"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignBottom="@+id/btn_ParamCfg"
+             android:layout_alignParentLeft="true"
+             android:layout_alignRight="@+id/btn_Login"
+             android:layout_alignTop="@+id/btn_ParamCfg"
+             android:text="Capture"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_Record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/btn_ParamCfg"
-                    android:layout_alignLeft="@+id/btn_Preview"
-                    android:layout_alignRight="@+id/btn_Preview"
-                    android:layout_below="@+id/btn_Preview"
-                    android:text="Record"
-                    android:visibility="gone" />
+         <Button
+             android:id="@+id/btn_Record"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignBottom="@+id/btn_ParamCfg"
+             android:layout_alignLeft="@+id/btn_Preview"
+             android:layout_alignRight="@+id/btn_Preview"
+             android:layout_below="@+id/btn_Preview"
+             android:text="Record"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_Talk"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:layout_below="@+id/btn_Capture"
-                    android:layout_toLeftOf="@+id/btn_Record"
-                    android:text="Talk"
-                    android:textColor="#ff000000"
-                    android:typeface="sans"
-                    android:visibility="gone" />
+         <Button
+             android:id="@+id/btn_Talk"
+             android:layout_width="100dip"
+             android:layout_height="40dip"
+             android:layout_below="@+id/btn_Capture"
+             android:layout_toLeftOf="@+id/btn_Record"
+             android:text="Talk"
+             android:textColor="#ff000000"
+             android:typeface="sans"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_OTHER"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:layout_alignBaseline="@+id/btn_PTZ"
-                    android:layout_alignBottom="@+id/btn_PTZ"
-                    android:layout_toRightOf="@+id/btn_PTZ"
-                    android:text="Other"
-                    android:textColor="#ff000000"
-                    android:typeface="sans"
-                    android:visibility="gone" />
+         <Button
+             android:id="@+id/btn_OTHER"
+             android:layout_width="100dip"
+             android:layout_height="40dip"
+             android:layout_alignBaseline="@+id/btn_PTZ"
+             android:layout_alignBottom="@+id/btn_PTZ"
+             android:layout_toRightOf="@+id/btn_PTZ"
+             android:text="Other"
+             android:textColor="#ff000000"
+             android:typeface="sans"
+             android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_PTZ"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:layout_alignBaseline="@+id/btn_Talk"
-                    android:layout_alignBottom="@+id/btn_Talk"
-                    android:layout_toLeftOf="@+id/btn_ParamCfg"
-                    android:text="PTZ(L)"
-                    android:textColor="#ff000000"
-                    android:typeface="sans"
-                    android:visibility="gone" /> -->
+         <Button
+             android:id="@+id/btn_PTZ"
+             android:layout_width="100dip"
+             android:layout_height="40dip"
+             android:layout_alignBaseline="@+id/btn_Talk"
+             android:layout_alignBottom="@+id/btn_Talk"
+             android:layout_toLeftOf="@+id/btn_ParamCfg"
+             android:text="PTZ(L)"
+             android:textColor="#ff000000"
+             android:typeface="sans"
+             android:visibility="gone" />
+                -->
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

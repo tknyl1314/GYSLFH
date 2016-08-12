@@ -53,7 +53,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/map_tools_bg"
-        android:contentDescription="@string/contentDescription"
         android:src="@drawable/tuceng" />
      <ImageButton
         android:id="@+id/imgbtn_weather"
@@ -72,13 +71,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imgbtn_tucengcontrol"
-        android:layout_alignParentRight="true"
+              android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/map_tools_bg"
         android:contentDescription="@string/contentDescription"
-        android:src="@drawable/map_tools_plot"
-        />
+        android:src="@drawable/map_tools_plot" />
 
     <include
         android:layout_width="wrap_content"
@@ -196,19 +194,7 @@
             android:layout_gravity="center"
             android:background="@color/transparent" />
 
-        <com.otitan.customui.IconButton
-            android:id="@+id/btn_huijing"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_gray_bg"
-            android:drawableLeft="@drawable/reply"
-            android:textColor="@android:color/black"
-            app:iconPadding="8dp"
-            android:text="回警"
-            android:textSize="18sp" />
-
-      <View
+        <View
             android:layout_width="0.3dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -249,6 +235,18 @@
             android:background="@drawable/nav_locationbtn"
             android:textColor="@android:color/white"
             android:textSize="18sp" /> -->
+        <com.otitan.customui.IconButton
+            android:id="@+id/btn_huijing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/button_gray_bg"
+            android:drawableLeft="@drawable/reply"
+            android:textColor="@android:color/black"
+            app:iconPadding="8dp"
+            android:text="回警"
+            android:textSize="18sp" />
+
         <com.otitan.customui.IconButton
             android:id="@+id/btn_zbdw"
             android:layout_width="0dp"

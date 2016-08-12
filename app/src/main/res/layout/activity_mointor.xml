@@ -156,7 +156,6 @@
                     android:id="@+id/btn_Playback"
                     android:layout_width="100dip"
                     android:layout_height="40dip"
-                    android:layout_below="@+id/TV_User"
                     android:text="Playback"
                     android:textColor="#ff000000"
                     android:typeface="sans"

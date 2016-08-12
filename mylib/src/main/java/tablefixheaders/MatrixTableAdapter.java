@@ -27,6 +27,7 @@ import Util.ToastUtil;
 
 public class MatrixTableAdapter<T> extends BaseTableAdapter{
 
+
 	private final static int WIDTH_DIP = 110;
 	private final static int HEIGHT_DIP = 32;
 
@@ -42,24 +43,28 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 	private LayoutInflater Inflater=null;
 	// the interface to trigger refresh and load more.
 	private IMatrixTableListener mListener;
-	private Handler handler=new Handler()
+	private Handler handler;
+
 	{
+		handler = new Handler() {
 
-		@Override
-		public void handleMessage(Message msg) {
-			switch ( msg.what) {
-				case 1:
-					ProgressDialogUtil.stopProgressDialog();
-					notifyDataSetChanged();
-					break;
+			@Override
+			public void handleMessage(Message msg) {
+				switch (msg.what) {
+					case 1:
+						ProgressDialogUtil.stopProgressDialog();
+						notifyDataSetChanged();
+						break;
 
-				default:
-					break;
+					default:
+						break;
+				}
 			}
-		}
 
-	};
-	//接口
+		};
+	}
+
+	//鎺ュ彛
 	public interface IMatrixTableListener {
 
 
@@ -161,7 +166,6 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 		}
 		((TextView) convertView).setText(table[row + 1][column + 1].toString());
 		return convertView;
-
 	}
 
 	private void onLoadMore(int objid) {
@@ -172,6 +176,7 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 			handler.sendMessage(msg);
 		}
 		else {
+			//展示图层属性数据
 			FeatureTable featureTable=featureLayer.getFeatureTable();
 			long featureCount=featureTable.getNumberOfFeatures();
 			QueryParameters query = new QueryParameters();
@@ -198,6 +203,7 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 						int count = (int) featureLayer.getFeatureTable().getFields().size();
 						String[] row = new String[count];
 						for(int i=0;i<count;i++){
+							//获取图层属性值
 							row[i] = feature.getAttributeValue(featureLayer.getFeatureTable().getFields().get(i).getName())+"";
 						}
 						table[(int) id]=(T[]) row;
@@ -236,7 +242,7 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 		/*int itemViewType = 0;
 		if (row == -1 ) {
 			itemViewType = 1;
-		} 
+		}
 		return itemViewType;*/
 		return 0;
 	}
@@ -262,4 +268,5 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 
 		return convertView;
 	}
+
 }

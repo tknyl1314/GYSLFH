@@ -1,4 +1,4 @@
-package com.otitan.push;
+package com.titan.broadcastreceiver;
 
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
