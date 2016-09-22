@@ -172,7 +172,7 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -187,7 +187,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_d"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -205,7 +206,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_f"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -224,7 +226,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_m"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -242,7 +245,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -257,7 +260,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_d"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -275,7 +279,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_f"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -293,7 +298,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_m"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -382,27 +388,27 @@
             android:layout_height="1dp"
             android:background="@color/blue" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+      <!--  <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="horizontal" >
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:orientation="horizontal" >-->
 
             <LinearLayout
-                android:layout_width="595dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="0.5"
                 android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:paddingTop="10dp"
                     android:text="当前坐标"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
@@ -410,10 +416,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:paddingTop="10dp"
                     android:text="经度:"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
@@ -434,10 +438,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:paddingTop="10dp"
                     android:text="纬度:"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
@@ -454,9 +456,21 @@
                     android:ellipsize="end"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="left|center"
+                    android:background="@drawable/background_view_rounded_blue"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="确定"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
@@ -465,7 +479,7 @@
                 android:layout_marginTop="10dp" >
 
                 <Button
-                    android:id="@+id/btn_confirm"
+                    android:id="@+id/btn_confirm1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
@@ -477,7 +491,7 @@
                     android:text="确定"
                     android:textColor="@color/white" />
             </RelativeLayout>
-        </LinearLayout>
+        <!--</LinearLayout>-->
     </LinearLayout>
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.esri.android.map.MapView;
+import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 import com.esri.core.symbol.CompositeSymbol;
 import com.esri.core.symbol.LineSymbol;
@@ -62,11 +63,15 @@ public class TrackUtil {
     	List<Point>  pointset=new ArrayList<Point>();
     	//判断点是否在地图范围内,去除不在地图范围内的点
     	for(int i=0;i<pts.size();i++){
-    		/*Point pt=new Point(pts.get(i).getLongitude(),pts.get(i).getLatitude());
-    		if(!GeometryEngine.within(pt, mapview.getExtent(), mapview.getSpatialReference())){
-    			continue;
-    		}*/
-    		tps.add(pts.get(i));
+			Point pt=new Point(pts.get(i).getLongitude(),pts.get(i).getLatitude());
+			if(!GeometryEngine.within(pt, mapview.getExtent(), mapview.getSpatialReference())){
+				continue;
+			}
+			tps.add(pts.get(i));
+    		/*tps.add(pts.get(i));Point pt=new Point(pts.get(i).getLongitude(),pts.get(i).getLatitude());
+			if(!GeometryEngine.within(pt, mapview.getExtent(), mapview.getSpatialReference())){
+				continue;
+			}*/
     		//points.add(pt);
     	}
     	

@@ -1,5 +1,10 @@
 package com.otitan.util;
 
+import android.app.Activity;
+import android.content.Context;
+
+import com.esri.core.geometry.Point;
+
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,10 +17,6 @@ import java.util.Map;
 import jsqlite.Callback;
 import jsqlite.Database;
 import jsqlite.Exception;
-import android.app.Activity;
-import android.content.Context;
-
-import com.esri.core.geometry.Point;
 
 public class DataBaseHelperUtil
 {
@@ -187,7 +188,7 @@ public class DataBaseHelperUtil
 		final List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try
 		{
-			String databaseName = manager.getDataBase(context, "guiji.sqlite");
+			String databaseName = manager.getDataBase(context, "db.sqlite");
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new Database();
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);

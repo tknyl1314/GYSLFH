@@ -32,7 +32,6 @@
             android:layout_gravity="right|center"
             android:background="@drawable/background_view_rounded_image"
             android:contentDescription="@null"
-            android:onClick="searchButton"
             android:padding="15dp"
             android:src="@drawable/icon_tab_search_selected" />
         
