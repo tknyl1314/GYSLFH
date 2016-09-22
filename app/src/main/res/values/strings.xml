@@ -49,9 +49,20 @@
     <string name="title_activity_jjxxgl">JJXXGLActivity</string>
     <string name="sp_prompt">-请选择-</string>
 
-    <!-- 图片浏览 -->
-    <string name="title_activity_alarm__edit">接警信息编辑</string>
 
+    <!-- 图片浏览 -->
+    <string name="only_choose_num">超出可选图片张数</string>
+    <string name="finish">完成</string>
+    <string name="invalidSD">sdcard无效或没有插入！</string>
+    <string name="photo">选择相册</string>
+    <string name="album">相册</string>
+    <string name="preview">预览</string>
+    <string name="unfinished">完成</string>
+    <string name="camera_cancel">取消</string>
+    <string name="no_photo">相册没有图片</string>
+    <string name="drawer_open">侧滑打开</string>
+    <string name="drawer_close">侧滑关闭</string>
+    <string name="title_activity_alarm__edit">接警信息编辑</string>
     <!-- 创建默认文件夹名称 -->
 
     <!-- 视频监控 -->
@@ -59,5 +70,7 @@
     <string name="but_down">向下</string>
     <string name="but_left">向左</string>
     <string name="but_right">向右</string>
+
+    <string name="todo"></string>
 
 </resources>

@@ -245,5 +245,10 @@
     <color name="base_end_color_default">#FFFFFF</color>
     <color name="base_start_color_pressed">#fffcfcfc</color>
     <color name="base_end_color_pressed">#ffd7d7d7</color>
+    <!-- 相册 -->
+    <color name="plugin_camera_black">#000000</color>
+    <color name="albumback">#E1E0DE</color>
+    <color name="style_red">#ff4c41</color>
+    <color name="style_divider_color">#C9C7CD</color>
 
 </resources>

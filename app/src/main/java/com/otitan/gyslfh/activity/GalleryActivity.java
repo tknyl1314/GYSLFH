@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.king.photo.activity.AlbumActivity;
 import com.king.photo.util.Bimp;
 import com.king.photo.util.PublicWay;
 import com.king.photo.util.Res;

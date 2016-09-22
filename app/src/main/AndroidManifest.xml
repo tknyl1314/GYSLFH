@@ -66,7 +66,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="yCFvjFjqb8ITXhyLMQjuOyRl7WZ9Bfw8" />
         <!--发布新版本时需要修改以及bugly isbug需要改成false等部分 -->
-        <!-- 贵阳森林防火key  android:value="rnYG5iog6pEhzUaqt4t1nvLX" -->
+        <!-- 贵阳森林防火key  android:value="yCFvjFjqb8ITXhyLMQjuOyRl7WZ9Bfw8" -->
         <!-- 台式机测试key  android:value="4rZXRyQN5UnCKM0v6tTtt1g9" -->
         <!-- 笔记本测试key  android:value="IRxl8CTt3XVwVvV6mBT7kHqn" -->
         <!-- 百度地图通用key  android:value="vrn5PmTl38mk3Gux8nDrBf32" -->
@@ -90,9 +90,6 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <!-- 火警上报 -->
-        <activity
-            android:name=".activity.AlbumActivity"
-            android:label="@string/title_activity_frame"></activity>
         <activity
             android:name=".activity.AlbumActivity_HuiJing"
             android:label="@string/title_activity_frame"></activity>

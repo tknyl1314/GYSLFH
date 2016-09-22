@@ -189,7 +189,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_d"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -207,7 +208,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_f"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -226,7 +228,8 @@
 
                 <EditText
                     android:id="@+id/edit_jd_m"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -259,7 +262,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_d"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -277,7 +281,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_f"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -295,7 +300,8 @@
 
                 <EditText
                     android:id="@+id/edit_wd_m"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:background="@drawable/edit_bg"
@@ -391,7 +397,7 @@
             android:orientation="horizontal" >
 
             <LinearLayout
-                android:layout_width="595dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
@@ -423,12 +429,13 @@
                 <TextView
                     android:id="@+id/location_lon"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:paddingBottom="10dp"
                     android:paddingRight="15dp"
                     android:paddingTop="10dp"
-                    android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
 
@@ -446,12 +453,13 @@
                 <TextView
                     android:id="@+id/location_lat"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:paddingBottom="10dp"
                     android:paddingRight="15dp"
                     android:paddingTop="10dp"
-                    android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
             </LinearLayout>

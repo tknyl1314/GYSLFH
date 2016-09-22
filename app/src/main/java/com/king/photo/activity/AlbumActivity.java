@@ -26,12 +26,11 @@ import com.king.photo.util.ImageBucket;
 import com.king.photo.util.ImageItem;
 import com.king.photo.util.PublicWay;
 import com.king.photo.util.Res;
-import com.otitan.gyslfh.activity.UpFireActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlbumActivity extends Activity {
+public class 	AlbumActivity extends Activity {
 	//鏄剧ず鎵嬫満閲岀殑鎵�鏈夊浘鐗囩殑鍒楄〃鎺т欢
 	private GridView gridView;
 	//褰撴墜鏈洪噷娌℃湁鍥剧墖鏃讹紝鎻愮ず鐢ㄦ埛娌℃湁鍥剧墖鐨勬帶浠�
@@ -114,8 +113,8 @@ public class AlbumActivity extends Activity {
 	private class CancelListener implements OnClickListener {
 		public void onClick(View v) {
 			Bimp.tempSelectBitmap.clear();
-			intent.setClass(mContext, UpFireActivity.class);
-			startActivity(intent);
+			/*intent.setClass(mContext, UpFireActivity.class);
+			startActivity(intent);*/
 			AlbumActivity.this.finish();
 		}
 	}
@@ -212,8 +211,9 @@ public class AlbumActivity extends Activity {
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			intent.setClass(AlbumActivity.this, ImageFileActivity.class);
-			startActivity(intent);
+			/*intent.setClass(AlbumActivity.this, ImageFileActivity.class);
+			startActivity(intent);*/
+			Bimp.tempSelectBitmap.clear();
 			AlbumActivity.this.finish();
 		}
 		return false;

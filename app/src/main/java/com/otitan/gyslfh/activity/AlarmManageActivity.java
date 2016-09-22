@@ -149,7 +149,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		searchStrings=new String[]{username,"","","","","","","","","",ischagang+""};//初始化查询数组
 		orsearchStrings=new String[]{username,"","","","--请选择--","","--请选择--","","","--请选择--",ischagang+""};//初始化上一次查询数组
 		headerstring = new String[]{"序号","当日编号","相同警号","报警地址","报警电话","通知区县","是否火灾","火灾类型","市局出警","接警时间"};
-		tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
+		tableData=new String[Integer.parseInt(totalnum)+1][headerstring.length];
 		tableData[0]=headerstring;
 		receiveAlarmInfos =getresultformjson(result);//解析服务端查询数据
 	   
@@ -420,7 +420,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 			try {
 			result=webService.serchHuoJing(params[0],params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],currentpage,ischagang);
 
-				//Thread.sleep(1000);
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -568,7 +568,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 	public void onLoadMore(int row) {
 		currentpage++;
 		new GetTableDataTask().execute(searchStrings);
-		//getresultformjson(result);
+		getresultformjson(result);
 	}
 	@Override
 	protected void onStop() {

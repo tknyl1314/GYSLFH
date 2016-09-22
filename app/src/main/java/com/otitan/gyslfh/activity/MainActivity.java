@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import com.king.photo.activity.AlbumActivity;
 import com.king.photo.util.Bimp;
 import com.king.photo.util.FileUtils;
 import com.king.photo.util.ImageItem;

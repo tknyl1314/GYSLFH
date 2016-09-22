@@ -14,11 +14,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.king.photo.activity.AlbumActivity;
 import com.king.photo.util.BitmapCache;
 import com.king.photo.util.BitmapCache.ImageCallback;
 import com.king.photo.util.ImageItem;
 import com.king.photo.util.Res;
-import com.otitan.gyslfh.activity.AlbumActivity;
 import com.otitan.gyslfh.activity.ShowAllPhoto;
 
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class FolderAdapter extends BaseAdapter {
 		if (path.contains("android_hybrid_camera_default"))
 			holder.imageView.setImageResource(Res.getDrawableID("plugin_camera_no_pictures"));
 		else {
-//			holder.imageView.setImageBitmap( AlbumActivity.contentList.get(position).imageList.get(0).getBitmap());
+		holder.imageView.setImageBitmap( AlbumActivity.contentList.get(position).imageList.get(0).getBitmap());
 			final ImageItem item = AlbumActivity.contentList.get(position).imageList.get(0);
 			holder.imageView.setTag(item.imagePath);
 			cache.displayBmp(holder.imageView, item.thumbnailPath, item.imagePath,

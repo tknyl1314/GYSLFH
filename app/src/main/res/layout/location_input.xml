@@ -172,7 +172,7 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -242,7 +242,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -383,7 +383,7 @@
             android:background="@color/blue" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="horizontal" >
@@ -421,12 +421,13 @@
                 <TextView
                     android:id="@+id/location_lon"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:paddingBottom="10dp"
                     android:paddingRight="15dp"
                     android:paddingTop="10dp"
-                    android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
 
@@ -444,12 +445,13 @@
                 <TextView
                     android:id="@+id/location_lat"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:paddingBottom="10dp"
                     android:paddingRight="15dp"
                     android:paddingTop="10dp"
-                    android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/blue"
                     android:textSize="16sp" />
             </LinearLayout>

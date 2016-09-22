@@ -64,7 +64,7 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 		};
 	}
 
-	//鎺ュ彛
+	//接口
 	public interface IMatrixTableListener {
 
 
@@ -149,7 +149,7 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 		if(table[row + 1][0] == null||table[row + 1][0].toString().equals(""))
 		{
 			ProgressDialogUtil.startProgressDialog(context);
-
+			try {
 			new Thread(new Runnable() {
 
 				@Override
@@ -158,14 +158,18 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter{
 					onLoadMore(row);
 				}
 			}).start();
-			try {
+
 				Thread.currentThread().sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}else{
+			((TextView) convertView).setText(table[row + 1][column + 1].toString());
+
 		}
-		((TextView) convertView).setText(table[row + 1][column + 1].toString());
 		return convertView;
+
+
 	}
 
 	private void onLoadMore(int objid) {

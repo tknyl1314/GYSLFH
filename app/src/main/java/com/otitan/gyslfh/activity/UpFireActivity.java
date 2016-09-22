@@ -52,6 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.king.photo.activity.AlbumActivity;
 import com.king.photo.util.Bimp;
 import com.king.photo.util.FileUtils;
 import com.king.photo.util.ImageItem;
@@ -139,7 +140,8 @@ public class UpFireActivity extends Activity {
 		latitudeValue = intent.getDoubleExtra("latitude", latitudeValue);
 		DQLEVEL = intent.getStringExtra("DQLEVEL");
 		UNITID = intent.getStringExtra("UNITID");
-		address = intent.getStringExtra("address");
+		//address = intent.getStringExtra("address");
+		address="";
 		REALNAME=sharedPreferences.getString("REALNAME", "");
 		TELNO=sharedPreferences.getString("TELNO", "");
 		websUtil.initWebserviceTry();

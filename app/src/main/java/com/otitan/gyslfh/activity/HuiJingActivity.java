@@ -394,7 +394,6 @@ public class HuiJingActivity extends Activity {
 		//从相册选择
 		bt2.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				//Intent intent = new Intent(HuiJingActivity.this,AlbumActivity.class);
 				Intent intent = new Intent(HuiJingActivity.this,AlbumActivity_HuiJing.class);
 				//startActivity(intent);
 				startActivityForResult(intent, ALBUM);
@@ -467,8 +466,6 @@ public class HuiJingActivity extends Activity {
 			switch (v.getId()) {
 			/*case R.id.selectPicture:
 				removeImage();
-				Intent imageIntent = new Intent(HuiJingActivity.this,
-						AlbumActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putInt("size", 10);
 				bundle.putStringArrayList("dataList", dataList);

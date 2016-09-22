@@ -113,7 +113,6 @@ public class AlbumGridViewAdapter extends BaseAdapter{
 		if (path.contains("camera_default")) {
 			viewHolder.imageView.setImageResource(Res.getDrawableID("plugin_camera_no_pictures"));
 		} else {
-//			ImageManager2.from(mContext).displayImage(viewHolder.imageView,
 //					path, Res.getDrawableID("plugin_camera_camera_default"), 100, 100);
 			final ImageItem item = dataList.get(position);
 			viewHolder.imageView.setTag(item.imagePath);
