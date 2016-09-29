@@ -1,4 +1,4 @@
-package com.titan.jedis;
+package com.titan.jedis.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.esri.core.geometry.Point;
+import com.titan.jedis.R;
 
 import redis.clients.jedis.Jedis;
 

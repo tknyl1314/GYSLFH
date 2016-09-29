@@ -65,13 +65,13 @@ public class PlotUtil implements OnClickListener {
 	Context mcontext;
 	public PopupWindow pop_plot;
 	GraphicsLayer plotgraphiclayer;
-	int plotgraphicID, plotType;
+	public  int plotgraphicID, plotType;
 	MapView mapview;
 
 	public static boolean active = false;
 	private Point point;
 	private Polyline polyline;
-	Graphic plotgarphic;
+	public  Graphic plotgarphic;
 	private Polygon polygon;
 	private Point startPoint;
 	// 地图事件监听
