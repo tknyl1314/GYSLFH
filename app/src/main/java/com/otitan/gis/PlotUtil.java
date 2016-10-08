@@ -212,6 +212,12 @@ public class PlotUtil implements OnClickListener {
 			return super.onDragPointerMove(from, to);
 		}
 
+		/*@Override
+		public boolean onDragPointerUp(MotionEvent from, MotionEvent to) {
+			deactivate();//结束标绘
+			return super.onDragPointerUp(from, to);
+		}*/
+
 		@Override
 		public boolean onSingleTap(MotionEvent event) {
 			final Point point = mapview.toMapPoint(event.getX(), event.getY());
@@ -258,6 +264,13 @@ public class PlotUtil implements OnClickListener {
 			return false;
 
 		}
+
+		@Override
+		public boolean onDoubleTap(MotionEvent point) {
+			deactivate();//结束标绘
+			return super.onDoubleTap(point);
+		}
+
 
 		@Override
 		public void onLongPress(MotionEvent event) {
@@ -308,12 +321,14 @@ public class PlotUtil implements OnClickListener {
 				break;
 		}
 	}
-
+ /**
+  * 结束标绘
+  * */
 	public void deactivate() {
 		/*if (plotgraphiclayer != null) {
 			this.plotgraphiclayer.removeGraphic(plotgraphicID);
 		}*/
-		MapActivity.active = false;
+		active = false;
 		this.point = null;
 		this.polygon = null;
 		this.polyline = null;
