@@ -152,6 +152,19 @@
             android:label="@string/title_activity_alarm__edit"
             android:theme="@android:style/Theme.NoTitleBar"></activity>
 
+        <!-- 注册后台服务 上传历史轨迹信息 -->
+        <service android:name="com.otitan.service.MyIntentService">
+            <intent-filter >
+                <action android:name="com.otitan.myintentservice"/>
+            </intent-filter>
+        </service>
+        <!-- 注册监听网络变化的广播 -->
+        <receiver android:name="com.titan.broadcastreceiver.ConnectionChangeReceiver"
+            android:label="NetworkConnection">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
         <!-- 个推SDK配置开始 -->
         <meta-data
             android:name="PUSH_APPID"
@@ -226,6 +239,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <provider
             android:name="com.igexin.download.DownloadProvider"
             android:authorities="downloads.com.otitan.gyslfh"
