@@ -1,5 +1,6 @@
 package com.otitan.gyslfh.activity;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,12 +8,12 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings.Secure;
 
-import com.esri.android.map.FeatureLayer;
 import com.igexin.sdk.PushManager;
 import com.otitan.DataBaseHelper;
 import com.otitan.util.NetUtil;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.ScreenTool;
+import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -22,15 +23,17 @@ public class MyApplication extends Application
 		public static int mNetWorkState;
 		/** 是否有网络 */
 		public static boolean IntetnetISVisible = false;
+		/** 获取设备号序列号信息 */
 		public static String SBH, XLH;
+
 		public static String MOBILE_MODEL, MOBILE_MANUFACTURER;
 		/** 设备屏幕信息 */
 		public static ScreenTool.Screen screen;
 		/** 移动设备唯一号 */
-		public static String macAddress;
+		//public static String macAddress;
 		/** 用于查询的图层url */
-		public static String featureurl;
-		public static FeatureLayer queryfeature;
+		//public static String featureurl;
+		//public static FeatureLayer queryfeature;
 
 		SharedPreferences sharedPreferences;
 		//屏幕宽高
@@ -44,9 +47,7 @@ public class MyApplication extends Application
 		public void onCreate()
 		{
 			super.onCreate();
-		/*log=LoggerManager.getLoggerInstance();
-		log.debug("MyAPP启动\n");*/
-		/* Bugly SDK初始化
+		/** Bugly SDK初始化
 	        * 参数1：上下文对象
 	        * 参数2：APPID，平台注册时得到,注意替换成你的appId
 	        * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
@@ -60,37 +61,9 @@ public class MyApplication extends Application
 			//initNetworkReceiver();
 			/** 获取当前网络状态 */
 			getNetState();
+			getDeviceInfo();
 
-			// 初始化应用信息
-      /*  AVOSCloud.initialize(this, "wzJcyDMaPYYirJrkMQFzKGkI-gzGzoHsz",
-            "grm35ru5eSU3nf8q38jKOyVo");
-        // 启用崩溃错误统计
-        //AVAnalytics.enableCrashReport(this.getApplicationContext(), true);
-        AVOSCloud.setLastModifyEnabled(true);
-        AVOSCloud.setDebugLogEnabled(true);*/
-			// GYSLFH
-		/*AVOSCloud.initialize(this, "wzJcyDMaPYYirJrkMQFzKGkI-gzGzoHsz",
-				"grm35ru5eSU3nf8q38jKOyVo");
-        AVOSCloud.initialize(this, "wAkH3Uo0iLtI1EH0YMshUBfg-gzGzoHsz",
-				"kJPuRiK1CsedHcnXR5omf9os");
 
-		// 这段代码应该在应用启动的时候调用一次，保证设备注册到 LeanCloud 平台
-		AVInstallation.getCurrentInstallation().saveInBackground(
-				new SaveCallback()
-				{
-					@Override
-					public void done(AVException e)
-					{
-						String installationId = AVInstallation
-								.getCurrentInstallation().getInstallationId();
-						System.out.println(installationId);
-					}
-				});
-		// 通过调用以下代码启动推送服务，同时设置默认打开的 Activity。
-		PushService.setDefaultPushCallback(this, MapActivity.class);
-		// 启用崩溃错误统计
-		AVAnalytics.enableCrashReport(this.getApplicationContext(), true);
-		AVOSCloud.setDebugLogEnabled(true);*/
 
 			new Thread(new Runnable() {
 
@@ -99,15 +72,33 @@ public class MyApplication extends Application
 					initData();
 					/** 获取屏幕分辨率 */
 					screen = ScreenTool.getScreenPix(mcontext);
-					if (IntetnetISVisible)
+					/*if (IntetnetISVisible)
 					{
 						registerSBH();
 						//在有网络情况下上传本地的历史轨迹
-					}
+					}*/
 				}
 			}).start();
-			//getWindowInfo();
 		}
+		/** 获取设备信息 */
+		private void getDeviceInfo() {
+            // 用户信息存储
+            sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
+			// 获取唯一识表示 mac地址
+			WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			if (!wifiMgr.isWifiEnabled())
+			{
+				wifiMgr.setWifiEnabled(true);
+			}
+			WifiInfo info = (null == wifiMgr ? null : wifiMgr.getConnectionInfo());
+			if (null != info)
+			{
+				SBH = info.getMacAddress();
+				sharedPreferences.edit().putString("SBH", SBH).commit();
+			}
+		}
+
+
 		/** 获取屏幕信息 */
 /*	private void getWindowInfo() {
 		     WindowManager wm = (WindowManager) mcontext.getSystemService(Context.WINDOW_SERVICE);
@@ -148,6 +139,8 @@ public class MyApplication extends Application
 			e.printStackTrace();
 		}
 	}*/
+
+
 		/** 注册用户设备信息*/
 	public void registerSBH()
 	{
@@ -180,7 +173,7 @@ public class MyApplication extends Application
 		// MOBILE_MANUFACTURER = android.os.Build.MANUFACTURER;// samsung 厂商
 		MOBILE_MODEL = android.os.Build.MODEL + "-"
 				+ android.os.Build.MANUFACTURER;
-		WebServiceUtil websUtil = new WebServiceUtil(this);
+		WebServiceUtil websUtil = new WebServiceUtil(mcontext);
 		String result = websUtil.addMacAddress(SBH, XLH, MOBILE_MODEL);
 		if (result.equals(WebServiceUtil.netException))
 		{
@@ -221,6 +214,12 @@ public class MyApplication extends Application
 			{
 				DataBaseHelper.CopyDatabase(MyApplication.this,path, "db.sqlite");
 			}
+			//检查本地数据库
+			if (!DataBaseHelper.checkDataBase(path, "GYSLFH.sqlite"))
+			{
+				DataBaseHelper.CopyDatabase(MyApplication.this,path, "GYSLFH.sqlite");
+			}
+
 			//检查空间数据库
 			/*if (!DataBaseHelper.checkDataBase(path, "gy.geodatabase"))
 			{
@@ -236,6 +235,7 @@ public class MyApplication extends Application
 			}*/
 		} catch (Exception e)
 		{
+			ToastUtil.setToast((Activity) mcontext,"初始化本地数据库失败");
 			e.printStackTrace();
 			//log.debug(e.toString());
 			//ToastUtil.setToast(mcontext, "")

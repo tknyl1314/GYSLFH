@@ -31,6 +31,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.esri.core.geometry.GeometryEngine;
+import com.esri.core.geometry.Point;
+import com.esri.core.geometry.SpatialReference;
 import com.hikvision.netsdk.ExceptionCallBack;
 import com.hikvision.netsdk.HCNetSDK;
 import com.hikvision.netsdk.NET_DVR_COMPRESSIONCFG_V30;
@@ -141,7 +144,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 					Toast.makeText(mContext, "报警成功", Toast.LENGTH_SHORT).show();
 					break;
 				case 0:
-					Toast.makeText(mContext, "报警失败",Toast.LENGTH_SHORT).show();
+					Toast.makeText(mContext, "报警失败："+msg.obj.toString(),Toast.LENGTH_SHORT).show();
 					break;
 				case 3:
 					Toast.makeText(mContext, "监控视频播放失败", Toast.LENGTH_SHORT).show();
@@ -188,7 +191,6 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		{
 			m_oPort = "8001";
 			m_Port=m_oPort;
-
 		} else
 		{
 			m_oPort = "8000";
@@ -434,8 +436,12 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		monitorview.setOnClickListener(this);
 		Button nomorview=(Button) findViewById(R.id.btn_nomorview);
 		nomorview.setOnClickListener(this);
+
 		Button irview=(Button) findViewById(R.id.btn_irview);
 		irview.setOnClickListener(this);
+
+		Button rtsp= (Button) findViewById(R.id.btn_rtsp);
+		rtsp.setOnClickListener(this);
 		/*Button setting=(Button) findViewById(R.id.btn_monitorsetting);
 		setting.setOnClickListener(this);*/
 		/*
@@ -562,10 +568,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		rightpopupwindow.setOutsideTouchable(true);
 	}
 
-	protected void showtitlepup()
-	{
 
-	}
 
 	private Button.OnTouchListener PTZ_Listener = new OnTouchListener()
 	{
@@ -605,8 +608,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 								ToastUtil.setToast(MonitorActivity.this, "放大失败");
 							} else
 							{
-								Log.i(TAG, "start PAN_RIGHT succ");
-								//btLeft.setText("正在向左");
+								Log.i(TAG, "start ZOOM_IN");
 							}
 							break;
 						case R.id.bt_zoomout:
@@ -616,7 +618,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 								ToastUtil.setToast(MonitorActivity.this, "缩小失败");
 							} else
 							{
-								Log.i(TAG, "start PAN_RIGHT succ");
+								Log.i(TAG, "start ZOOM_OUT");
 								//btLeft.setText("正在向左");
 							}
 							break;
@@ -1459,8 +1461,11 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		{
 			case KeyEvent.KEYCODE_BACK:
 
-				stopSinglePlayer();
-				Cleanup();
+                if(Player.getInstance()==null){
+					stopSinglePlayer();
+					Cleanup();
+				}
+
 				// android.os.Process.killProcess(android.os.Process.myPid());
 				MonitorActivity.this.finish();
 				break;
@@ -1512,7 +1517,6 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		}
 
 	}
-
 	@Override
 	public void onClick(View v)
 	{
@@ -1524,20 +1528,24 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 
 					@Override
 					public void run() {
-						//String redisip="192.168.0.105";s
+						//String redisip="192.168.0.105";
 						String result="";
 						Message msg=new Message();
 						try{
 							Jedis jedis = new Jedis(redisip, 6379,15000);
+                            Point point= (Point) GeometryEngine.project(MapActivity.upPoint,SpatialReference.create(2343), SpatialReference.create(4326));
 							//jedis.set("foo", "bar");
-							String lon=MapActivity.upPoint.getX()+"";
-							String lat=MapActivity.upPoint.getY()+"";
+						/*	String lon=MapActivity.upPoint.getX()+"";
+							String lat=MapActivity.upPoint.getY()+"";*/
+                            String lon=point.getX()+"";
+                            String lat=point.getY()+"";
 							//jedis.set("call", "{'alarm':1,'lon':"+lon+",'lat':"+lat+",}");
 							String alarminfo="Android,otitan,"+lat.toString()+","+lon.toString();
 							result=jedis.set("msg_sdbj", alarminfo);
 							jedis.close();
 						}catch (Exception e){
 							msg.what=0;
+                            msg.obj=e;
 							myhanHandler.sendMessage(msg);
 							return;
 						}
@@ -1547,6 +1555,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 						if(result.equals("OK")){
 							msg.what=1;
 						}else{
+                            msg.obj="jedis 报警失败";
 							msg.what=0;
 						}
 						//String value = jedis.get("foo");
@@ -1643,6 +1652,8 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 			          //主码流
 			          //rtsp://admin:12345@192.0.0.64:81/h264/ch1/main/av_stream
 			          //rtsp://admin:12345@192.0.0.64:81/MPEG-4/ch1/main/av_stream
+			          //宿州
+			          //rtsp://admin:admin@112.26.183.12:554/cam/realmonitor?channel=1&subtype=2
 			          String rtsp="rtsp://admin:admin12345@"+irip+":554/h264/ch1/sub/av_stream";
 
 							mediaPlayer.setDataSource(rtsp);
@@ -1735,6 +1746,62 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 					}
 				}).start();
 
+				break;
+			case  R.id.btn_rtsp:
+				new Thread(new Runnable() {
+				@Override
+				public void run() {
+					  if(m_oPreviewBtn.getText().equals("停止预览")){
+						  mediaPlayer.release();
+						  mediaPlayer=null;
+							Message msg=new Message();
+							msg.what=5;
+							myhanHandler.sendMessage(msg);
+						  return;
+					  }
+					  if(mediaPlayer==null){
+			              mediaPlayer = new MediaPlayer();
+			          }
+					  try {
+			          mediaPlayer.reset();
+			          //主码流
+			          //rtsp://admin:12345@192.0.0.64:81/h264/ch1/main/av_stream
+			          //rtsp://admin:12345@192.0.0.64:81/MPEG-4/ch1/main/av_stream
+			          //宿州
+						  //rtsp://admin:admin@112.26.183.12:554/cam/realmonitor?channel=1&subtype=2
+						  String rtsp="rtsp://admin:admin@112.26.183.12:554/cam/realmonitor?channel=1&subtype=2";//大华
+                          //MediaPlayer   error (1, -2147483648) 编码错误
+			         //String rtsp="rtsp://admin:admin12345@"+irip+":554/h264/ch1/sub/av_stream";//海康
+                      //创建client，需要传入一个SurfaceView作为显示
+						  //String host = "rtsp://192.168.0.217/test.264"
+
+							  mediaPlayer.setDataSource(rtsp);
+				              mediaPlayer.setDisplay(m_osurfaceView.getHolder());
+				              mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				                  @Override
+				                  public void onPrepared(MediaPlayer mp) {
+				                      mp.start();
+				                  	Message msg=new Message();
+									msg.what=4;
+									myhanHandler.sendMessage(msg);
+				                  }
+				              });
+				              mediaPlayer.prepareAsync();
+						} catch (Exception e) {
+							e.printStackTrace();
+							Message msg=new Message();
+							msg.what=3;
+							myhanHandler.sendMessage(msg);
+						}
+			              //Sets the audio stream type for this MediaPlayer，设置流的类型，此为音乐流
+
+			              //Thread.currentThread().sleep(1000);
+			             // mediaPlayer.prepareAsync();
+			              //Interface definition for a callback to be invoked when the media source is ready for playback
+
+
+				}
+			}).start();
 				break;
 
 
