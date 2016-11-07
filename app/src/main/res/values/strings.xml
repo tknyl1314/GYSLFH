@@ -28,7 +28,7 @@
     <!--   <string name="webservice">http://192.168.1.103/WebServices/FireService/WebService1.asmx</string> -->
     <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>
     <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
-    <string name="title_activity_frame">FrameActivity</string>
+    <string name="title_activity_frame">森林防火</string>
     <string name="title_activity_hui_jing">HuiJingActivity</string>
     <string name="title_activity_jie_jing">JieJingActivity</string>
     <string name="title_activity_huo_qing">HuoQingActivity</string>
@@ -70,7 +70,6 @@
     <string name="but_down">向下</string>
     <string name="but_left">向左</string>
     <string name="but_right">向右</string>
-
     <string name="todo"></string>
 
 </resources>

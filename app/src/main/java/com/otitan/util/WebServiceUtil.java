@@ -34,7 +34,7 @@ public class WebServiceUtil {
 	private String methodName = null;
 	private String soapAction = null;
 	private String urlWebService;
-	private static int timeout = 10000;
+	private static int timeout = 5000;
 	private Context context;
 	public static String NetworkException = "网络错误";
 	public static String CharException = "用户名中包含特殊字符";

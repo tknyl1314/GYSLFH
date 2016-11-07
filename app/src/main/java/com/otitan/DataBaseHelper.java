@@ -11,9 +11,7 @@ import com.otitan.entity.TrackPoint;
 import com.otitan.gyslfh.activity.MyApplication;
 import com.otitan.util.ResourcesManager;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,11 +22,13 @@ import java.util.Map;
 
 import jsqlite.Callback;
 import jsqlite.Database;
+import jsqlite.Exception;
 
 public class DataBaseHelper  {
-
+      private static  String dbname = "GYSLFH.sqlite";
 	 static Map<String, String> map=null;
-	/** s
+
+	/**
 	 * 查询当前位置所在区县代码
 	 */
 		public static Map<String, String> queryDistrict(Point p)
@@ -36,17 +36,17 @@ public class DataBaseHelper  {
 			
 			
 			try {
-				String databaseName =  ResourcesManager.getDataBase("guiji.sqlite");
+				//String databaseName =  ResourcesManager.getDataBase("guiji.sqlite");
+                String databaseName =  ResourcesManager.getDataBase(dbname);
 				Class.forName("jsqlite.JDBCDriver").newInstance();
 				Database db = new Database();
 				db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
 				String sql = "select NAME,CODE from gy_jx where MbrWithin( MakePoint("+p.getX()+","+p.getY()+",2343) ,Geometry)";
 				db.exec(sql, new Callback() {
 					@Override
-					public void types(String[] arg0) {
-						// TODO Auto-generated method stub
-						
-					}
+                    public void types(String[] arg0) {
+                        // TODO Auto-generated method stub
+                    }
 					
 					@Override
 					public boolean newrow(String[] row) {
@@ -70,7 +70,7 @@ public class DataBaseHelper  {
 					}
 				});
 				db.close();
-			} catch (Exception e) {
+			} catch (java.lang.Exception e) {
 				e.printStackTrace();
 				//logger.debug(LoggerManager.getExceptionMessage(e));
 				return map;
@@ -121,10 +121,7 @@ public class DataBaseHelper  {
 
 				fos.close();
 				db.close();
-			} catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			} catch (IOException e)
+			} catch (java.lang.Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -136,7 +133,7 @@ public class DataBaseHelper  {
          public static boolean UploadLocalDatebase(String SBH, String LON, String LAT, String time,String state) {
 			try {
 				// String string = SBH;
-				String databaseName =  ResourcesManager.getDataBase("guiji.sqlite");
+				String databaseName =  ResourcesManager.getDataBase(dbname);
 				Class.forName("jsqlite.JDBCDriver").newInstance();
 				Database db = new Database();
 				db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -147,10 +144,11 @@ public class DataBaseHelper  {
 				db.exec(sql, null);
 				db.close();
 				Log.i("guiji","上传轨迹信息到本地数据库");
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (java.lang.Exception e) {
+                return false;
+				//e.printStackTrace();
 				//logger.debug(LoggerManager.getExceptionMessage(e));
-				return false;
+
 			}
 			return true;
 		}
@@ -161,7 +159,7 @@ public class DataBaseHelper  {
 		final List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try
 		{
-			String databaseName = ResourcesManager.getDataBase("guiji.sqlite");
+			String databaseName = ResourcesManager.getDataBase(dbname);
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new Database();
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -198,7 +196,7 @@ public class DataBaseHelper  {
 				}
 			});
 			db.close();
-		} catch (Exception e)
+		} catch (java.lang.Exception e)
 		{
 			e.printStackTrace();
 			//logger.debug(LoggerManager.getExceptionMessage(e));
@@ -215,7 +213,7 @@ public class DataBaseHelper  {
 			//final List<TrackModel> locations = new ArrayList<TrackModel>();
 			final List<TrackPoint> locations = new ArrayList<TrackPoint>();
 			try {
-				String databaseName = ResourcesManager.getDataBase("guiji.sqlite");
+				String databaseName = ResourcesManager.getDataBase(dbname);
 				Class.forName("jsqlite.JDBCDriver").newInstance();
 				Database db = new Database();
 				db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -271,7 +269,7 @@ public class DataBaseHelper  {
 					}
 				});
 				db.close();
-			} catch (jsqlite.Exception e) {
+			} catch (java.lang.Exception e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -284,20 +282,19 @@ public class DataBaseHelper  {
 	{
 		try
 		{
-			String databaseName = ResourcesManager.getDataBase(
-					"guiji.sqlite");
+			String databaseName = ResourcesManager.getDataBase(dbname);
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new Database();
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
 			String sql = "update point set state = '"+ 1 +"' where pkuid = '"+ id + "'";
 			db.exec(sql, null);
 			db.close();
-		} catch (Exception e)
+		} catch (java.lang.Exception e)
 		{
 			e.printStackTrace();
 			//logger.debug(LoggerManager.getExceptionMessage(e));
 		}
-	}
+    }
 	
 	/**
 	 * 获取assets文件夹下db.sqlite文件中的历史用户
@@ -307,18 +304,10 @@ public class DataBaseHelper  {
 	public static  ArrayList<String> getUserList()
 	{
 		String filename = null;
-		try
-		{
-			filename =  ResourcesManager.getDataBase(
-					"db.sqlite");
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 		final ArrayList<String> list = new ArrayList<String>();
 		try
 		{
+            filename =  ResourcesManager.getDataBase(dbname);
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new Database();
 			db.open(filename, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -346,7 +335,7 @@ public class DataBaseHelper  {
 				}
 			});
 			db.close();
-		} catch (Exception e)
+		} catch (java.lang.Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -362,7 +351,7 @@ public class DataBaseHelper  {
 			try {
 				// String string = SBH;
 				
-				String databaseName =  ResourcesManager.getDataBase("guiji.sqlite");
+				String databaseName =  ResourcesManager.getDataBase(dbname);
 				Class.forName("jsqlite.JDBCDriver").newInstance();
 				Database db = new Database();
 				db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -371,8 +360,6 @@ public class DataBaseHelper  {
 					
 					@Override
 					public void types(String[] arg0) {
-						// TODO Auto-generated method stub
-						
 					}
 					
 					@Override
@@ -395,7 +382,7 @@ public class DataBaseHelper  {
 					}
 				});
 				db.close();
-			} catch (Exception e) {
+			} catch (java.lang.Exception e) {
 				e.printStackTrace();
 				//logger.debug(LoggerManager.getExceptionMessage(e));
 				return null;
@@ -403,6 +390,162 @@ public class DataBaseHelper  {
 			return params;
 		}
 
-	
+    /**
+     *  获取小地名查询结果
+     */
+    public static List<Map<String, Object>> serchPlace(String keyword)
+    {
+
+        final List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        try
+        {
+            String databaseName =  ResourcesManager.getDataBase(dbname);
+            Class.forName("jsqlite.JDBCDriver").newInstance();
+            Database db = new Database();
+            db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
+            // String sql =
+            // "SELECT * FROM History WHERE time order by datetime(time) desc limit 15";
+            String sql = "select * from station where name like '%" + keyword
+                    + "%'";
+            db.exec(sql, new Callback()
+            {
+                String[] columns;
+                @Override
+                public void types(String[] arg0)
+                {
+                }
+                @Override
+                public boolean newrow(String[] data)
+                {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    for (int i = 0; i < columns.length; i++)
+                    {
+                        map.put(columns[i], data[i]);
+                    }
+                    list.add(map);
+                    return false;
+                }
+
+                @Override
+                public void columns(String[] arg0)
+                {
+                    columns = arg0;
+                }
+            });
+            db.close();
+        } catch (java.lang.Exception e)
+        {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 注册新用户到本地数据库
+     */
+    public static void  addUser(String username,String psw)
+    {
+        String filename = null;
+        try
+        {
+            String databaseName =  ResourcesManager.getDataBase(dbname);
+            Class.forName("jsqlite.JDBCDriver").newInstance();
+            Database db = new jsqlite.Database();
+            db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
+            String sql = "insert into user values('" + username + "','"
+                    + psw + "') ";
+            db.exec(sql, null);
+            db.close();
+        } catch (java.lang.Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取登录的历史用户
+     */
+  /*  public static  ArrayList<String> getUserList()
+    {
+        String filename = null;
+        try
+        {
+            final ArrayList<String> list = new ArrayList<String>();
+            String databaseName =  ResourcesManager.getDataBase(dbname);
+            Class.forName("jsqlite.JDBCDriver").newInstance();
+            Database db = new jsqlite.Database();
+            db.open(filename, jsqlite.Constants.SQLITE_OPEN_READWRITE);
+            String sql = "select name,password from user ";
+            db.exec(sql, new Callback()
+            {
+                @Override
+                public boolean newrow(String[] data)
+                {
+                    list.add(data[0]);
+                    return false;
+                }
+                public void columns(String[] arg1)
+                {
+
+                }
+                @Override
+                public void types(String[] arg2)
+                {
+
+                }
+            });
+            db.close();
+        } catch (java.lang.Exception e)
+        {
+            e.printStackTrace();
+        }
+        return list;
+    }*/
+    /**
+     *  查询乡镇
+     */
+   /* public static  String [] queryTown(){
+        try
+        {
+            String databaseName =  ResourcesManager.getDataBase(dbname);
+            Class.forName("jsqlite.JDBCDriver").newInstance();
+            Database db = new Database();
+            db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
+            String sql = "select * from station where name like '%" + keyword
+                    + "%'";
+            db.exec(sql, new Callback()
+            {
+                String[] columns;
+                @Override
+                public void types(String[] arg0)
+                {
+                }
+                @Override
+                public boolean newrow(String[] data)
+                {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    for (int i = 0; i < columns.length; i++)
+                    {
+                        map.put(columns[i], data[i]);
+                    }
+                    list.add(map);
+                    return false;
+                }
+
+                @Override
+                public void columns(String[] arg0)
+                {
+                    columns = arg0;
+                }
+            });
+            db.close();
+        } catch (java.lang.Exception e)
+        {
+            e.printStackTrace();
+        }
+        return  null;
+    }*/
+
+
 
 }

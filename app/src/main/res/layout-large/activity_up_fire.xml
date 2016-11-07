@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".UpFireActivity" >
+    >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -84,7 +84,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/edittextstyle"
+                android:background="@color/pedestrian"
+                android:enabled="false"
                 android:ems="10"
                 android:text="贵阳市"
                 android:textColor="@color/balck"
@@ -203,34 +204,37 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/edittextstyle"
+                android:background="@color/pedestrian"
+                android:enabled="false"
                 android:textColor="@color/balck"
                 android:textSize="18sp" />
-
             <TextView
-                android:layout_width="74dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="纬度:"
+                android:text="火情状态:"
                 android:textColor="#282828"
                 android:textSize="22sp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="*"
                 android:textColor="#ff0000" />
-
-            <EditText
-                android:id="@+id/latitude"
+            <Spinner
+                android:id="@+id/fireState"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:spinnerMode="dropdown"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittextstyle"
-                android:textColor="@color/balck"
                 android:textSize="18sp" />
+
+
+
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -240,11 +244,36 @@
             android:layout_below="@id/layout4"
             android:layout_marginTop="3dp"
             android:orientation="horizontal" >
-             <TextView
+            <TextView
                 android:layout_width="74dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="类型:"
+                android:text="纬度:"
+                android:textColor="#282828"
+                android:textSize="22sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="*"
+                android:textColor="#ff0000" />
+
+
+            <EditText
+                android:id="@+id/latitude"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:background="@color/pedestrian"
+                android:enabled="false"
+                android:textColor="@color/balck"
+                android:textSize="18sp" />
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="火灾类型:"
                 android:textColor="#282828"
                 android:textSize="22sp" />
 
@@ -260,34 +289,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="3dp"
+                android:spinnerMode="dropdown"
                 android:layout_weight="1"
                 android:background="@drawable/edittextstyle"
                 android:textSize="18sp" />
-            <TextView
-                android:layout_width="74dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="状态:"
-                android:textColor="#282828"
-                android:textSize="22sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="*"
-                android:textColor="#ff0000" />
 
-            <Spinner
-                android:id="@+id/fireState"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="@drawable/edittextstyle"
-                android:textSize="18sp" />
-            
-          
+
+
+
         </LinearLayout>
 
         <LinearLayout

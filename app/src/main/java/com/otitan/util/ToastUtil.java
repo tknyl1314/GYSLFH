@@ -42,6 +42,9 @@ public class ToastUtil {
 		});
 	}
 
+
+
+
 	public static void startProgressDialog(Context context) {
 		if (progressDialog == null) {
 			progressDialog = CustomProgressDialog.createDialog(context);

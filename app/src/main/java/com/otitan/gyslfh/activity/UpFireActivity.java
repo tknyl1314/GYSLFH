@@ -3,7 +3,6 @@ package com.otitan.gyslfh.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +37,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
@@ -82,13 +80,10 @@ import java.util.Date;
 
 public class UpFireActivity extends Activity {
 
-	private ProgressDialog Progress;
 	private EditText city_text, town_text, viliage_text, huozai_address,
 			longitude, latitude, remark;// endTime,
 	ImageButton imgBtn_upSure;
 	ImageButton returnBtn;
-	Button selectPictures;
-	CheckBox isUpsj;
 	TextView endTime, startTime;
 	String FIREStartTime;
 	 String REMARK,REALNAME,TELNO,CITY,TOWN,VILLAGE,PLACE,X,Y,FireType;
@@ -138,7 +133,7 @@ public class UpFireActivity extends Activity {
 		userID = intent.getStringExtra("userID");
 		longitudeValue = intent.getDoubleExtra("longitude", longitudeValue);
 		latitudeValue = intent.getDoubleExtra("latitude", latitudeValue);
-		DQLEVEL = intent.getStringExtra("DQLEVEL");
+		DQLEVEL = intent.getStringExtra("DQLEVEL");//用户等级  区县用户2
 		UNITID = intent.getStringExtra("UNITID");
 		//address = intent.getStringExtra("address");
 		address="";
@@ -201,6 +196,7 @@ public class UpFireActivity extends Activity {
 		fireStateSpinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, fireStates);
 		fireStateSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fireStateSpinner.setAdapter(fireStateSpinnerAdapter);
+		//fireStateSpinner.setSelection(0);
 		fireStateSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 					@Override
@@ -230,8 +226,10 @@ public class UpFireActivity extends Activity {
 		countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		county_textSpinner.setAdapter(countryAdapter);
 		if ("2".equals(DQLEVEL)) {
-			county_textSpinner.setClickable(false);
-			county_textSpinner.setBackgroundDrawable(getResources().getDrawable(R.drawable.selectbg));
+			//county_textSpinner.setClickable(false);
+			county_textSpinner.setEnabled(false);
+			county_textSpinner.setBackground(new ColorDrawable(getResources().getColor(R.color.pedestrian)));
+			//county_textSpinner.setBackground(getResources().getDrawable().getDrawable(R.drawable.selectbg));
 			//county_textSpinner.setBackgroundDrawable(getResources().getColor(R.color.balck));
 			county_textSpinner.setSelection(Integer.parseInt(UNITID));
 			countryValue = countries[Integer.parseInt(UNITID)].toString();
@@ -268,9 +266,7 @@ public class UpFireActivity extends Activity {
 
 		imgBtn_upSure.setOnClickListener(new MyListener());
 		returnBtn.setOnClickListener(new MyListener());
-//
-//		selectPictures = (Button) findViewById(R.id.selectPictures);
-//		selectPictures.setOnClickListener(new MyListener());
+
 
 		//selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layoutView);
 		scrollview = (HorizontalScrollView) findViewById(R.id.scrollview);
@@ -591,26 +587,7 @@ public class UpFireActivity extends Activity {
 						}
 					}
 					sendRequset();// 数据上传
-					/*String CITY, String COUNTY, String TOWN, String VILLAGE, String PLACE, 
-					String NAME, String TEL, String USERID, String LON, String LAT, String devisionID, String FIRETYPE, String ISFIRE,String REMARK, String IMAGE_ID*/
-					/*
-					 * if(upImageResult.equals("0")){
-					 * Toast.makeText(getApplicationContext(),
-					 * "图片上传失败",Toast.LENGTH_SHORT).show(); }else{
-					 * addFireResult=
-					 * websUtil.updateAlarmFireInfor(CITY,countryValue, TOWN,
-					 * VILLAGE
-					 * ,PLACE,REALNAME,TELNO,userID,X,Y,devisionID,FireType
-					 * ,fireStateValue + "",REMARK,upImageResult); }
-					 */
-					//addFireResult = websUtil.upFireInfo(CITY,countryValue, TOWN, VILLAGE, PLACE,FIREStartTime, FIREEND, REMARK, userID, X,Y, fireStateValue + "",UNITID,devisionID,isUp);
-					/*
-					 * if (addFireResult) { Message msg = new Message();
-					 * msg.what = 3; msg.obj = addFireResult;
-					 * handler.sendMessage(msg); } else { Message msg = new
-					 * Message(); msg.what = 4; msg.obj = "网络错误，请稍候再试！";
-					 * handler.sendMessage(msg); }
-					 */
+
 				}
 				break;
 			// 返回按钮
@@ -624,29 +601,9 @@ public class UpFireActivity extends Activity {
 		}
 	}
 
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//		if (requestCode == 0) {
-//			if (resultCode == RESULT_OK) {
-//				Bundle bundle = data.getExtras();
-//				selectedDataList = (ArrayList<String>) bundle
-//						.getSerializable("dataList");
-//				if (selectedDataList != null) {
-//					dataList.clear();
-//					dataList.addAll(selectedDataList);
-//					initSelectImage();
-//				}
-//			}
-//		}
-//	}
-
 	/**
-	 * 
 	 * 函数名称 : sendRequset 功能描述 : 参数及返回值说明：
-	 * 
 	 * 描述 ：发送上传请求
-	 * 
 	 */
 	private void sendRequset() {
 		// downLoadTip();

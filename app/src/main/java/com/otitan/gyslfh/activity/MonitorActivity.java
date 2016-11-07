@@ -1064,7 +1064,7 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 
 
 		previewInfo.dwStreamType = 1; // 码流类型：0-主码流，1-子码流，2-码流3，3-虚拟码流，以此类推
-		previewInfo.bBlocked = 1;//0- 非阻塞取流，1- 阻塞取流。如果阻塞取流，SDK内部connect失败将会有5s的超时才能够返回，不适合于轮询取流操作。
+		previewInfo.bBlocked = 0;//0- 非阻塞取流，1- 阻塞取流。如果阻塞取流，SDK内部connect失败将会有5s的超时才能够返回，不适合于轮询取流操作。
 		// HCNetSDK start preview
 		m_iPlayID = HCNetSDK.getInstance().NET_DVR_RealPlay_V40(m_iLogID,
 				previewInfo, fRealDataCallBack);

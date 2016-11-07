@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.otitan.gyslfh.activity.MyApplication;
+import com.otitan.service.MyIntentService;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 
@@ -45,8 +46,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
           if(networkInfo.getType()==ConnectivityManager.TYPE_WIFI){  
            Log.i("通知", "WIFI网络已连接");  
              Toast.makeText(context, "WIFI已连接", Toast.LENGTH_LONG).show();
-             //上传轨迹点
-             Intent startServiceIntent = new Intent("com.otitan.myintentservice");
+            /*  final Intent intent = new Intent(this,BindService.class);
+              bindService(intent,coon,Service.BIND_AUTO_CREATE)*/
+
+              //上传轨迹点
+             Intent startServiceIntent = new Intent(context,MyIntentService.class);
  		    Bundle bundle = new Bundle();
  		    bundle.putString("name", "upPointHistory");
  		    startServiceIntent.putExtras(bundle);

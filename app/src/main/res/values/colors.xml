@@ -26,7 +26,7 @@
 	<color name="living_street">#FFFFFF</color>
 	<color name="service">#FFFFFF</color>
     -->
-    <color name="pedestrian">#EEEEEE</color>
+    <color name="pedestrian">#EEEEEE</color><!--不可编辑-->
     <color name="cycleway">#D0E9D0</color>
     <color name="footway">#DCA86B</color>
     <color name="bridleway">#70B971</color>

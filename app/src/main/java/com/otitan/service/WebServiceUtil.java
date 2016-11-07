@@ -482,7 +482,6 @@ public class WebServiceUtil {
 	/**
 	 * 根据用户名查询用户所在区域的火情信息统计
 	 *
-	 * @param username
 	 * @throws Exception
 	 */
 	public String selDayHuoDian(String COUNTY, String DQLEVEL) {
@@ -557,7 +556,7 @@ public class WebServiceUtil {
 		return result;
 	}
 	// 上传轨迹信息到本地数据库
-	public boolean UploadLocalDatebase(String SBH, String LON, String LAT, String time,String state) {
+	/*public boolean UploadLocalDatebase(String SBH, String LON, String LAT, String time,String state) {
 		try {
 			// String string = SBH;
 
@@ -576,7 +575,7 @@ public class WebServiceUtil {
 
 		}
 		return true;
-	}
+	}*/
 	//获取接警编号
 	public String getJieJingBainHao(String username) {
 
