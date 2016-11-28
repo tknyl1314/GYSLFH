@@ -214,7 +214,12 @@ import java.util.Map.Entry;
 								 LXJID= object.getString("LXJID");//监控点所在硬盘录像机id
 								 monitorintent.putExtra("TD", TD);
 								 monitorintent.putExtra("LXJID", LXJID);
-								 mContext.startActivity(monitorintent);
+								monitorintent.putExtra("username", "admin");//用户名
+								monitorintent.putExtra("password", "sfb12345");//密码
+								monitorintent.putExtra("ip", "222.85.147.92");//设备ip
+								//监控点位置
+								monitorintent.putExtra("Location", object.getString("TDNAME"));
+								mContext.startActivity(monitorintent);
 							}
 							else{
 								ToastUtil.setToast((Activity) mContext, "获取通道失败");
@@ -242,7 +247,7 @@ import java.util.Map.Entry;
 			@Override
 			public void onClick(View v) {
 				mView.getCallout().hide();
-				MapActivity.active = false;
+				//MapActivity.active = false;
 			}
 		});
 		return view;

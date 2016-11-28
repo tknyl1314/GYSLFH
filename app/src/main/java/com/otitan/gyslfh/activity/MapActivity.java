@@ -113,14 +113,12 @@ import com.otitan.entity.Firepoint;
 import com.otitan.entity.TrackPoint;
 import com.otitan.gis.Calculate;
 import com.otitan.gis.Convert;
-import com.otitan.gis.Geocoding;
 import com.otitan.gis.GraphicLayerutil;
 import com.otitan.gis.MyIdentifyTask;
 import com.otitan.gis.PlotUtil;
 import com.otitan.gis.PositionUtil;
 import com.otitan.gis.TrackUtil;
 import com.otitan.gyslfh.R;
-import com.otitan.util.DataBaseHelperUtil;
 import com.otitan.util.GpsCorrect;
 import com.otitan.util.GpsUtil;
 import com.otitan.util.NetUtil;
@@ -149,10 +147,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import Util.MylibUtil;
 import Util.ProgressDialogUtil;
@@ -167,7 +163,7 @@ public class MapActivity extends Activity {
 	public static String DQLEVEL, loginName, userID, websUtilResult, UNITID;
 	// 设备信息
 	String TELNO, REALNAME;
-	boolean iszhuce = false;
+	boolean iszhuce = false;//是否注册
 	boolean isupdateserver;// 是否上传到服务器
 	// 保存对应的featureLayer的 文件名和父级文件夹名称
 	public static List<HashMap<String, String>> nameList = new ArrayList<HashMap<String, String>>();
@@ -191,25 +187,28 @@ public class MapActivity extends Activity {
 	List<Map<String, Object>> searchHistoryData = new ArrayList<Map<String, Object>>();
 	public boolean focuse = false;
 	ImageButton searchButton;
-	private String searchText;
+/*	private String searchText;
 	private List<Map<String, Object>> searchList = new ArrayList<Map<String, Object>>();
 	View addresssview;
-	int dimingid;
-
+	int dimingid;*/
+    //是否导航
 	boolean isnav = false;
-	String authinfo = null;
+	//是否标绘
+	boolean isplot = false;
+
+	//String authinfo = null;
 	public static final String ROUTE_PLAN_NODE = "routePlanNode";
 	BaiduNavi baiduNavi = null;
 	BaiduRoutePlanListener mBaiduRoutePlanListener;
 
 	private ImageButton btn_clear, btn_cemian, btn_ceju, myLocation;
-	private MapView mapView = null;
+	public MapView mapView = null;
 	private MarkerSymbol locationMarkerSymbol = null;
 	private String titlePath,titlePath1, imageTitlePath, citytitlePath;
 
 	public String querPath = "";
 	// 图层
-	ArcGISLocalTiledLayer arcGISLocalTiledLayer, arcGISLocalCityTiledLayer;
+	ArcGISLocalTiledLayer arcGISLocalTiledLayer,arcGISLocalTiledLayer2, arcGISLocalCityTiledLayer;
 	ArcGISLocalTiledLayer imageLocalTiledLayer;
 	ArcGISDynamicMapServiceLayer dynamiclayer = null;// 专题数据图层
 	ArcGISFeatureLayer arcGISFeatureLayer = null;
@@ -336,6 +335,8 @@ public class MapActivity extends Activity {
 
 	private boolean isFirstPoint = true;
 	private DecimalFormat decimalFormat = new DecimalFormat(".00");
+    //经纬度格式化
+	DecimalFormat lonlatdf = new DecimalFormat(".000000");
 	public int drawType;
 	// 标绘类型
 	public static int plotType;
@@ -392,12 +393,14 @@ public class MapActivity extends Activity {
 		MODE_EMPERTY
 
 	}
-
+	Intent intent=null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mcontext=this;
 		//获取GPS服务
+
+		 intent=getIntent();
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -535,8 +538,19 @@ public class MapActivity extends Activity {
 		// 添加地图
 		try {
 
+
+			// 贵阳矢量切片
+			titlePath = ResourcesManager.getInstance(this)
+					.getArcGISLocalTiledLayerPath();
+			if (!titlePath.equals("")) {
+				arcGISLocalTiledLayer = new ArcGISLocalTiledLayer(titlePath);
+				arcGISLocalTiledLayer.setVisible(true);
+				mapView.addLayer(arcGISLocalTiledLayer);
+			} else {
+				ToastUtil.setToast(MapActivity.this, "贵阳切片图层不存在");
+			}
 			// 全国市界切片
-			citytitlePath = ResourcesManager.getInstance(this)
+			/*citytitlePath = ResourcesManager.getInstance(this)
 					.getArcGISLocalCityTiledLayerPath();
 			if (!citytitlePath.equals("")) {
 				arcGISLocalCityTiledLayer = new ArcGISLocalTiledLayer(
@@ -544,25 +558,16 @@ public class MapActivity extends Activity {
 				mapView.addLayer(arcGISLocalCityTiledLayer);
 			} else {
 				ToastUtil.setToast(MapActivity.this, "全国市级切片图层不存在");
-			}
-			// 贵阳矢量切片
-			titlePath = ResourcesManager.getInstance(this)
-					.getArcGISLocalTiledLayerPath();
-			if (!titlePath.equals("")) {
-				arcGISLocalTiledLayer = new ArcGISLocalTiledLayer(titlePath);
-				mapView.addLayer(arcGISLocalTiledLayer);
-			} else {
-				ToastUtil.setToast(MapActivity.this, "贵阳切片图层不存在");
-			}
+			}*/
 			// 安顺矢量切片
-			titlePath1 = ResourcesManager.getInstance(this)
+		/*	titlePath1 = ResourcesManager.getInstance(this)
 					.getArcGISLocalTiledASLayerPath();
 			if (!titlePath.equals("")) {
-				arcGISLocalTiledLayer = new ArcGISLocalTiledLayer(titlePath1);
-				mapView.addLayer(arcGISLocalTiledLayer);
+				arcGISLocalTiledLayer2 = new ArcGISLocalTiledLayer(titlePath1);
+				mapView.addLayer(arcGISLocalTiledLayer2);
 			} else {
 				ToastUtil.setToast(MapActivity.this, "安顺切片图层不存在");
-			}
+			}*/
 			// 影像切片
 			imageTitlePath = ResourcesManager.getInstance(this)
 					.getArcGISLocalImageLayerPath();
@@ -691,6 +696,11 @@ public class MapActivity extends Activity {
 
 	}
 
+	public   MapView getMapview() {
+		return mapView;
+
+	}
+
 	private void getMobileInfo() {
 		final String result = websUtil.selMobileInfo(MyApplication.SBH);// 获取设备
 		if (result.equals("网络异常")) {
@@ -716,6 +726,17 @@ public class MapActivity extends Activity {
 	}
 
 	private void intitalmenu() {
+
+		if(true){
+			iszhuce=true;
+			btn_upfireInfo.setVisibility(View.VISIBLE);
+			btn_jiejing.setVisibility(View.VISIBLE);
+			day_statistics.setVisibility(View.VISIBLE);
+			btn_jiejingmanage.setVisibility(View.GONE);
+			btn_zbdw.setVisibility(View.VISIBLE);
+			btn_sbzx.setVisibility(View.VISIBLE);
+			return;
+		}
 		// 获取菜单
 		menus = websUtil.getMenu(loginName);
 		for (com.otitan.entity.Menu menu : menus) {
@@ -799,7 +820,7 @@ public class MapActivity extends Activity {
 	}
 
 	/* 小地名搜索按钮 */
-	public void searchButton(View view) {
+	/*public void searchButton(View view) {
 		searchText = editsearchText.getText().toString().trim();
 		if (StrChecked(searchText)) {
 			// 记录到历史查询数据中
@@ -823,7 +844,7 @@ public class MapActivity extends Activity {
 			}
 
 		}
-	}
+	}*/
 
 	/**
 	 * 检测 str 是否为null 如果不为null是否为""
@@ -1055,7 +1076,7 @@ public class MapActivity extends Activity {
 					public void run() {
 						if (isFirstLoc) {
 							if (1 < mapView.getResolution()) {
-								mapView.setResolution(1);
+								mapView.setResolution(10);
 							}
 							mapView.centerAt(upPoint, true);
 							mapView.invalidate();
@@ -1307,20 +1328,6 @@ public class MapActivity extends Activity {
 						e.printStackTrace();
 						ToastUtil.setToast(MapActivity.this, "数据获取失败");
 					}
-
-
-					/*if (result.equals("网络异常"))
-					{
-						ToastUtil.setToast(MapActivity.this, "数据获取异常");
-					} else
-					{
-						ProgressDialogUtil.startProgressDialog(MapActivity.this);
-						manageintent.putExtra("result", result);
-						manageintent.putExtra("username", loginName);
-						startActivity(manageintent);
-					}*/
-
-
 					break;
 				case R.id.btn_huijing:
 					if (iszhuce) {
@@ -1345,8 +1352,36 @@ public class MapActivity extends Activity {
 					jieJingintent.putExtra("UNITID", UNITID);
 					startActivity(jieJingintent);
 					break;
+				//火警上报
 				case R.id.btn_upfireInfo:
-					if (iszhuce) {
+
+					if (iszhuce&& userID != null) {
+						if(upPoint!=null){
+							Point point = (Point) GeometryEngine.project(upPoint,
+									mapView.getSpatialReference(),
+									SpatialReference.create(4326));
+						/*currentDetailDress = testUrlRes(point.getY() + "", point.getX()
+								+ "");*/
+							Intent fireIntent = new Intent(MapActivity.this,
+									UpFireActivity.class);
+
+							fireIntent.putExtra("userID", userID);
+							fireIntent.putExtra("longitude", point.getX());
+							fireIntent.putExtra("latitude", point.getY());
+							//fireIntent.putExtra("address", currentDetailDress);
+							fireIntent.putExtra("DQLEVEL", DQLEVEL);
+							fireIntent.putExtra("UNITID", UNITID);
+							startActivity(fireIntent);
+
+
+						} else {
+							ToastUtil.setToast(MapActivity.this, "无法获取经纬度信息");
+						}
+					} else {
+						ToastUtil.setToast(MapActivity.this, "设备信息未注册，请去个人中心注册");
+					}
+					break;
+				/*	if (iszhuce) {
 
 						Point point = (Point) GeometryEngine.project(upPoint,
 								mapView.getSpatialReference(),
@@ -1372,7 +1407,7 @@ public class MapActivity extends Activity {
 					} else {
 						ToastUtil.setToast(MapActivity.this, "设备信息未注册，请去个人中心注册");
 					}
-					break;
+					break;*/
 				case R.id.btn_fireINFO:// 火情统计
 					showFireInfo();
 					break;
@@ -1622,6 +1657,11 @@ public class MapActivity extends Activity {
 		//List<List<Point>> listpts=TrackUtil.OptimizeTrackPoint(locations,mapView);
 
 		//Toast.makeText(MapActivity.this, "共查询到"+tps.size()+"个轨迹点", Toast.LENGTH_SHORT).show();
+		if(listpts==null||listpts.size()<1.){
+			com.otitan.util.ProgressDialogUtil.stopProgressDialog();
+			Toast.makeText(MapActivity.this, "未查询到符合条件的轨迹点", Toast.LENGTH_SHORT)
+					.show();
+		}
 		for(List<Point> s:listpts){
 			int i=0;
 			Point pp=s.get(0);
@@ -1744,6 +1784,14 @@ public class MapActivity extends Activity {
 				}
 				break;
 			case POLYGON:
+				polygon = new Polygon();
+				drawGraphic = new Graphic(polygon, fillSymbol);
+				if (actionMode == actionMode.MODE_PLOT) {
+					polygon = new Polygon();
+					drawGraphic = new Graphic(polygon, fillSymbol);
+					plotgraphicID = plotgraphiclayer.addGraphic(drawGraphic);
+				}
+				break;
 		/*case CIRCLE:
 			polygon = new Polygon();
 			drawGraphic = new Graphic(polygon, fillSymbol);
@@ -1885,7 +1933,17 @@ public class MapActivity extends Activity {
 					drawType = POLYLINE;
 					activate(drawType);
 					break;
+				//清空图层
 				case R.id.btn_clear:
+					if(isplot){
+					// 清空标绘图层
+						//plotUtil.plotgarphic
+						plotgraphiclayer.removeGraphic(plotUtil.plotgraphicID);
+						plotUtil.activate(plotUtil.plotType);
+						/*plotgraphiclayer.updateGraphic(plotUtil.plotgraphicID,null);
+					    plotgraphiclayer.removeAll();*/
+						break;
+				}
 					active = false;
 					drawType = Entity;
 					isFirstPoint = true;
@@ -1913,21 +1971,6 @@ public class MapActivity extends Activity {
 					break;
 				// 轨迹回放开始时间
 				case R.id.guiji_startTime:
-				/*String time=guiji_startTime.getText().toString();
-				try {
-					sdf.parse(time);
-					istime=true;
-
-				} catch (Exception e) {
-					istime=false;
-				}
-				if(istime){
-
-				}else{
-					Dialog guijistartDateDialog = new DateDialog(MapActivity.this,
-							guiji_startTime);
-					guijistartDateDialog.show();
-				}*/
 					Dialog guijistartDateDialog = new DateDialog(MapActivity.this,
 							guiji_startTime);
 					guijistartDateDialog.show();
@@ -2131,15 +2174,15 @@ public class MapActivity extends Activity {
 				// 态势标绘
 				case R.id.imgbtn_plot:
 
-					if (isnav) {
-						isnav = false;
+					if (isplot) {
+						isplot = false;
 						actionMode = ActionMode.MODE_ENTITY;
 						plotUtil.closePlotDialog();
 						mapView.setOnTouchListener(myTouchListener);
 						ToastUtil.setToast(MapActivity.this, "标绘功能已关闭");
 					} else {
 						plotUtil = new PlotUtil(MapActivity.this, mapView);
-						isnav = true;
+						isplot = true;
 						ToastUtil.setToast(MapActivity.this, "标绘功能已开启");
 						mapView.setOnTouchListener(plotUtil.plotTouchListener);
 						plotUtil.showPlotDialog(v);
@@ -2332,8 +2375,8 @@ public class MapActivity extends Activity {
 			//安顺林业局：105.9479815  	26.2492988
 
 			Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
-			final Point pt1=(Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
-			final Point pt = new Point(667279.435, 2956758.767);
+			final Point pt=(Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
+			//final Point pt = new Point(667279.435, 2956758.767);
 			//首次定位查询当前所在区县
 			if(isFirstLoc){
 				//qureyCurpt(pt);
@@ -2369,7 +2412,7 @@ public class MapActivity extends Activity {
 			upPoint = new Point(point2.getX(), point2.getY());
 			longitude=point2.getX();
 			latitude=point2.getY();
-			// upPoint = new Point(672679.534108, 2972909.353704);
+			//upPoint = new Point(672679.534108, 2972909.353704);
 			// upPoint = SymbolUtil.getPoint(longitude,latitude);
 			createLocationGraphic(upPoint);
 				/* 坐标实时定位 */
@@ -2382,7 +2425,6 @@ public class MapActivity extends Activity {
 				//int dis= sharedPreferences.getInt("distance",100);
 				//两点定位间隔大于100米则上传坐标
 				if (l > sharedPreferences.getInt("distance", 100)) {
-
 					last_point_lon = longitude;
 					last_point_lat = latitude;
 					if(sharedPreferences.getBoolean("guiji", false)){
@@ -2428,16 +2470,18 @@ public class MapActivity extends Activity {
 	 * 当日火情统计
 	 */
 	private void showFireInfo() {
-		websUtilResult = websUtil
+		Toast.makeText(context,"今日无火情",Toast.LENGTH_SHORT).show();
+		return;
+		/*websUtilResult = websUtil
 				.selHuoDian(countries[Integer.parseInt(UNITID)].toString(),
-						DQLEVEL, UNITID);
-		LayoutInflater layInflater = LayoutInflater.from(context);
+						DQLEVEL, UNITID);*/
+		/*LayoutInflater layInflater = LayoutInflater.from(context);
 		View view = layInflater.inflate(R.layout.dialog_hqtj, null);
 		final Dialog dialogFire = new Dialog(context, R.style.customDialog);
 
-		/*final Dialog dialogFire = new Dialog(context);
+		*//*final Dialog dialogFire = new Dialog(context);
 		android.view.WindowManager.LayoutParams lparam= dialogFire.getWindow().getAttributes();
-		lparam.width=(int) (MyApplication.screen.widthPixels*0.8);*/
+		lparam.width=(int) (MyApplication.screen.widthPixels*0.8);*//*
 		dialogFire.setContentView(view);
 		dialogFire.setCanceledOnTouchOutside(true);
 		//dialogFire.getWindow().setAttributes(lparam);
@@ -2507,139 +2551,9 @@ public class MapActivity extends Activity {
 				}
 			}
 			dialogFire.show();
-		}
+		}*/
 	}
 
-	/**
-	 * 图层
-	 */
-	/*private void showTucengDialog() {
-		LayoutInflater layInflater = LayoutInflater.from(context);
-		View view = layInflater.inflate(R.layout.dialog_tuceng_control, null);
-		final Dialog dialogTC = new Dialog(context, R.style.customDialog);
-		dialogTC.setContentView(view);
-		for (Layer layer : mapView.getLayers()) {
-			if (!(layer instanceof GraphicsLayer)) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("name", layer.getName());
-				map.put("cb", layer.isVisible());
-				tcList.add(map);
-			}
-		}
-		ListView tcListView = (ListView) dialogTC
-				.findViewById(R.id.tcControl_listView);
-		TucengAdapter tcAdapter = new TucengAdapter(tcList, context, tcListView);
-		tcListView.setAdapter(tcAdapter);
-
-		Button bt_sure = (Button) dialogTC.findViewById(R.id.bt_sure);
-		Button bt_cancle = (Button) dialogTC.findViewById(R.id.bt_cancle);
-		ImageButton returnButton = (ImageButton) dialogTC
-				.findViewById(R.id.returnBtn);
-		bt_cancle.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				dialogTC.dismiss();
-			}
-		});
-
-		returnButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				dialogTC.dismiss();
-			}
-		});
-
-		bt_sure.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				for (int i = 0; i < tcList.size(); i++) {
-					tcList.get(i).put("isTrue",
-							TucengAdapter.getIsSelected().get(i));
-					mapView.getLayer(i).setVisible(
-							TucengAdapter.getIsSelected().get(i));
-					dialogTC.dismiss();
-				}
-				mapView.invalidate();
-			}
-		});
-		dialogTC.show();
-	}*/
-
-	/*class PageTask extends AsyncTask<String, Integer, String> {
-
-		@Override
-		protected String doInBackground(String... params) {
-			arrayList.clear();
-			try {
-				websUtilResult = websUtil.selHuoDian(
-						countries[Integer.parseInt(UNITID)].toString(),
-						DQLEVEL, UNITID);
-				obj = new JSONObject(websUtilResult);
-				arr = obj.optJSONArray("ds");
-				if (arr != null) {
-					try {
-						for (int i = 0; i < arr.length(); i++) {
-							object = arr.optJSONObject(i);
-							HashMap<String, Object> map = new HashMap<String, Object>();
-							map.put("id", object.get("ID"));
-							map.put("FIRESTART", object.getString("FIRESTART"));
-							map.put("address", object.getString("PLACE"));
-							map.put("X", object.getString("X").toString());
-							map.put("Y", object.getString("Y").toString());
-							map.put("FIRE_STATE",
-									object.getString("FIRE_STATE"));
-							map.put("COUNTY", object.getString("COUNTY")
-									.toString());
-							arrayList.add(map);
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			HuoDianAdapter hdAdapter = new HuoDianAdapter(arrayList,
-					getApplicationContext());
-			if (hdAdapter != null) {
-				huodianlistView.setAdapter(hdAdapter);
-			}
-
-			huodianlistView.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-										final int position, long id) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							dialog.dismiss();
-							// showFirePoint(position);
-							updateFireInfo(arrayList, position);
-						}
-					});
-				}
-			});
-			dialog.findViewById(R.id.hddw_returnBtn).setOnClickListener(
-					new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							dialog.dismiss();
-						}
-					});
-			runOnUiThread(new Runnable() {
-				public void run() {
-					dialog.show();
-					System.out.println("++++" + System.currentTimeMillis());
-				}
-			});
-
-			return "";
-		}
-	}*/
 
 	// 方法二画圆
 	public FillSymbol DroolCircle() {
@@ -2655,6 +2569,7 @@ public class MapActivity extends Activity {
 	 * 图层显示
 	 */
 	public void showTcDialog() {
+		//ExpandableListView exp_title= findViewById(R.id.)
 		ImageView closeView = (ImageView) findViewById(R.id.close_tuceng);
 		closeView.setOnClickListener(new View.OnClickListener() {
 
@@ -2672,9 +2587,8 @@ public class MapActivity extends Activity {
 		cb_sl.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton arg0, final boolean arg1) {
-				runOnUiThread(new Runnable() {
-					public void run() {
+			public void onCheckedChanged(CompoundButton arg0,  boolean arg1) {
+
 						if (arg1) {
 							if (arcGISLocalTiledLayer != null) {
 								if (!arcGISLocalTiledLayer.isVisible()) {
@@ -2689,8 +2603,8 @@ public class MapActivity extends Activity {
 							}
 						}
 					}
-				});
-			}
+
+
 		});
 		// 基础图 缩放到地图范围
 		ImageView tileView = (ImageView) findViewById(R.id.tile_extent);
@@ -2820,7 +2734,10 @@ public class MapActivity extends Activity {
 	List<File> groups = null;
 	List<List<File>> childs = null;
 	List<List<Map<String, Boolean>>> childCheckBox = new ArrayList<List<Map<String, Boolean>>>();
-
+   /**
+    *
+    * 加载专题图层
+    */
 	public void loginNOshi(String qname) {
 		ExpandableListView tc_exp = (ExpandableListView) findViewById(R.id.tc_expandlistview);
 		tc_exp.setGroupIndicator(null);
@@ -3473,12 +3390,19 @@ public class MapActivity extends Activity {
 		final EditText edit_x = (EditText) view.findViewById(R.id.edit_x);
 		// 米制y
 		final EditText edit_y = (EditText) view.findViewById(R.id.edit_y);
-
+        //显示当前的经纬度
 		TextView lon = (TextView) view.findViewById(R.id.location_lon);
-		lon.setText(longitude + "");
-
 		TextView lat = (TextView) view.findViewById(R.id.location_lat);
-		lat.setText(latitude + "");
+        if(upPoint!=null){
+			Point point = (Point) GeometryEngine.project(upPoint,
+					mapView.getSpatialReference(),
+					SpatialReference.create(4326));
+
+
+			lon.setText(lonlatdf.format(point.getX() ) );
+			lat.setText(lonlatdf.format(point.getY() ) );
+		}
+
 
 		// 确定按钮
 		Button btn_confirm = (Button) view.findViewById(R.id.btn_confirm);
@@ -3943,9 +3867,7 @@ public class MapActivity extends Activity {
 					return;
 				}
 				searchHistoryData.clear();
-				searchHistoryData = DataBaseHelperUtil.selSearchResult(
-						MapActivity.this, manager, editsearchText.getText()
-								.toString());
+				searchHistoryData = DataBaseHelper.serchPlace(editsearchText.getText().toString());
 				if (searchHistoryData.size() > 0) {
 					runOnUiThread(new Runnable() {
 						public void run() {

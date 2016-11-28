@@ -23,8 +23,6 @@
     <string name="versionxml">http://www.gyslfh.com:8037/apk/version.xml</string>
     <!-- 本地服务地址 -->
     <!--   <string name="webservice"> http://localhost:8082/FireService/WebService1.asmx</string> -->
-
-
     <!--   <string name="webservice">http://192.168.1.103/WebServices/FireService/WebService1.asmx</string> -->
     <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>
     <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
@@ -35,7 +33,6 @@
     <string name="title_activity_huo_dian">HuoDianActivity</string>
     <string name="contentDescription"></string>
     <string name="select_time">选 择 时 间</string>
-    <string name="xiaodimingsearch">小地名查询</string>
 
     <!-- 版本更新 -->
     <string name="soft_update_title">软件更新</string>
@@ -51,17 +48,6 @@
 
 
     <!-- 图片浏览 -->
-    <string name="only_choose_num">超出可选图片张数</string>
-    <string name="finish">完成</string>
-    <string name="invalidSD">sdcard无效或没有插入！</string>
-    <string name="photo">选择相册</string>
-    <string name="album">相册</string>
-    <string name="preview">预览</string>
-    <string name="unfinished">完成</string>
-    <string name="camera_cancel">取消</string>
-    <string name="no_photo">相册没有图片</string>
-    <string name="drawer_open">侧滑打开</string>
-    <string name="drawer_close">侧滑关闭</string>
     <string name="title_activity_alarm__edit">接警信息编辑</string>
     <!-- 创建默认文件夹名称 -->
 
@@ -70,6 +56,5 @@
     <string name="but_down">向下</string>
     <string name="but_left">向左</string>
     <string name="but_right">向右</string>
-    <string name="todo"></string>
 
 </resources>

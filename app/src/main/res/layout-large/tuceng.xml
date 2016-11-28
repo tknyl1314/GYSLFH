@@ -50,7 +50,13 @@
             android:background="@color/white"
             android:gravity="left"
             android:orientation="vertical" >
-
+            <ExpandableListView
+                android:id="@+id/explv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:cacheColorHint="@color/white" >
+            </ExpandableListView>
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

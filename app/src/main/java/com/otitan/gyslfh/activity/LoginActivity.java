@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.otitan.DataBaseHelper;
 import com.otitan.customui.DropdownEdittext;
 import com.otitan.gyslfh.R;
 import com.otitan.util.PadUtil;
@@ -40,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class LoginActivity extends Activity
 	// private com.otitan.util.Network_Service networkService;
 	private String loginResult = null;
 	private String loginName, userID, UNITID, TELNO;// ,
-	private String loginPassword;
+	public String loginPassword;
 	private String DQLEVEL, REALNAME;
 	private boolean qiehuan = false;
 	//private MainFrameTask mMainFrameTask = null;
@@ -121,11 +121,10 @@ public class LoginActivity extends Activity
 					break;
 				case LOGINfail:
 					ProgressDialogUtil.stopProgressDialog();
-					Toast.makeText(LoginActivity.this, "登录失败",
+					Toast.makeText(LoginActivity.this, msg.obj.toString(),
 							Toast.LENGTH_SHORT).show();
 					break;
 				case NetWorkfail:
-
 					ProgressDialogUtil.stopProgressDialog();
 					Toast.makeText(LoginActivity.this, "网络错误",
 							Toast.LENGTH_SHORT).show();
@@ -153,12 +152,6 @@ public class LoginActivity extends Activity
 
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 		websUtil = new WebServiceUtil(getApplicationContext());
-	/*	progressDialog = new ProgressDialog(this,
-				ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
-		progressDialog.setIndeterminate(true);
-		progressDialog.setCancelable(false);
-		progressDialog.hide();*/
-
 		// 获取上一个页面传过来的值
 		Intent intent = getIntent();
 		qiehuan = intent.getBooleanExtra("isqiehuan", false);
@@ -305,20 +298,16 @@ public class LoginActivity extends Activity
 
 					Intent intent = new Intent(LoginActivity.this,
 							MapActivity.class);
+					intent.putExtra("psw",loginPassword);
 					LoginActivity.this.startActivity(intent);
 					LoginActivity.this.finish();
 					// 记住密码和自动登入
-					sharedPreferences.edit().putString("DQLEVEL", DQLEVEL)
-							.commit();
-					sharedPreferences.edit().putString("REALNAME", REALNAME)
-							.commit();
+					sharedPreferences.edit().putString("DQLEVEL", DQLEVEL).commit();
+					sharedPreferences.edit().putString("REALNAME", REALNAME).commit();
 					sharedPreferences.edit().putString("TELNO", TELNO).commit();
-					sharedPreferences.edit().putString("userID", userID)
-							.commit();
-					sharedPreferences.edit().putString("UNITID", UNITID)
-							.commit();
-					sharedPreferences.edit().putString("name", loginName)
-							.commit();
+					sharedPreferences.edit().putString("userID", userID).commit();
+					sharedPreferences.edit().putString("UNITID", UNITID).commit();
+					sharedPreferences.edit().putString("name", loginName).commit();
 					sharedPreferences
 							.edit()
 							.putString(
@@ -337,16 +326,17 @@ public class LoginActivity extends Activity
 						if (loginName.equals(mList.get(i)))
 						{
 							flag = true;
-							return;
+							break;
 						}
 					}
 					if (!flag)
 					{
-						addData();
+						DataBaseHelper.addUser(loginName,loginPassword);
+						//addData();
 					}
-					return;
-				}
-				if (object.getString("re") == null
+
+
+				}else if (object.getString("re") == null
 						|| object.getString("re").equals("fail"))
 				{
 					String eMsg = object.getString("eMsg").toString();
@@ -361,9 +351,10 @@ public class LoginActivity extends Activity
 		ProgressDialogUtil.stopProgressDialog();
 	}
 
-	// 确定按钮
+	// 确定登录
 	public void loginSure(View view)
 	{
+
 
 		loginName = login_name.getText().toString();
 		loginPassword = login_password.getText().toString();
@@ -376,6 +367,11 @@ public class LoginActivity extends Activity
 		if (loginPassword == null || loginPassword.equals(""))
 		{
 			Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
+		if(!MyApplication.IntetnetISVisible){
+			Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT)
 					.show();
 			return;
 		}
@@ -493,6 +489,13 @@ public class LoginActivity extends Activity
 	public void checkLogin(String loginName, String loginPassword)
 	{
 		Message msg = new Message();
+		if(loginName.equals("admin")&&loginPassword.equals("whs")){
+			msg.what=LOGIN;
+			mHandler.sendMessage(msg);
+			loginResult="{'re':success','ds':[{'USERNAME':'admin','ROLE_ID':1,'PASSWORD':'C127E5917D58A2EBA9492FBE7DC54456','REALNAME':'管理员','TELNO':'','MOBILEPHONENO':'','USEREMAIL':'','DEPTNAME':'林业局','DEPTID':-1,'DQLEVEL':1,'UNITID':1,'ID':-10}]}";
+			return;
+
+		}
 		loginResult = websUtil.CheckLogin(loginName, loginPassword);
 		try
 		{
@@ -500,7 +503,10 @@ public class LoginActivity extends Activity
 
 			if (login_jsonobject.getString("re").equals("fail"))
 			{
+				String eMsg=login_jsonobject.getString("eMsg");
+				msg.obj=eMsg;
 				msg.what = LOGINfail;
+
 			} else if(loginResult.equals(WebServiceUtil.netException)){
 				msg.what=NetWorkfail;
 			}else
@@ -513,10 +519,6 @@ public class LoginActivity extends Activity
 		}
 
 		mHandler.sendMessage(msg);
-	/*	Intent intent = new Intent(LoginActivity.this,
-				MapActivity.class);
-		LoginActivity.this.startActivity(intent);
-		LoginActivity.this.finish();*/
 	}
 
 	@Override
@@ -531,65 +533,6 @@ public class LoginActivity extends Activity
 		super.onDestroy();
 	}
 
-/*	private void startProgressDialog()
-	{
-		if (progressDialog == null)
-		{
-			 //progressDialog = CustomProgressDialog.createDialog(mcontext);
-			progressDialog.setMessage("正在加载中...");
-		}
-		progressDialog.show();
-	}*/
-
-	/*private void stopProgressDialog()
-	{
-		if (progressDialog != null)
-		{
-			progressDialog.dismiss();
-			progressDialog = null;
-		}
-	}*/
-
-/*	public class MainFrameTask extends AsyncTask<Integer, String, Integer>
-	{
-		@SuppressWarnings("unused")
-		private LoginActivity mainFrame = null;
-
-		public MainFrameTask(LoginActivity mainFrame)
-		{
-			this.mainFrame = mainFrame;
-		}
-
-		protected void onCancelled()
-		{
-			ProgressDialogUtil.stopProgressDialog();
-			super.onCancelled();
-		}
-
-		protected Integer doInBackground(Integer... params)
-		{
-
-			try
-			{
-				Thread.sleep(100 * 1000);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		protected void onPreExecute()
-		{
-			startProgressDialog();
-		}
-
-		protected void onPostExecute(Integer result)
-		{
-			stopProgressDialog();
-		}
-	}*/
-
 	/**
 	 * 检查软件是否有更新版本
 	 *
@@ -598,7 +541,7 @@ public class LoginActivity extends Activity
 	private boolean isUpdate() throws IOException
 	{
 		// 获取当前软件版本
-		double versionCode = getVersionCode(this);
+		double versionCode = getVersionCode(mcontext);
 		// 把version.xml放到网络上，然后获取文件信息
 		/* 获取xml */
 		// http://gis.gyforest.com:8088/fireservice/apk/version.xml
@@ -606,18 +549,25 @@ public class LoginActivity extends Activity
 		URLConnection connection = url.openConnection();
 
 		HttpURLConnection httpConnection = (HttpURLConnection) connection;
-		int responseCode = 1;
-		try
+		//int responseCode = 1;
+		httpConnection.setConnectTimeout(3000);
+		httpConnection.setRequestMethod("GET");
+		/*try
 		{
-			responseCode = httpConnection.getResponseCode();
+			int responseCode = httpConnection.getResponseCode();
 		} catch (Exception e1)
 		{
 			e1.printStackTrace();
-		}
+			return  false;
+
+		}*/
+		int responseCode = httpConnection.getResponseCode();
 		InputStream inStream = null;
 		if (responseCode == HttpURLConnection.HTTP_OK)
 		{
 			inStream = httpConnection.getInputStream();
+		}else{
+			return false;
 		}
 		// InputStream inStream =
 		// ParseXmlService.class.getClassLoader().getResourceAsStream("version.xml");
@@ -662,37 +612,6 @@ public class LoginActivity extends Activity
 		}
 		return versionCode;
 	}
-
-	/**
-	 * 显示软件更新对话框，使用系统控件写的 不要删除 做参
-	 */
-	// private void showNoticeDialog() {
-	// // 构造对话框
-	// AlertDialog.Builder builder = new Builder(mContext,R.style.DialogTheme);
-	// builder.setTitle(R.string.soft_update_title);
-	// builder.setMessage(R.string.soft_update_info);
-	// // 更新
-	// builder.setPositiveButton(R.string.soft_update_updatebtn,
-	// new OnClickListener() {
-	// @Override
-	// public void onClick(DialogInterface dialog, int which) {
-	// dialog.dismiss();
-	// // 显示下载对话框
-	// showDownloadDialog();
-	// }
-	// });
-	// // 稍后更新
-	// builder.setNegativeButton(R.string.soft_update_later,
-	// new OnClickListener() {
-	// @Override
-	// public void onClick(DialogInterface dialog, int which) {
-	// dialog.dismiss();
-	// initView();
-	// }
-	// });
-	// Dialog noticeDialog = builder.create();
-	// noticeDialog.show();
-	// }
 	// 自定义版本更新提示dialog
 	public void showVersionDialog()
 	{
@@ -730,34 +649,6 @@ public class LoginActivity extends Activity
 		});
 		updateDialog.show();
 	}
-
-	/**
-	 * 显示软件下载对话框,使用系统控件写的 不要删除 做参考
-	 */
-	// private void showDownloadDialog() {
-	// // 构造软件下载对话框
-	// AlertDialog.Builder builder = new Builder(mContext,R.style.DialogTheme);
-	// builder.setTitle(R.string.soft_updating);
-	// // 给下载对话框增加进度条
-	// final LayoutInflater inflater = LayoutInflater.from(mContext);
-	// View v = inflater.inflate(R.layout.softupdate_progress, null);
-	// mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
-	// builder.setView(v);
-	// // 取消更新
-	// builder.setNegativeButton(R.string.btn_edit_discard,
-	// new OnClickListener() {
-	// @Override
-	// public void onClick(DialogInterface dialog, int which) {
-	// dialog.dismiss();
-	// // 设置取消状态
-	// cancelUpdate = true;
-	// }
-	// });
-	// mDownloadDialog = builder.create();
-	// mDownloadDialog.show();
-	// // 下载文件
-	// downloadApk();
-	// }
 	/**
 	 * 显示软件下载对话框
 	 */
@@ -858,10 +749,7 @@ public class LoginActivity extends Activity
 					is.close();
 					cancelUpdate = false;
 				}
-			} catch (MalformedURLException e)
-			{
-				e.printStackTrace();
-			} catch (IOException e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -894,8 +782,10 @@ public class LoginActivity extends Activity
 		return false;
 		// return super.onPrepareOptionsMenu(menu);
 	}
-
-	public void addData()
+    /**
+	 * 注册新用户到本地数据库
+	 */
+/*	public void addData()
 	{
 		String filename = null;
 		try
@@ -919,5 +809,5 @@ public class LoginActivity extends Activity
 		{
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

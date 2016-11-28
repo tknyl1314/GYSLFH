@@ -71,7 +71,7 @@
         <!-- 笔记本测试key  android:value="IRxl8CTt3XVwVvV6mBT7kHqn" -->
         <!-- 百度地图通用key  android:value="vrn5PmTl38mk3Gux8nDrBf32" -->
 
-       <!-- <activity
+        <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden">
@@ -79,16 +79,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
+        </activity>
         <activity
             android:name=".activity.MapActivity"
             android:label="@string/title_activity_frame"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustUnspecified|stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.UpFireActivity"
@@ -97,26 +93,26 @@
         <!-- 火警上报 -->
         <activity
             android:name=".activity.AlbumActivity_HuiJing"
-            android:label="@string/title_activity_frame"></activity>
+            android:label="@string/title_activity_frame"/>
         <activity
             android:name=".activity.HuiJingActivity"
-            android:label="@string/title_activity_hui_jing"></activity>
+            android:label="@string/title_activity_hui_jing"/>
         <activity
             android:name=".activity.JJLRActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_jie_jing"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name="activity.HuoQingActivity"
-            android:label="@string/title_activity_huo_qing"></activity>
+            android:label="@string/title_activity_huo_qing"/>
         <activity
             android:name=".activity.HuoDianActivity"
-            android:label="@string/title_activity_huo_dian"></activity>
+            android:label="@string/title_activity_huo_dian"/>
         <activity
             android:name="com.baidu.navi.BNDemoGuideActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"></activity>
 
+        android:theme="@android:style/Theme.NoTitleBar"/>
 
 
         <service
@@ -127,22 +123,22 @@
         <activity
             android:name=".activity.ManageActivity"
             android:label="@string/title_activity_jjxxgl"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <!-- 接警管理 -->
         <activity
             android:name=".activity.AlarmManageActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
 
         <!-- 引用照片 -->
         <activity
             android:name="com.king.photo.activity.AlbumActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name="com.king.photo.activity.ImageFileActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name="com.king.photo.activity.ShowAllPhoto"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name="com.king.photo.activity.GalleryActivity"
             android:screenOrientation="landscape"></activity>
@@ -254,5 +250,4 @@
         <!-- 个推SDK配置结束 -->
 
 </application>
-
 </manifest>

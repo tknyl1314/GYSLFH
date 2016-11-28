@@ -22,6 +22,7 @@ public class ResourcesManager implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	public static final String PATH_MAPS = "/maps";
+	public static final String TITAN = "/TITAN";
 	public static String Code_Path = "";
 	public static Context context;
 	public static String packageName;
@@ -319,12 +320,23 @@ public class ResourcesManager implements Serializable
 		return arcGISLocalTiledLayerPath;
 	}
 
-
 	// 获取本地spatialite
 	public String getlocdb()
+	{//Export_Output.shp
+		//bou2_4p.shp
+		return getPath()[1] + TITAN  + "/长坡岭.shp";
+	}
+	public String getlayerpath()
+	{//Export_Output.shp
+		//bou2_4p.shp
+		return getPath()[1] + TITAN  + "/顺海林场t.shp";
+	}
+
+	// 获取本地spatialite
+	/*public String getlocdb()
 	{
 		return getPath()[1] + PATH_MAPS +sqlite + "/GYSLFH_1010.sqlite";
-	}
+	}*/
 
 	// 获取本地安顺市图层
 		public String getArcGISLocalTiledASLayerPath()

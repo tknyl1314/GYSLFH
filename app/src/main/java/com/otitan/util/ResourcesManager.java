@@ -292,6 +292,14 @@ public class ResourcesManager implements Serializable
 		excelPath = getDataPath(excel);
 		return excelPath;
 	}
+	// 获取本地合肥市图层
+	public String getArcGISLocalTiledHFLayerPath()
+	{
+		String arcGISLocalTiledLayerPath = "";
+		String str = otitan_map + "/title.tpk";
+		arcGISLocalTiledLayerPath = getDataPath(str);
+		return arcGISLocalTiledLayerPath;
+	}
 	// 获取本地贵阳市图层
 	public String getArcGISLocalTiledLayerPath()
 	{
