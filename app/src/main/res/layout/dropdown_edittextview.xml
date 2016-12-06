@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal" >
-
     <AutoCompleteTextView
         android:id="@+id/autotextview"
         android:layout_width="0dp"
@@ -16,8 +15,11 @@
         android:dropDownVerticalOffset="2dp"
         android:focusable="true"
         android:textColor="@color/balck"
-        android:textCursorDrawable="@drawable/test_cursor" />
-
+        android:textSize="24sp"
+        android:paddingLeft="8dp"
+        android:lines="1"
+        android:textCursorDrawable="@drawable/test_cursor"
+       />
     <ImageView
         android:id="@+id/btn_dropdown"
         android:layout_width="0dp"

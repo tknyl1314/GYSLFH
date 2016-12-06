@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.titan.viewmodel.LoginViewModel"/>
+        <variable
+            name="user"
+            type="com.titan.model.UserInfo"/>
+    </data>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/system_bg"
+    android:orientation="vertical"
+    android:focusable="true"
+	android:focusableInTouchMode="true"
+    android:gravity="center"
+    tools:context="com.titan.view.LoginActivity" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/logo" />
+
+    <com.titan.custom.DropdownEdittext
+        android:id="@+id/login_name"
+        android:layout_width="350dp"
+        android:background="@color/white"
+        android:gravity="start"
+        android:layout_height="45dp"
+        android:layout_marginTop="150dp" />
+    <!--<EditText
+        android:id="@+id/login_password1"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:hint="@string/password"
+        android:text="@{user.passWord}"
+        android:lines="1"
+        android:textSize="24sp"
+        android:paddingLeft="8dp"
+        android:gravity="center|start"
+        android:inputType="textPassword"
+        android:theme="@style/EditText"
+        android:textColor="@color/balck" >
+    </EditText>-->
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/usernameWrapper"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        >
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:text="@{user.passWord}"
+            android:hint="@string/password"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_cb"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp" >
+        <CheckBox
+            android:id="@+id/checkBoxPass"
+            style="@style/CustomCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/checkBoxlogin"
+            style="@style/autoLoginCheckboxTheme"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:checked="false" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/loginbutton"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/login"
+        android:onClick="@{viewModel.onLongin}"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+</LinearLayout>
+</layout>

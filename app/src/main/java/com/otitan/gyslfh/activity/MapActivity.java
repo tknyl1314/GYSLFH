@@ -155,6 +155,9 @@ import Util.ProgressDialogUtil;
 import Util.ToastUtil;
 import symbol.SymbolUtil;
 
+/**
+ *
+ */
 public class MapActivity extends Activity {
 
 
@@ -214,7 +217,6 @@ public class MapActivity extends Activity {
 	ArcGISFeatureLayer arcGISFeatureLayer = null;
 	ArcGISDynamicMapServiceLayer arcGISDynamicMapServiceLayer;
 	String featurelayerurl;
-	LinearLayout linerlayout_zhuanti;// 动态专题图层
 
 	FeatureLayer queryfeatureLayer;
 
@@ -338,17 +340,6 @@ public class MapActivity extends Activity {
     //经纬度格式化
 	DecimalFormat lonlatdf = new DecimalFormat(".000000");
 	public int drawType;
-	// 标绘类型
-	public static int plotType;
-	// public static final int Entity = 0;
-	//
-	public static final int ARROW = 1;
-	public static final int PLOTAREA = 12;
-	// 防火带
-	public static final int FIREBREAK = 2;
-	// 火点
-	public static final int FIREPOINT = 3;
-
 	public static ActionMode actionMode;
 	private SharedPreferences sharedPreferences;
 	private View tcontrolView;
@@ -399,9 +390,7 @@ public class MapActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mcontext=this;
 		//获取GPS服务
-
-		 intent=getIntent();
-
+		intent=getIntent();
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_map);
@@ -425,12 +414,6 @@ public class MapActivity extends Activity {
 		context = this;
 		websUtil = new WebServiceUtil(getApplicationContext());
 		websUtil.initWebserviceTry();
-		// 先删除tag
-		/*
-		 * List<String> tags1 = new ArrayList<String>();
-		 * tags1.add(sharedPreferences.getString("UNITID", ""));
-		 * PushManager.delTags(context, tags1);
-		 */
 		// 获取上个页面传来的值
 		DQLEVEL = sharedPreferences.getString("DQLEVEL", "");// 0代表领导//
 		// 1代表市级。。。2代表县级之分
@@ -441,65 +424,13 @@ public class MapActivity extends Activity {
 
 
 		ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");// 去除水印的
-
 		mapView = (MapView) findViewById(R.id.map);
 		mapView.setMapBackground(0xffffff, 0xffffff, 3, 3);
-		zoomControls = (ZoomControlView) findViewById(R.id.ZoomControlView);
-		zoomControls.setMapView(mapView);
-		// 工具栏
-		myLocation = (ImageButton) findViewById(R.id.myLocation);
 
-		// 图层控制
-		tcontrolView = findViewById(R.id.tuceng_control);
-		tcControlBtn = (Button) findViewById(R.id.btn_tcControl);
-		tcControlBtn.setVisibility(View.GONE);
-		// 火情上报
-		btn_upfireInfo = (Button) findViewById(R.id.btn_upfireInfo);
-		btn_upfireInfo.setVisibility(View.GONE);
-		// 回警
-		btn_huijing = (Button) findViewById(R.id.btn_huijing);
-		btn_huijing.setVisibility(View.GONE);
-		// 接警录入
-		btn_jiejing = (Button) findViewById(R.id.btn_jiejing);
-		btn_jiejing.setVisibility(View.GONE);
-		// 接警管理
-		btn_jiejingmanage = (Button) findViewById(R.id.btn_jiejingmanage);
-		btn_jiejingmanage.setVisibility(View.GONE);
-		// 火情统计
-		day_statistics = (Button) findViewById(R.id.btn_fireINFO);
-		day_statistics.setVisibility(View.GONE);
-		/* 坐标定位 */
-		btn_zbdw = (Button) findViewById(R.id.btn_zbdw);
-		btn_zbdw.setVisibility(View.GONE);
-		/* 个人中心 */
-		btn_sbzx = (Button) findViewById(R.id.btn_sbzx);
-		btn_sbzx.setVisibility(View.GONE);
-		// 天气预报
-		imgbtn_weather = (ImageButton) findViewById(R.id.imgbtn_weather);
+        intiView();
 
-		imgbtn_plot = (ImageButton) findViewById(R.id.imgbtn_plot);
-		imgbtn_plot.setOnClickListener(new MyListener());
-
-
-		btn_jiejingmanage.setOnClickListener(new MyListener());
-		tcControlBtn.setOnClickListener(new MyListener());
-		btn_zbdw.setOnClickListener(new MyListener());
-		btn_sbzx.setOnClickListener(new MyListener());
-		btn_fireLocation = (Button) findViewById(R.id.btn_fireLocation);
-
-		btn_clear = (ImageButton) findViewById(R.id.btn_clear);
-		btn_clear.setOnClickListener(new MyListener());
-		btn_ceju = (ImageButton) findViewById(R.id.btn_ceju);
-		btn_ceju.setOnClickListener(new MyListener());
-		btn_cemian = (ImageButton) findViewById(R.id.btn_cemian);
-		btn_cemian.setOnClickListener(new MyListener());
-
-		// 导航
-		btn_nav = (ImageButton) findViewById(R.id.btn_nav);
-		btn_nav.setOnClickListener(new MyListener());
 		// 内部类MyTouchListener
 		myTouchListener = new MyTouchListener(MapActivity.this, mapView);
-
 		mapView.setOnTouchListener(myTouchListener);
 		mapView.setOnZoomListener(new OnZoomListener() {
 
@@ -518,27 +449,11 @@ public class MapActivity extends Activity {
 		// 小地名搜索
 		View xdmsearch = findViewById(R.id.dimingsearch);
 		initXDMsearch(xdmsearch);
-
-		imgbtn_tucengcontrol = (ImageButton) findViewById(R.id.imgbtn_tucengcontrol);
-		// 按钮注册点击事件
-		myLocation.setOnClickListener(new MyListener());
-		btn_upfireInfo.setOnClickListener(new MyListener());
-		btn_jiejing.setOnClickListener(new MyListener());
-		btn_huijing.setOnClickListener(new MyListener());
-		btn_fireLocation.setOnClickListener(new MyListener());
-		tcControlBtn.setOnClickListener(new MyListener());
-		day_statistics.setOnClickListener(new MyListener());
-		imgbtn_tucengcontrol.setOnClickListener(new MyListener());
-		imgbtn_weather.setOnClickListener(new MyListener());
-
 		/*
 		 * if (!(DQLEVEL.equals("2"))) { btn_huijing.setVisibility(View.GONE); }
 		 */
-
 		// 添加地图
 		try {
-
-
 			// 贵阳矢量切片
 			titlePath = ResourcesManager.getInstance(this)
 					.getArcGISLocalTiledLayerPath();
@@ -578,21 +493,18 @@ public class MapActivity extends Activity {
 			} else {
 				ToastUtil.setToast(MapActivity.this, "影像切片图层不存在");
 			}
-
-
-		/*	querPath =  ResourcesManager.getDataBase("gy.geodatabase");
-			queryfeatureLayer= GeodatabaseHelper.loadGeodatabase(querPath);
-			mapView.addLayer(queryfeatureLayer);*/
 			// 有网络时加载动态图层
 			if (MyApplication.IntetnetISVisible) {
 
-				dynamiclayerurl = context.getResources().getString(
-						R.string.dynamiclayerurl);
-				// dynamiclayerurl =
+				dynamiclayerurl = context.getResources().getString(R.string.dynamiclayerurl);
 				// "http://192.168.6.219:6080/arcgis/rest/services/SLFH_GEO2/MapServer";
 				dynamiclayer = new ArcGISDynamicMapServiceLayer(dynamiclayerurl);
-				dynamiclayerid = mapView.addLayer(dynamiclayer);
-				dynamiclayer.setVisible(true);
+                dynamiclayerid = mapView.addLayer(dynamiclayer);
+                dynamiclayer.setVisible(true);
+
+                if(dynamiclayer.getMapServiceInfo()==null){
+                    dynamiclayer=null;
+                }
 				// 获取设备注册信息
 				try {
 					getMobileInfo();
@@ -610,17 +522,7 @@ public class MapActivity extends Activity {
 				//
 			}
 
-			// 专题图层
-			/*
-			 * featurelayerurl =
-			 * context.getResources().getString(R.string.featurelayerurl);
-			 * arcGISFeatureLayer=new ArcGISFeatureLayer(featurelayerurl,
-			 * MODE.SNAPSHOT ); mapView.addLayer(arcGISFeatureLayer);
-			 * arcGISFeatureLayer.setVisible(true);
-			 */
-
 		} catch (Exception e) {
-		//log.error(e.toString());
 			Toast.makeText(context, "地图初始化失败", Toast.LENGTH_SHORT).show();
 		}
 
@@ -696,7 +598,77 @@ public class MapActivity extends Activity {
 
 	}
 
-	public   MapView getMapview() {
+    /**
+     * 初始化view
+     */
+    private void intiView() {
+
+        zoomControls = (ZoomControlView) findViewById(R.id.ZoomControlView);
+        zoomControls.setMapView(mapView);
+        if(!ispad){
+            zoomControls.setVisibility(View.GONE);
+        }
+        // 图层控制
+        tcontrolView = findViewById(R.id.tuceng_control);
+        imgbtn_tucengcontrol = (ImageButton) findViewById(R.id.imgbtn_tucengcontrol);
+        imgbtn_tucengcontrol.setOnClickListener(new MyListener());
+       /* tcControlBtn = (Button) findViewById(R.id.btn_tcControl);
+        tcControlBtn.setVisibility(View.GONE);
+        tcControlBtn.setOnClickListener(new MyListener());*/
+        // 火情上报
+        btn_upfireInfo = (Button) findViewById(R.id.btn_upfireInfo);
+        btn_upfireInfo.setVisibility(View.GONE);
+        btn_upfireInfo.setOnClickListener(new MyListener());
+        // 回警
+        btn_huijing = (Button) findViewById(R.id.btn_huijing);
+        btn_huijing.setVisibility(View.GONE);
+        btn_huijing.setOnClickListener(new MyListener());
+        // 接警录入
+        btn_jiejing = (Button) findViewById(R.id.btn_jiejing);
+        btn_jiejing.setVisibility(View.GONE);
+        btn_jiejing.setOnClickListener(new MyListener());
+        // 接警管理
+        btn_jiejingmanage = (Button) findViewById(R.id.btn_jiejingmanage);
+        btn_jiejingmanage.setVisibility(View.GONE);
+        btn_jiejingmanage.setOnClickListener(new MyListener());
+        // 火情统计
+        day_statistics = (Button) findViewById(R.id.btn_fireINFO);
+        day_statistics.setVisibility(View.GONE);
+        day_statistics.setOnClickListener(new MyListener());
+		/* 坐标定位 */
+        btn_zbdw = (Button) findViewById(R.id.btn_zbdw);
+        btn_zbdw.setVisibility(View.GONE);
+        btn_zbdw.setOnClickListener(new MyListener());
+		/* 个人中心 */
+        btn_sbzx = (Button) findViewById(R.id.btn_sbzx);
+        btn_sbzx.setVisibility(View.GONE);
+        btn_sbzx.setOnClickListener(new MyListener());
+        // 天气预报
+		/*imgbtn_weather = (ImageButton) findViewById(R.id.imgbtn_weather);
+        imgbtn_weather.setVisibility(View.GONE);
+        imgbtn_weather.setOnClickListener(new MyListener());*/
+        //态势标绘
+        imgbtn_plot = (ImageButton) findViewById(R.id.imgbtn_plot);
+        imgbtn_plot.setOnClickListener(new MyListener());
+        //当日火情
+        btn_fireLocation = (Button) findViewById(R.id.btn_fireLocation);
+        btn_fireLocation.setOnClickListener(new MyListener());
+        // 工具栏
+        myLocation = (ImageButton) findViewById(R.id.myLocation);
+        myLocation.setOnClickListener(new MyListener());
+        btn_clear = (ImageButton) findViewById(R.id.btn_clear);
+        btn_clear.setOnClickListener(new MyListener());
+        btn_ceju = (ImageButton) findViewById(R.id.btn_ceju);
+        btn_ceju.setOnClickListener(new MyListener());
+        btn_cemian = (ImageButton) findViewById(R.id.btn_cemian);
+        btn_cemian.setOnClickListener(new MyListener());
+
+        // 导航
+        btn_nav = (ImageButton) findViewById(R.id.btn_nav);
+        btn_nav.setOnClickListener(new MyListener());
+    }
+
+    public   MapView getMapview() {
 		return mapView;
 
 	}
@@ -725,16 +697,22 @@ public class MapActivity extends Activity {
 		}
 	}
 
-	private void intitalmenu() {
+    /**
+     * 初始化菜单
+     */
+    private void intitalmenu() {
 
 		if(true){
 			iszhuce=true;
 			btn_upfireInfo.setVisibility(View.VISIBLE);
 			btn_jiejing.setVisibility(View.VISIBLE);
 			day_statistics.setVisibility(View.VISIBLE);
-			btn_jiejingmanage.setVisibility(View.GONE);
-			btn_zbdw.setVisibility(View.VISIBLE);
-			btn_sbzx.setVisibility(View.VISIBLE);
+			btn_jiejingmanage.setVisibility(View.VISIBLE);
+            if(ispad){
+                btn_zbdw.setVisibility(View.VISIBLE);
+				btn_sbzx.setVisibility(View.VISIBLE);
+            }
+
 			return;
 		}
 		// 获取菜单
@@ -818,49 +796,6 @@ public class MapActivity extends Activity {
 		}
 
 	}
-
-	/* 小地名搜索按钮 */
-	/*public void searchButton(View view) {
-		searchText = editsearchText.getText().toString().trim();
-		if (StrChecked(searchText)) {
-			// 记录到历史查询数据中
-			boolean result = DataBaseHelperUtil.selDataHistoryByString(
-					MapActivity.this, manager, "db.sqlite", searchText);
-			if (!result) {
-				DataBaseHelperUtil.addDataToHistory(MapActivity.this, manager,
-						"db.sqlite", searchText);
-			}
-		}
-		searchList.clear();
-		// geoTypeList.clear();
-		if (actionMode.equals(ActionMode.MODE_searchXDM)) {
-			if (searchText.length() > 0) {
-				Message message = new Message();
-				message.what = R.string.xiaodimingsearch;
-				message.obj = true;
-				handler.sendMessage(message);
-			} else {
-				ToastUtil.setToast(MapActivity.this, "请输入小地名");
-			}
-
-		}
-	}*/
-
-	/**
-	 * 检测 str 是否为null 如果不为null是否为""
-	 *
-	 * @param str
-	 * @return 不为null或者"" 返回true 否则返回false
-	 */
-	public boolean StrChecked(String str) {
-		if (Util.IsEmpty(str)) {
-			if (!str.trim().equalsIgnoreCase("")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	class MyTouchListener extends MapOnTouchListener {
 
 		MapView map;
@@ -1702,14 +1637,6 @@ public class MapActivity extends Activity {
 				}
 				i++;
 			}
-			/*Graphic TrackGraphic = new Graphic(TrackPolyline,
-					TracklineSymbol);*/
-			/*Graphic TrackGraphic = new Graphic(TrackPolyline,
-					TrackUtil.tracksym);
-			trackGraphicID = graphicLayer
-					.addGraphic(TrackGraphic);*/
-
-
 		}
 		//listpts.clear();
 		mapView.addLayer(graphicLayer);
@@ -2118,24 +2045,6 @@ public class MapActivity extends Activity {
 					}else {
 						ToastUtil.setToast(MapActivity.this, "网络异常，请检查网络");
 					}
-					/*ProgressDialogUtil.startProgressDialog(MapActivity.this);
-					new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							Message msg=new Message();
-							String result = websUtil.serchHuoJing(loginName, "", "", "",
-									"", "", "", "", "", "", 1, 0);
-							if (result.equals("网络异常")) {
-								msg.obj = "网络异常";
-							}
-							else{
-								msg.obj = result;
-							}
-							msg.what = R.id.btn_jiejingmanage;
-							handler.sendMessage(msg);
-						}
-					}).start();*/
 
 					break;
 				// 导航点击
@@ -2165,11 +2074,6 @@ public class MapActivity extends Activity {
 					QueryWeatherTask weathertask = new QueryWeatherTask(
 							MapActivity.this, mapView);
 					weathertask.execute(latitude + "", longitude + "");
-					// Weather weather=new Weather();
-					// List<WeatherEntity>
-					// weatherlist=weather.SearchByCoordinates(latitude + "",
-					// longitude + "");
-
 					break;
 				// 态势标绘
 				case R.id.imgbtn_plot:
@@ -2578,147 +2482,152 @@ public class MapActivity extends Activity {
 				tcontrolView.setVisibility(View.GONE);
 			}
 		});
-		// 基础图
-		CheckBox cb_sl = (CheckBox) findViewById(R.id.cb_sl);
+
 		if (arcGISLocalTiledLayer != null) {
+			LinearLayout layer= (LinearLayout) findViewById(R.id.layer_title);
+			layer.setVisibility(View.VISIBLE);
+			// 基础图
+			CheckBox cb_sl = (CheckBox) findViewById(R.id.cb_sl);
 			cb_sl.setChecked(arcGISLocalTiledLayer.isVisible());
-		}
-		// 基础图
-		cb_sl.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			// 基础图
+			cb_sl.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			@Override
-			public void onCheckedChanged(CompoundButton arg0,  boolean arg1) {
+				@Override
+				public void onCheckedChanged(CompoundButton arg0,  boolean arg1) {
 
-						if (arg1) {
-							if (arcGISLocalTiledLayer != null) {
-								if (!arcGISLocalTiledLayer.isVisible()) {
-									arcGISLocalTiledLayer.setVisible(true);
-								}
-							}
-						} else {
-							if (arcGISLocalTiledLayer != null) {
-								if (arcGISLocalTiledLayer.isVisible()) {
-									arcGISLocalTiledLayer.setVisible(false);
-								}
+					if (arg1) {
+						if (arcGISLocalTiledLayer != null) {
+							if (!arcGISLocalTiledLayer.isVisible()) {
+								arcGISLocalTiledLayer.setVisible(true);
 							}
 						}
-					}
-
-
-		});
-		// 基础图 缩放到地图范围
-		ImageView tileView = (ImageView) findViewById(R.id.tile_extent);
-		tileView.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				runOnUiThread(new Runnable() {
-					public void run() {
+					} else {
 						if (arcGISLocalTiledLayer != null) {
 							if (arcGISLocalTiledLayer.isVisible()) {
-								mapView.setExtent(arcGISLocalTiledLayer
-										.getFullExtent());
-								mapView.invalidate();
-							} else {
-								ToastUtil.setToast(MapActivity.this, "基础图未加载");
+								arcGISLocalTiledLayer.setVisible(false);
 							}
-						} else {
-							ToastUtil.setToast(MapActivity.this, "基础图不存在");
-						}
-						if (arcGISLocalCityTiledLayer != null) {
-							if (arcGISLocalCityTiledLayer.isVisible()) {
-								mapView.setExtent(arcGISLocalCityTiledLayer
-										.getFullExtent());
-								mapView.invalidate();
-							} else {
-								ToastUtil.setToast(MapActivity.this, "市界图未加载");
-							}
-						} else {
-							ToastUtil.setToast(MapActivity.this, "市界图不存在");
-						}
-					}
-				});
-			}
-		});
-		// 影像图
-		CheckBox cb_yx = (CheckBox) findViewById(R.id.cb_ys);
-		if (imageLocalTiledLayer != null) {
-			cb_yx.setChecked(imageLocalTiledLayer.isVisible());
-		}
-		// 影像
-		cb_yx.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-				if (arg1) {
-					if (imageLocalTiledLayer != null) {
-						if (!imageLocalTiledLayer.isVisible()) {
-							imageLocalTiledLayer.setVisible(true);
-						}
-						mapView.invalidate();
-					}
-				} else {
-					if (imageLocalTiledLayer != null) {
-						if (imageLocalTiledLayer.isVisible()) {
-							imageLocalTiledLayer.setVisible(false);
 						}
 					}
 				}
-			}
-		});
-		// 影像图所放到地图范围
-		ImageView imageView = (ImageView) findViewById(R.id.image_extent);
-		imageView.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						if (imageLocalTiledLayer != null) {
-							if (imageLocalTiledLayer.isVisible()) {
-								mapView.setExtent(imageLocalTiledLayer
-										.getFullExtent());
-								mapView.invalidate();
+
+			});
+			// 基础图 缩放到地图范围
+			ImageView tileView = (ImageView) findViewById(R.id.tile_extent);
+			tileView.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							if (arcGISLocalTiledLayer != null) {
+								if (arcGISLocalTiledLayer.isVisible()) {
+									mapView.setExtent(arcGISLocalTiledLayer
+											.getFullExtent());
+									mapView.invalidate();
+								} else {
+									ToastUtil.setToast(MapActivity.this, "基础图未加载");
+								}
 							} else {
-								ToastUtil.setToast(MapActivity.this, "影像图未加载");
+								ToastUtil.setToast(MapActivity.this, "基础图不存在");
 							}
-						} else {
-							ToastUtil.setToast(MapActivity.this, "影像文件不存在");
+							if (arcGISLocalCityTiledLayer != null) {
+								if (arcGISLocalCityTiledLayer.isVisible()) {
+									mapView.setExtent(arcGISLocalCityTiledLayer
+											.getFullExtent());
+									mapView.invalidate();
+								} else {
+									ToastUtil.setToast(MapActivity.this, "市界图未加载");
+								}
+							} else {
+								ToastUtil.setToast(MapActivity.this, "市界图不存在");
+							}
 						}
-					}
-				});
-			}
-		});
-		// 专题图层
-		linerlayout_zhuanti = (LinearLayout) findViewById(R.id.l_zhuanti);
-		if (dynamiclayer != null) {
-			linerlayout_zhuanti.setVisibility(View.VISIBLE);
-			CheckBox cb_zt = (CheckBox) findViewById(R.id.cb_zt);
-			cb_zt.setChecked(dynamiclayer.isVisible());
+					});
+				}
+			});
+		}
 
-			cb_zt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		if(arcGISLocalTiledLayer!=null){
+			LinearLayout layer= (LinearLayout) findViewById(R.id.layer_img);
+			layer.setVisibility(View.VISIBLE);
+			// 影像图
+			CheckBox cb_yx = (CheckBox) findViewById(R.id.cb_ys);
+			if (imageLocalTiledLayer != null) {
+				cb_yx.setChecked(imageLocalTiledLayer.isVisible());
+			}
+			// 影像
+			cb_yx.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 					if (arg1) {
-
-						if (!dynamiclayer.isVisible()) {
-							dynamiclayer.setVisible(true);
+						if (imageLocalTiledLayer != null) {
+							if (!imageLocalTiledLayer.isVisible()) {
+								imageLocalTiledLayer.setVisible(true);
+							}
+							mapView.invalidate();
 						}
-						mapView.invalidate();
-
 					} else {
-
-						if (dynamiclayer.isVisible()) {
-							dynamiclayer.setVisible(false);
+						if (imageLocalTiledLayer != null) {
+							if (imageLocalTiledLayer.isVisible()) {
+								imageLocalTiledLayer.setVisible(false);
+							}
 						}
 					}
-
 				}
 			});
-		} else {
-			linerlayout_zhuanti.setVisibility(View.GONE);
+			// 影像图所放到地图范围
+			ImageView imageView = (ImageView) findViewById(R.id.image_extent);
+			imageView.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							if (imageLocalTiledLayer != null) {
+								if (imageLocalTiledLayer.isVisible()) {
+									mapView.setExtent(imageLocalTiledLayer
+											.getFullExtent());
+									mapView.invalidate();
+								} else {
+									ToastUtil.setToast(MapActivity.this, "影像图未加载");
+								}
+							} else {
+								ToastUtil.setToast(MapActivity.this, "影像文件不存在");
+							}
+						}
+					});
+				}
+			});
 		}
+		// 专题图层
+		if (dynamiclayer != null) {
+            LinearLayout layer = (LinearLayout) findViewById(R.id.layer_zhuanti);
+            layer.setVisibility(View.VISIBLE);
+            CheckBox cb_zt = (CheckBox) findViewById(R.id.cb_zt);
+            cb_zt.setChecked(dynamiclayer.isVisible());
+            cb_zt.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+                    if (arg1) {
+
+                        if (!dynamiclayer.isVisible()) {
+                            dynamiclayer.setVisible(true);
+                        }
+                        mapView.invalidate();
+
+                    } else {
+
+                        if (dynamiclayer.isVisible()) {
+                            dynamiclayer.setVisible(false);
+                        }
+                    }
+
+                }
+            });
+        }
 
 		if (DQLEVEL.equals("1")) {
 			// 市级用户
@@ -2736,7 +2645,7 @@ public class MapActivity extends Activity {
 	List<List<Map<String, Boolean>>> childCheckBox = new ArrayList<List<Map<String, Boolean>>>();
    /**
     *
-    * 加载专题图层
+    * 加载本地数据图层
     */
 	public void loginNOshi(String qname) {
 		ExpandableListView tc_exp = (ExpandableListView) findViewById(R.id.tc_expandlistview);

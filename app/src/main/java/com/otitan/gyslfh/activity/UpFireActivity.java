@@ -497,7 +497,6 @@ public class UpFireActivity extends Activity {
 		};
 	};
 	
-	// ��ť����¼�
 	public class MyListener implements OnClickListener {
 
 		@Override

@@ -39,7 +39,17 @@
 #  不混淆baidu sdk
 -keep class com.baidu.** {*;}
 -dontwarn com.baidu.**
-
+#  不混淆commons
+-keep class org.apache.commons.** {*;}
+-dontwarn org.apache.commons.**
+#  不混淆sun
+-keep class sun.misc.**{*;}
+-dontwarn sun.misc.**
+#  不混淆tablefix
+-keep class tablefixheaders.TableFixHeaders
+-dontwarn tablefixheaders.TableFixHeaders
+#  不混淆
+-dontwarn javax.annotation.**
 -dontwarn jcifs.**
 -keep class jcifs.** {*;}
 

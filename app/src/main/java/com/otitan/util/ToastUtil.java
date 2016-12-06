@@ -41,6 +41,20 @@ public class ToastUtil {
 			}
 		});
 	}
+	/**
+	 * ��ʾ
+	 * @param context
+	 * @param text
+	 */
+	public static void setToast(final Context context, final String text) {
+		((Activity) context).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				ToastUtil.makeText(context, text, Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 
 
 

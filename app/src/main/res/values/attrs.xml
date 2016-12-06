@@ -3,4 +3,7 @@
     <declare-styleable name="IconButton">
         <attr name="iconPadding" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="DropdownEditTextView">
+        <attr name="isDropDown" format="boolean"/>
+    </declare-styleable>
 </resources>

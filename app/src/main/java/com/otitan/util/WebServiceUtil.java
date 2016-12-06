@@ -40,6 +40,7 @@ public class WebServiceUtil {
 	public static String CharException = "用户名中包含特殊字符";
 	public static String psException = "用户名或密码错误";
 	public static String netException = "网络异常";
+	public static String serverException = "服务器异常";
 
 	public WebServiceUtil(Context context) {
 		this.context = context;
@@ -101,7 +102,6 @@ public class WebServiceUtil {
 
 	/**
 	 * 登陆 只做了用户名的特殊字符验证
-	 *
 	 * @param loginName
 	 * @param loginPassword
 	 * @return
@@ -109,11 +109,11 @@ public class WebServiceUtil {
 	public String CheckLogin(String loginName, String loginPassword) {
 
 		String result = null;
+		SoapObject soapObject=null;
 		if (stringCheck(loginName)) {
 			String methodName = "CheckLogin";
 			soapAction = "http://tempuri.org/" + methodName;
-
-			SoapObject soapObject = new SoapObject(nameSpace, methodName);
+			soapObject = new SoapObject(nameSpace, methodName);
 			soapObject.addProperty("username", loginName);
 			soapObject.addProperty("password", loginPassword);
 			result = getResult(soapObject, "CheckLoginResult");
@@ -125,7 +125,6 @@ public class WebServiceUtil {
 
 	/**
 	 * 修改火情状态
-	 *
 	 * @param state
 	 * @return
 	 */
@@ -336,7 +335,6 @@ public class WebServiceUtil {
 	/**
 	 * 根据行号查询接警信息
 	 *
-	 * @param username
 	 * @return
 	 * @throws Exception
 	 */
@@ -902,22 +900,6 @@ public class WebServiceUtil {
 						trackModel.setLatitude(Double.parseDouble(data[2]));
 						trackModel.setTime(data[4]);
 						locations.add(trackModel);
-						/*try {
-
-							String dd=data[4];
-							datatme=df2.parse(data[4]);
-							long a = start.getTime(), b = datatme.getTime(),  d = end.getTime();
-							if (a < b && b < d) {
-								trackModel.setLongitude(Double.parseDouble(data[1]));
-								trackModel.setLatitude(Double.parseDouble(data[2]));
-								trackModel.setTime(data[4]);
-								locations.add(trackModel);
-							}
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}*/
-
 					}
 
 					return false;

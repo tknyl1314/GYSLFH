@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="horizontal"
-    tools:context=".LoginActivity" >
+    tools:context=".activity.LoginActivity" >
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -49,13 +49,6 @@
                     android:layout_alignLeft="@+id/login_password"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="5dp" />
-             <!--        <EditText
-                    android:id="@+id/login_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_alignLeft="@+id/login_password"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="5dp" />  -->
 
                 <EditText
                     android:id="@+id/login_password"

@@ -1,6 +1,5 @@
 package com.otitan.gyslfh.activity;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,13 +12,12 @@ import com.otitan.DataBaseHelper;
 import com.otitan.util.NetUtil;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.ScreenTool;
-import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
 import com.tencent.bugly.crashreport.CrashReport;
 
 public class MyApplication extends Application
 
-	{// FrontiaApplication  implements netEventHandler
+	{
 		public static int mNetWorkState;
 		/** 是否有网络 */
 		public static boolean IntetnetISVisible = false;
@@ -235,30 +233,11 @@ public class MyApplication extends Application
 			}*/
 		} catch (Exception e)
 		{
-			ToastUtil.setToast((Activity) mcontext,"初始化本地数据库失败");
 			e.printStackTrace();
-			//log.debug(e.toString());
-			//ToastUtil.setToast(mcontext, "")
 		}
 
 	}
 
-
-
-
-
-	/*	@Override
-        public boolean onNetChange()
-        {
-            if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE)
-            {
-                IntetnetISVisible = false;
-            } else
-            {
-                IntetnetISVisible = true;
-            }
-            return IntetnetISVisible;
-        }*/
 	public boolean getNetState () {
 		if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE)
 		{

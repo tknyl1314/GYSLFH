@@ -1,7 +1,6 @@
 package com.otitan.customui;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -25,21 +24,20 @@ public class DropdownEdittext extends LinearLayout {
 	long dismissTime;//设置标记防止事件重复执行
 	View DropdownEditText;
 
-	@SuppressLint("NewApi")
 	public DropdownEdittext(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		 if(!isInEditMode())
 		 {
+
 			 DropdownEditText=LayoutInflater.from(context).inflate(R.layout.dropdown_edittextview, this);
 				this.mcontext = context;
 				//DropdownEditText.setBackgroundResource(R.drawable.dropdown_edittext_nomal);
 				//
 				tv = (AutoCompleteTextView) findViewById(R.id.autotextview);
 				tv.setDropDownBackgroundResource(R.color.white);
-				
 				//tv.setDropDownHeight()
 				btn = (ImageView) findViewById(R.id.btn_dropdown);
-				//设置匹配字符�?
+				//设置匹配字符
 				tv.setThreshold(100);
 				//设置下拉宽度
 				tv.setDropDownAnchor(this.getId());
@@ -60,7 +58,6 @@ public class DropdownEdittext extends LinearLayout {
 				
 				tv.setOnDismissListener(new OnDismissListener() {
 
-					@SuppressLint("NewApi")
 					@Override
 					public void onDismiss() {
 						//btn.setBackgroundResource(R.drawable.btn_up);

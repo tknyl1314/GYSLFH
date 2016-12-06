@@ -6,18 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -28,21 +20,15 @@ import com.otitan.DataBaseHelper;
 import com.otitan.customui.DropdownEdittext;
 import com.otitan.gyslfh.R;
 import com.otitan.util.PadUtil;
-import com.otitan.util.ParseXmlService;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
+import com.titan.util.UpdateUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -50,6 +36,9 @@ import Util.ProgressDialogUtil;
 import jsqlite.Callback;
 import jsqlite.Database;
 
+/**
+ *
+ */
 public class LoginActivity extends Activity
 {
 
@@ -88,9 +77,6 @@ public class LoginActivity extends Activity
 	public String loginPassword;
 	private String DQLEVEL, REALNAME;
 	private boolean qiehuan = false;
-	//private MainFrameTask mMainFrameTask = null;
-	// private CustomProgressDialog progressDialog = null;
-	//private ProgressDialog progressDialog = null;
 	private SharedPreferences sharedPreferences;
 	// 定义获取的历史用户登录名
 	ArrayList<String> mList = new ArrayList<String>();
@@ -113,7 +99,7 @@ public class LoginActivity extends Activity
 					break;
 				case DOWNLOAD_FINISH:
 					// 安装文件
-					installApk();
+					//installApk();
 					break;
 				case loadhistorylist:
 					// 加载历史登录用户
@@ -135,19 +121,14 @@ public class LoginActivity extends Activity
 		};
 	};
 
-	// onCreate
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		mcontext=this;
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// 设置全屏
-		// this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		if (PadUtil.isPad(this))
 		{
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
-
 		setContentView(R.layout.activity_login);
 
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
@@ -155,7 +136,6 @@ public class LoginActivity extends Activity
 		// 获取上一个页面传过来的值
 		Intent intent = getIntent();
 		qiehuan = intent.getBooleanExtra("isqiehuan", false);
-
 		// 获取页面控件
 		login_name = (DropdownEdittext) findViewById(R.id.login_name);
 		//login_name = (EditText) findViewById(R.id.login_name);
@@ -167,7 +147,7 @@ public class LoginActivity extends Activity
 		if (!MyApplication.IntetnetISVisible)
 		{
 			// 无网络时跳转手机网络设置界面
-			ToastUtil.setToast(LoginActivity.this, "网络未连接");
+			ToastUtil.setToast(mcontext, "网络连接异常");
 			login_name.setText(sharedPreferences.getString("name", ""));
 			login_password.setText(sharedPreferences.getBoolean("remember",
 					false) ? sharedPreferences.getString("pwd", "") : "");
@@ -176,27 +156,23 @@ public class LoginActivity extends Activity
 			zidongLogin.setChecked(sharedPreferences
 					.getBoolean("zidong", false));
 			// 跳到网络连接设置
-			startActivityForResult(new Intent(
+			/*startActivityForResult(new Intent(
 					android.provider.Settings.ACTION_WIRELESS_SETTINGS), 1);
 			Toast.makeText(LoginActivity.this, "进行网络连接设置", Toast.LENGTH_SHORT)
-					.show();
+					.show();*/
 		} else
 		{
+			//检查更新
+            UpdateUtil update=new UpdateUtil(mcontext);
+            update.executeUpdate();
+			initView();
 			// 有网络
-			init();
+			//init();
+
 		}
 	}
-
-	// 设置横竖屏切换布局
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		super.onConfigurationChanged(newConfig);
-	}
-
 	/**
 	 * 获取assets文件夹下db.sqlite文件中的历史用户
-	 *
 	 * @return
 	 */
 	public ArrayList<String> getUserList()
@@ -247,7 +223,9 @@ public class LoginActivity extends Activity
 		}
 		return list;
 	}
-
+    /**
+	 * 初始化已登录用户名
+	 */
 	public void initAutoComplete()
 	{
 
@@ -354,8 +332,6 @@ public class LoginActivity extends Activity
 	// 确定登录
 	public void loginSure(View view)
 	{
-
-
 		loginName = login_name.getText().toString();
 		loginPassword = login_password.getText().toString();
 		if (loginName == null || loginName.equals(""))
@@ -387,10 +363,11 @@ public class LoginActivity extends Activity
 		return;
 	}
 
-	// 初始化
-	private void init()
+    /**
+     * 初始化
+     */
+/*	private void init()
 	{
-		// initView();
 		try
 		{
 			boolean flag = isUpdate();
@@ -407,8 +384,11 @@ public class LoginActivity extends Activity
 		{
 			e.printStackTrace();
 		}
-	}
+	}*/
 
+	/**
+	 *
+	 */
 	public void initView()
 	{
 		if (qiehuan)
@@ -525,11 +505,6 @@ public class LoginActivity extends Activity
 	protected void onDestroy()
 	{
 		ProgressDialogUtil.stopProgressDialog();
-
-		/*if (mMainFrameTask != null && !mMainFrameTask.isCancelled())
-		{
-			mMainFrameTask.cancel(true);
-		}*/
 		super.onDestroy();
 	}
 
@@ -538,12 +513,15 @@ public class LoginActivity extends Activity
 	 *
 	 * @throws IOException
 	 */
+/*
 	private boolean isUpdate() throws IOException
 	{
 		// 获取当前软件版本
 		double versionCode = getVersionCode(mcontext);
 		// 把version.xml放到网络上，然后获取文件信息
-		/* 获取xml */
+		*/
+/* 获取xml *//*
+
 		// http://gis.gyforest.com:8088/fireservice/apk/version.xml
 		URL url = new URL(getResources().getString(R.string.versionxml));
 		URLConnection connection = url.openConnection();
@@ -552,7 +530,8 @@ public class LoginActivity extends Activity
 		//int responseCode = 1;
 		httpConnection.setConnectTimeout(3000);
 		httpConnection.setRequestMethod("GET");
-		/*try
+		*/
+/*try
 		{
 			int responseCode = httpConnection.getResponseCode();
 		} catch (Exception e1)
@@ -560,7 +539,8 @@ public class LoginActivity extends Activity
 			e1.printStackTrace();
 			return  false;
 
-		}*/
+		}*//*
+
 		int responseCode = httpConnection.getResponseCode();
 		InputStream inStream = null;
 		if (responseCode == HttpURLConnection.HTTP_OK)
@@ -591,6 +571,7 @@ public class LoginActivity extends Activity
 		}
 		return false;
 	}
+*/
 
 	/**
 	 * 获取软件版本号
@@ -598,7 +579,7 @@ public class LoginActivity extends Activity
 	 * @param context
 	 * @return
 	 */
-	private double getVersionCode(Context context)
+/*	private double getVersionCode(Context context)
 	{
 		double versionCode = 0;
 		try
@@ -611,9 +592,9 @@ public class LoginActivity extends Activity
 			e.printStackTrace();
 		}
 		return versionCode;
-	}
+	}*/
 	// 自定义版本更新提示dialog
-	public void showVersionDialog()
+/*	public void showVersionDialog()
 	{
 		final LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
 		View view = inflater.inflate(R.layout.dialog_appversionupdate, null);
@@ -648,11 +629,11 @@ public class LoginActivity extends Activity
 			}
 		});
 		updateDialog.show();
-	}
+	}*/
 	/**
 	 * 显示软件下载对话框
 	 */
-	public void showDownloadDialog()
+	/*public void showDownloadDialog()
 	{
 		final LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
 		View view = inflater.inflate(R.layout.dialog_download_apk, null);
@@ -676,21 +657,22 @@ public class LoginActivity extends Activity
 		downApkDialog.show();
 		// 下载文件
 		downloadApk();
-	}
+	}*/
 
 	/**
 	 * 下载apk文件
 	 */
-	private void downloadApk()
+/*	private void downloadApk()
 	{
 		// 启动新线程下载软件
 		new downloadApkThread().start();
-	}
+	}*/
 
 	/**
 	 * 下载文件线程
 	 *
 	 */
+/*
 	private class downloadApkThread extends Thread
 	{
 		@Override
@@ -757,11 +739,12 @@ public class LoginActivity extends Activity
 			downApkDialog.dismiss();
 		}
 	};
+*/
 
 	/**
 	 * 安装APK文件
 	 */
-	private void installApk()
+/*	private void installApk()
 	{
 		File apkfile = new File(mSavePath, mHashMap.get("name"));
 		if (!apkfile.exists())
@@ -773,15 +756,15 @@ public class LoginActivity extends Activity
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 				"application/vnd.android.package-archive");
 		startActivity(i);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
 
 		return false;
 		// return super.onPrepareOptionsMenu(menu);
-	}
+	}*/
     /**
 	 * 注册新用户到本地数据库
 	 */

@@ -16,8 +16,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -81,7 +79,6 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
     private AlarmManageAdapter adapter;
     private int flag=0;//1表示通过查询按钮查询
     
-    //private ActionBarDrawerToggle mDrawerToggle;
     //查询总页数
     private String totalpage="",totalnum="";
     private int currentpage=1;//使用pulltorefresh时初始为1
@@ -126,19 +123,18 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		mcontext=this;
-		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		if (PadUtil.isPad(mcontext)) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}
+		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		 setContentView(R.layout.alarm_manage);
-		 if (PadUtil.isPad(this)) {
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-			}
 	    //获取数据
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 		Intent intent =getIntent();
 	    username=intent.getStringExtra("username");
 		result=intent.getStringExtra("result");
-		
 		try {
 			//获取查询结果的总数
 			totalnum = new JSONObject(result).getString("totalnum");
@@ -152,10 +148,8 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		tableData=new String[Integer.parseInt(totalnum)+1][headerstring.length];
 		tableData[0]=headerstring;
 		receiveAlarmInfos =getresultformjson(result);//解析服务端查询数据
-	   
 		//获取服务接口
 		webService=new WebServiceUtil(getApplicationContext());
-		
 		//初始化控件
 		intiview();
 	}

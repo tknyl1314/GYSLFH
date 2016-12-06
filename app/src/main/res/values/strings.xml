@@ -20,10 +20,12 @@
     <!-- <string name="webservice">http://192.168.1.16:8099/SLFH/FireService/WebService1.asmx</string> -->
     <!-- 长坡岭服务地址 222.85.147.93 -->
     <string name="webservice">http://www.gyslfh.com:8037/FireService/WebService1.asmx</string>
-    <string name="versionxml">http://www.gyslfh.com:8037/apk/version.xml</string>
+    <string name="versionxml">http://www.gyslfh.com:8037/apk/AS_version.xml</string>
+    <string name="updateurl">http://www.gyslfh.com:8037/apk/AS_version.xml</string>
     <!-- 本地服务地址 -->
     <!--   <string name="webservice"> http://localhost:8082/FireService/WebService1.asmx</string> -->
     <!--   <string name="webservice">http://192.168.1.103/WebServices/FireService/WebService1.asmx</string> -->
+    <!-- 专题数据服务地址 -->
     <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>
     <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
     <string name="title_activity_frame">森林防火</string>
@@ -56,5 +58,9 @@
     <string name="but_down">向下</string>
     <string name="but_left">向左</string>
     <string name="but_right">向右</string>
+    <string name="ischagang">是否查岗</string>
+    <string name="login">登 录</string>
+    <string name="password">密码</string>
+    <string name="username">用户名</string>
 
 </resources>

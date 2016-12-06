@@ -61,7 +61,7 @@
                 android:id="@+id/tv_iteminfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="20dp"
+                android:paddingRight="20dp"
                 android:gravity="right|center_vertical"
                 android:textColor="@color/balck" />
         </LinearLayout>

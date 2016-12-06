@@ -200,13 +200,12 @@ public class ResourcesManager implements Serializable
 		File file = new File(path);
 		if (!file.exists())
 		{
-			file.mkdirs();// �������� �Զ������ϼ�Ŀ¼
+			boolean ismkd=file.mkdirs();// �������� �Զ������ϼ�Ŀ¼
 		}
 	}
 
 	/**
-	 * ɾ���ļ�����������
-	 * 
+	 *
 	 */
 	public void deleteFile(File file)
 	{
