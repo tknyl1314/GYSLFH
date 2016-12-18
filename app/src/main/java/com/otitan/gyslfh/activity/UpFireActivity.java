@@ -59,7 +59,6 @@ import com.king.photo.util.Res;
 import com.otitan.entity.DateDialog;
 import com.otitan.entity.Image;
 import com.otitan.gyslfh.R;
-import com.otitan.util.DateTool;
 import com.otitan.util.PadUtil;
 import com.otitan.util.PictureUtil;
 import com.otitan.util.ToastUtil;
@@ -100,7 +99,7 @@ public class UpFireActivity extends Activity {
 	private LinearLayout selectedImageLayout;
 	private String userID, countryValue, DQLEVEL, UNITID,address,devisionID;
 	private int fireStateValue;
-	private double longitudeValue, latitudeValue;
+	private double longitudeValue=0, latitudeValue=0;
 	private WebServiceUtil websUtil;
 	private SharedPreferences sharedPreferences;
 	//photo
@@ -145,16 +144,16 @@ public class UpFireActivity extends Activity {
 		
 		town_text = (EditText) findViewById(R.id.town_text);// 镇
 		town_text.setCursorVisible(true);
-		viliage_text = (EditText) findViewById(R.id.viliage_text);
+		viliage_text = (EditText) findViewById(R.id.viliage_text);//村
 		viliage_text.setCursorVisible(true);
 		huozai_address = (EditText) findViewById(R.id.huozai_address);
 		huozai_address.setText(address);
-		startTime = (TextView) findViewById(R.id.startTime);
-		startTime.setOnClickListener(new MyListener());
-		DateTool dateTool = new DateTool();
-		startTime.setText(dateTool.getDateStr());
+		/*startTime = (TextView) findViewById(R.id.startTime);
+		startTime.setOnClickListener(new MyListener());*/
+		//DateTool dateTool = new DateTool();
+		/*startTime.setText(dateTool.getDateStr());
 		endTime = (TextView) findViewById(R.id.endTime);
-		endTime.setOnClickListener(new MyListener());
+		endTime.setOnClickListener(new MyListener());*/
 		longitude = (EditText) findViewById(R.id.longitude);
 		//isUpsj = (CheckBox) findViewById(R.id.isUpSJ);
 		

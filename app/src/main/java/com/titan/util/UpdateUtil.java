@@ -51,9 +51,18 @@ public class UpdateUtil {
 	private final int DOWN_ERROR = 4;
 	/**下载完成*/
 	private final int DOWN_COMPLETE = 5;
+
+	public double getCurrentVersionCode() {
+		return currentVersionCode;
+	}
+
+	public void setCurrentVersionCode(double currentVersionCode) {
+		this.currentVersionCode = currentVersionCode;
+	}
+
 	// 版本信息
 	///public UpdataInfo versioninfo;
-    double currentVersionCode=0.0;
+    public  double currentVersionCode=0.0;
     //是否通过点击更新
     boolean isclick=false;
     VersionInfo versioninfo;
@@ -183,15 +192,21 @@ public class UpdateUtil {
 	
 	/**
 	 * 获取当前软件版本号
-	 * @throws NameNotFoundException
 	 */
-	public static double getVersionCode() throws NameNotFoundException {
+	public static double getVersionCode()  {
 		double versionCode = 0;
 		String versionName;
+		try {
 			versionName = mcontext.getPackageManager().getPackageInfo(
 					mcontext.getPackageName(), 0).versionName;//0代表是获取版本信息
 			versionCode = Double.parseDouble(versionName);
+
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
 		return versionCode;
+
+
 	}
 	
 	/**

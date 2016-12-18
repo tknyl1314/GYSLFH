@@ -64,7 +64,7 @@ public class BaiduNavi {
 			}
 
 			public void initFailed() {
-				Toast.makeText(mContext, "百度导航引擎初始化失败", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(mContext, "导航引擎初始化失败", Toast.LENGTH_SHORT).show();
 			}
 
 		},  null  /* null mTTSCallback */);

@@ -84,6 +84,9 @@
 -dontwarn org.kxml2.**
 -keep class org.kxml2.** { *;}
 
+-dontwarn org.**
+-keep class org.** { *;}
+
 -keep class com.otitan.entity.** { *; } #实体类不参与混淆
 -keep class com.otitan.customui.** { *; } #自定义控件不参与混淆
 

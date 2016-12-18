@@ -153,9 +153,10 @@ public class ResourcesManager implements Serializable
 		 * createFolder(getPath()[1] + PATH_MAPS + image);
 		 * createFolder(getPath()[1] + PATH_MAPS + navi); }
 		 */
-		createFolder(getPath()[0] + PATH_MAPS + sqlite);
-	    createFolder(getPath()[0] + PATH_MAPS + otitan_map);
+		createFolder(getPath()[0] + PATH_MAPS + sqlite);//本地数据库
+	    createFolder(getPath()[0] + PATH_MAPS + otitan_map);//
 		createFolder(getPath()[0] + PATH_MAPS + navi);
+		createFolder(getPath()[0] + PATH_MAPS + otms);//图层数据
 		//createFolder(getDataPath() + PATH_MAPS + sqlite);
 		createFolder(getPath()[0] + PATH_MAPS + picture);//
 		createFolder(getPath()[0] + PATH_MAPS + navi + "/" + appname);//存储导航数据
@@ -191,9 +192,6 @@ public class ResourcesManager implements Serializable
 	}
 
 	/**
-	 * ��SD���ϴ���һ���ļ���
-	 * 
-	 *            �ļ�������
 	 */
 	public static void createFolder(String path)
 	{

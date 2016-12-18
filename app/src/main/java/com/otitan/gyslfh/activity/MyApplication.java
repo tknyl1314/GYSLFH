@@ -1,10 +1,12 @@
 package com.otitan.gyslfh.activity;
 
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Vibrator;
 import android.provider.Settings.Secure;
 
 import com.igexin.sdk.PushManager;
@@ -14,6 +16,7 @@ import com.otitan.util.ResourcesManager;
 import com.otitan.util.ScreenTool;
 import com.otitan.util.WebServiceUtil;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.titan.loction.baiduloc.LocationService;
 
 public class MyApplication extends Application
 
@@ -41,6 +44,10 @@ public class MyApplication extends Application
 	/* 注册网络 */
 		//private ConnectionChangeReceiver mNetworkStateReceiver;
 		//private Logger log;
+		/** 百度位置监听服务 */
+		public LocationService locationService;
+		/** 震动器 */
+		Vibrator mVibrator;
 		@Override
 		public void onCreate()
 		{
@@ -52,6 +59,11 @@ public class MyApplication extends Application
 	        * 发布新版本时需要修改以及bugly isbug需要改成false等部分
 	        */
 			CrashReport.initCrashReport(getApplicationContext(), "900039321", true);
+
+			/** 百度定位初始化 */
+			locationService = new LocationService(getApplicationContext());
+			mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+			//SDKInitializer.initialize(getApplicationContext());
 			mcontext=this.getApplicationContext();
 			//个推推送初始化
 			PushManager.getInstance().initialize(this.getApplicationContext());
@@ -60,9 +72,6 @@ public class MyApplication extends Application
 			/** 获取当前网络状态 */
 			getNetState();
 			getDeviceInfo();
-
-
-
 			new Thread(new Runnable() {
 
 				@Override
@@ -95,50 +104,6 @@ public class MyApplication extends Application
 				sharedPreferences.edit().putString("SBH", SBH).commit();
 			}
 		}
-
-
-		/** 获取屏幕信息 */
-/*	private void getWindowInfo() {
-		     WindowManager wm = (WindowManager) mcontext.getSystemService(Context.WINDOW_SERVICE);
-             window_width = wm.getDefaultDisplay().getWidth();
-             window_height = wm.getDefaultDisplay().getHeight();
-             //log.i("windowinfo："+window_width+"_"+window_height);
-	}*/
-
-
-	/* 注册网络监听 实时监控网络状态 */
-	/*public void initNetworkReceiver()
-	{
-		ConnectionChangeReceiver.mListeners.add(this);
-		mNetworkStateReceiver = new ConnectionChangeReceiver();
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		registerReceiver(mNetworkStateReceiver, filter);
-	}*/
-
-	/*public void checkData()
-	{
-		try
-		{
-			ResourcesManager manager = ResourcesManager.getInstance(this);
-			manager.createFolder();// 初始化文件目录
-			String path = manager.getPath()[0] + ResourcesManager.PATH_MAPS
-					+ ResourcesManager.sqlite;
-			if (!checkDataBase(path, "db.sqlite"))
-			{
-				CopyDatabase(path, "db.sqlite");
-			}
-			if (!checkDataBase(path, "guiji.sqlite"))
-			{
-				CopyDatabase(path, "guiji.sqlite");
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}*/
-
-
 		/** 注册用户设备信息*/
 	public void registerSBH()
 	{
@@ -203,10 +168,10 @@ public class MyApplication extends Application
 			manager.createFolder();// 创建相关文件夹
 			// 初始化轨迹存储表
 			String path = ResourcesManager.getDataPath(ResourcesManager.sqlite) ;
-			if (!DataBaseHelper.checkDataBase(path, "guiji.sqlite"))
+			/*if (!DataBaseHelper.checkDataBase(path, "guiji.sqlite"))
 			{
 				DataBaseHelper.CopyDatabase(MyApplication.this,path, "guiji.sqlite");
-			}
+			}*/
 			//检查小地名数据库
 			if (!DataBaseHelper.checkDataBase(path, "db.sqlite"))
 			{

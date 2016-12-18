@@ -26,7 +26,8 @@
     <!--   <string name="webservice"> http://localhost:8082/FireService/WebService1.asmx</string> -->
     <!--   <string name="webservice">http://192.168.1.103/WebServices/FireService/WebService1.asmx</string> -->
     <!-- 专题数据服务地址 -->
-    <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>
+   <!-- <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>-->
+    <string name="dynamiclayerurl">http://222.85.147.93:6080/arcgis/rest/services/GYSLFHService/ThematicMap/MapServer</string>
     <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
     <string name="title_activity_frame">森林防火</string>
     <string name="title_activity_hui_jing">HuiJingActivity</string>
@@ -62,5 +63,8 @@
     <string name="login">登 录</string>
     <string name="password">密码</string>
     <string name="username">用户名</string>
+    <string name="appversion">系统版本号</string>
+    <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
+    <string name="version">版本号</string>
 
 </resources>

@@ -36,7 +36,32 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:orientation="vertical" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/linelayout"
+            android:orientation="horizontal" >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/appversion"
+                android:textColor="#2578b8" />
+
+            <TextView
+                android:id="@+id/tv_appversion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="20dp"
+                android:button="@drawable/checkbox_style1"
+                android:checked="true"
+                android:textColor="#2578b8" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

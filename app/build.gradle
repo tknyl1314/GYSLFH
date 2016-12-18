@@ -58,6 +58,10 @@ android {
             //storeFile file("E:/项目/android")
             //multiDexEnabled true
             //applicationIdSuffix ".debug"
+            minifyEnabled true //是否混淆  Android Studio disables ProGuard when using Instant Run.
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
        /* productFlavors {//多样的产品
             flavor1 {
@@ -81,23 +85,24 @@ dependencies {
     compile project(':mylib')
     //IconButton for Android
     compile 'com.githang:com-phillipcalvin-iconbutton:1.0.1@aar'
-    /** 解决method 超出限制   */
+    /** 解决method 超出限制     */
     //compile 'com.android.support:multidex:1.0.0'
-    /** 集成bugly   */
+    /** 集成bugly     */
     compile 'com.tencent.bugly:crashreport:2.1.5'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.1.5
     //compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
-    /** 个推   */
+    /** 个推     */
     //compile 'com.getui:sdk:2.9.0.0'
-    /** Redis   */
+    /** Redis     */
     compile files('libs/jedis-2.8.1.jar')
-    /** butterknife   */
+    /** butterknife     */
     compile 'com.jakewharton:butterknife:8.4.0'
-    /** databinding   */
+    /** databinding     */
     compile 'com.kelin.mvvmlight:library:1.0.0'
     //apt 'com.jakewharton:butterknife-compiler:8.4.0'
     //compile "com.aaronhan:rtspclient:0.7"
     compile files('libs/ksoap2-android-assembly-3.0.0-RC.4-jar-with-dependencies.jar')
+    compile files('libs/BaiduLBS_Android.jar')
 }
 

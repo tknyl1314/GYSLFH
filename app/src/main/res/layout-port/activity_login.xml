@@ -95,6 +95,7 @@
                 android:layout_marginTop="10dp" >
 
                 <Button
+                    android:id="@+id/btn_login"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/loginbutton"
@@ -102,6 +103,24 @@
                     android:text="@string/login"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/tv_appversion"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/btn_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text="@string/version"
+                    />
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/tv_appversion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text="@string/appinfo"/>
             </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

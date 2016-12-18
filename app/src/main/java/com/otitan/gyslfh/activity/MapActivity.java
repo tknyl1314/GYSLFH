@@ -1,7 +1,6 @@
 package com.otitan.gyslfh.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -29,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -75,7 +74,6 @@ import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapOnTouchListener;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISDynamicMapServiceLayer;
-import com.esri.android.map.ags.ArcGISFeatureLayer;
 import com.esri.android.map.ags.ArcGISLayerInfo;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
 import com.esri.android.map.event.OnStatusChangedListener;
@@ -128,7 +126,9 @@ import com.otitan.util.SymobelUtils;
 import com.otitan.util.Util;
 import com.otitan.util.WebServiceUtil;
 import com.otitan.util.ZoomControlView;
+import com.titan.loction.baiduloc.LocationService;
 import com.titan.navi.BaiduNavi;
+import com.titan.util.UpdateUtil;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
@@ -148,6 +148,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import Util.MylibUtil;
@@ -158,10 +159,7 @@ import symbol.SymbolUtil;
 /**
  *
  */
-public class MapActivity extends Activity {
-
-
-
+public class MapActivity extends AppCompatActivity {
 	Context mcontext;
 	public static String DQLEVEL, loginName, userID, websUtilResult, UNITID;
 	// 设备信息
@@ -173,7 +171,6 @@ public class MapActivity extends Activity {
 	// 保存添加的FeatureLayer图层
 	public static List<FeatureLayer> featureLayerList = new ArrayList<FeatureLayer>();
 	String qxname = "";
-	boolean NetworkFlag;
 	// private ImageButton ;
 	private Button tcControlBtn, btn_upfireInfo, btn_jiejing, btn_fireLocation,
 			day_statistics, btn_huijing, btn_jiejingmanage;
@@ -190,10 +187,6 @@ public class MapActivity extends Activity {
 	List<Map<String, Object>> searchHistoryData = new ArrayList<Map<String, Object>>();
 	public boolean focuse = false;
 	ImageButton searchButton;
-/*	private String searchText;
-	private List<Map<String, Object>> searchList = new ArrayList<Map<String, Object>>();
-	View addresssview;
-	int dimingid;*/
     //是否导航
 	boolean isnav = false;
 	//是否标绘
@@ -214,13 +207,13 @@ public class MapActivity extends Activity {
 	ArcGISLocalTiledLayer arcGISLocalTiledLayer,arcGISLocalTiledLayer2, arcGISLocalCityTiledLayer;
 	ArcGISLocalTiledLayer imageLocalTiledLayer;
 	ArcGISDynamicMapServiceLayer dynamiclayer = null;// 专题数据图层
-	ArcGISFeatureLayer arcGISFeatureLayer = null;
+	/*ArcGISFeatureLayer arcGISFeatureLayer = null;
 	ArcGISDynamicMapServiceLayer arcGISDynamicMapServiceLayer;
 	String featurelayerurl;
 
 	FeatureLayer queryfeatureLayer;
 
-	Envelope initExtent;
+	Envelope initExtent;*/
 	GraphicsLayer graphicLayer, graphicsLayerLocation, firepointlayer = null,trackgraphiclayer;
 	// 标绘图层
 	public static GraphicsLayer plotgraphiclayer;
@@ -349,6 +342,7 @@ public class MapActivity extends Activity {
 	Geodatabase geodatabase;
 	PopupWindow pop_plot;
 	PlotUtil plotUtil;
+    LocationService mlocationservice;
 	//
 	/** GPS位置监听 */
 	private LocationManager locationManager;
@@ -392,8 +386,8 @@ public class MapActivity extends Activity {
 		//获取GPS服务
 		intent=getIntent();
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_map);
+
 		// 检测是平板还是手机。。
 		if (PadUtil.isPad(this)) {
 			ispad = true;
@@ -420,15 +414,10 @@ public class MapActivity extends Activity {
 		loginName = sharedPreferences.getString("name", "");// 登陆用户名
 		userID = sharedPreferences.getString("userID", "");// 用户id
 		UNITID = sharedPreferences.getString("UNITID", "");// 市级用户是1或者0
-
-
-
 		ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");// 去除水印的
 		mapView = (MapView) findViewById(R.id.map);
-		mapView.setMapBackground(0xffffff, 0xffffff, 3, 3);
-
+		//mapView.setMapBackground(mcontext.getColor(R.color.white), mcontext.getColor(R.color.balck), 3, 3);
         intiView();
-
 		// 内部类MyTouchListener
 		myTouchListener = new MyTouchListener(MapActivity.this, mapView);
 		mapView.setOnTouchListener(myTouchListener);
@@ -506,12 +495,12 @@ public class MapActivity extends Activity {
                     dynamiclayer=null;
                 }
 				// 获取设备注册信息
-				try {
+			/*	try {
 					getMobileInfo();
 				} catch (Exception e) {
 					//log.error(e.toString());
 					Toast.makeText(context, "获取设备注册信息失败", Toast.LENGTH_SHORT).show();
-				}
+				}*/
 				// 初始化菜单
 				try {
 					intitalmenu();
@@ -554,7 +543,7 @@ public class MapActivity extends Activity {
 						mapView.addLayer(trackgraphiclayer);
 						mapView.addLayer(graphicsLayerLocation);
 						mapView.addLayer(plotgraphiclayer);// 添加标绘图层
-						intiLocation();// 定位初始化
+						//intiLocation();// 定位初始化
 						initBaiduNavi();// 初始化导航
 
 					}
@@ -588,6 +577,8 @@ public class MapActivity extends Activity {
 				}
 			}
 		});
+
+		//intiLocation();// 定位初始化
 		// 获取定位图标
 		LocationDisplayManager ls = mapView.getLocationDisplayManager();
 		try {
@@ -597,7 +588,6 @@ public class MapActivity extends Activity {
 		}
 
 	}
-
     /**
      * 初始化view
      */
@@ -696,7 +686,6 @@ public class MapActivity extends Activity {
 			}
 		}
 	}
-
     /**
      * 初始化菜单
      */
@@ -758,33 +747,49 @@ public class MapActivity extends Activity {
 			}
 		}
 	}
-
-	// 定位的初始化
-	private void intiLocation() {
-		mLocClient = new LocationClient(MapActivity.this);
+    /**
+     *  定位的初始化
+     */
+    private void intiLocation() {
+        // -----------location config ------------
+        //定位初始化
+        mlocationservice = ((MyApplication) getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        mlocationservice.registerListener(myLocationListener);
+        //注册监听
+        //int type = getIntent().getIntExtra("from", 0);
+        setLocationOption();
+        mlocationservice.start();// 定位SDK
+	/*	mLocClient = new LocationClient(MapActivity.this);
 		mLocClient.registerLocationListener(myLocationListener);
 		setLocationOption();
-		mLocClient.start();
+		mLocClient.start();*/
 
 	}
-	// 设置定位监听相关参数
+
+    /**
+     *  设置定位监听相关参数
+     */
 	private void setLocationOption() {
 		int loctime=sharedPreferences.getInt("time", 1000);
 		LocationClientOption option = new LocationClientOption();
-		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
-		option.setOpenGps(true); // 打开gps
+	/*	高精度定位模式：这种定位模式下，会同时使用网络定位和GPS定位，优先返回最高精度的定位结果；
+		低功耗定位模式：这种定位模式下，不会使用GPS进行定位，只会使用网络定位（WiFi定位和基站定位）；
+		仅用设备定位模式：这种定位模式下，不需要连接网络，只使用GPS进行定位，这种模式下不支持室内环境的定位。*/
+		option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式 默认高精度（低功耗、仅设备）
+		option.setOpenGps(true); //可选，默认false,设置是否使用gps
 		option.setCoorType("GCJ-02"); // 设置坐标类型 GCJ-02 bd0911
 		option.setScanSpan(loctime);
-		// option.setNeedDeviceDirect(true);        // 返回的定位结果包含手机机头的方向
-		// if (isFirstLoc) {
-		// option.setScanSpan(1000);
-		// } else {
-		// option.setScanSpan(userInfo.getInt("time", 5) * 1000);
-		// }
-		mLocClient.setLocOption(option);
+		option.setNeedDeviceDirect(true);        // 返回的定位结果包含手机机头的方向
+		//mLocClient.setLocOption(option);
+        mlocationservice.setLocationOption(option);
 	}
 
-	public void isearch(View view) {
+    /**
+     * 空间查询
+     * @param view
+     */
+    public void isearch(View view) {
 
 		if (actionMode == ActionMode.MODE_ISEARCH) {
 			actionMode = ActionMode.MODE_ENTITY;
@@ -796,7 +801,11 @@ public class MapActivity extends Activity {
 		}
 
 	}
-	class MyTouchListener extends MapOnTouchListener {
+
+    /**
+     * 地图触摸事件监听
+     */
+    class MyTouchListener extends MapOnTouchListener {
 
 		MapView map;
 		Context context;
@@ -1039,7 +1048,7 @@ public class MapActivity extends Activity {
 			}else if (params[0].equals("uplocation")) {
 				Date now = new Date();
 				final SimpleDateFormat dateFormat = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");// 修改日期格式
+						"yyyy-MM-dd HH:mm:ss", Locale.getDefault());// 修改日期格式
 				uptime = dateFormat.format(now);
 				String lon = upPoint.getX() + "";
 				String lat = upPoint.getY() + "";
@@ -1289,7 +1298,6 @@ public class MapActivity extends Activity {
 					break;
 				//火警上报
 				case R.id.btn_upfireInfo:
-
 					if (iszhuce&& userID != null) {
 						if(upPoint!=null){
 							Point point = (Point) GeometryEngine.project(upPoint,
@@ -1307,8 +1315,6 @@ public class MapActivity extends Activity {
 							fireIntent.putExtra("DQLEVEL", DQLEVEL);
 							fireIntent.putExtra("UNITID", UNITID);
 							startActivity(fireIntent);
-
-
 						} else {
 							ToastUtil.setToast(MapActivity.this, "无法获取经纬度信息");
 						}
@@ -1929,7 +1935,6 @@ public class MapActivity extends Activity {
 								return;
 							}
 						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 
@@ -2111,11 +2116,10 @@ public class MapActivity extends Activity {
 	}
 
 
-	// 监听退出键
-	long firstTime = 0;
 	/**
 	 * 监听回退按钮
 	 */
+	long firstTime = 0;
 	@Override
 	public void onBackPressed() {
 		// exitApp();
@@ -2225,86 +2229,41 @@ public class MapActivity extends Activity {
 			}
 		}
 	}
-
-
-
-	/** 获取位置坐标（优先使用gps定位） GPS定位 网络定位 百度定位 */
-	public   Point getGPSpoint(BDLocation blocation) {
-		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		Location location=null;
-
-		try {
-			 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		}catch (SecurityException e){
-			e.printStackTrace();
-		}
-
-		if (location == null) {
-			try{
-				location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			}
-			catch (SecurityException e){
-				e.printStackTrace();
-			}
-
-		}
-
-		if (location != null) {
-			latitude = location.getLatitude(); // 纬度 26.567741305680546
-			longitude = location.getLongitude(); // 经度 106.68937683886078
-			altitude = location.getAltitude();// 1040.8563754250627
-			dwflag = false;
-		} else {
-			Point p= PositionUtil.gcj_To_84(new Point(blocation.getLatitude(),blocation.getLongitude(),blocation.getAltitude()));
-			/*latitude = blocation.getLatitude(); // 纬度  26.569726
-			longitude = blocation.getLongitude(); // 经度 106.694609
-			altitude = blocation.getAltitude();*/
-			dwflag = true;
-			return p;
-		}
-		return new Point(longitude,latitude,altitude);
-	}
 	/**
-	 * 监听函数，更新位置时获取位置信息
+	 * 定位监听函数，更新位置时获取位置信息
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 		public void onReceiveLocation(BDLocation location) {
-			if (location == null)
-				return;
-			if (location.getLongitude() == 4.9E-324
-					&& location.getLatitude() == 4.9E-324)
-				return;
-			if (location.getLongitude() == 1.0 && location.getLatitude() == 1.0)
-				return;
-			//安顺林业局：105.9479815  	26.2492988
 
-			Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
-			final Point pt=(Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
-			//final Point pt = new Point(667279.435, 2956758.767);
-			//首次定位查询当前所在区县
-			if(isFirstLoc){
-				//qureyCurpt(pt);
-				new Thread(new Runnable() {
+			if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+				//安顺林业局：105.9479815  	26.2492988
+				Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
+				final Point pt=(Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
+				//final Point pt = new Point(667279.435, 2956758.767);
+				//首次定位查询当前所在区县
+				if(isFirstLoc){
+					//qureyCurpt(pt);
+					new Thread(new Runnable() {
 
-					@Override
-					public void run() {
-						dismap=DataBaseHelper.queryDistrict(pt);
-						if(dismap!=null){
-							locparam=DataBaseHelper.getLocParam(dismap.get("CODE"));
-							Message msg=new Message();
-							msg.what=querydistrict;
-							handler.sendMessage(msg);
+						@Override
+						public void run() {
+							dismap=DataBaseHelper.queryDistrict(pt);
+							if(dismap!=null){
+								locparam=DataBaseHelper.getLocParam(dismap.get("CODE"));
+								Message msg=new Message();
+								msg.what=querydistrict;
+								handler.sendMessage(msg);
 
+							}
 						}
-					}
-				}).start();
+					}).start();
 
-			}
-			//Point point1=getGPSpoint(location);
-			//Point point1=new Point(105.9479815,26.2492988);
-			//Point point = new Point(longitude, latitude,altitude);
-			//Gps gps = PositionUtil.gcj_To_Gps84(point);
-			Point point2=PositionUtil.meth(point1,locparam);//使用纠偏参数进行校正和投影转换
+				}
+				//Point point1=getGPSpoint(location);
+				//Point point1=new Point(105.9479815,26.2492988);
+				//Point point = new Point(longitude, latitude,altitude);
+				//Gps gps = PositionUtil.gcj_To_Gps84(point);
+				Point point2=PositionUtil.meth(point1,locparam);//使用纠偏参数进行校正和投影转换
 
 				/*Point point1 = new Point(gps.getWgLon(), gps.getWgLat());// wgs84
 				Point point2 = (Point) GeometryEngine.project(point1,
@@ -2313,37 +2272,46 @@ public class MapActivity extends Activity {
 			/*	Point point2 = (Point) GeometryEngine.project(point1,
 						SpatialReference.create(4326),
 						mapView.getSpatialReference());*/
-			upPoint = new Point(point2.getX(), point2.getY());
-			longitude=point2.getX();
-			latitude=point2.getY();
-			//upPoint = new Point(672679.534108, 2972909.353704);
-			// upPoint = SymbolUtil.getPoint(longitude,latitude);
-			createLocationGraphic(upPoint);
+				upPoint = new Point(point2.getX(), point2.getY());
+				longitude=point2.getX();
+				latitude=point2.getY();
+				//upPoint = new Point(672679.534108, 2972909.353704);
+				// upPoint = SymbolUtil.getPoint(longitude,latitude);
+				createLocationGraphic(upPoint);
 				/* 坐标实时定位 */
-			new MyAsyncTask().execute("myLocation");
+				new MyAsyncTask().execute("myLocation");
 				/* 坐标实时上传到服务器及本地保存 */
-			if (last_point_lon != longitude || last_point_lat != latitude) {
+				if (last_point_lon != longitude || last_point_lat != latitude) {
 
-				int l = Calculate.Distance(last_point_lon, last_point_lat,
-						longitude, latitude);
-				//int dis= sharedPreferences.getInt("distance",100);
-				//两点定位间隔大于100米则上传坐标
-				if (l > sharedPreferences.getInt("distance", 100)) {
-					last_point_lon = longitude;
-					last_point_lat = latitude;
-					if(sharedPreferences.getBoolean("guiji", false)){
-						new MyAsyncTask().execute("uplocation");// 上传位置
+					int l = Calculate.Distance(last_point_lon, last_point_lat,
+							longitude, latitude);
+					//int dis= sharedPreferences.getInt("distance",100);
+					//两点定位间隔大于100米则上传坐标
+					if (l > sharedPreferences.getInt("distance", 100)) {
+						last_point_lon = longitude;
+						last_point_lat = latitude;
+						if(sharedPreferences.getBoolean("guiji", false)){
+							new MyAsyncTask().execute("uplocation");// 上传位置
+						}
+
+
+						if(sharedPreferences.getBoolean("zongji", false)){
+							ToastUtil.makeText(mcontext, "轨迹跟踪中", 0);
+							//轨迹跟踪
+							new MyAsyncTask().execute("mytrack");
+						}
 					}
 
-
-					if(sharedPreferences.getBoolean("zongji", false)){
-						ToastUtil.makeText(mcontext, "轨迹跟踪中", 0);
-						//轨迹跟踪
-						new MyAsyncTask().execute("mytrack");
-					}
 				}
-
 			}
+			/*if (location == null)
+				return;
+			if (location.getLongitude() == 4.9E-324
+					&& location.getLatitude() == 4.9E-324)
+				return;
+			if (location.getLongitude() == 1.0 && location.getLatitude() == 1.0)
+				return;*/
+
 		}
 	}
 
@@ -3159,6 +3127,7 @@ public class MapActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+      intiLocation();
 		Intent intent = getIntent();
 		if (intent.hasExtra("com.avos.avoscloud.Data")) {
 			try {
@@ -3624,7 +3593,9 @@ public class MapActivity extends Activity {
 				R.style.TransparentDialog);
 		dialog.setContentView(R.layout.sys_settings);
 		dialog.setCanceledOnTouchOutside(false);
-
+		//系统版本号
+		TextView tv_version= (TextView) dialog.findViewById(R.id.tv_appversion);
+		tv_version.setText(UpdateUtil.getVersionCode()+"");
 		CheckBox radio_btn_setting_guiji = (CheckBox) dialog
 				.findViewById(R.id.radio_btn_setting_guiji);
 		radio_btn_setting_guiji
@@ -3684,10 +3655,10 @@ public class MapActivity extends Activity {
 					sharedPreferences.edit().putInt("distance", loc_dis).commit();
 					isintilocction=true;
 				}
-				if(isintilocction){
+				/*if(isintilocction){
 					intiLocation();// 定位初始化
 
-				}
+				}*/
 				sharedPreferences.edit().putString("redisip", redisip.getText().toString()).commit();
 				sharedPreferences.edit().putString("anshunmap", anshunmap.getText().toString()).commit();
 				sharedPreferences.edit().putString("monitorip", monitorip.getText().toString()).commit();

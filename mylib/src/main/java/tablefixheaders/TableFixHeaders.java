@@ -1,13 +1,10 @@
 package tablefixheaders;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -28,13 +25,6 @@ import java.util.List;
  * @author Brais Gabín (InQBarna)
  */
 public class TableFixHeaders extends ViewGroup {
-
-
-
-
-
-
-
 	public int getFirstRow() {
 		return firstRow;
 	}
@@ -256,7 +246,7 @@ public class TableFixHeaders extends ViewGroup {
 				//改造点击事件
 				if(currentY <= downy+15&&downy-15<=currentY)
 				{
-					Log.e("dd","enter:TableFixHeaders.onInterceptTouchEvent():a");
+					//Log.e("dd","enter:TableFixHeaders.onInterceptTouchEvent():a");
 					performClick();
 					break;
 				}
@@ -606,7 +596,6 @@ public class TableFixHeaders extends ViewGroup {
 		return sum;
 	}
 
-	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		if (needRelayout || changed) {
@@ -727,7 +716,6 @@ public class TableFixHeaders extends ViewGroup {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressWarnings("deprecation")
 	private void setAlpha(ImageView imageView, float alpha) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

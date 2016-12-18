@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.otitan.DataBaseHelper;
@@ -82,6 +83,7 @@ public class LoginActivity extends Activity
 	ArrayList<String> mList = new ArrayList<String>();
 	WebServiceUtil websUtil;
 	Context mcontext;
+	UpdateUtil update=null;
 	private Handler mHandler = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -163,7 +165,7 @@ public class LoginActivity extends Activity
 		} else
 		{
 			//检查更新
-            UpdateUtil update=new UpdateUtil(mcontext);
+             update=new UpdateUtil(mcontext);
             update.executeUpdate();
 			initView();
 			// 有网络
@@ -332,7 +334,7 @@ public class LoginActivity extends Activity
 	// 确定登录
 	public void loginSure(View view)
 	{
-		loginName = login_name.getText().toString();
+		loginName = login_name.getText();
 		loginPassword = login_password.getText().toString();
 		if (loginName == null || loginName.equals(""))
 		{
@@ -391,6 +393,10 @@ public class LoginActivity extends Activity
 	 */
 	public void initView()
 	{
+		TextView tv_version= (TextView) findViewById(R.id.tv_appversion);
+
+		tv_version.setText("版本号："+UpdateUtil.getVersionCode());
+
 		if (qiehuan)
 		{
 			login_name.setText("");

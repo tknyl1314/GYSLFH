@@ -34,8 +34,8 @@ public class ToastUtil {
 	 * @param context
 	 * @param text
 	 */
-	public static void setToast(final Activity context, final String text) {
-		context.runOnUiThread(new Runnable() {
+	public static void setToast(final Context context, final String text) {
+		((Activity) context).runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {

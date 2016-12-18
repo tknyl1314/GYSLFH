@@ -529,7 +529,8 @@ public class WebServiceUtil {
 		try {
 			// String string = SBH;
 
-			String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/guiji.sqlite";
+			//String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/guiji.sqlite";
+			String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/GYSLFH.sqlite";
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new jsqlite.Database();
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
@@ -878,7 +879,8 @@ public class WebServiceUtil {
 		final List<TrackModel> locations = new ArrayList<TrackModel>();
 
 		try {
-			String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/guiji.sqlite";
+			//String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/guiji.sqlite";
+			String databaseName = ResourcesManager.getInstance(context).getPath()[0] + "/maps/sqlite/GYSLFH.sqlite";
 			Class.forName("jsqlite.JDBCDriver").newInstance();
 			Database db = new jsqlite.Database();
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);

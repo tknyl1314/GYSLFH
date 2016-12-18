@@ -7,7 +7,6 @@ import android.content.Context;
 import android.view.View;
 
 import Util.ToastUtil;
-
 /**
  * Created by Whs on 2016/12/1 0001.
  */
