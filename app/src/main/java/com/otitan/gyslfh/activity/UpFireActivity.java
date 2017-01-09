@@ -1,12 +1,15 @@
 package com.otitan.gyslfh.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -17,10 +20,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,7 +36,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -49,6 +55,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.king.photo.activity.AlbumActivity;
 import com.king.photo.util.Bimp;
@@ -63,9 +71,9 @@ import com.otitan.util.PadUtil;
 import com.otitan.util.PictureUtil;
 import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
+import com.titan.view.DeleteImageActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -76,6 +84,12 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
+import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
+import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultSubscriber;
+import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 
 public class UpFireActivity extends Activity {
 
@@ -112,17 +126,32 @@ public class UpFireActivity extends Activity {
 	private static final int PHOTO_PICTURE = 0x000002;*/
 	private static final int TAKE_PHOTO = 0x000001;
 	private static final int ALBUM = 0x000002;
-	
-	@Override
+    Context mContext;
+	/**需要动态获取的权限*/
+	String[] reqPermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
+			.READ_EXTERNAL_STORAGE};
+	SimpleDraweeView draweeView1=null;
+	SimpleDraweeView draweeView2=null;
+	SimpleDraweeView draweeView3=null;
+
+    /**保存上传图片*/
+    List<Image> imgs=new ArrayList<Image>();
+    private int i=0;
+    ProgressDialog mprogress=null;
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		//PublicWay.activityList.add(this);
-		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mContext=this;
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		if (PadUtil.isPad(this)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
+
+		initFresco();
+		getRequeatPermission();
+		intiView();
 		parentView = getLayoutInflater().inflate(R.layout.activity_up_fire,null);
 		setContentView(parentView);
 		Res.init(this);
@@ -135,9 +164,9 @@ public class UpFireActivity extends Activity {
 		DQLEVEL = intent.getStringExtra("DQLEVEL");//用户等级  区县用户2
 		UNITID = intent.getStringExtra("UNITID");
 		//address = intent.getStringExtra("address");
-		address="";
-		REALNAME=sharedPreferences.getString("REALNAME", "");
-		TELNO=sharedPreferences.getString("TELNO", "");
+		address=null;
+		REALNAME=sharedPreferences.getString("REALNAME", null);
+		TELNO=sharedPreferences.getString("TELNO", null);
 		websUtil.initWebserviceTry();
 
 		city_text = (EditText) findViewById(R.id.city_text);// 市
@@ -159,9 +188,9 @@ public class UpFireActivity extends Activity {
 		
 
 		DecimalFormat df = new DecimalFormat(".000000");
-		longitude.setText(df.format(longitudeValue) + "");
+		longitude.setText(df.format(longitudeValue));
 		latitude = (EditText) findViewById(R.id.latitude);
-		latitude.setText(df.format(latitudeValue) + "");
+		latitude.setText(df.format(latitudeValue));
 		remark = (EditText) findViewById(R.id.remark);
 		
 		firetype = (Spinner) findViewById(R.id.firetype);// 火灾类型
@@ -231,7 +260,7 @@ public class UpFireActivity extends Activity {
 			//county_textSpinner.setBackground(getResources().getDrawable().getDrawable(R.drawable.selectbg));
 			//county_textSpinner.setBackgroundDrawable(getResources().getColor(R.color.balck));
 			county_textSpinner.setSelection(Integer.parseInt(UNITID));
-			countryValue = countries[Integer.parseInt(UNITID)].toString();
+			countryValue = countries[Integer.parseInt(UNITID)];
 			devisionID = UNITID;
 		} else {
 			county_textSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -243,9 +272,9 @@ public class UpFireActivity extends Activity {
 							tv.setTextColor(getResources().getColor(R.color.balck));
 							//tv.setBackgroundColor(R.color.gray);
 							if (position == 0) {
-								countryValue = "";
+								countryValue = null;
 							} else {
-								countryValue = countries[position].toString();
+								countryValue = countries[position];
 								devisionID = position+"";
 							}
 //							TextView tv = (TextView) view;
@@ -268,11 +297,43 @@ public class UpFireActivity extends Activity {
 
 
 		//selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layoutView);
-		scrollview = (HorizontalScrollView) findViewById(R.id.scrollview);
+		//scrollview = (HorizontalScrollView) findViewById(R.id.scrollview);
 
 		// initSelectImage();
 		// 初始化照片上传模块
 		InitTakePhoto();
+	}
+
+	/**
+	 * 初始控件
+	 */
+	private void intiView() {
+
+	}
+
+
+	/**
+	 * 检查权限
+	 */
+	private void getRequeatPermission() {
+		// If an error is found, handle the failure to start.
+		// Check permissions to see if failure may be due to lack of permissions.
+		boolean permissionCheck1 = ContextCompat.checkSelfPermission(mContext, reqPermissions[0]) ==
+				PackageManager.PERMISSION_GRANTED;
+		boolean permissionCheck2 = ContextCompat.checkSelfPermission(mContext, reqPermissions[1]) ==
+				PackageManager.PERMISSION_GRANTED;
+
+		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+			// If permissions are not already granted, request permission from the user.
+			int requestCode = 3;
+			ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
+		}
+	}
+	/**
+	 *初始化Fresco
+	 */
+	private void initFresco() {
+		Fresco.initialize(this);
 	}
 	
 	
@@ -354,7 +415,203 @@ public class UpFireActivity extends Activity {
 		});
 
 	}
-	
+
+	/**
+	 * 打开相册
+	 * @param view
+	 */
+	public void openGallery(View view) {
+		if(imgs.size()>=3){
+			Toast.makeText(mContext,"最多只能上传3张图片",Toast.LENGTH_SHORT).show();
+		}else {
+			RxGalleryFinal
+					.with(mContext)
+					.image()
+					.radio()
+					.maxSize(3)
+					//.crop() //裁剪
+					.imageLoader(ImageLoaderType.FRESCO)
+					.subscribe(new RxBusResultSubscriber<ImageRadioResultEvent>() {
+						@Override
+						protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
+							i++;
+							final Image img=new Image();
+							String path=imageRadioResultEvent.getResult().getOriginalPath();
+							img.setPath(path);
+							dealPhotoFile(path);
+							imgs.add(img);
+                            //upLoads.add(img);
+							//uploadinfo.setFJINFO(imgs);
+							switch (i){
+								case 1:
+									draweeView1 = (SimpleDraweeView) findViewById(R.id.sdv_imgview1);
+									draweeView1.setImageURI(Uri.fromFile(new File(img.getPath())));
+									draweeView1.setOnClickListener(new View.OnClickListener() {
+										@Override
+										public void onClick(View view) {
+											Intent intent=new Intent(mContext,DeleteImageActivity.class);
+											Bundle bundle=new Bundle();
+											String str=img.getPath();
+											bundle.putString("img_name",str);
+											bundle.putInt("img_location",1);
+											intent.putExtras(bundle);
+											startActivityForResult(intent,0);
+										}
+									});
+									break;
+								case 2:
+									draweeView2= (SimpleDraweeView) findViewById(R.id.sdv_imgview2);
+									draweeView2.setImageURI(Uri.fromFile(new File(img.getPath())));
+									draweeView2.setOnClickListener(new View.OnClickListener() {
+										@Override
+										public void onClick(View view) {
+											Intent intent=new Intent(mContext,DeleteImageActivity.class);
+											Bundle bundle=new Bundle();
+											String str=img.getPath();
+											bundle.putString("img_name",str);
+											bundle.putInt("img_location",2);
+											intent.putExtras(bundle);
+											startActivityForResult(intent,0);
+										}
+									});
+									break;
+								case 3:
+									draweeView3= (SimpleDraweeView) findViewById(R.id.sdv_imgview3);
+									draweeView3.setImageURI(Uri.fromFile(new File(img.getPath())));
+									draweeView3.setOnClickListener(new View.OnClickListener() {
+										@Override
+										public void onClick(View view) {
+											Intent intent=new Intent(mContext,DeleteImageActivity.class);
+											Bundle bundle=new Bundle();
+											String str=img.getPath();
+											bundle.putString("img_name",str);
+											bundle.putInt("img_location",3);
+											intent.putExtras(bundle);
+											startActivityForResult(intent,0);
+										}
+									});
+									break;
+							}
+						}
+					})
+					.openGallery();
+		}
+	}
+
+
+    /**
+     * 删除图片后返回页面图片重新排列展示
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ALBUM:// 相册选择
+                if (Bimp.tempSelectBitmap.size() < PublicWay.num && resultCode == RESULT_OK) {
+                    for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
+                        String path = Bimp.tempSelectBitmap.get(i).getImagePath();
+                        //Bitmap bm = PictureUtil.getSmallBitmap(path);
+                        selectedDataList.add(path);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+
+            case TAKE_PHOTO:// 拍照
+                if (resultCode == RESULT_OK) {
+                    Bitmap bm = PictureUtil.getSmallBitmap(mCurrentPhotoPath);
+                    dealPhotoFile(mCurrentPhotoPath);
+                    selectedDataList.add(mCurrentPhotoPath);
+                    ImageItem takePhoto = new ImageItem();
+                    takePhoto.setBitmap(bm);
+                    Bimp.tempSelectBitmap.add(takePhoto);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+        }
+        if(requestCode==0&&resultCode==1)
+        {
+            Bundle bundle = data.getExtras();
+            boolean isDelete = bundle.getBoolean("isDelete");
+            int img_location = bundle.getInt("img_location");
+                /**
+                 * 根据你点中的图片进行删除
+                 */
+                if(isDelete)
+                {
+
+                    if(img_location==1)
+                    {
+                        imgs.remove(0);
+                    }else if(img_location==2)
+                    {
+                        imgs.remove(1);
+                    }else
+                    {
+                        imgs.remove(2);
+                    }
+
+                    /**
+                     * 将删除后的图片排序展示，
+                     */
+                    if(imgs.size()==0)
+                    {
+                        /*draweeView1.setImageURI(null);
+                        draweeView2.setImageURI(null);
+                        draweeView3.setImageURI(null);*/
+                        if(draweeView1!=null)
+                        {
+                            draweeView1.setImageURI("");
+
+                        }
+                        if(draweeView2!=null)
+                        {
+                            draweeView2.setImageURI("");
+                        }
+                        if(draweeView3!=null)
+                        {
+                            draweeView3.setImageURI("");
+                        }
+
+                        i=0;
+                    }else if(imgs.size()==1)
+                    {
+                        draweeView1.setImageURI(Uri.fromFile(new File(imgs.get(0).getPath())));
+                        if(draweeView2!=null)
+                        {
+                            draweeView2.setImageURI("");
+                        }
+                        if(draweeView3!=null)
+                        {
+                            draweeView3.setImageURI("");
+                        }
+                        i=1;
+                    }else if(imgs.size()==2)
+                    {
+                        draweeView1.setImageURI(Uri.fromFile(new File(imgs.get(0).getPath())));
+                        draweeView2.setImageURI(Uri.fromFile(new File(imgs.get(1).getPath())));
+                        if(draweeView3!=null)
+                        {
+                            draweeView3.setImageURI("");
+                        }
+                        i=2;
+                    }else
+                    {
+                        draweeView1.setImageURI(Uri.fromFile(new File(imgs.get(0).getPath())));
+                        draweeView2.setImageURI(Uri.fromFile(new File(imgs.get(1).getPath())));
+                        draweeView3.setImageURI(Uri.fromFile(new File(imgs.get(2).getPath())));
+
+                    }
+
+                    Toast.makeText(mContext,"图片删除成功",Toast.LENGTH_SHORT).show();
+                }
+
+        }
+    }
+
 	public class GridAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private int selectedPosition = -1;
@@ -512,25 +769,24 @@ public class UpFireActivity extends Activity {
 				Dialog endDateDialog = new DateDialog(UpFireActivity.this,
 						endTime);
 				endDateDialog.show();
-
 				break;
-
 			// 提交
 			case R.id.fireinfo_imgBtn_upSure:
+
 				 CITY = city_text.getText().toString();
 				 TOWN = town_text.getText().toString();
 				 VILLAGE = viliage_text.getText().toString();
 				 PLACE = huozai_address.getText().toString();
-				 FIREStartTime = startTime.getText().toString();
-				String FIREEND = endTime.getText().toString();
+				 //FIREStartTime = startTime.getText().toString();
+				//String FIREEND = endTime.getText().toString();
 			     REMARK = remark.getText().toString();
 				 X = longitude.getText().toString();
 				 Y = latitude.getText().toString();
 				 FireType=firetype.getSelectedItem().toString();
 				double lon = Double.parseDouble(X);
 				double lat = Double.parseDouble(Y);
-				//final String isUp = isUpsj.isChecked()+"";
-				if(countryValue.equals("")){
+				//final String isUp = isUpsj.isChecked()+null;
+				if(countryValue==null||countryValue.equals("")){
 					Toast.makeText(getApplicationContext(), "区县不能为空",
 							Toast.LENGTH_SHORT).show();
 				}else if(TOWN.equals("")){
@@ -554,16 +810,17 @@ public class UpFireActivity extends Activity {
 				} else if (PLACE.equals("")) {
 					Toast.makeText(getApplicationContext(), "地点不能为空",
 							Toast.LENGTH_SHORT).show();
-				} else if (FIREStartTime.equals("")
+				} /*else if (FIREStartTime.equals("")
 						|| FIREStartTime.equals("点击选择时间")) {
 					Toast.makeText(getApplicationContext(), "开始时间不能为空",
 							Toast.LENGTH_SHORT).show();
-				} else if (FireType.equals("--请选择--")) {
+				} */else if (FireType.equals("--请选择--")) {
 					Toast.makeText(getApplicationContext(), "请选择火灾类型",
 							Toast.LENGTH_SHORT).show();
 				} else {
+                    /** 获取设备信息*/
 					final String result = websUtil
-							.selMobileInfo(MyApplication.SBH);// 获取设备
+							.selMobileInfo(MyApplication.SBH);
 					if (result.equals("网络异常")) {
 						ToastUtil
 								.setToast(UpFireActivity.this, "网络异常,设备信息获取失败");
@@ -580,11 +837,12 @@ public class UpFireActivity extends Activity {
 								str[3] = object.getString("SBMC");
 								str[4] = object.getString("DJTIME");*/
 							}
-						} catch (JSONException e) {
-							e.printStackTrace();
+						} catch (Exception e) {
+                            ToastUtil.setToast(UpFireActivity.this, "网络异常,设备信息获取失败");
+                            return;
 						}
 					}
-					sendRequset();// 数据上传
+					sendRequset();// 照片上传
 
 				}
 				break;
@@ -601,11 +859,20 @@ public class UpFireActivity extends Activity {
 
 	/**
 	 * 函数名称 : sendRequset 功能描述 : 参数及返回值说明：
-	 * 描述 ：发送上传请求
+	 * 描述 ：图片上传
 	 */
 	private void sendRequset() {
+		upLoadTask uptask=new upLoadTask(imgs);
+		uptask.execute();
+        /*if (imgs.size()>0){
+
+        }*//*else{
+			Toast.makeText(mContext,"上传图片数为0",Toast.LENGTH_SHORT).show();
+		}*/
+
+
 		// downLoadTip();
-		new Thread() {
+		/*new Thread() {
 			@Override
 			public void run() {
 				super.run();
@@ -616,7 +883,7 @@ public class UpFireActivity extends Activity {
 						try {
 							Image image = new Image();
 							//image.setPath(Base64.encodeFromFile(selectedDataList.get(i).toString()));
-							image.setPath(PictureUtil.bitmapToString(selectedDataList.get(i).toString()));
+							image.setPath(PictureUtil.bitmapToString(selectedDataList.get(i)));
 							upLoads.add(image);
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -658,11 +925,11 @@ public class UpFireActivity extends Activity {
 						// "经度", "纬度", remark, startTime,1);
 
 					}
-				/*	Message msg = new Message();
+				*//*	Message msg = new Message();
 					msg.what = 2;
 					msg.obj = upImageResult;
 					handler.sendMessage(msg);
-					selectedDataList.clear();*/
+					selectedDataList.clear();*//*
 				} else {
 					msg.what = 1;
 					msg.obj = "未选择图片";
@@ -671,7 +938,7 @@ public class UpFireActivity extends Activity {
 					return;
 				}
 			}
-		}.start();
+		}.start();*/
 	}
 
 
@@ -724,7 +991,7 @@ public class UpFireActivity extends Activity {
 		return image;
 	}
 	
-	protected void onActivityResult(int requestCode, final int resultCode, final Intent intent) {
+	/*protected void onActivityResult(int requestCode, final int resultCode, final Intent intent) {
 		switch (requestCode) {
 		case ALBUM:// 相册选择
 			if (Bimp.tempSelectBitmap.size() < PublicWay.num && resultCode == RESULT_OK) {
@@ -752,7 +1019,7 @@ public class UpFireActivity extends Activity {
 		default:
 			break;
 		}
-	}
+	}*/
 	
 	private void dealPhotoFile(final String file) {
 		PhotoTask task = new PhotoTask(file);
@@ -859,9 +1126,6 @@ public class UpFireActivity extends Activity {
 		}
 		return (new SimpleDateFormat(pattern)).format(new Date());
 	}
-
-
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -876,5 +1140,88 @@ public class UpFireActivity extends Activity {
 		}
 		return true;
 	}
+
+    /**
+     *  上报task
+     */
+    class upLoadTask extends AsyncTask<Void,Void,Boolean> {
+        List<Image> imgs;
+
+        public upLoadTask(List<Image> imgs) {
+            this.imgs = imgs;
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+
+			if (imgs.size() > 0) {
+				for (int i=0;i<imgs.size();i++) {
+					try {
+
+						imgs.get(i).setPath(PictureUtil.bitmapToString(imgs.get(i).getPath()));
+						/*FileInputStream fis = new FileInputStream(imgs.get(i).getPath());
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte[] buffer = new byte[5024];
+						int count = 0;
+						while ((count = fis.read(buffer)) >= 0) {
+                            baos.write(buffer, 0, count);
+                        }
+						String  uploadBuffer = org.kobjects.base64.Base64.encode(baos.toByteArray());//进行Base64编码
+						imgs.get(i).setPath(uploadBuffer);*/
+					} catch (IOException e) {
+						e.printStackTrace();
+						Toast.makeText(mContext,e.toString(),Toast.LENGTH_SHORT).show();
+						return false;
+					}
+				}
+                Gson gson = new Gson();
+                String send = gson.toJson(imgs);
+                upImageResult = websUtil.uploadPhotoByService1(send);
+                if (upImageResult.equals("0")) {
+                    return  false;
+                } else {
+                    addFireResult = websUtil.updateAlarmFireInfor(CITY, countryValue, TOWN, VILLAGE, PLACE, REALNAME, TELNO, userID, X, Y, devisionID, FireType, fireStateValue + "", REMARK, upImageResult);
+                   return  addFireResult;
+                }
+
+
+            }
+			else {
+				addFireResult = websUtil.updateAlarmFireInfor(CITY, countryValue, TOWN, VILLAGE, PLACE, REALNAME, TELNO, userID, X, Y, devisionID, FireType, fireStateValue + "", REMARK, upImageResult);
+				return  addFireResult;
+			}
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mprogress = new ProgressDialog(mContext);
+            //mprogress.setTitle("正在提交");
+            mprogress.setMessage("正在提交,请稍等...");
+            mprogress.setCancelable(false);
+            mprogress.show();
+
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean  success) {
+            super.onPostExecute(success);
+            mprogress.dismiss();
+            //Toast.makeText(mContext,success,Toast.LENGTH_SHORT).show();
+            if(success)
+            {
+                mprogress.dismiss();
+                Toast.makeText(mContext,"上报成功",Toast.LENGTH_LONG).show();
+                UpFireActivity.this.finish();
+
+            }else {
+                mprogress.dismiss();
+                Toast.makeText(mContext,"上报失败",Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
 	
 }

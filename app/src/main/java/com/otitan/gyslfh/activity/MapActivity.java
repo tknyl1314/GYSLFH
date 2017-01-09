@@ -1,6 +1,8 @@
 package com.otitan.gyslfh.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,15 +11,19 @@ import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -199,10 +205,9 @@ public class MapActivity extends AppCompatActivity {
 
 	private ImageButton btn_clear, btn_cemian, btn_ceju, myLocation;
 	public MapView mapView = null;
+	//定位点样式
 	private MarkerSymbol locationMarkerSymbol = null;
 	private String titlePath,titlePath1, imageTitlePath, citytitlePath;
-
-	public String querPath = "";
 	// 图层
 	ArcGISLocalTiledLayer arcGISLocalTiledLayer,arcGISLocalTiledLayer2, arcGISLocalCityTiledLayer;
 	ArcGISLocalTiledLayer imageLocalTiledLayer;
@@ -220,7 +225,6 @@ public class MapActivity extends AppCompatActivity {
 	private Context context;
 	private LocationClient mLocClient;
 	public MyLocationListenner myLocationListener = new MyLocationListenner();
-	GpsCorrect gpsCorrect;
 	private LayoutInflater inflator;
 	protected static final int REFRESH = 0;
 	public static int mScreenW, mScreenH;
@@ -344,10 +348,12 @@ public class MapActivity extends AppCompatActivity {
 	PlotUtil plotUtil;
     LocationService mlocationservice;
 	//
-	/** GPS位置监听 */
-	private LocationManager locationManager;
+	/**定位需要动态获取的权限*/
+	String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
+			.ACCESS_COARSE_LOCATION};
 	/** 轨迹查询 */
 	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 	boolean istime=false;
 	public static enum ActionMode {
 		/**
@@ -385,7 +391,7 @@ public class MapActivity extends AppCompatActivity {
 		mcontext=this;
 		//获取GPS服务
 		intent=getIntent();
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		//locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		setContentView(R.layout.activity_map);
 
 		// 检测是平板还是手机。。
@@ -417,7 +423,17 @@ public class MapActivity extends AppCompatActivity {
 		ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");// 去除水印的
 		mapView = (MapView) findViewById(R.id.map);
 		//mapView.setMapBackground(mcontext.getColor(R.color.white), mcontext.getColor(R.color.balck), 3, 3);
+		// 获取定位图标
+		LocationDisplayManager ls = mapView.getLocationDisplayManager();
+		try {
+			locationMarkerSymbol = ls.getDefaultSymbol();
+
+		} catch (java.lang.Exception e) {
+
+			e.printStackTrace();
+		}
         intiView();
+
 		// 内部类MyTouchListener
 		myTouchListener = new MyTouchListener(MapActivity.this, mapView);
 		mapView.setOnTouchListener(myTouchListener);
@@ -543,7 +559,8 @@ public class MapActivity extends AppCompatActivity {
 						mapView.addLayer(trackgraphiclayer);
 						mapView.addLayer(graphicsLayerLocation);
 						mapView.addLayer(plotgraphiclayer);// 添加标绘图层
-						//intiLocation();// 定位初始化
+                        intiPermisson();
+                        intiLocation();
 						initBaiduNavi();// 初始化导航
 
 					}
@@ -579,13 +596,7 @@ public class MapActivity extends AppCompatActivity {
 		});
 
 		//intiLocation();// 定位初始化
-		// 获取定位图标
-		LocationDisplayManager ls = mapView.getLocationDisplayManager();
-		try {
-			locationMarkerSymbol = ls.getDefaultSymbol();
-		} catch (java.lang.Exception e) {
-			e.printStackTrace();
-		}
+
 
 	}
     /**
@@ -759,7 +770,13 @@ public class MapActivity extends AppCompatActivity {
         //注册监听
         //int type = getIntent().getIntExtra("from", 0);
         setLocationOption();
-        mlocationservice.start();// 定位SDK
+
+		/*mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
+
+		if (!mLocationDisplay.isStarted())
+			mLocationDisplay.startAsync();*/
+
+		mlocationservice.start();// 定位SDK
 	/*	mLocClient = new LocationClient(MapActivity.this);
 		mLocClient.registerLocationListener(myLocationListener);
 		setLocationOption();
@@ -1296,7 +1313,7 @@ public class MapActivity extends AppCompatActivity {
 					jieJingintent.putExtra("UNITID", UNITID);
 					startActivity(jieJingintent);
 					break;
-				//火警上报
+				//火情上报
 				case R.id.btn_upfireInfo:
 					if (iszhuce&& userID != null) {
 						if(upPoint!=null){
@@ -1367,7 +1384,7 @@ public class MapActivity extends AppCompatActivity {
 					arrayList.clear();
 					try {
 						websUtilResult = websUtil.selHuoDian(
-								countries[Integer.parseInt(UNITID)].toString(),
+								countries[Integer.parseInt(UNITID)],
 								DQLEVEL, UNITID);
 						obj = new JSONObject(websUtilResult);
 						arr = obj.optJSONArray("ds");
@@ -1380,14 +1397,12 @@ public class MapActivity extends AppCompatActivity {
 									map.put("FIRESTART",
 											object.getString("FIRESTART"));
 									map.put("address", object.getString("PLACE"));
-									map.put("X", object.getString("X").toString());
-									map.put("Y", object.getString("Y").toString());
+									map.put("X", object.getString("X"));
+									map.put("Y", object.getString("Y"));
 									map.put("FIRE_STATE",
 											object.getString("FIRE_STATE"));
-									map.put("COUNTY", object.getString("COUNTY")
-											.toString());
-									map.put("FIREEND", object.getString("FIREEND")
-											.toString());
+									map.put("COUNTY", object.getString("COUNTY"));
+									map.put("FIREEND", object.getString("FIREEND"));
 									arrayList.add(map);
 								}
 							} catch (JSONException e) {
@@ -1656,9 +1671,9 @@ public class MapActivity extends AppCompatActivity {
 		try {
 			graphicLayer.removeAll();
 			double longitude = Double.parseDouble(arr.optJSONObject(position)
-					.getString("X").toString());
+					.getString("X"));
 			double latitude = Double.parseDouble(arr.optJSONObject(position)
-					.getString("Y").toString());
+					.getString("Y"));
 			double[] latlng = GpsCorrect.gpsToBD09(String.valueOf(latitude),
 					String.valueOf(longitude));
 			longitude = 2 * longitude - latlng[0];
@@ -2272,7 +2287,7 @@ public class MapActivity extends AppCompatActivity {
 			/*	Point point2 = (Point) GeometryEngine.project(point1,
 						SpatialReference.create(4326),
 						mapView.getSpatialReference());*/
-				upPoint = new Point(point2.getX(), point2.getY());
+				upPoint = point2;
 				longitude=point2.getX();
 				latitude=point2.getY();
 				//upPoint = new Point(672679.534108, 2972909.353704);
@@ -2318,13 +2333,16 @@ public class MapActivity extends AppCompatActivity {
 
 	/* 创建定位时的误差园及定位中心点 */
 	public void createLocationGraphic(Point upPoint) {
+        if(upPoint==null){
+			return;
+		}
 		if (locationGraphic == null) {
 			locationGraphic = new Graphic(upPoint, locationMarkerSymbol);
 			locationID = graphicsLayerLocation.addGraphic(locationGraphic);
 		} else {
 			graphicsLayerLocation.updateGraphic(locationID, upPoint);
 		}
-		circlePolygon = GeometryEngine.buffer(upPoint,
+		/*circlePolygon = GeometryEngine.buffer(upPoint,
 				mapView.getSpatialReference(), 100, null);
 		if (circleGraphic == null) {
 			FillSymbol symbol = DroolCircle();
@@ -2332,7 +2350,7 @@ public class MapActivity extends AppCompatActivity {
 			circleID = graphicsLayerLocation.addGraphic(circleGraphic);
 		} else {
 			graphicsLayerLocation.updateGraphic(circleID, circlePolygon);
-		}
+		}*/
 	}
 
 
@@ -2434,6 +2452,8 @@ public class MapActivity extends AppCompatActivity {
 				Color.TRANSPARENT, (float) 0.1);
 		symbol.setOutline(simplelinesymbol);
 		symbol.setAlpha(30);
+
+
 		return symbol;
 	}
 
@@ -3127,7 +3147,8 @@ public class MapActivity extends AppCompatActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-      intiLocation();
+
+
 		Intent intent = getIntent();
 		if (intent.hasExtra("com.avos.avoscloud.Data")) {
 			try {
@@ -3659,9 +3680,9 @@ public class MapActivity extends AppCompatActivity {
 					intiLocation();// 定位初始化
 
 				}*/
-				sharedPreferences.edit().putString("redisip", redisip.getText().toString()).commit();
-				sharedPreferences.edit().putString("anshunmap", anshunmap.getText().toString()).commit();
-				sharedPreferences.edit().putString("monitorip", monitorip.getText().toString()).commit();
+				sharedPreferences.edit().putString("redisip", redisip.getText().toString()).apply();
+				sharedPreferences.edit().putString("anshunmap", anshunmap.getText().toString()).apply();
+				sharedPreferences.edit().putString("monitorip", monitorip.getText().toString()).apply();
 				dialog.dismiss();
 			}
 		});
@@ -3687,11 +3708,11 @@ public class MapActivity extends AppCompatActivity {
 			switch (compoundbutton.getId()) {
 				case R.id.radio_btn_setting_guiji:
 					compoundbutton.setChecked(flag);
-					sharedPreferences.edit().putBoolean("guiji", flag).commit();
+					sharedPreferences.edit().putBoolean("guiji", flag).apply();
 					break;
 				case R.id.radio_btn_setting_gps:
 					compoundbutton.setChecked(flag);
-					sharedPreferences.edit().putBoolean("gps", flag).commit();
+					sharedPreferences.edit().putBoolean("gps", flag).apply();
 					if (flag && !MylibUtil.isOPen(MapActivity.this)) {
 						Util.toggleGPS(MapActivity.this);
 					} else if (!flag && MylibUtil.isOPen(MapActivity.this)) {
@@ -3700,7 +3721,7 @@ public class MapActivity extends AppCompatActivity {
 					break;
 				case R.id.radio_btn_setting_zongji:
 					compoundbutton.setChecked(flag);
-					sharedPreferences.edit().putBoolean("zongji", flag).commit();
+					sharedPreferences.edit().putBoolean("zongji", flag).apply();
 					if (!flag) {
 						graphicsLayerLocation.removeGraphic(gjGraphicID);
 					}
@@ -3805,6 +3826,35 @@ public class MapActivity extends AppCompatActivity {
 				}
 			}
 		});
+	}
+
+	/**
+	 * 初始化权限
+	 */
+	private void intiPermisson() {
+		// If an error is found, handle the failure to start.
+		// Check permissions to see if failure may be due to lack of permissions.
+		boolean permissionCheck1 = ContextCompat.checkSelfPermission(mcontext, reqPermissions[0]) ==
+				PackageManager.PERMISSION_GRANTED;
+		boolean permissionCheck2 = ContextCompat.checkSelfPermission(mcontext, reqPermissions[1]) ==
+				PackageManager.PERMISSION_GRANTED;
+
+		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+			int requestCode=1;
+			// If permissions are not already granted, request permission from the user.
+			ActivityCompat.requestPermissions((Activity) mcontext, reqPermissions, requestCode);
+		}/* else {
+			// Report other unknown failure types to the user - for example, location services may not
+			// be enabled on the device.
+                    *//*String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
+                            .getSource().getLocationDataSource().getError().getMessage());*//*
+			String message="获取定位信息异常，请检查GPS是否开启";
+			Toast.makeText(mcontext, message, Toast.LENGTH_LONG).show();
+			// Update UI to reflect that the location display did not actually start
+			//mSpinner.setSelection(0, true);
+		}*/
+
+
 	}
 
 

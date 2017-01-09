@@ -2,6 +2,7 @@ package com.titan.custom;
 
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.AutoCompleteTextView.OnDismissListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.otitan.gyslfh.R;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class DropdownEdittext extends LinearLayout {
 				tv.setDropDownBackgroundResource(R.color.white);
 				//tv.setDropDownHeight()
 				btn = (ImageView) findViewById(R.id.btn_dropdown);
+			    applyAttributes(attrs);
 				//设置匹配字符
 				tv.setThreshold(100);
 				//设置下拉宽度
@@ -65,6 +68,21 @@ public class DropdownEdittext extends LinearLayout {
 					}
 				});
 		 }
+	}
+
+	/**
+	 * 设置属性
+	 * @param attrs
+	 */
+	protected void applyAttributes(AttributeSet attrs) {
+		// Slight contortion to prevent allocating in onLayout
+
+		TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.DropdownEditTextView);
+		String  text = typedArray.getString(R.styleable.DropdownEditTextView_text);
+		String  hint =typedArray.getString(R.styleable.DropdownEditTextView_hint);
+		tv.setHint(hint);
+		tv.setText(text);
+		typedArray.recycle();
 	}
 
 	public void setAdapter(String[] datalist) {
@@ -99,15 +117,6 @@ public class DropdownEdittext extends LinearLayout {
 	{
 		tv.setCompletionHint("最近登录用户"+number+"个");
 	}
-	/*@Override
-	protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
-		if(gainFocus)
-		{
-			setBackgroundResource(R.drawable.dropdown_edittext_select);
-		}else {
-			setBackgroundResource(R.drawable.dropdown_edittext_nomal);
-		}
-	}*/
 	//获取数据
 	public String getText() {
 		String tv_text = tv.getText().toString();

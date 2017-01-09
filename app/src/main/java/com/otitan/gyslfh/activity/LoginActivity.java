@@ -1,7 +1,6 @@
 package com.otitan.gyslfh.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,15 +12,15 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.otitan.DataBaseHelper;
 import com.otitan.customui.DropdownEdittext;
 import com.otitan.gyslfh.R;
 import com.otitan.util.PadUtil;
-import com.otitan.util.ResourcesManager;
 import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
 import com.titan.util.UpdateUtil;
@@ -31,11 +30,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import Util.ProgressDialogUtil;
-import jsqlite.Callback;
-import jsqlite.Database;
 
 /**
  *
@@ -56,25 +52,26 @@ public class LoginActivity extends Activity
 	/* 密码错误 */
 	private static final int loadhistorylist = 4;
 	/* 保存解析的XML信息 */
-	HashMap<String, String> mHashMap;
-	/* 下载保存路径 */
+	/*HashMap<String, String> mHashMap;
+	*//* 下载保存路径 *//*
 	private String mSavePath;
-	/* 记录进度条数量 */
+	*//* 记录进度条数量 *//*
 	private int progress;
+
+	*//* 是否取消更新 *//*
+	private boolean cancelUpdate = false;
+	*//* 更新进度条 *//*
+	private ProgressBar mProgress;
+	private Dialog downApkDialog;*/
 	/* 登录返回结果 */
 	private JSONObject login_jsonobject;
-	/* 是否取消更新 */
-	private boolean cancelUpdate = false;
-	/* 更新进度条 */
-	private ProgressBar mProgress;
-	private Dialog downApkDialog;
 	// 登陆等待进度条
 	DropdownEdittext login_name;
 	private EditText login_password;// login_name,
 	private CheckBox pwdRemember, zidongLogin;
-	// private com.otitan.util.Network_Service networkService;
 	private String loginResult = null;
 	private String loginName, userID, UNITID, TELNO;// ,
+	//登录密码
 	public String loginPassword;
 	private String DQLEVEL, REALNAME;
 	private boolean qiehuan = false;
@@ -84,6 +81,8 @@ public class LoginActivity extends Activity
 	WebServiceUtil websUtil;
 	Context mcontext;
 	UpdateUtil update=null;
+	ArrayList<String> userlist=new ArrayList<>() ;
+	Gson gson=new Gson();
 	private Handler mHandler = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -95,10 +94,10 @@ public class LoginActivity extends Activity
 					loginMethod();
 					break;
 				// 正在下载
-				case DOWNLOAD:
+				/*case DOWNLOAD:
 					// 设置进度条位置
 					mProgress.setProgress(progress);
-					break;
+					break;*/
 				case DOWNLOAD_FINISH:
 					// 安装文件
 					//installApk();
@@ -120,7 +119,7 @@ public class LoginActivity extends Activity
 				default:
 					break;
 			}
-		};
+		}
 	};
 
 	public void onCreate(Bundle savedInstanceState)
@@ -132,16 +131,17 @@ public class LoginActivity extends Activity
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
 		setContentView(R.layout.activity_login);
-
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-		websUtil = new WebServiceUtil(getApplicationContext());
+		websUtil = new WebServiceUtil(mcontext);
 		// 获取上一个页面传过来的值
 		Intent intent = getIntent();
 		qiehuan = intent.getBooleanExtra("isqiehuan", false);
 		// 获取页面控件
 		login_name = (DropdownEdittext) findViewById(R.id.login_name);
 		//login_name = (EditText) findViewById(R.id.login_name);
-		initAutoComplete();
+		//initAutoComplete();
+
+		//getUserList();
 		login_password = (EditText) findViewById(R.id.login_password);
 		pwdRemember = (CheckBox) findViewById(R.id.checkBoxPass);
 		zidongLogin = (CheckBox) findViewById(R.id.checkBoxlogin);
@@ -149,7 +149,7 @@ public class LoginActivity extends Activity
 		if (!MyApplication.IntetnetISVisible)
 		{
 			// 无网络时跳转手机网络设置界面
-			ToastUtil.setToast(mcontext, "网络连接异常");
+			ToastUtil.setToast(mcontext, "网络异常,请检查网络连接");
 			login_name.setText(sharedPreferences.getString("name", ""));
 			login_password.setText(sharedPreferences.getBoolean("remember",
 					false) ? sharedPreferences.getString("pwd", "") : "");
@@ -174,15 +174,26 @@ public class LoginActivity extends Activity
 		}
 	}
 	/**
-	 * 获取assets文件夹下db.sqlite文件中的历史用户
+	 *
 	 * @return
 	 */
 	public ArrayList<String> getUserList()
 	{
-		String filename = null;
+
+		String str=sharedPreferences.getString("history_userinfo","");
+		try {
+			userlist=gson.fromJson(str, new TypeToken<ArrayList<String>>() {}.getType());
+		} catch (Exception e) {
+			return null;
+		}
+		if (userlist.size()>0){
+			return  userlist;
+		}
+		return  null;
+	/*	String filename = null;
 		try
 		{
-			filename = ResourcesManager.getInstance(this).getDataBase(
+			filename = ResourcesManager.getInstance(mcontext).getDataBase(
 					LoginActivity.this, "db.sqlite");
 		} catch (Exception e)
 		{
@@ -223,7 +234,7 @@ public class LoginActivity extends Activity
 		{
 			e.printStackTrace();
 		}
-		return list;
+		return list;*/
 	}
     /**
 	 * 初始化已登录用户名
@@ -247,6 +258,9 @@ public class LoginActivity extends Activity
 		login_name.setAdapter(mList);
 	}
 
+	/**
+	 * 登录
+	 */
 	private void loginMethod()
 	{
 		// 没有网络
@@ -279,27 +293,33 @@ public class LoginActivity extends Activity
 					Intent intent = new Intent(LoginActivity.this,
 							MapActivity.class);
 					intent.putExtra("psw",loginPassword);
+					//如果未登录账号默认
+					/*if(!checkLogined(loginName)){
+						userlist.add(loginName);
+						sharedPreferences.edit().putString("history_userinfo",gson.toJson(userlist)).apply();
+					}*/
+
 					LoginActivity.this.startActivity(intent);
 					LoginActivity.this.finish();
 					// 记住密码和自动登入
-					sharedPreferences.edit().putString("DQLEVEL", DQLEVEL).commit();
-					sharedPreferences.edit().putString("REALNAME", REALNAME).commit();
-					sharedPreferences.edit().putString("TELNO", TELNO).commit();
-					sharedPreferences.edit().putString("userID", userID).commit();
-					sharedPreferences.edit().putString("UNITID", UNITID).commit();
-					sharedPreferences.edit().putString("name", loginName).commit();
+					sharedPreferences.edit().putString("DQLEVEL", DQLEVEL).apply();
+					sharedPreferences.edit().putString("REALNAME", REALNAME).apply();
+					sharedPreferences.edit().putString("TELNO", TELNO).apply();
+					sharedPreferences.edit().putString("userID", userID).apply();
+					sharedPreferences.edit().putString("UNITID", UNITID).apply();
+					sharedPreferences.edit().putString("name", loginName).apply();
 					sharedPreferences
 							.edit()
 							.putString(
 									"pwd",
 									pwdRemember.isChecked() ? loginPassword
-											: "").commit();
+											: "").apply();
 					sharedPreferences.edit()
 							.putBoolean("remember", pwdRemember.isChecked())
-							.commit();
+							.apply();
 					sharedPreferences.edit()
 							.putBoolean("zidong", zidongLogin.isChecked())
-							.commit();
+							.apply();
 					boolean flag = false;
 					for (int i = 0; i < mList.size(); i++)
 					{
@@ -319,7 +339,7 @@ public class LoginActivity extends Activity
 				}else if (object.getString("re") == null
 						|| object.getString("re").equals("fail"))
 				{
-					String eMsg = object.getString("eMsg").toString();
+					String eMsg = object.getString("eMsg");
 					Toast.makeText(getApplicationContext(), eMsg,
 							Toast.LENGTH_SHORT).show();
 				}
@@ -329,6 +349,14 @@ public class LoginActivity extends Activity
 			}
 		}
 		ProgressDialogUtil.stopProgressDialog();
+	}
+
+	/**
+	 * 检查是否登录过
+	 * @return
+	 */
+	private boolean checkLogined(String username) {
+		return  false;
 	}
 
 	// 确定登录

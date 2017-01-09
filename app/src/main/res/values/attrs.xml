@@ -5,5 +5,7 @@
     </declare-styleable>
     <declare-styleable name="DropdownEditTextView">
         <attr name="isDropDown" format="boolean"/>
+        <attr name="text" format="string"/>
+        <attr name="hint" format="string"/>
     </declare-styleable>
 </resources>

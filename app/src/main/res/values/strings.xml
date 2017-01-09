@@ -1,23 +1,14 @@
 <resources>
-    <!-- <string name="app_name">GYSLFH</string>
-    <string name="action_settings">Settings</string>-->
-
     <!-- 贵阳防火 -->
     <string name="app_name">贵阳防火</string>
     <string name="startname">贵阳市森林防火监控指挥综合管理平台</string>
-    <!-- 枣庄防火 -->
-    <!--
-    <string name="app_name">枣庄防火</string>
-    <string name="startname">枣庄市森林防火监控指挥综合管理平台</string>
-
-    -->
 
     <!-- 贵阳服务地址服务地址 -->
     <!-- <string name="webservice">http://gis.gyforest.com:8088/fireservice/FireService/WebService1.asmx</string> -->
 
     <!-- 公司服务地址 -->
     <!--   <string name="webservice">http://titanah.imwork.net:8099/SLFH/FireService/WebService1.asmx</string> -->
-    <!-- <string name="webservice">http://192.168.1.16:8099/SLFH/FireService/WebService1.asmx</string> -->
+    <!-- <string name="webservice">http://192.168.1.16:8090/SLFH/FireService/WebService1.asmx</string>-->
     <!-- 长坡岭服务地址 222.85.147.93 -->
     <string name="webservice">http://www.gyslfh.com:8037/FireService/WebService1.asmx</string>
     <string name="versionxml">http://www.gyslfh.com:8037/apk/AS_version.xml</string>
@@ -66,5 +57,4 @@
     <string name="appversion">系统版本号</string>
     <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
     <string name="version">版本号</string>
-
 </resources>

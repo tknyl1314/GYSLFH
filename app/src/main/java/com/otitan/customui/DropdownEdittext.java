@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.otitan.gyslfh.R;
+import com.titan.model.UserInfo;
 
 import java.util.List;
 
@@ -109,6 +110,19 @@ public class DropdownEdittext extends LinearLayout {
 			btn.setEnabled(true);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(mcontext, R.layout.dropdown_item,datalist);
 			tv.setAdapter(adapter);	
+		}
+		else {
+			btn.setEnabled(false);
+		}
+	}
+	public void setMapAdapter(List<UserInfo> datalist) {
+		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(mcontext,  android.R.layout.simple_list_item_1,
+				datalist);*/
+		if(datalist!=null&&datalist.size()>0)
+		{
+			btn.setEnabled(true);
+			/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(mcontext, R.layout.dropdown_item,datalist);
+			tv.setAdapter(adapter);*/
 		}
 		else {
 			btn.setEnabled(false);

@@ -6,9 +6,9 @@
         <variable
             name="viewModel"
             type="com.titan.viewmodel.LoginViewModel"/>
-        <variable
+        <!--<variable
             name="user"
-            type="com.titan.model.UserInfo"/>
+            type="com.titan.model.UserInfo"/>-->
     </data>
 <LinearLayout
     android:layout_width="match_parent"
@@ -30,38 +30,23 @@
     <com.titan.custom.DropdownEdittext
         android:id="@+id/login_name"
         android:layout_width="350dp"
-        android:background="@color/white"
         android:gravity="start"
-        android:layout_height="45dp"
-        android:layout_marginTop="150dp" />
-    <!--<EditText
-        android:id="@+id/login_password1"
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:visibility="gone"
-        android:background="@color/white"
-        android:hint="@string/password"
-        android:text="@{user.passWord}"
-        android:lines="1"
-        android:textSize="24sp"
-        android:paddingLeft="8dp"
-        android:gravity="center|start"
-        android:inputType="textPassword"
-        android:theme="@style/EditText"
-        android:textColor="@color/balck" >
-    </EditText>-->
-
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        app:text="@{viewModel.username}"
+        app:hint="用户名"
+        />
     <android.support.design.widget.TextInputLayout
         android:id="@+id/usernameWrapper"
         android:layout_width="350dp"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         >
         <EditText
             android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:text="@{user.passWord}"
+            android:text="@{viewModel.password}"
             android:hint="@string/password"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -72,8 +57,9 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_marginTop="10dp" >
+        <!--记住密码-->
         <CheckBox
-            android:id="@+id/checkBoxPass"
+            android:id="@+id/cb_remeber"
             style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,27 +67,45 @@
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:checked="true" />
-
+        <!--自动登录-->
         <CheckBox
-            android:id="@+id/checkBoxlogin"
+            android:id="@+id/cb_autologin"
             style="@style/autoLoginCheckboxTheme"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
+            android:layout_marginStart="100dp"
             android:checked="false" />
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_login"
         android:layout_width="350dp"
         android:layout_height="40dp"
         android:background="@drawable/loginbutton"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="@string/login"
-        android:onClick="@{viewModel.onLongin}"
+        android:onClick="@{viewModel.onLogin}"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
+    <TextView
+        android:id="@+id/tv_appversion"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:text="@string/version"
+        />
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="@string/appinfo"/>
 </LinearLayout>
 </layout>

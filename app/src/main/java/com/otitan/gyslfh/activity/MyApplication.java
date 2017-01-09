@@ -36,7 +36,7 @@ public class MyApplication extends Application
 		//public static String featureurl;
 		//public static FeatureLayer queryfeature;
 
-		SharedPreferences sharedPreferences;
+		public  static  SharedPreferences sharedPreferences;
 		//屏幕宽高
 		int window_width,window_height;
 		Context mcontext;
@@ -62,6 +62,7 @@ public class MyApplication extends Application
 
 			/** 百度定位初始化 */
 			locationService = new LocationService(getApplicationContext());
+
 			mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
 			//SDKInitializer.initialize(getApplicationContext());
 			mcontext=this.getApplicationContext();
@@ -101,7 +102,7 @@ public class MyApplication extends Application
 			if (null != info)
 			{
 				SBH = info.getMacAddress();
-				sharedPreferences.edit().putString("SBH", SBH).commit();
+				sharedPreferences.edit().putString("SBH", SBH).apply();
 			}
 		}
 		/** 注册用户设备信息*/
@@ -126,7 +127,7 @@ public class MyApplication extends Application
 		if (null != info)
 		{
 			SBH = info.getMacAddress();
-			sharedPreferences.edit().putString("SBH", SBH).commit();
+			sharedPreferences.edit().putString("SBH", SBH).apply();
 		} else
 		{
 			SBH = sharedPreferences.getString("SBH", "");
@@ -141,19 +142,19 @@ public class MyApplication extends Application
 		if (result.equals(WebServiceUtil.netException))
 		{
 			// 网络异常
-			sharedPreferences.edit().putBoolean(SBH, false).commit();
+			sharedPreferences.edit().putBoolean(SBH, false).apply();
 		} else if (result.equals("已录入"))
 		{
 			// 设备信息已经录入
-			sharedPreferences.edit().putBoolean(SBH, true).commit();
+			sharedPreferences.edit().putBoolean(SBH, true).apply();
 		} else if (result.equals("录入成功"))
 		{
-			sharedPreferences.edit().putBoolean(SBH, true).commit();
+			sharedPreferences.edit().putBoolean(SBH, true).apply();
 			// 设备信息录入成功
 		} else if (result.equals("录入失败"))
 		{
 			// 设备信息录入失败
-			sharedPreferences.edit().putBoolean(SBH, false).commit();
+			sharedPreferences.edit().putBoolean(SBH, false).apply();
 		}
 	}
 

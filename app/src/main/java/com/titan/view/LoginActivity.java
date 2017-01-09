@@ -11,21 +11,18 @@ import com.otitan.gyslfh.activity.MyApplication;
 import com.otitan.gyslfh.databinding.ActivityLogin1Binding;
 import com.otitan.util.PadUtil;
 import com.otitan.util.ToastUtil;
-import com.titan.model.UserInfo;
 import com.titan.util.UpdateUtil;
 import com.titan.viewmodel.LoginViewModel;
 
 import Util.ProgressDialogUtil;
 
 /**
- *
+ *登录界面
  */
 public class LoginActivity extends Activity
 {
 	Context mContext;
     LoginViewModel loginViewModel;
-    //ViewDataBinding binding;
-    //LoginActivityBinding binding;
     ActivityLogin1Binding binding;
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -36,16 +33,23 @@ public class LoginActivity extends Activity
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
         binding=   DataBindingUtil.setContentView(this, R.layout.activity_login_1);
-		UserInfo user=new UserInfo("whs","123");
+		//UserInfo user=new UserInfo("whs","123");
 	  // LoginActivityBinding binding=DataBindingUtil.setContentView(this, R.layout.activity_login_1);
-    /*    loginViewModel = new LoginViewModel(this);
-        binding.setViewModel(loginViewModel);*/
-        binding.setUser(user);
 
+        //binding.setUser(user);
+		loginViewModel = new LoginViewModel(this);
+		binding.setViewModel(loginViewModel);
 		if (!MyApplication.IntetnetISVisible)
 		{
 			// 无网络时跳转手机网络设置界面
-			ToastUtil.setToast(mContext, "网络连接异常");
+			ToastUtil.setToast(mContext, "网络异常，请检查网络连接");
+			/*binding.loginName.setText(MyApplication.sharedPreferences.getString("name", ""));
+			binding.loginPassword.setText(MyApplication.sharedPreferences.getBoolean("remember",
+					false) ? MyApplication.sharedPreferences.getString("pwd", "") : "");*/
+			binding.cbRemeber.setChecked(MyApplication.sharedPreferences.getBoolean("remember",
+					false));
+            binding.cbAutologin.setChecked(MyApplication.sharedPreferences
+					.getBoolean("zidong", false));
 		} else
 		{
 			//检查更新
@@ -58,6 +62,7 @@ public class LoginActivity extends Activity
 	{
 		ProgressDialogUtil.stopProgressDialog();
 		super.onDestroy();
+		loginViewModel.destroy();
 	}
 
 }

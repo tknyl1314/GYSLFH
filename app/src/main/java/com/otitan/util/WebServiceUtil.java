@@ -34,7 +34,7 @@ public class WebServiceUtil {
 	private String methodName = null;
 	private String soapAction = null;
 	private String urlWebService;
-	private static int timeout = 5000;
+	private static int timeout = 10000;
 	private Context context;
 	public static String NetworkException = "网络错误";
 	public static String CharException = "用户名中包含特殊字符";
@@ -45,12 +45,11 @@ public class WebServiceUtil {
 	public WebServiceUtil(Context context) {
 		this.context = context;
 		urlWebService = context.getResources().getString(R.string.webservice);
-		initWebserviceTry();
+		//initWebserviceTry();
 	}
 
 	/**
 	 * 录入设备使用者信息
-	 *
 	 * @param sysname
 	 *            使用者名称
 	 * @param tel
@@ -66,7 +65,6 @@ public class WebServiceUtil {
 	public String addMobileSysInfo(String sysname, String tel, String dw, String sbmc, String sbh, String xlh) {
 		methodName = "addMoblieSysInfo";
 		soapAction = "http://tempuri.org/" + methodName;
-
 		SoapObject soapObject = new SoapObject(nameSpace, methodName);
 		soapObject.addProperty("sysname", sysname);
 		soapObject.addProperty("tel", tel);
@@ -160,6 +158,7 @@ public class WebServiceUtil {
 		methodName = "selMobileInfo";
 		soapAction = "http://tempuri.org/" + methodName;
 		SoapObject soapObject = new SoapObject(nameSpace, methodName);
+		sbh="B4:EF:39:8A:6E:B9";
 		soapObject.addProperty("sbh", sbh);
 		return getResult(soapObject, "selMobileInfoResult");
 	}
@@ -977,7 +976,6 @@ public class WebServiceUtil {
 		envelope.bodyOut = soapObject;
 		envelope.dotNet = true;
 		envelope.setOutputSoapObject(soapObject);
-
 		try {
 			HttpTransportSE transport = new HttpTransportSE(urlWebService, timeout);
 			transport.debug = true;
@@ -993,7 +991,7 @@ public class WebServiceUtil {
 	public String getResult(SoapObject soapObject, String param) {
 		String result = "";
 		SoapSerializationEnvelope envelope = getEnvelope(soapObject);
-		if (envelope == null) {
+ 		if (envelope == null) {
 			return netException;
 		}
 		SoapObject object = null;
