@@ -1,0 +1,5 @@
+<vector android:height="24dp" android:viewportHeight="32.0"
+    android:viewportWidth="32.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#3495FC" android:pathData="M11.71,15.94c0,2.37 1.92,4.29 4.29,4.29s4.29,-1.92 4.29,-4.29c0,-2.37 -1.92,-4.29 -4.29,-4.29S11.71,13.57 11.71,15.94L11.71,15.94z"/>
+    <path android:fillColor="#3495FC" android:pathData="M25.47,15.07c-0.38,-4.61 -4.1,-8.26 -8.7,-8.58V4.06h-1.63v2.46c-4.48,0.42 -8.03,4.03 -8.42,8.54H4.29v1.63H6.72c0.38,4.51 3.94,8.1 8.42,8.54v2.46h1.63V25.28c4.61,-0.32 8.32,-3.97 8.7,-8.58h2.43v-1.63H25.47L25.47,15.07zM16.1,23.58c-4.26,0 -7.68,-3.46 -7.68,-7.68c0,-4.22 3.46,-7.68 7.68,-7.68c4.26,0 7.68,3.46 7.68,7.68C23.77,20.13 20.35,23.58 16.1,23.58z"/>
+</vector>

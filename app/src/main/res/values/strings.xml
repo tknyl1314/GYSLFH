@@ -39,8 +39,12 @@
     <string name="btn_update">修&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;改</string>
     <string name="title_activity_jjxxgl">JJXXGLActivity</string>
     <string name="sp_prompt">-请选择-</string>
-
-
+    <!--主界面菜单-->
+    <string name="main_bottom_hqsb">火情上报</string>
+    <string name="main_bottom_jjlr">接警录入</string>
+    <string name="main_bottom_hj">回警</string>
+    <string name="main_bottom_jjgl">接警管理</string>
+    <string name="main_bottom_grzx">个人中心</string>
     <!-- 图片浏览 -->
     <string name="title_activity_alarm__edit">接警信息编辑</string>
     <!-- 创建默认文件夹名称 -->

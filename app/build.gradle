@@ -80,6 +80,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     //支持material design
     compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:support-vector-drawable:25.0.1'
     //compile 'com.esri.arcgis.android:arcgis-android:10.2.7'
     compile project(':BaiduNavi')
     compile project(':mylib')

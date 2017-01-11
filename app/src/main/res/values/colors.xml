@@ -5,6 +5,8 @@
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="main_bottom_text_normal">#9B9DB1</color>
+    <color name="main_bottom_text_press">#3c8df7</color>
     <color name="none_color">#00000000</color>
     <!--
 	<color name="unclassified">#FFFFFF</color>

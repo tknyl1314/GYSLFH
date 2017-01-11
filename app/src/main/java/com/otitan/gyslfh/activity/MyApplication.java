@@ -58,7 +58,7 @@ public class MyApplication extends Application
 	        * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
 	        * 发布新版本时需要修改以及bugly isbug需要改成false等部分
 	        */
-			CrashReport.initCrashReport(getApplicationContext(), "900039321", true);
+			CrashReport.initCrashReport(getApplicationContext(), "900039321", false);
 
 			/** 百度定位初始化 */
 			locationService = new LocationService(getApplicationContext());

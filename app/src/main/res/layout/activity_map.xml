@@ -54,6 +54,7 @@
         android:layout_below="@+id/imgbtn_tucengcontrol"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/map_tools_bg"
         android:contentDescription="@string/contentDescription"
@@ -67,9 +68,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="100dp"
-        android:layout_marginRight="10dp" />
-
-    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"/>
+    <!--底部菜单栏-->
+    <include
+        android:id="@+id/main_bot"
+        layout="@layout/activity_main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+   <!-- <LinearLayout
+        android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -77,31 +86,11 @@
         android:gravity="left|center_vertical"
         android:orientation="horizontal" >
 
-        <!--
-             <ImageButton
-            android:id="@+id/btn_tcControl"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bt_nobgd"
-            android:src="@drawable/tc_control_large"
-            android:textSize="18sp"
-            android:visibility="visible" />
-            android:text="图层控制"
-        -->
-
         <View
             android:layout_width="0.3dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#cbcbcb" />
-     <!--   <Button
-            android:id="@+id/btn_tcControl"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/menu_tuceng"
-            android:textSize="@dimen/mobile_16" />-->
         <Button
             android:id="@+id/btn_upfireInfo"
             android:layout_width="0dp"
@@ -153,7 +142,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#cbcbcb" />
-
+        &lt;!&ndash;回警&ndash;&gt;
         <Button
             android:id="@+id/btn_huijing"
             android:layout_width="0dp"
@@ -168,7 +157,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#cbcbcb" />
-
+        &lt;!&ndash;接警管理&ndash;&gt;
         <Button
             android:id="@+id/btn_jiejingmanage"
             android:layout_width="0dp"
@@ -182,7 +171,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#cbcbcb" />
-        <!--坐标定位-->
+        &lt;!&ndash;坐标定位&ndash;&gt;
         <Button
             android:id="@+id/btn_zbdw"
             android:layout_width="0dp"
@@ -198,7 +187,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#cbcbcb" />
-        <!-- 个人中心 -->
+        &lt;!&ndash; 个人中心 &ndash;&gt;
         <Button
             android:id="@+id/btn_sbzx"
             android:layout_width="0dp"
@@ -206,7 +195,8 @@
             android:layout_weight="1"
             android:background="@drawable/menu_uaercenter"
             android:textSize="@dimen/mobile_16" />
-    </LinearLayout>
+    </LinearLayout>-->
+
 
     <include
         android:layout_width="wrap_content"
@@ -214,5 +204,4 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         layout="@layout/map_tools" />
-
 </RelativeLayout>

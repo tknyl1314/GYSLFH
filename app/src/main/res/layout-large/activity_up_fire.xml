@@ -524,8 +524,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:onClick="openGallery"
-                    android:src="@drawable/ic_camera_alt"
-
+                    android:src="@drawable/ic_camera_alt_green_24dp"
                     android:contentDescription="img_camera" />
 
                 <com.facebook.drawee.view.SimpleDraweeView

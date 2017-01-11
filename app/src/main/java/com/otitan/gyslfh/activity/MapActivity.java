@@ -352,7 +352,7 @@ public class MapActivity extends AppCompatActivity {
 	String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
 			.ACCESS_COARSE_LOCATION};
 	/** 轨迹查询 */
-	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
 
 	boolean istime=false;
 	public static enum ActionMode {
@@ -500,7 +500,6 @@ public class MapActivity extends AppCompatActivity {
 			}
 			// 有网络时加载动态图层
 			if (MyApplication.IntetnetISVisible) {
-
 				dynamiclayerurl = context.getResources().getString(R.string.dynamiclayerurl);
 				// "http://192.168.6.219:6080/arcgis/rest/services/SLFH_GEO2/MapServer";
 				dynamiclayer = new ArcGISDynamicMapServiceLayer(dynamiclayerurl);
@@ -652,8 +651,8 @@ public class MapActivity extends AppCompatActivity {
         imgbtn_plot = (ImageButton) findViewById(R.id.imgbtn_plot);
         imgbtn_plot.setOnClickListener(new MyListener());
         //当日火情
-        btn_fireLocation = (Button) findViewById(R.id.btn_fireLocation);
-        btn_fireLocation.setOnClickListener(new MyListener());
+       /* btn_fireLocation = (Button) findViewById(R.id.btn_fireLocation);
+        btn_fireLocation.setOnClickListener(new MyListener());*/
         // 工具栏
         myLocation = (ImageButton) findViewById(R.id.myLocation);
         myLocation.setOnClickListener(new MyListener());
@@ -709,6 +708,7 @@ public class MapActivity extends AppCompatActivity {
 			day_statistics.setVisibility(View.VISIBLE);
 			btn_jiejingmanage.setVisibility(View.VISIBLE);
             if(ispad){
+
                 btn_zbdw.setVisibility(View.VISIBLE);
 				btn_sbzx.setVisibility(View.VISIBLE);
             }
@@ -770,17 +770,7 @@ public class MapActivity extends AppCompatActivity {
         //注册监听
         //int type = getIntent().getIntExtra("from", 0);
         setLocationOption();
-
-		/*mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-
-		if (!mLocationDisplay.isStarted())
-			mLocationDisplay.startAsync();*/
-
 		mlocationservice.start();// 定位SDK
-	/*	mLocClient = new LocationClient(MapActivity.this);
-		mLocClient.registerLocationListener(myLocationListener);
-		setLocationOption();
-		mLocClient.start();*/
 
 	}
 
@@ -1204,8 +1194,7 @@ public class MapActivity extends AppCompatActivity {
 				// 展示面积
 				if (polygon.getPointCount() >= 3) {
 					String str = decimalFormat.format(
-							Math.abs(polygon.calculateArea2D())).toString()
-							+ "平方米";
+							Math.abs(polygon.calculateArea2D())) + "平方米";
 					Drawable color = MapActivity.this.getResources()
 							.getDrawable(R.drawable.point_pic);
 					int size = 0;
