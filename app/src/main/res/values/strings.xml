@@ -44,6 +44,7 @@
     <string name="main_bottom_jjlr">接警录入</string>
     <string name="main_bottom_hj">回警</string>
     <string name="main_bottom_jjgl">接警管理</string>
+    <string name="statistics">火情统计</string>
     <string name="main_bottom_grzx">个人中心</string>
     <!-- 图片浏览 -->
     <string name="title_activity_alarm__edit">接警信息编辑</string>
@@ -61,4 +62,5 @@
     <string name="appversion">系统版本号</string>
     <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
     <string name="version">版本号</string>
+
 </resources>

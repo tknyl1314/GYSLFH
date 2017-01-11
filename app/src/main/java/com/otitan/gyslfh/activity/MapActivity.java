@@ -452,8 +452,8 @@ public class MapActivity extends AppCompatActivity {
 			}
 		});
 		// 小地名搜索
-		View xdmsearch = findViewById(R.id.dimingsearch);
-		initXDMsearch(xdmsearch);
+	/*	View xdmsearch = findViewById(R.id.dimingsearch);
+		initXDMsearch(xdmsearch);*/
 		/*
 		 * if (!(DQLEVEL.equals("2"))) { btn_huijing.setVisibility(View.GONE); }
 		 */
@@ -2308,13 +2308,6 @@ public class MapActivity extends AppCompatActivity {
 
 				}
 			}
-			/*if (location == null)
-				return;
-			if (location.getLongitude() == 4.9E-324
-					&& location.getLatitude() == 4.9E-324)
-				return;
-			if (location.getLongitude() == 1.0 && location.getLatitude() == 1.0)
-				return;*/
 
 		}
 	}
@@ -2607,10 +2600,10 @@ public class MapActivity extends AppCompatActivity {
         }
 
 		if (DQLEVEL.equals("1")) {
-			// 市级用户
+			// 市级用户可以查看所有数据
 			loginNOshi("");
 		} else {
-			// 非市级用户登陆
+			// 非市级用户登陆 只能查看所在区县的数据
 			String str = sharedPreferences.getString("REALNAME", "");
 			str = str.substring(0, str.length() - 2);
 			loginNOshi(str);
@@ -2631,7 +2624,8 @@ public class MapActivity extends AppCompatActivity {
 			groups = manager.getGeodatabaseName();
 			childs = manager.getChildeName(qname);
 		} catch (java.lang.Exception e) {
-			e.printStackTrace();
+			ToastUtil.makeText(mcontext,"初始化图层控制异常,请检查数据",Toast.LENGTH_SHORT);
+			return;
 		}
 		childCheckBox.clear();
 		if (groups.size() == 0||groups==null) {
@@ -3658,11 +3652,11 @@ public class MapActivity extends AppCompatActivity {
 				int  loc_time=Integer.parseInt(rg_time.getText().toString());
 				int loc_dis=Integer.parseInt(rg_distance.getText().toString());
 				if (loc_time!=sharedPreferences.getInt("time", 1000)) {
-					sharedPreferences.edit().putInt("time", loc_time*1000).commit();
+					sharedPreferences.edit().putInt("time", loc_time*1000).apply();
 					isintilocction=true;
 				}
 				if (loc_dis!=sharedPreferences.getInt("distance", 100) ){
-					sharedPreferences.edit().putInt("distance", loc_dis).commit();
+					sharedPreferences.edit().putInt("distance", loc_dis).apply();
 					isintilocction=true;
 				}
 				/*if(isintilocction){

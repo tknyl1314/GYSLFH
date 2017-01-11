@@ -35,7 +35,7 @@
         android:drawablePadding="1dp"
         android:text="@string/main_bottom_hj"
         style="@style/style_RadioButton"
-        android:drawableTop="@drawable/back_normal"
+        android:drawableTop="@drawable/rb_back_selector"
        />
     <!--接警管理-->
     <RadioButton
@@ -46,7 +46,18 @@
         android:drawablePadding="1dp"
         android:text="@string/main_bottom_jjgl"
         style="@style/style_RadioButton"
-        android:drawableTop="@drawable/manage_normal" />
+        android:drawableTop="@drawable/rb_manager_selector" />
+    <!--火情统计-->
+    <RadioButton
+        android:id="@+id/btn_fireINFO"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:text="@string/statistics"
+        style="@style/style_RadioButton"
+        android:drawableTop="@drawable/rb_statistics_selector"
+        />
     <!-- 个人中心 -->
     <RadioButton
         android:id="@+id/btn_sbzx"
@@ -56,16 +67,8 @@
         android:drawablePadding="1dp"
         android:text="@string/main_bottom_grzx"
         style="@style/style_RadioButton"
-        android:drawableTop="@drawable/user_normal"/>
-    <!--火情统计-->
-    <Button
-        android:id="@+id/btn_fireINFO"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="gone"
-        android:background="@drawable/menu_hqtongji"
-        android:textSize="@dimen/mobile_16" />
+        android:drawableTop="@drawable/rb_user_selector"/>
+
     <!--坐标定位-->
     <Button
         android:id="@+id/btn_zbdw"

@@ -19,24 +19,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:layout_below="@+id/imgbtn_tucengcontrol"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/imgbtn_plot"
         layout="@layout/tuceng"
-        android:background="#1b85cf"
+        android:background="@color/main_bottom_text_press"
         android:visibility="gone" />
     <!--图层控制-->
         <ImageButton
         android:id="@+id/imgbtn_tucengcontrol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dimingsearch"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/map_tools_bg"
-        android:contentDescription="@string/contentDescription"
         android:src="@drawable/tuceng" />
         
          <include
+             android:visibility="gone"
         android:id="@+id/dimingsearch"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -57,7 +58,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/map_tools_bg"
-        android:contentDescription="@string/contentDescription"
         android:src="@drawable/map_tools_plot"
         />
 
