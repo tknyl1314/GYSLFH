@@ -84,11 +84,18 @@
 -dontwarn org.kxml2.**
 -keep class org.kxml2.** { *;}
 
+-dontwarn org.**
+-keep class org.** { *;}
+
 -keep class com.otitan.entity.** { *; } #实体类不参与混淆
 -keep class com.otitan.customui.** { *; } #自定义控件不参与混淆
 
 
+-dontwarn com.nostra13.**
+-keep class com.nostra13.** { *;}
 
+-dontwarn cn.finalteam.rxgalleryfinal.**
+-keep class cn.finalteam.rxgalleryfinal.** { *;}
 #1.support-v7-appcompat
 -keep public class android.support.v7.widget.** { *; }
 -keep public class android.support.v7.internal.widget.** { *; }
@@ -97,10 +104,6 @@
 -keep public class * extends android.support.v4.view.ActionProvider {
     public <init>(android.content.Context);
 }
-
-
--dontwarn cn.finalteam.rxgalleryfinal.**
--keep class cn.finalteam.rxgalleryfinal.** { *;}
 #2.rxjava
 -keep class rx.schedulers.Schedulers {
     public static <methods>;

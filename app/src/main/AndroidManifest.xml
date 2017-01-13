@@ -132,6 +132,7 @@
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true" />
+        <!-- 图片裁剪-->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

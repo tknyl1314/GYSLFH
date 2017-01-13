@@ -64,6 +64,10 @@ import com.king.photo.util.FileUtils;
 import com.king.photo.util.ImageItem;
 import com.king.photo.util.PublicWay;
 import com.king.photo.util.Res;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.otitan.entity.DateDialog;
 import com.otitan.entity.Image;
 import com.otitan.gyslfh.R;
@@ -148,7 +152,7 @@ public class UpFireActivity extends Activity {
 		if (PadUtil.isPad(this)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
-
+        initImageLoader();
 		initFresco();
 		getRequeatPermission();
 		intiView();
@@ -329,18 +333,30 @@ public class UpFireActivity extends Activity {
 			ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
 		}
 	}
-	/**
+
+    /**
+     * 初始化图片加载设置
+     */
+    private void initImageLoader() {
+        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(this);
+        config.threadPriority(Thread.NORM_PRIORITY - 2);
+        config.denyCacheImageMultipleSizesInMemory();
+        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+        config.tasksProcessingOrder(QueueProcessingType.LIFO);
+        ImageLoader.getInstance().init(config.build());
+    }
+
+    /**
 	 *初始化Fresco
 	 */
 	private void initFresco() {
 		Fresco.initialize(this);
 	}
-	
-	
-	
+
+
+
 	public void InitTakePhoto() {
-		/*selectedImageLayout = (LinearLayout) findViewById(R.id.selected_image_layoutView);
-		scrollview = (HorizontalScrollView) findViewById(R.id.scrollview);*/
 		pop = new PopupWindow(UpFireActivity.this);
 
 		View view = getLayoutInflater().inflate(R.layout.item_popupwindows,null);
@@ -430,7 +446,7 @@ public class UpFireActivity extends Activity {
 					.radio()
 					.maxSize(3)
 					//.crop() //裁剪
-					.imageLoader(ImageLoaderType.FRESCO)
+					.imageLoader(ImageLoaderType.UNIVERSAL)
 					.subscribe(new RxBusResultSubscriber<ImageRadioResultEvent>() {
 						@Override
 						protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {

@@ -58,7 +58,8 @@ android {
             //storeFile file("E:/项目/android")
             //multiDexEnabled true
             //applicationIdSuffix ".debug"
-            minifyEnabled false  //是否混淆  Android Studio disables ProGuard when using Instant Run.
+            shrinkResources false//去除不用的资源文件
+            minifyEnabled true  //是否混淆  Android Studio disables ProGuard when using Instant Run.
             // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
@@ -106,5 +107,6 @@ dependencies {
 
     compile 'cn.finalteam.rxgalleryfinal:library:0.0.3'
     compile 'com.facebook.fresco:fresco:0.12.0'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
 
