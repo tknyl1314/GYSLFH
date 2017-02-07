@@ -241,8 +241,6 @@ public class UpFireActivity extends Activity {
 						} else {
 							fireStateValue = position - 1;
 						}
-//						TextView tv = (TextView) view;
-//						tv.setTextColor(color.balck);
 					}
 
 					@Override
@@ -320,18 +318,21 @@ public class UpFireActivity extends Activity {
 	 * 检查权限
 	 */
 	private void getRequeatPermission() {
-		// If an error is found, handle the failure to start.
-		// Check permissions to see if failure may be due to lack of permissions.
-		boolean permissionCheck1 = ContextCompat.checkSelfPermission(mContext, reqPermissions[0]) ==
-				PackageManager.PERMISSION_GRANTED;
-		boolean permissionCheck2 = ContextCompat.checkSelfPermission(mContext, reqPermissions[1]) ==
-				PackageManager.PERMISSION_GRANTED;
+		if(Build.VERSION.SDK_INT>=21){
+			// If an error is found, handle the failure to start.
+			// Check permissions to see if failure may be due to lack of permissions.
+			boolean permissionCheck1 = ContextCompat.checkSelfPermission(mContext, reqPermissions[0]) ==
+					PackageManager.PERMISSION_GRANTED;
+			boolean permissionCheck2 = ContextCompat.checkSelfPermission(mContext, reqPermissions[1]) ==
+					PackageManager.PERMISSION_GRANTED;
 
-		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
-			// If permissions are not already granted, request permission from the user.
-			int requestCode = 3;
-			ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
+			if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+				// If permissions are not already granted, request permission from the user.
+				int requestCode = 3;
+				ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
+			}
 		}
+
 	}
 
     /**

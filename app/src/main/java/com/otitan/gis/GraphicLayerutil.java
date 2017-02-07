@@ -13,20 +13,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.navi.BNDemoGuideActivity;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
-import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
-import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
-import com.otitan.gyslfh.activity.MapActivity;
 import com.otitan.gyslfh.R;
+import com.otitan.gyslfh.activity.MapActivity;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.ToastUtil;
+import com.titan.navi.BNDemoGuideActivity;
 import com.titan.navi.BaiduNavi;
 
 import java.util.Map;
@@ -168,10 +167,10 @@ public class GraphicLayerutil
 					Point epoint = (Point) GeometryEngine.project(endpoint, mapview.getSpatialReference(),
 							SpatialReference.create(4326));
 					BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(), sPoint.getY(), "起点", null,
-							CoordinateType.WGS84);
+							BNRoutePlanNode.CoordinateType.WGS84);
 					BNRoutePlanNode eNode = new BNRoutePlanNode(epoint.getX(), epoint.getY(), "终点", null,
-							CoordinateType.WGS84);
-					baiduNavi.initListener(sNode, eNode, CoordinateType.WGS84, mBaiduRoutePlanListener);
+							BNRoutePlanNode.CoordinateType.WGS84);
+					baiduNavi.initListener(sNode, eNode, BNRoutePlanNode.CoordinateType.WGS84, mBaiduRoutePlanListener);
 					//Toast.makeText(mContext, "正在为您计算导航路线，请稍后", Toast.LENGTH_LONG);
 				}
 			});
@@ -190,7 +189,7 @@ public class GraphicLayerutil
 		}
 	
 
-	public class BaiduRoutePlanListener implements RoutePlanListener {
+	public class BaiduRoutePlanListener implements BaiduNaviManager.RoutePlanListener {
 
 		private BNRoutePlanNode mBNRoutePlanNode = null;
 

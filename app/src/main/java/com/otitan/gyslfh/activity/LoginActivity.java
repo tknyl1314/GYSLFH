@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.otitan.DataBaseHelper;
 import com.otitan.customui.DropdownEdittext;
 import com.otitan.gyslfh.R;
 import com.otitan.util.PadUtil;
@@ -329,11 +328,11 @@ public class LoginActivity extends Activity
 							break;
 						}
 					}
-					if (!flag)
+					/*if (!flag)
 					{
 						DataBaseHelper.addUser(loginName,loginPassword);
 						//addData();
-					}
+					}*/
 
 
 				}else if (object.getString("re") == null

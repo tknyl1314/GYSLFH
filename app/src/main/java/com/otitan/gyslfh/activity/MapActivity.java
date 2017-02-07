@@ -68,7 +68,6 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
-import com.baidu.navi.BNDemoGuideActivity;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
 import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
@@ -124,7 +123,6 @@ import com.otitan.gis.PositionUtil;
 import com.otitan.gis.TrackUtil;
 import com.otitan.gyslfh.R;
 import com.otitan.util.GpsCorrect;
-import com.otitan.util.GpsUtil;
 import com.otitan.util.NetUtil;
 import com.otitan.util.PadUtil;
 import com.otitan.util.ResourcesManager;
@@ -133,6 +131,7 @@ import com.otitan.util.Util;
 import com.otitan.util.WebServiceUtil;
 import com.otitan.util.ZoomControlView;
 import com.titan.loction.baiduloc.LocationService;
+import com.titan.navi.BNGuideActivity;
 import com.titan.navi.BaiduNavi;
 import com.titan.util.UpdateUtil;
 
@@ -240,9 +239,9 @@ public class MapActivity extends AppCompatActivity {
 	String [] locparam=null;//定位三参数
 	private double last_point_lon = 0;
 	private double last_point_lat = 0;
-	private MyTouchListener myTouchListener = null;
 	LocationManager locMag;
-	Location locA;
+    private MyTouchListener myTouchListener = null;
+    Location locA;
 	Point wgspoint;
 	Point mapPoint, centerPoint;
 	PictureMarkerSymbol locationSymbol, firepointSymbol;
@@ -350,7 +349,8 @@ public class MapActivity extends AppCompatActivity {
 	//
 	/**定位需要动态获取的权限*/
 	String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
-			.ACCESS_COARSE_LOCATION};
+			.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
+			.READ_EXTERNAL_STORAGE};
 	/** 轨迹查询 */
 	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
 
@@ -385,10 +385,12 @@ public class MapActivity extends AppCompatActivity {
 
 	}
 	Intent intent=null;
+	Context mContext;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mcontext=this;
+		mContext=this;
 		//获取GPS服务
 		intent=getIntent();
 		//locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -922,6 +924,7 @@ public class MapActivity extends AppCompatActivity {
 				}
 				return true;
 			} else if (active && actionMode.equals(ActionMode.MODE_NAV)) {
+				//导航
 				if(upPoint != null){
 					ToastUtil.setToast(MapActivity.this, "正在为您计算导航路线，请稍后");
 					Point epoint = (Point) GeometryEngine.project(point,
@@ -930,13 +933,20 @@ public class MapActivity extends AppCompatActivity {
 					Point sPoint = (Point) GeometryEngine.project(upPoint,
 							mapView.getSpatialReference(),
 							SpatialReference.create(4326));
-					BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(),
-							sPoint.getY(), "起点", null, CoordinateType.WGS84);
-					BNRoutePlanNode eNode = new BNRoutePlanNode(epoint.getX(),
-							epoint.getY(), "终点", null, CoordinateType.WGS84);
-					mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
-					baiduNavi.initListener(sNode, eNode, CoordinateType.WGS84,
-							mBaiduRoutePlanListener);
+                    BNRoutePlanNode sNode=null,eNode=null;
+                    try {
+                         sNode = new BNRoutePlanNode(sPoint.getX(),
+                                sPoint.getY(), "起点", null, CoordinateType.WGS84);
+                         eNode = new BNRoutePlanNode(epoint.getX(),
+                                epoint.getY(), "终点", null, CoordinateType.WGS84);
+                        mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
+
+                        baiduNavi.initListener(sNode, eNode, CoordinateType.WGS84,
+                                mBaiduRoutePlanListener);
+                    }catch (Exception e){
+                        Toast.makeText(mcontext,"坐标点异常",Toast.LENGTH_SHORT).show();
+                    }
+
 				}else{
 					ToastUtil.setToast(MapActivity.this,"无法获取当前位置信息");
 				}
@@ -1142,7 +1152,6 @@ public class MapActivity extends AppCompatActivity {
 				mapView.centerAt(firepoint, false);
 			} catch (Exception e) {
 				Toast.makeText(mcontext, "解析推送数据失败", Toast.LENGTH_SHORT).show();
-				return;
 			}
 
 
@@ -2241,7 +2250,8 @@ public class MapActivity extends AppCompatActivity {
 
 			if (null != location && location.getLocType() != BDLocation.TypeServerError) {
 				//安顺林业局：105.9479815  	26.2492988
-				Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
+				//Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
+                Point point1=new Point(location.getLongitude(),location.getLatitude(),location.getAltitude());
 				final Point pt=(Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
 				//final Point pt = new Point(667279.435, 2956758.767);
 				//首次定位查询当前所在区县
@@ -2263,24 +2273,10 @@ public class MapActivity extends AppCompatActivity {
 					}).start();
 
 				}
-				//Point point1=getGPSpoint(location);
-				//Point point1=new Point(105.9479815,26.2492988);
-				//Point point = new Point(longitude, latitude,altitude);
 				//Gps gps = PositionUtil.gcj_To_Gps84(point);
-				Point point2=PositionUtil.meth(point1,locparam);//使用纠偏参数进行校正和投影转换
-
-				/*Point point1 = new Point(gps.getWgLon(), gps.getWgLat());// wgs84
-				Point point2 = (Point) GeometryEngine.project(point1,
-						SpatialReference.create(4326),
-						mapView.getSpatialReference());*/
-			/*	Point point2 = (Point) GeometryEngine.project(point1,
-						SpatialReference.create(4326),
-						mapView.getSpatialReference());*/
-				upPoint = point2;
-				longitude=point2.getX();
-				latitude=point2.getY();
-				//upPoint = new Point(672679.534108, 2972909.353704);
-				// upPoint = SymbolUtil.getPoint(longitude,latitude);
+                upPoint=PositionUtil.meth(point1,locparam);//使用纠偏参数进行校正和投影转换
+				longitude=upPoint.getX();
+				latitude=upPoint.getY();
 				createLocationGraphic(upPoint);
 				/* 坐标实时定位 */
 				new MyAsyncTask().execute("myLocation");
@@ -2915,7 +2911,7 @@ public class MapActivity extends AppCompatActivity {
 
 			@Override
 			public void colorChanged(int color) {
-				sharedPreferences.edit().putInt("color", color).commit();
+				sharedPreferences.edit().putInt("color", color).apply();
 
 			}
 		});
@@ -2927,7 +2923,7 @@ public class MapActivity extends AppCompatActivity {
 					@Override
 					public void onColorSeleter(int color) {
 						sharedPreferences.edit().putInt("color", color)
-								.commit();
+								.apply();
 						txtView.setBackgroundColor(color);
 					}
 				});
@@ -2954,7 +2950,7 @@ public class MapActivity extends AppCompatActivity {
 			@Override
 			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
 				sharedPreferences.edit()
-						.putInt("tmd", 100 - arg0.getProgress()).commit();
+						.putInt("tmd", 100 - arg0.getProgress()).apply();
 				textView.setText(arg0.getProgress() + "");
 			}
 		});
@@ -3037,6 +3033,9 @@ public class MapActivity extends AppCompatActivity {
 		return null;
 	}
 
+	/**
+	 * 初始化百度导航
+	 */
 	private void initBaiduNavi() {
 		// BaiduNaviManager.getInstance().setNativeLibraryPath(mSDCardPath +
 		// "/BaiduNaviSDK_SO");
@@ -3054,7 +3053,10 @@ public class MapActivity extends AppCompatActivity {
 
 	}
 
-	public class BaiduRoutePlanListener implements RoutePlanListener {
+    /**
+     * 百度导航回调
+     */
+    public class BaiduRoutePlanListener implements RoutePlanListener {
 
 		private BNRoutePlanNode mBNRoutePlanNode = null;
 
@@ -3069,7 +3071,7 @@ public class MapActivity extends AppCompatActivity {
 			 */
 
 			Intent intent = new Intent(MapActivity.this,
-					BNDemoGuideActivity.class);
+					BNGuideActivity.class);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(ROUTE_PLAN_NODE,
 					(BNRoutePlanNode) mBNRoutePlanNode);
@@ -3822,7 +3824,12 @@ public class MapActivity extends AppCompatActivity {
 		boolean permissionCheck2 = ContextCompat.checkSelfPermission(mcontext, reqPermissions[1]) ==
 				PackageManager.PERMISSION_GRANTED;
 
-		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+		boolean permissionCheck3 = ContextCompat.checkSelfPermission(mContext, reqPermissions[2]) ==
+				PackageManager.PERMISSION_GRANTED;
+		boolean permissionCheck4 = ContextCompat.checkSelfPermission(mContext, reqPermissions[3]) ==
+				PackageManager.PERMISSION_GRANTED;
+
+		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2&& permissionCheck3 &&permissionCheck4)) {
 			int requestCode=1;
 			// If permissions are not already granted, request permission from the user.
 			ActivityCompat.requestPermissions((Activity) mcontext, reqPermissions, requestCode);
@@ -3835,6 +3842,19 @@ public class MapActivity extends AppCompatActivity {
 			Toast.makeText(mcontext, message, Toast.LENGTH_LONG).show();
 			// Update UI to reflect that the location display did not actually start
 			//mSpinner.setSelection(0, true);
+		}*/
+
+		// If an error is found, handle the failure to start.
+		// Check permissions to see if failure may be due to lack of permissions.
+		/*boolean permissionCheck1 = ContextCompat.checkSelfPermission(mContext, reqPermissions[0]) ==
+				PackageManager.PERMISSION_GRANTED;
+		boolean permissionCheck2 = ContextCompat.checkSelfPermission(mContext, reqPermissions[1]) ==
+				PackageManager.PERMISSION_GRANTED;
+
+		if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+			// If permissions are not already granted, request permission from the user.
+			int requestCode = 3;
+			ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
 		}*/
 
 

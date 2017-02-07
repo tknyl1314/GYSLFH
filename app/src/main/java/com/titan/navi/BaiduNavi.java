@@ -2,9 +2,12 @@ package com.titan.navi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Toast;
 
+import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
@@ -23,12 +26,13 @@ public class BaiduNavi {
     CoordinateType mcoType;
     MapActivity.BaiduRoutePlanListener mBaiduRoutePlanListener;
     /**
+	 * 百度导航初始化
 	 */
 	public void initNavi(Context context,String sdpath,String appname) {
 		// BaiduNaviManager.getInstance().setNativeLibraryPath(mSDCardPath +
 		// "/BaiduNaviSDK_SO");
 		mContext=context;
-		//BNOuterTTSPlayerCallback ttsCallback = null;
+		BNOuterTTSPlayerCallback ttsCallback = null;
 		BaiduNaviManager.getInstance().init((Activity) mContext, sdpath, appname, new NaviInitListener() {
 			@Override
 			public void onAuthResult(int status, String msg) {
@@ -64,10 +68,10 @@ public class BaiduNavi {
 			}
 
 			public void initFailed() {
-				//Toast.makeText(mContext, "导航引擎初始化失败", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "导航引擎初始化失败", Toast.LENGTH_SHORT).show();
 			}
 
-		},  null  /* null mTTSCallback */);
+		},  null, ttsHandler, ttsPlayStateListener  /* null mTTSCallback */);
 	}
     public void initListener(BNRoutePlanNode sNode,BNRoutePlanNode eNode,CoordinateType coType, MapActivity.BaiduRoutePlanListener rp) {
 		//buttonView=button;
@@ -122,8 +126,56 @@ public class BaiduNavi {
 
 
 	}
-	
-	
+	/**
+	 * 内部TTS播报状态回传handler
+	 */
+	private Handler ttsHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			int type = msg.what;
+			switch (type) {
+				case BaiduNaviManager.TTSPlayMsgType.PLAY_START_MSG: {
+					//showToastMsg("Handler : TTS play start");
+					break;
+				}
+				case BaiduNaviManager.TTSPlayMsgType.PLAY_END_MSG: {
+					//showToastMsg("Handler : TTS play end");
+					break;
+				}
+				default :
+					break;
+			}
+		}
+	};
+
+	/**
+	 * 内部TTS播报状态回调接口
+	 */
+	private BaiduNaviManager.TTSPlayStateListener ttsPlayStateListener = new BaiduNaviManager.TTSPlayStateListener() {
+
+		@Override
+		public void playEnd() {
+			showToastMsg("TTSPlayStateListener : TTS play end");
+		}
+
+		@Override
+		public void playStart() {
+			showToastMsg("TTSPlayStateListener : TTS play start");
+		}
+	};
+
+	public void showToastMsg(final String msg) {
+		Toast.makeText(mContext, "导航引擎初始化失败"+msg, Toast.LENGTH_SHORT).show();
+		/*BNDemoMainActivity.this.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Toast.makeText(BNDemoMainActivity.this, msg, Toast.LENGTH_SHORT).show();
+			}
+		});*/
+	}
+
+
+
 	public void routeplanToNavi(CoordinateType coType,BNRoutePlanNode sNode,BNRoutePlanNode eNode) {
 	/*	BNRoutePlanNode sNode = null;
 		BNRoutePlanNode eNode = null;*/

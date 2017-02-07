@@ -366,6 +366,13 @@
                     android:text="乌当区"
                     android:textColor="#282828"
                     />
+                    <CheckBox
+                        android:id="@+id/cb_gaxq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gaxq"
+                        android:textColor="#282828"
+                        />
               
                 </LinearLayout>
                  <LinearLayout
@@ -410,15 +417,7 @@
                         android:layout_height="wrap_content"
                         android:text="观山湖区"
                         android:textColor="#282828" />
-                    <!--
-                     <CheckBox 
-                    android:id="@+id/jkq"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="经济技术开发区"
-                    android:textColor="#282828"
-                    />
-                    -->
+
                 </LinearLayout>
 
 <!--             <Spinner -->

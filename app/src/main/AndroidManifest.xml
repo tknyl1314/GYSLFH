@@ -115,10 +115,15 @@
         <activity
             android:name=".activity.HuoDianActivity"
             android:label="@string/title_activity_huo_dian"/>
+        <!--导航界面-->
         <activity
-            android:name="com.baidu.navi.BNDemoGuideActivity"
+            android:name="com.titan.navi.BNDemoGuideActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
         android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity
+            android:name="com.titan.navi.BNGuideActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar"/>
         <activity
             android:name=".activity.ManageActivity"
             android:label="@string/title_activity_jjxxgl"

@@ -11,6 +11,9 @@
     <!-- <string name="webservice">http://192.168.1.16:8090/SLFH/FireService/WebService1.asmx</string>-->
     <!-- 长坡岭服务地址 222.85.147.93 -->
     <string name="webservice">http://www.gyslfh.com:8037/FireService/WebService1.asmx</string>
+    <!-- 公司18服务地址 192.168.1.18 -->
+   <!-- <string name="webservice">http://192.168.1.18:8099/GYSLFH/service/FireService/WebService1.asmx</string>-->
+
     <string name="versionxml">http://www.gyslfh.com:8037/apk/AS_version.xml</string>
     <string name="updateurl">http://www.gyslfh.com:8037/apk/AS_version.xml</string>
     <!-- 本地服务地址 -->
@@ -62,5 +65,7 @@
     <string name="appversion">系统版本号</string>
     <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
     <string name="version">版本号</string>
+    <!--通知区县-->
+    <string name="gaxq">贵安新区</string>
 
 </resources>

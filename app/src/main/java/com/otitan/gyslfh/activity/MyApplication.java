@@ -58,7 +58,7 @@ public class MyApplication extends Application
 	        * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
 	        * 发布新版本时需要修改以及bugly isbug需要改成false等部分
 	        */
-			CrashReport.initCrashReport(getApplicationContext(), "900039321", false);
+			CrashReport.initCrashReport(getApplicationContext(), "900039321", true);
 
 			/** 百度定位初始化 */
 			locationService = new LocationService(getApplicationContext());
@@ -203,6 +203,24 @@ public class MyApplication extends Application
 		}
 
 	}
+
+		/**
+		 * 检查权限
+		 */
+		/*private void getRequeatPermission() {
+			// If an error is found, handle the failure to start.
+			// Check permissions to see if failure may be due to lack of permissions.
+			boolean permissionCheck1 = ContextCompat.checkSelfPermission(getApplicationContext(), reqPermissions[0]) ==
+					PackageManager.PERMISSION_GRANTED;
+			boolean permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext, reqPermissions[1]) ==
+					PackageManager.PERMISSION_GRANTED;
+
+			if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
+				// If permissions are not already granted, request permission from the user.
+				int requestCode = 3;
+				ActivityCompat.requestPermissions((Activity) mContext, reqPermissions, requestCode);
+			}
+		}*/
 
 	public boolean getNetState () {
 		if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE)

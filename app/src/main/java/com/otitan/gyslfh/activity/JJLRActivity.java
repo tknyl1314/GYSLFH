@@ -28,13 +28,16 @@ import com.otitan.util.WebServiceUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 接警录入
+ */
 public class JJLRActivity extends Activity {
 
 	private EditText jiejing_huojingaddress, chujingqingkuang, jiejing_tel;
 	private Spinner huojing_resource;
 	private ImageButton imgBtn_return, imgBtn_upSure;
 	private TextView jiejing_time, shichujingTime,jiejing_bianhao;
-	private CheckBox yyq,nmq,byq,xfx,wdq,qzs,xwx,kyx,hxq,gshq,jkq;
+	private CheckBox yyq,nmq,byq,xfx,wdq,qzs,xwx,kyx,hxq,gshq,gaxq;
 	private ArrayAdapter<String> resourceAdapter;
 	private String username, userID, DQLEVEL, UNITID,jjbh;
 	private WebServiceUtil websUtil;
@@ -113,7 +116,9 @@ public class JJLRActivity extends Activity {
 		kyx = (CheckBox) findViewById(R.id.kyx);
 		hxq = (CheckBox) findViewById(R.id.hxq);
 		gshq = (CheckBox) findViewById(R.id.gshq);
-		//经开区
+		//贵安新区
+		gaxq = (CheckBox) findViewById(R.id.cb_gaxq);
+
 		//jkq = (CheckBox) findViewById(R.id.jkq);
 	}
 
@@ -169,6 +174,9 @@ public class JJLRActivity extends Activity {
 				}
 				if(gshq.isChecked()){
 					quxianValue = quxianValue +gshq.getText().toString()+",";
+				}
+				if(gaxq.isChecked()){
+					quxianValue = quxianValue +gaxq.getText().toString()+",";
 				}
 				/*if(quxianValue.subSequence(quxianValue.length()-1, quxianValue.length()).equals(",")){
 					quxianValue=quxianValue.substring(0, quxianValue.length()-1);

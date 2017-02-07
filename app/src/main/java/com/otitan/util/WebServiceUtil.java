@@ -558,6 +558,7 @@ public class WebServiceUtil {
 	}
 
 	/**
+	 * 接警录入
 	 * @param username
 	 * @param DQLEVEL
 	 * @param RECEIPTTIME

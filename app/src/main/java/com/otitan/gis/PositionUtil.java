@@ -170,7 +170,8 @@ public class PositionUtil {
 				* pi)) * 2.0 / 3.0;
 		return ret;
 	}
-	/** 
+	/**
+	 * wgs84 转 西安80
 	 * 使用Proj4纠偏（三参数纠偏）
 	 */
 	public static  Point meth(Point pt,String[] locparam) {

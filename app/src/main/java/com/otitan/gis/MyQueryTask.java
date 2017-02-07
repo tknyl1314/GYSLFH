@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.navi.BNDemoGuideActivity;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
 import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
@@ -33,6 +32,7 @@ import com.esri.core.tasks.query.QueryTask;
 import com.otitan.gyslfh.R;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.ToastUtil;
+import com.titan.navi.BNDemoGuideActivity;
 import com.titan.navi.BaiduNavi;
 
 import java.util.Map;
