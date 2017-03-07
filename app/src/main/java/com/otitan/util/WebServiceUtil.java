@@ -1,13 +1,10 @@
 package com.otitan.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.StrictMode;
-import android.util.Log;
 
 import com.otitan.entity.Menu;
 import com.otitan.entity.ReceiveAlarmInfo;
-import com.otitan.entity.TrackModel;
 import com.otitan.gyslfh.R;
 
 import org.json.JSONException;
@@ -18,15 +15,10 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import jsqlite.Callback;
-import jsqlite.Database;
 
 public class WebServiceUtil {
 
@@ -524,7 +516,7 @@ public class WebServiceUtil {
 	}
 
 	// 上传轨迹信息到本地数据库
-	public boolean UploadLocalDatebase(String SBH, String LON, String LAT, String time) {
+	/*public boolean UploadLocalDatebase(String SBH, String LON, String LAT, String time) {
 		try {
 			// String string = SBH;
 
@@ -544,7 +536,7 @@ public class WebServiceUtil {
 
 		}
 		return true;
-	}
+	}*/
 	//获取接警编号
 	public String getJieJingBainHao(String username) {
 
@@ -874,8 +866,7 @@ public class WebServiceUtil {
 
 
 	// 获取轨迹信息
-	@SuppressLint("SimpleDateFormat")
-	public List<TrackModel> getTrack(String starttime, String endtime) throws Exception {
+	/*public List<TrackModel> getTrack(String starttime, String endtime) throws Exception {
 		final List<TrackModel> locations = new ArrayList<TrackModel>();
 
 		try {
@@ -886,8 +877,8 @@ public class WebServiceUtil {
 			db.open(databaseName, jsqlite.Constants.SQLITE_OPEN_READWRITE);
 			//String sql = "select * from BUSI_COMMON_MOBILE_ZB_REALTIME";
 			final SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			/*final Date start = df2.parse(starttime);
-			final Date end = df2.parse(endtime);*/
+			*//*final Date start = df2.parse(starttime);
+			final Date end = df2.parse(endtime);*//*
 			String sql = "select * from point where time >='" + starttime+ "' and time <='" + endtime+ "' order by datetime(time) desc";
 			//select * from point where time between datetime('Sat Mar 01 10:26:58 GMT+08:00 2014') and datetime('Sat Mar 01 10:26:58 GMT+08:00 2016')
 			//final SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
@@ -923,7 +914,7 @@ public class WebServiceUtil {
 		}
 
 		return locations;
-	}
+	}*/
 	/**获取监控点通道*/
 	public String  getMonitortd(String objectid) {
 		String result=null;

@@ -77,7 +77,7 @@ public class LoginActivity extends Activity
 	private SharedPreferences sharedPreferences;
 	// 定义获取的历史用户登录名
 	ArrayList<String> mList = new ArrayList<String>();
-	WebServiceUtil websUtil;
+	private WebServiceUtil websUtil;
 	Context mcontext;
 	UpdateUtil update=null;
 	ArrayList<String> userlist=new ArrayList<>() ;
@@ -131,7 +131,12 @@ public class LoginActivity extends Activity
 		}
 		setContentView(R.layout.activity_login);
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-		websUtil = new WebServiceUtil(mcontext);
+		try {
+			websUtil = new WebServiceUtil(mcontext);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		// 获取上一个页面传过来的值
 		Intent intent = getIntent();
 		qiehuan = intent.getBooleanExtra("isqiehuan", false);
@@ -189,51 +194,7 @@ public class LoginActivity extends Activity
 			return  userlist;
 		}
 		return  null;
-	/*	String filename = null;
-		try
-		{
-			filename = ResourcesManager.getInstance(mcontext).getDataBase(
-					LoginActivity.this, "db.sqlite");
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 
-		final ArrayList<String> list = new ArrayList<String>();
-		try
-		{
-			Class.forName("jsqlite.JDBCDriver").newInstance();
-			Database db = new jsqlite.Database();
-			db.open(filename, jsqlite.Constants.SQLITE_OPEN_READWRITE);
-			String sql = "select * from user ";
-			db.exec(sql, new Callback()
-			{
-
-				@Override
-				public boolean newrow(String[] data)
-				{
-					list.add(data[0]);
-					return false;
-				}
-
-				@Override
-				public void columns(String[] arg1)
-				{
-
-				}
-
-				@Override
-				public void types(String[] arg2)
-				{
-
-				}
-			});
-			db.close();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return list;*/
 	}
     /**
 	 * 初始化已登录用户名

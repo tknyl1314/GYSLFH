@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@SuppressLint("ShowToast") public class MyIdentifyTask extends AsyncTask<IdentifyParameters, Void, IdentifyResult[]> {
+public class MyIdentifyTask extends AsyncTask<IdentifyParameters, Void, IdentifyResult[]> {
 
 	IdentifyTask mIdentifyTask;
 	Point mAnchor;

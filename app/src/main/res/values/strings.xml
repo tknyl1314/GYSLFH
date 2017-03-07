@@ -11,6 +11,7 @@
     <!-- <string name="webservice">http://192.168.1.16:8090/SLFH/FireService/WebService1.asmx</string>-->
     <!-- 长坡岭服务地址 222.85.147.93 -->
     <string name="webservice">http://www.gyslfh.com:8037/FireService/WebService1.asmx</string>
+    <string name="serverhost">http://www.gyslfh.com:8037/</string>
     <!-- 公司18服务地址 192.168.1.18 -->
    <!-- <string name="webservice">http://192.168.1.18:8099/GYSLFH/service/FireService/WebService1.asmx</string>-->
 

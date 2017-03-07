@@ -389,7 +389,6 @@ public class MapActivity extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mcontext=this;
 		mContext=this;
 		//获取GPS服务
 		intent=getIntent();
@@ -560,7 +559,7 @@ public class MapActivity extends AppCompatActivity {
 						mapView.addLayer(trackgraphiclayer);
 						mapView.addLayer(graphicsLayerLocation);
 						mapView.addLayer(plotgraphiclayer);// 添加标绘图层
-                        intiPermisson();
+                        //intiPermisson();
                         intiLocation();
 						initBaiduNavi();// 初始化导航
 
@@ -926,26 +925,32 @@ public class MapActivity extends AppCompatActivity {
 			} else if (active && actionMode.equals(ActionMode.MODE_NAV)) {
 				//导航
 				if(upPoint != null){
-					ToastUtil.setToast(MapActivity.this, "正在为您计算导航路线，请稍后");
-					Point epoint = (Point) GeometryEngine.project(point,
-							mapView.getSpatialReference(),
-							SpatialReference.create(4326));
-					Point sPoint = (Point) GeometryEngine.project(upPoint,
-							mapView.getSpatialReference(),
-							SpatialReference.create(4326));
-                    BNRoutePlanNode sNode=null,eNode=null;
-                    try {
-                         sNode = new BNRoutePlanNode(sPoint.getX(),
-                                sPoint.getY(), "起点", null, CoordinateType.WGS84);
-                         eNode = new BNRoutePlanNode(epoint.getX(),
-                                epoint.getY(), "终点", null, CoordinateType.WGS84);
-                        mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
+					try{
+						ToastUtil.setToast(MapActivity.this, "正在为您计算导航路线，请稍后");
+						Point epoint = (Point) GeometryEngine.project(point,
+								mapView.getSpatialReference(),
+								SpatialReference.create(4326));
+						Point sPoint = (Point) GeometryEngine.project(upPoint,
+								mapView.getSpatialReference(),
+								SpatialReference.create(4326));
+						BNRoutePlanNode sNode=null,eNode=null;
+						try {
+							sNode = new BNRoutePlanNode(sPoint.getX(),
+									sPoint.getY(), "起点", null, CoordinateType.WGS84);
+							eNode = new BNRoutePlanNode(epoint.getX(),
+									epoint.getY(), "终点", null, CoordinateType.WGS84);
+							mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
 
-                        baiduNavi.initListener(sNode, eNode, CoordinateType.WGS84,
-                                mBaiduRoutePlanListener);
-                    }catch (Exception e){
-                        Toast.makeText(mcontext,"坐标点异常",Toast.LENGTH_SHORT).show();
-                    }
+							baiduNavi.initListener(sNode, eNode, CoordinateType.WGS84,
+									mBaiduRoutePlanListener);
+						}catch (Exception e){
+							Toast.makeText(mcontext,"坐标点异常",Toast.LENGTH_SHORT).show();
+						}
+					}catch (Exception e){
+						ToastUtil.setToast(MapActivity.this,"坐标点异常"+e);
+
+					}
+
 
 				}else{
 					ToastUtil.setToast(MapActivity.this,"无法获取当前位置信息");
@@ -953,36 +958,41 @@ public class MapActivity extends AppCompatActivity {
 
 			} else if (active && actionMode.equals(ActionMode.MODE_ISEARCH)) {
 				if(upPoint != null){
-					Point sPoint = (Point) GeometryEngine.project(upPoint,
-							mapView.getSpatialReference(),
-							SpatialReference.create(4326));
-					BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(),
-							sPoint.getY(), "起点", null, CoordinateType.WGS84);
-					mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
-					Polygon circlePolygon = GeometryEngine.buffer(point,
-							mapView.getSpatialReference(),
-							50 * mapView.getResolution(), null);
-					// 实例化对象，并且给实现初始化相应的值
-					identifyparams = new IdentifyParameters();
-					identifyparams.setTolerance(10);
-					identifyparams.setDPI(98);
-					identifyparams.setLayerMode(IdentifyParameters.ALL_LAYERS);
-					identifyparams.setGeometry(circlePolygon);
-					identifyparams.setMapHeight(mapView.getHeight());
-					identifyparams.setMapWidth(mapView.getWidth());
-					identifyparams.setSpatialReference(mapView
-							.getSpatialReference());
-					identifyparams.setReturnGeometry(true);
-					identifyparams.setLayers(new int[] { 0 });
-					Envelope env = new Envelope();
-					mapView.getExtent().queryEnvelope(env);
-					identifyparams.setMapExtent(env);
+					try{
+						Point sPoint = (Point) GeometryEngine.project(upPoint,
+								mapView.getSpatialReference(),
+								SpatialReference.create(4326));
+						BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(),
+								sPoint.getY(), "起点", null, CoordinateType.WGS84);
+						mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
+						Polygon circlePolygon = GeometryEngine.buffer(point,
+								mapView.getSpatialReference(),
+								50 * mapView.getResolution(), null);
+						// 实例化对象，并且给实现初始化相应的值
+						identifyparams = new IdentifyParameters();
+						identifyparams.setTolerance(10);
+						identifyparams.setDPI(98);
+						identifyparams.setLayerMode(IdentifyParameters.ALL_LAYERS);
+						identifyparams.setGeometry(circlePolygon);
+						identifyparams.setMapHeight(mapView.getHeight());
+						identifyparams.setMapWidth(mapView.getWidth());
+						identifyparams.setSpatialReference(mapView
+								.getSpatialReference());
+						identifyparams.setReturnGeometry(true);
+						identifyparams.setLayers(new int[] { 0 });
+						Envelope env = new Envelope();
+						mapView.getExtent().queryEnvelope(env);
+						identifyparams.setMapExtent(env);
 
-					// 我们自己扩展的异步类
-					MyIdentifyTask mTask = new MyIdentifyTask(MapActivity.this,
-							mapView, dynamiclayerurl, upPoint,
-							mBaiduRoutePlanListener);
-					mTask.execute(identifyparams);// 执行异步操作并传递所需的参数
+						// 我们自己扩展的异步类
+						MyIdentifyTask mTask = new MyIdentifyTask(MapActivity.this,
+								mapView, dynamiclayerurl, upPoint,
+								mBaiduRoutePlanListener);
+						mTask.execute(identifyparams);// 执行异步操作并传递所需的参数
+					}catch (Exception e){
+						ToastUtil.setToast(MapActivity.this,"坐标点异常"+e);
+					}
+
 				}else {
 					ToastUtil.setToast(MapActivity.this,"无法获取当前位置信息");
 				}
@@ -990,32 +1000,38 @@ public class MapActivity extends AppCompatActivity {
 			} else if (firepointlayer != null) {
 				//推送添加火点
 				if(upPoint!=null){
-					Point sPoint = (Point) GeometryEngine.project(upPoint,
-							mapView.getSpatialReference(),
-							SpatialReference.create(4326));
-					BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(),
-							sPoint.getY(), "起点", null, CoordinateType.WGS84);
-					mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
-					GraphicLayerutil graphicLayerutil = new GraphicLayerutil(
-							MapActivity.this, mapView, upPoint,
-							mBaiduRoutePlanListener);
-					Graphic firepointg = graphicLayerutil.GetGraphicsFromLayer(
-							point, firepointlayer);
-					if (firepointg != null) {
-						// 显示提示callout
-						// Create callout from MapView
-						callout = mapView.getCallout();
-						callout.setCoordinates(point);
-						callout.setOffset(0, -3);
-						callout.setStyle(R.xml.calloutstyle);
-						// populate callout with results from IdentifyTask
-						callout.setContent(graphicLayerutil
-								.createIdentifyContent(firepointg.getAttributes()));
-						// show callout
-						callout.show();
-					} else {
-						callout.hide();
+					try {
+						Point sPoint = (Point) GeometryEngine.project(upPoint,
+								mapView.getSpatialReference(),
+								SpatialReference.create(4326));
+						BNRoutePlanNode sNode = new BNRoutePlanNode(sPoint.getX(),
+								sPoint.getY(), "起点", null, CoordinateType.WGS84);
+						mBaiduRoutePlanListener = new BaiduRoutePlanListener(sNode);
+						GraphicLayerutil graphicLayerutil = new GraphicLayerutil(
+								MapActivity.this, mapView, upPoint,
+								mBaiduRoutePlanListener);
+						Graphic firepointg = graphicLayerutil.GetGraphicsFromLayer(
+								point, firepointlayer);
+						if (firepointg != null) {
+							// 显示提示callout
+							// Create callout from MapView
+							callout = mapView.getCallout();
+							callout.setCoordinates(point);
+							callout.setOffset(0, -3);
+							callout.setStyle(R.xml.calloutstyle);
+							// populate callout with results from IdentifyTask
+							callout.setContent(graphicLayerutil
+									.createIdentifyContent(firepointg.getAttributes()));
+							// show callout
+							callout.show();
+						} else {
+							callout.hide();
+						}
+					}catch (Exception e){
+						ToastUtil.setToast(MapActivity.this,"坐标点异常"+e);
+
 					}
+
 				}else{
 					ToastUtil.setToast(MapActivity.this,"无法获取当前位置信息");
 				}

@@ -188,6 +188,12 @@
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
+#  不混淆okhttp sdk
+-dontwarn okio.**
+-dontwarn okhttp3.**
+#  不混淆retrofit2 sdk
+-keep class com.squareup.retrofit2.** {*;}
+-dontwarn rcom.squareup.retrofit2.**
 #}
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
