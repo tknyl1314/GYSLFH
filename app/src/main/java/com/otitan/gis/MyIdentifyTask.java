@@ -119,7 +119,8 @@ public class MyIdentifyTask extends AsyncTask<IdentifyParameters, Void, Identify
 			callout.show();
 		}else {
 			mView.getCallout().hide();
-			Toast.makeText(mContext, "未查询到结果", Toast.LENGTH_LONG);
+			ToastUtil.setToast(mContext,"未查询到结果");
+			//Toast.makeText(mContext, "未查询到结果", Toast.LENGTH_LONG);
 		}
 		progress.dismiss();// 停止进度条
 	}

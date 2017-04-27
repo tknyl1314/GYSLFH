@@ -1,4 +1,4 @@
-include ':app',':mylib'
+include ':app', ':mylib', ':gyslfh2'
 //, ':BaiduNavi'
 //, ':mylib', ':BaiduNavi', ':jedis'
 //, ':jedis',':loadshapefile'

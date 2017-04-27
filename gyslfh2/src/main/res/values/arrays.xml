@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="upalarmtype">
+        <item>火情上报</item>
+        <item>病虫害上报</item>
+        <item>盗砍滥伐</item>
+    </string-array>
+</resources>
+    <!--  <item>请选择上报类型</item>-->

@@ -79,7 +79,7 @@ import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapOnTouchListener;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISDynamicMapServiceLayer;
-import com.esri.android.map.ags.ArcGISLayerInfo;
+import com.esri.android.map.ags.ArcGISFeatureLayer;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
 import com.esri.android.map.event.OnStatusChangedListener;
 import com.esri.android.map.event.OnZoomListener;
@@ -123,7 +123,6 @@ import com.otitan.gis.PositionUtil;
 import com.otitan.gis.TrackUtil;
 import com.otitan.gyslfh.R;
 import com.otitan.util.GpsCorrect;
-import com.otitan.util.NetUtil;
 import com.otitan.util.PadUtil;
 import com.otitan.util.ResourcesManager;
 import com.otitan.util.SymobelUtils;
@@ -312,7 +311,6 @@ public class MapActivity extends AppCompatActivity {
 	public static int plotgraphicID;
 	private Point point;
 	private Polyline polyline;
-	Graphic plotgarphic;
 	private Polygon polygon;
 	private Point startPoint;
 	private MarkerSymbol markerSymbol;
@@ -501,11 +499,20 @@ public class MapActivity extends AppCompatActivity {
 			}
 			// 有网络时加载动态图层
 			if (MyApplication.IntetnetISVisible) {
+                Integer[] layerid=new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
+                String featureurl = mContext.getResources().getString(R.string.featurelayerurl);
+                // zzlyfeaturelayer=new ArcGISFeatureLayer(serverAddress, ArcGISFeatureLayer.MODE.ONDEMAND);
+                for (Integer i : layerid) {
+                    ArcGISFeatureLayer layer = new ArcGISFeatureLayer(featureurl + "/" + i, ArcGISFeatureLayer.MODE.SNAPSHOT);
+                    layer.setVisible(true);
+                    mapView.addLayer(layer);
+                }
 				dynamiclayerurl = context.getResources().getString(R.string.dynamiclayerurl);
 				// "http://192.168.6.219:6080/arcgis/rest/services/SLFH_GEO2/MapServer";
 				dynamiclayer = new ArcGISDynamicMapServiceLayer(dynamiclayerurl);
+				dynamiclayer.setVisible(true);
                 dynamiclayerid = mapView.addLayer(dynamiclayer);
-                dynamiclayer.setVisible(true);
+
 
                 if(dynamiclayer.getMapServiceInfo()==null){
                     dynamiclayer=null;
@@ -517,19 +524,20 @@ public class MapActivity extends AppCompatActivity {
 					//log.error(e.toString());
 					Toast.makeText(context, "获取设备注册信息失败", Toast.LENGTH_SHORT).show();
 				}*/
-				// 初始化菜单
-				try {
-					intitalmenu();
-				} catch (Exception e) {
-					//log.error(e.toString());
-					Toast.makeText(context, "初始化菜单失败",Toast.LENGTH_SHORT).show();
-				}
+
 				//
 			}
 
 		} catch (Exception e) {
 			Toast.makeText(context, "地图初始化失败", Toast.LENGTH_SHORT).show();
 		}
+        // 初始化菜单
+        try {
+            intitalmenu();
+        } catch (Exception e) {
+            //log.error(e.toString());
+            Toast.makeText(context, "初始化菜单失败",Toast.LENGTH_SHORT).show();
+        }
 
 		locationSymbol = new PictureMarkerSymbol(this.getResources()
 				.getDrawable(R.drawable.icon_geo));// locationsymbol
@@ -564,11 +572,13 @@ public class MapActivity extends AppCompatActivity {
 						initBaiduNavi();// 初始化导航
 
 					}
+
+
 				}
 
 				if (STATUS.LAYER_LOADED == status) {// 每加载一次触发一次
 					if (source instanceof ArcGISDynamicMapServiceLayer) {
-						runOnUiThread(new Runnable() {
+						/*runOnUiThread(new Runnable() {
 							public void run() {
 								if (dynamiclayer != null) {
 									ArcGISLayerInfo[] layers = dynamiclayer
@@ -588,7 +598,7 @@ public class MapActivity extends AppCompatActivity {
 									}
 								}
 							}
-						});
+						});*/
 					}
 
 				}
@@ -672,30 +682,6 @@ public class MapActivity extends AppCompatActivity {
     public   MapView getMapview() {
 		return mapView;
 
-	}
-
-	private void getMobileInfo() {
-		final String result = websUtil.selMobileInfo(MyApplication.SBH);// 获取设备
-		if (result.equals("网络异常")) {
-			ToastUtil.setToast(MapActivity.this, "网络异常,设备信息获取失败");
-			return;
-		} else {
-			try {
-				JSONObject obj = new JSONObject(result);
-				JSONArray arr = obj.optJSONArray("ds");
-				if (arr != null || !arr.equals("[]")) {
-					JSONObject object = arr.optJSONObject(0);
-					REALNAME = object.getString("SYZNAME");
-					TELNO = object.getString("SYZPHONE");
-					iszhuce = true;
-				} else {
-					ToastUtil.setToast(MapActivity.this, "设备信息未注册，请去个人中心注册");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-				ToastUtil.setToast(MapActivity.this, "获取设备注册信息失败");
-			}
-		}
 	}
     /**
      * 初始化菜单
@@ -957,6 +943,7 @@ public class MapActivity extends AppCompatActivity {
 				}
 
 			} else if (active && actionMode.equals(ActionMode.MODE_ISEARCH)) {
+                //空间查询
 				if(upPoint != null){
 					try{
 						Point sPoint = (Point) GeometryEngine.project(upPoint,
@@ -1043,6 +1030,9 @@ public class MapActivity extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * 轨迹上传
+	 */
 	private class MyAsyncTask extends AsyncTask<String, Void, Void> {
 
 
@@ -1331,21 +1321,27 @@ public class MapActivity extends AppCompatActivity {
 				case R.id.btn_upfireInfo:
 					if (iszhuce&& userID != null) {
 						if(upPoint!=null){
-							Point point = (Point) GeometryEngine.project(upPoint,
-									mapView.getSpatialReference(),
-									SpatialReference.create(4326));
+							try {
+								Point point = (Point) GeometryEngine.project(upPoint,
+										mapView.getSpatialReference(),
+										SpatialReference.create(4326));
 						/*currentDetailDress = testUrlRes(point.getY() + "", point.getX()
 								+ "");*/
-							Intent fireIntent = new Intent(MapActivity.this,
-									UpFireActivity.class);
+								Intent fireIntent = new Intent(MapActivity.this,
+										UpFireActivity.class);
 
-							fireIntent.putExtra("userID", userID);
-							fireIntent.putExtra("longitude", point.getX());
-							fireIntent.putExtra("latitude", point.getY());
-							//fireIntent.putExtra("address", currentDetailDress);
-							fireIntent.putExtra("DQLEVEL", DQLEVEL);
-							fireIntent.putExtra("UNITID", UNITID);
-							startActivity(fireIntent);
+								fireIntent.putExtra("userID", userID);
+								fireIntent.putExtra("longitude", point.getX());
+								fireIntent.putExtra("latitude", point.getY());
+								//fireIntent.putExtra("address", currentDetailDress);
+								fireIntent.putExtra("DQLEVEL", DQLEVEL);
+								fireIntent.putExtra("UNITID", UNITID);
+								startActivity(fireIntent);
+							}catch (Exception e){
+								ToastUtil.setToast(MapActivity.this, "获取位置异常"+e);
+							}
+
+
 						} else {
 							ToastUtil.setToast(MapActivity.this, "无法获取经纬度信息");
 						}
@@ -2018,7 +2014,7 @@ public class MapActivity extends AppCompatActivity {
 					} else {
 						if (!Util.isOPen(MapActivity.this)) {
 							ToastUtil.setToast(MapActivity.this, "请先开启gps定位");
-						} else if (!NetUtil.onNetChange(MapActivity.this)) {
+						} else if (!MyApplication.IntetnetISVisible) {
 							ToastUtil.setToast(MapActivity.this, "无法获取位置信息,打开网络试试");
 						} else {
 							ToastUtil.setToast(MapActivity.this, "无法获取位置信息");
@@ -2057,7 +2053,7 @@ public class MapActivity extends AppCompatActivity {
 
 				// 接警管理
 				case R.id.btn_jiejingmanage:
-					if(NetUtil.onNetChange(mcontext)){
+					if(MyApplication.IntetnetISVisible){
 						ProgressDialogUtil.startProgressDialog(MapActivity.this);
 						new Thread(new Runnable() {
 
@@ -2584,7 +2580,7 @@ public class MapActivity extends AppCompatActivity {
 			});
 		}
 		// 专题图层
-		if (dynamiclayer != null) {
+		if (dynamiclayer != null)  {
             LinearLayout layer = (LinearLayout) findViewById(R.id.layer_zhuanti);
             layer.setVisibility(View.VISIBLE);
             CheckBox cb_zt = (CheckBox) findViewById(R.id.cb_zt);

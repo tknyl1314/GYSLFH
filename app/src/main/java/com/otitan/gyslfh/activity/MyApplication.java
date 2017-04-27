@@ -1,6 +1,5 @@
 package com.otitan.gyslfh.activity;
 
-import android.app.Application;
 import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +7,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Vibrator;
 import android.provider.Settings.Secure;
+import android.support.multidex.MultiDexApplication;
 
 import com.igexin.sdk.PushManager;
 import com.otitan.DataBaseHelper;
@@ -18,7 +18,7 @@ import com.otitan.util.WebServiceUtil;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.loction.baiduloc.LocationService;
 
-public class MyApplication extends Application
+public class MyApplication extends MultiDexApplication
 
 	{
 		public static int mNetWorkState;
@@ -52,6 +52,7 @@ public class MyApplication extends Application
 		public void onCreate()
 		{
 			super.onCreate();
+
 		/** Bugly SDK初始化
 	        * 参数1：上下文对象
 	        * 参数2：APPID，平台注册时得到,注意替换成你的appId

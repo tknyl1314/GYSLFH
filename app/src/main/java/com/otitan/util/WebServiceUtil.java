@@ -37,7 +37,7 @@ public class WebServiceUtil {
 	public WebServiceUtil(Context context) {
 		this.context = context;
 		urlWebService = context.getResources().getString(R.string.webservice);
-		//initWebserviceTry();
+		initWebserviceTry();
 	}
 
 	/**
@@ -593,6 +593,7 @@ public class WebServiceUtil {
 			try {
 				result = Boolean.parseBoolean(object.getProperty("addHuoJingResult").toString());
 			} catch (Exception e) {
+				return false;
 			}
 		} else {
 			result = false;
@@ -999,4 +1000,27 @@ public class WebServiceUtil {
 		}
 		return result;
 	}
+	/*private void getMobileInfo() {
+		final String result = websUtil.selMobileInfo(MyApplication.SBH);// 获取设备
+		if (result.equals("网络异常")) {
+			Util.ToastUtil.setToast(MapActivity.this, "网络异常,设备信息获取失败");
+			return;
+		} else {
+			try {
+				JSONObject obj = new JSONObject(result);
+				JSONArray arr = obj.optJSONArray("ds");
+				if (arr != null || !arr.equals("[]")) {
+					JSONObject object = arr.optJSONObject(0);
+					REALNAME = object.getString("SYZNAME");
+					TELNO = object.getString("SYZPHONE");
+					iszhuce = true;
+				} else {
+					Util.ToastUtil.setToast(MapActivity.this, "设备信息未注册，请去个人中心注册");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Util.ToastUtil.setToast(MapActivity.this, "获取设备注册信息失败");
+			}
+		}
+	}*/
 }

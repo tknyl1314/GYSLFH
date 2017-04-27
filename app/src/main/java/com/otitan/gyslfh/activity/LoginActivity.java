@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import Util.ProgressDialogUtil;
 
 /**
- *
+ *登陆界面
  */
 public class LoginActivity extends Activity
 {

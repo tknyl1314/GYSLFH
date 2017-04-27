@@ -1,6 +1,6 @@
 package com.titan.viewmodel;
 /**
- * Created by Whs on 2016/12/1 0001.
+ * Created by Whs on 2016/12/1 0001
  */
 
 import android.content.Context;

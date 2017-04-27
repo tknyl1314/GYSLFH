@@ -23,6 +23,7 @@
     <!-- 专题数据服务地址 -->
    <!-- <string name="dynamiclayerurl">http://www.gyslfh.com:6080/arcgis/rest/services/SLFH_GEO_new/MapServer</string>-->
     <string name="dynamiclayerurl">http://222.85.147.93:6080/arcgis/rest/services/GYSLFHService/ThematicMap/MapServer</string>
+    <string name="featurelayerurl">http://222.85.147.93:6080/arcgis/rest/services/GYSLFHService/ThematicMap/FeatureServer</string>
     <!--  <string name="dynamiclayerurl">http://gis.gyforest.com:6080/arcgis/rest/services/SLFH_GEO/MapServer</string> -->
     <string name="title_activity_frame">森林防火</string>
     <string name="title_activity_hui_jing">HuiJingActivity</string>

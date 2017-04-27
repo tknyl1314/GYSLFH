@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.esri.arcgisruntime.mapping.view.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.esri.arcgisruntime.mapping.view.MapView>
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:visibility="gone"
+            android:gravity="center"
+            />
+      <!--  <Button
+            android:id="@+id/btn_meg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="right"
+            android:visibility="gone"
+            android:background="@drawable/ic_message"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_loc"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="@string/startloc"/>
+            <Button
+                android:id="@+id/btn_upAlarm"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:onClick="onAlarm"
+                style="@style/btn_commit"
+                android:textColor="@color/white"
+                android:text="@string/upalarm"/>
+        </LinearLayout>
+    </FrameLayout>
+    <!-- The navigation drawer -->
+   <!-- <ListView
+        android:id="@+id/navList"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:background="@android:color/background_light"
+        android:divider="@color/colorDivider"
+        android:dividerHeight="1dp"/>-->
+    <include
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        layout="@layout/activity_main_left" />
+</android.support.v4.widget.DrawerLayout>

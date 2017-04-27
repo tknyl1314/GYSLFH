@@ -78,8 +78,9 @@
 -dontwarn org.kobjects.**
 -keep class org.kobjects.** { *;}
 
--dontwarn org.ksoap2.**
 -keep class org.ksoap2.** { *;}
+-dontwarn org.ksoap2.**
+
 
 -dontwarn org.kxml2.**
 -keep class org.kxml2.** { *;}

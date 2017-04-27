@@ -70,13 +70,15 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="yCFvjFjqb8ITXhyLMQjuOyRl7WZ9Bfw8" />
+        <!--31:05:6D:F8:3D:8D:C7:E1:FE:63:F6:51:F2:B4:8D:BA:95:64:13:6C-->
+        <!--macsha1:E9:AC:3D:7D:E5:BD:54:BA:6E:26:B5:86:2A:63:83:65:CC:79:03:FF-->
         <!--发布新版本时需要修改以及bugly isbug需要改成false等部分 -->
         <!-- 贵阳森林防火key  android:value="yCFvjFjqb8ITXhyLMQjuOyRl7WZ9Bfw8" -->
         <!-- 台式机测试key  android:value="4rZXRyQN5UnCKM0v6tTtt1g9" -->
         <!-- 笔记本测试key  android:value="IRxl8CTt3XVwVvV6mBT7kHqn" -->
         <!-- 百度地图通用key  android:value="vrn5PmTl38mk3Gux8nDrBf32" -->
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.otitan.gyslfh.activity.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait"
@@ -96,6 +98,7 @@
         <!-- 火警上报 -->
         <activity
             android:name=".activity.UpFireActivity"
+            android:configChanges="orientation"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity

@@ -63,7 +63,6 @@ import com.king.photo.util.Bimp;
 import com.king.photo.util.FileUtils;
 import com.king.photo.util.ImageItem;
 import com.king.photo.util.PublicWay;
-import com.king.photo.util.Res;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -106,8 +105,9 @@ public class UpFireActivity extends Activity {
 	 String REMARK,REALNAME,TELNO,CITY,TOWN,VILLAGE,PLACE,X,Y,FireType;
 	 String  upImageResult="0" ;
 	double lon ,lat;
- 
-	private Spinner county_textSpinner, fireStateSpinner,firetype;
+
+    private Spinner fireStateSpinner;
+    private Spinner firetype;
 	private ArrayAdapter<String> countryAdapter, fireStateSpinnerAdapter,firetypeSpinnerAdapter;
 	private boolean addFireResult = false;
 	// private boolean upImageResult = false;
@@ -152,13 +152,15 @@ public class UpFireActivity extends Activity {
 		if (PadUtil.isPad(this)) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
-        initImageLoader();
-		initFresco();
+		initImageLoader();
+        initFresco();
+        parentView = getLayoutInflater().inflate(R.layout.activity_up_fire,null);
+        setContentView(parentView);
+
 		getRequeatPermission();
 		intiView();
-		parentView = getLayoutInflater().inflate(R.layout.activity_up_fire,null);
-		setContentView(parentView);
-		Res.init(this);
+
+		//Res.init(this);
 		websUtil = new WebServiceUtil(this);
 		sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
 		Intent intent = getIntent();
@@ -171,7 +173,7 @@ public class UpFireActivity extends Activity {
 		address=null;
 		REALNAME=sharedPreferences.getString("REALNAME", null);
 		TELNO=sharedPreferences.getString("TELNO", null);
-		websUtil.initWebserviceTry();
+		//websUtil.initWebserviceTry();
 
 		city_text = (EditText) findViewById(R.id.city_text);// 市
 		
@@ -199,33 +201,33 @@ public class UpFireActivity extends Activity {
 		
 		firetype = (Spinner) findViewById(R.id.firetype);// 火灾类型
 		final String[] firetypes = getResources().getStringArray(R.array.firetype);
-		firetypeSpinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, firetypes);
+		firetypeSpinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, firetypes);
 		firetypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		firetype.setAdapter(firetypeSpinnerAdapter);
-		firetype.setSelection(0);
-		firetype.setOnItemSelectedListener(new OnItemSelectedListener() {
+		/*firetype.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view, int position, long arg3) {
 				TextView tv=(TextView)view;
 				tv.setTextColor(getResources().getColor(R.color.balck));
-				/*if (position == 0) {
+				*//*if (position == 0) {
 					fireStateValue = 1;
 				} else {
 					fireStateValue = position - 1;
-				}*/
+				}*//*
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				
 			}
-		});
+		});*/
+		firetype.setSelection(0);
 	
 
 		fireStateSpinner = (Spinner) findViewById(R.id.fireState);
 		final String[] fireStates = getResources().getStringArray(R.array.currentqingkuang);
-		fireStateSpinnerAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, fireStates);
+		fireStateSpinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, fireStates);
 		fireStateSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fireStateSpinner.setAdapter(fireStateSpinnerAdapter);
 		//fireStateSpinner.setSelection(0);
@@ -234,8 +236,9 @@ public class UpFireActivity extends Activity {
 					@Override
 					public void onItemSelected(AdapterView<?> parent,
 							View view, int position, long id) {
-						TextView tv=(TextView)view;
-						tv.setTextColor(getResources().getColor(R.color.balck));
+
+						//extView tv=(TextView)view;
+						//tv.setTextColor(getResources().getColor(R.color.balck));
 						if (position == 0) {
 							fireStateValue = 1;
 						} else {
@@ -249,7 +252,7 @@ public class UpFireActivity extends Activity {
 					}
 				});
 		fireStateSpinner.setSelection(2);
-		county_textSpinner = (Spinner) findViewById(R.id.county_text);
+        Spinner county_textSpinner = (Spinner) findViewById(R.id.county_text);
 		final String[] countries = getResources().getStringArray(R.array.counties);
 		//countryAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, countries);
 		countryAdapter = new ArrayAdapter<String>(this,R.layout.spinner_item1, countries);
@@ -270,8 +273,11 @@ public class UpFireActivity extends Activity {
 						@Override
 						public void onItemSelected(AdapterView<?> parent,
 								View view, int position, long id) {
-							TextView tv=(TextView)view;
-							tv.setTextColor(getResources().getColor(R.color.balck));
+                            /*if(view!=null){
+                                TextView tv=(TextView)view;
+                                tv.setTextColor(getResources().getColor(R.color.balck));
+                            }
+*/
 							//tv.setBackgroundColor(R.color.gray);
 							if (position == 0) {
 								countryValue = null;
@@ -279,17 +285,14 @@ public class UpFireActivity extends Activity {
 								countryValue = countries[position];
 								devisionID = position+"";
 							}
-//							TextView tv = (TextView) view;
-//							tv.setTextColor(color.balck);
 						}
-
 						@Override
 						public void onNothingSelected(AdapterView<?> arg0) {
 
 						}
 					});
 		}
-	
+
 
 		imgBtn_upSure = (ImageButton) findViewById(R.id.fireinfo_imgBtn_upSure);
 		returnBtn = (ImageButton) findViewById(R.id.fireinfo_returnBtn);
@@ -366,6 +369,7 @@ public class UpFireActivity extends Activity {
 
 		pop.setWidth(LayoutParams.MATCH_PARENT);
 		pop.setHeight(LayoutParams.WRAP_CONTENT);
+
 		pop.setBackgroundDrawable(new BitmapDrawable());
 		pop.setFocusable(true);
 		pop.setOutsideTouchable(true);

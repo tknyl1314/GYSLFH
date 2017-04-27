@@ -1,0 +1,49 @@
+<resources>
+    <!-- System Config-->
+    <string name="app_name">贵阳森林防火</string>
+    <!--服务器地址-->
+    <string name="serverhost">http://101.201.54.143:8027/</string>
+
+    <string name="startloc">开始定位</string>
+    <string name="stoploc">停止定位</string>
+    <string name="location_permission_denied">未获取定位权限</string>
+    <!-- <string name="webserviceurl">http://101.201.54.143:8031/SMLY/FireService/SMLYService.asmx</string>-->
+    <string name="webserviceurl">http://101.201.54.143:9011/GISService.asmx</string>
+
+    <!--应用更新地址-->
+    <string name="updateurl">http://101.201.54.143:8031/smly/apk/Version.xml</string>
+    <!--安徽天地图-->
+    <string name="ahtiditu">http://ahtdt.ahmap.gov.cn/arcgis/rest/services/AH_ELETest/MapServer</string>
+    <string name="smimgurl">http://titanah.imwork.net:6080/arcgis/rest/services/SMLY/SMLY_YX/MapServer</string>
+
+    <!--http://localhost:8031/SMLY/FireService/SMLYService.asmx-->
+    <string name="track">开始轨迹跟踪</string>
+    <string name="trackoff">停止轨迹跟踪</string>
+    <string name="title_activity_login">注册</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">请输入姓名</string>
+    <string name="error_field_phone_required">请输入手机号</string>
+    <string name="error_field_phonenumber">请输入正确的手机号</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing emailcompletions."</string>
+    <string name="phonenumber">手机号</string>
+    <string name="realname">真实姓名</string>
+    <string name="signin">注册</string>
+    <string name="istrack">是否显示轨迹</string>
+    <string name="resignin">更改登录</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="upalarm">上报火警</string>
+    <string name="uptype">上报类型</string>
+    <string name="title">标题</string>
+    <string name="remark">备注</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登  陆</string>
+</resources>
