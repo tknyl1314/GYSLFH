@@ -35,6 +35,10 @@ android {
                 GETUI_APP_SECRET : "bw2Ob8b07y95dChJxiD2q3",
                 PACKAGE_NAME : applicationId
         ]
+
+        //Enabling multidex support.
+        multiDexEnabled true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -97,6 +101,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     /** 集成fresco  */
     compile 'com.facebook.fresco:fresco:0.12.0'
+    /** 集成相册  */
     compile 'cn.finalteam.rxgalleryfinal:library:0.0.3'
     /** 个推     */
     //compile 'com.getui:sdk:2.10.2.0'
@@ -106,13 +111,20 @@ dependencies {
     compile files('libs/httpmime-4.1.2.jar')
     compile files('libs/IndoorscapeAlbumPlugin.jar')
     /** Spatialite  */
-    compile files('libs/spatialite-android-library.jar')
+    //compile files('libs/spatialite-android-library.jar')
     /** Retrofit  */
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'io.reactivex:rxandroid:1.2.0'
+
+    compile 'com.android.support:multidex:1.0.1'
     /** GreenDao  */
-    compile 'org.greenrobot:greendao:3.2.2'
+    //compile 'org.greenrobot:greendao:3.2.2'
     // add library
+    compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+        exclude module: 'stax-api'
+        exclude module: 'stax'
+        exclude module: 'xpp3'
+    }
 }

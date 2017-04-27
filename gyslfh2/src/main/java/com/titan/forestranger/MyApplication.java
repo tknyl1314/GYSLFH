@@ -17,7 +17,6 @@ import android.view.View;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.loction.baiduloc.LocationService;
-import com.titan.services.DataBaseHelper;
 import com.titan.util.NetUtil;
 
 import java.util.Arrays;
@@ -101,10 +100,10 @@ public class MyApplication extends Application{
         sharedPreferences.edit().putBoolean("istrack",false).apply();
         filePath= mContext.getFilesDir().getAbsolutePath();
         //检查本地数据库
-        if (!DataBaseHelper.checkDataBase(filePath, dbname))
+        /*if (!DataBaseHelper.checkDataBase(filePath, dbname))
         {
             DataBaseHelper.CopyDatabase(mContext,filePath, dbname);
-        }
+        }*/
     }
     /** 获取设备信息 */
     private void getDeviceInfo() {

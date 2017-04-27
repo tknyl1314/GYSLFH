@@ -39,7 +39,6 @@ import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.titan.gis.TrackUtil;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.newslfh.R;
-import com.titan.services.DataBaseHelper;
 import com.titan.util.DateUtil;
 import com.titan.util.UpdateUtil;
 
@@ -609,8 +608,8 @@ public class MainActivity extends AppCompatActivity {
                     // 上传轨迹到服务器
                     //boolean isuploc=webService.UPLonLat(TitanApplication.SBH, lon,lat, uptime);
                     // 上传轨迹到本地数据库
-                    boolean isup = DataBaseHelper.UploadLocalDatebase(TitanApplication.SBH,
-                            lon, lat, uptime,"1");
+                    /*boolean isup = DataBaseHelper.UploadLocalDatebase(TitanApplication.SBH,
+                            lon, lat, uptime,"1");*/
                     if(true){
                         return upPtSuccess;
                     }else {
@@ -623,8 +622,8 @@ public class MainActivity extends AppCompatActivity {
             } else
             {
                 try {
-                    boolean isadd=DataBaseHelper.UploadLocalDatebase(TitanApplication.SBH, lon, lat, uptime,"0");
-                    if(isadd){
+                    //oolean isadd=DataBaseHelper.UploadLocalDatebase(TitanApplication.SBH, lon, lat, uptime,"0");
+                    if(true){
                         return upPtSuccess;
                     }else {
                         return upPtError;

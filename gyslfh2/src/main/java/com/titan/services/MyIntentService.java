@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.titan.forestranger.MyApplication;
-
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +62,7 @@ public class MyIntentService extends IntentService {
 	    //上传历史轨迹
 		case "upPointHistory":
 			try {
-				 list = DataBaseHelper.selectPointGuiji(MyApplication.SBH);
+				 //list = DataBaseHelper.selectPointGuiji(MyApplication.SBH);
 			} catch (Exception e) {
 				//log.debug(LoggerManager.getExceptionMessage(e));  
 				//log.i(e.toString());
@@ -83,7 +81,7 @@ public class MyIntentService extends IntentService {
 				    //state= web.upPointHistory(sbh,lon ,lat, time);
 				
 					if ("1".equals(state)) {
-						DataBaseHelper.updatePointGuiji(id);
+						//DataBaseHelper.updatePointGuiji(id);
 						Log.i("+++", "上传历史轨迹成功");
 						//log.i("上传历史轨迹成功");
 					}else{

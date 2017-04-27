@@ -57,6 +57,7 @@ public class LoginViewModel extends BaseObservable  {
 
             @Override
             public void onNext(String json) {
+                //mLogin.showToast("获取结果",0);
                 ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
                 if(resultModel.getResult().equals("1")){
                     mLogin.showToast("登陆成功",0);
