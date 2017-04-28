@@ -1,4 +1,4 @@
-package com.titan.forestranger;
+package com.titan.gyslfh.main;
 
 import android.Manifest;
 import android.content.Context;
@@ -36,6 +36,8 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.LineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
+import com.titan.forestranger.MyApplication;
+import com.titan.forestranger.UpAlarmActivity;
 import com.titan.gis.TrackUtil;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.newslfh.R;
@@ -50,7 +52,9 @@ import java.util.LinkedList;
  * 主界面
  */
 public class MainActivity extends AppCompatActivity {
+    //
     private LocationService locationService;
+
     private MapView mMapView;
     Button btn_loc,btn_track,btn_relogin;
     public  static  TextView tv_msg;
@@ -100,10 +104,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyApplication.getInstance().addActivity(this);
+        //MyApplication.getInstance().addActivity(this);
         mContext=this;
-        MyApplication.mainActivity=this;
-       // ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");// 去除水印的
+        //MyApplication.mainActivity=this;
         mMapView= (MapView) findViewById(R.id.mapview);
         ArcGISMap mMap = new ArcGISMap(Basemap.createImagery());
         mMapView.setMap(mMap);
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         if(!mLocationDisplay.isStarted()){
             mLocationDisplay.startAsync();
         }
-         upTask=new MyAsyncTask();
+        upTask=new MyAsyncTask();
         if(MyApplication.IntetnetISVisible){
             UpdateUtil updateUtil=new UpdateUtil(mContext);
             updateUtil.executeUpdate();
@@ -288,31 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-       /* btn_loc.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (btn_loc.getText().toString().equals(getString(R.string.startloc))) {
-
-                    mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-
-                    if (!mLocationDisplay.isStarted())
-                        mLocationDisplay.startAsync();
-
-                    locationService.start();// 定位SDK
-                    currentPoint=mLocationDisplay.getLocation().getPosition();
-                    String lon=locformat.format(currentPoint.getX());
-                    String lat=locformat.format(currentPoint.getY());
-                    Toast.makeText(mContext,"经度："+lon+"\n纬度："
-                            +lat,Toast.LENGTH_SHORT).show();
-                    // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
-                    btn_loc.setText(getString(R.string.stoploc));
-                } else {
-                    locationService.stop();
-                    btn_loc.setText(getString(R.string.startloc));
-                }
-            }
-        });*/
     }
     /**
      * Stop location service

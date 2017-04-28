@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.esri.arcgisruntime.geometry.Point;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.titan.gyslfh.main.MainActivity;
 import com.titan.model.Image;
 import com.titan.model.UploadInfo;
 import com.titan.newslfh.R;
@@ -145,7 +146,7 @@ public class UpAlarmActivity extends AppCompatActivity {
      * @param view
      */
     public void onAlarm(View view) {
-        Point curpt=MainActivity.getCurrentPoint();
+        Point curpt= MainActivity.getCurrentPoint();
         try {
             uploadinfo.setLAT(curpt.getY()+"");
             uploadinfo.setLON(curpt.getX()+"");

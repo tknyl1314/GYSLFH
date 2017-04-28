@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.titan.gyslfh.main.MainActivity;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.util.NetUtil;
 

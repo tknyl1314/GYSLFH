@@ -15,6 +15,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.util.NetUtil;
 
@@ -38,6 +39,8 @@ public class TitanApplication extends Application{
     String dbname="SMLY.sqlite";
     public  SharedPreferences sharedPreferences=null;
     public  static  TitanApplication singleton;
+
+    public static UserModel mUserModel;
     /** 数据存储路径 */
     static  String filePath = null;
     /** 是否首次定位 */

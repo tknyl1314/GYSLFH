@@ -6,10 +6,17 @@ package com.titan.gyslfh.login;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.igexin.sdk.PushManager;
 import com.titan.data.source.remote.RetrofitHelper;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.model.ResultModel;
+import com.titan.newslfh.R;
+import com.titan.util.NetUtil;
 
 import rx.Observable;
 import rx.Observer;
@@ -35,41 +42,66 @@ public class LoginViewModel extends BaseObservable  {
      * 登录
      */
     public  void onLongin(){
-        mLogin.showProgress();
-        String test=username.get()+password.get();
+        if(NetUtil.checkNetState(mContext)){
 
-        Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().Checklogin(username.get(),password.get());
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-            @Override
-            public void onCompleted() {
-                mLogin.stopProgress();
+            if(TextUtils.isEmpty(username.get())||TextUtils.isEmpty(password.get())){
+                mLogin.showToast(mContext.getString(R.string.error_loginempty),0);
+                return;
             }
+            mLogin.showProgress();
+            Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().Checklogin(username.get(),password.get());
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<String>() {
+                        @Override
+                        public void onCompleted() {
+                            mLogin.stopProgress();
+                        }
 
-            @Override
-            public void onError(Throwable e) {
-                mLogin.stopProgress();
-                mLogin.showToast("登陆异常："+e,1);
+                        @Override
+                        public void onError(Throwable e) {
+                            mLogin.stopProgress();
+                            mLogin.showToast("登陆异常："+e,1);
+                            Log.i("dd",e.toString());
+                        }
+                        @Override
+                        public void onNext(String json) {
+                            //mLogin.showToast("获取结果",0);
+                            try {
+                                String cid= PushManager.getInstance().getClientid(mContext);
+                                ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
+                                if(resultModel.getResult().equals("1")){
+                                /*String dd=resultModel.getData().toString();
+                                mLogin.showToast("登陆成功"+dd,1);*/
+                                    String user=new Gson().toJson(resultModel.getData());
+                                    TitanApplication.mUserModel=new Gson().fromJson(user,UserModel.class);
+                                    mLogin.showToast("登陆成功",0);
+                                    //mLogin.showToast("登陆成功",0);
+                                    mLogin.onNext();
+                                }else {
+                                    //ToastUtil.showToast(mContext,"登陆",0);
+                                    mLogin.showToast("登陆失败："+resultModel.getMessage(),1);
+                                }
+                            }catch (JsonSyntaxException e){
+                                mLogin.showToast("用户数据解析失败"+e,1);
+                            }
 
+                            //Log.e("titan",s);
 
-            }
-
-            @Override
-            public void onNext(String json) {
-                //mLogin.showToast("获取结果",0);
-                ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
-                if(resultModel.getResult().equals("1")){
-                    mLogin.showToast("登陆成功",0);
-                }else {
-                    mLogin.showToast("登陆失败："+resultModel.getMessage(),1);
-                }
-                //Log.e("titan",s);
-
-            }
-        });
-
-        //ToastUtil.setToast(context,"点击了登录");
+                        }
+                    });
+        }
     }
+
+    /**
+     *
+     * @return
+     */
+    private String getClientId(){
+        String cid= PushManager.getInstance().getClientid(mContext);
+        return null;
+    }
+
+
 
 }

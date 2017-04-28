@@ -1,6 +1,10 @@
 <resources>
     <!-- System Config-->
     <string name="app_name">贵阳森林防火</string>
+    <!--提示-->
+    <string name="error_network">网络异常，请检查网络连接</string>
+    <string name="error_loginempty">请输入用户名或密码</string>
+
     <!--服务器地址-->
     <string name="serverhost">http://101.201.54.143:8027/</string>
 

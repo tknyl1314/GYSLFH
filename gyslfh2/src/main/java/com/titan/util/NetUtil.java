@@ -3,6 +3,10 @@ package com.titan.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
+
+import com.titan.gyslfh.TitanApplication;
+import com.titan.newslfh.R;
 
 public class NetUtil {
 	public static final int NETWORN_NONE = 0;// 无网络
@@ -75,5 +79,15 @@ public class NetUtil {
 			IntetnetISVisible = true;
 		}
 		return IntetnetISVisible;
+	}
+	public static boolean  checkNetState(Context mContext){
+		if(TitanApplication.IntetnetISVisible){
+			return true;
+		}else {
+
+            Toast.makeText(mContext,mContext.getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+            return false;
+		}
+
 	}
 }

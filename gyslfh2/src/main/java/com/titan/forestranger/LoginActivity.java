@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.igexin.sdk.PushManager;
+import com.titan.gyslfh.main.MainActivity;
 import com.titan.newslfh.R;
 import com.titan.push.GeTui;
 import com.titan.push.GeTuiIntentService;
