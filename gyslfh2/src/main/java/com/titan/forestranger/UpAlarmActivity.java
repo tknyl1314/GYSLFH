@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.esri.arcgisruntime.geometry.Point;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.main.MainActivity;
 import com.titan.model.Image;
 import com.titan.model.UploadInfo;
@@ -157,7 +158,7 @@ public class UpAlarmActivity extends AppCompatActivity {
 
         EditText et_describe= (EditText) findViewById(R.id.et_describe);
         EditText et_remark= (EditText) findViewById(R.id.et_remark);
-        uploadinfo.setSBH(MyApplication.SBH);
+        uploadinfo.setSBH(TitanApplication.SBH);
         uploadinfo.setDESCRIBE(et_describe.getText().toString().trim());
         uploadinfo.setREMARK(et_remark.getText().toString().trim());
         //uploadinfo.setSBH(MyApplication.SBH);

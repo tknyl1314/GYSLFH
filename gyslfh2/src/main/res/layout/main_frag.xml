@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewmodel"
+            type="com.titan.gyslfh.main.MainViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.esri.arcgisruntime.mapping.view.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rg_main">
+        </com.esri.arcgisruntime.mapping.view.MapView>
+        <RadioGroup
+            android:id="@+id/rg_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_alarm"
+                android:text="@string/upalarm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{()->viewmodel.onAlarm()}"
+                style="@style/style_RadioButton"
+                />
+            <RadioButton
+                android:text="@string/alarminfo"
+                android:id="@+id/rb_alarminfo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{()->viewmodel.onAlarmInfo()}"
+                style="@style/style_RadioButton"
+                />
+        </RadioGroup>
+    </RelativeLayout>
+</layout>

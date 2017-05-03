@@ -31,6 +31,8 @@ public class LoginViewModel extends BaseObservable  {
     public final ObservableField<String> username = new ObservableField<>();
     //密码
     public final ObservableField<String> password = new ObservableField<>();
+    //是否记住用户
+    public final ObservableField<Boolean> isremember = new ObservableField<>();
 
     private Context mContext;
     private ILogin mLogin;
@@ -43,24 +45,26 @@ public class LoginViewModel extends BaseObservable  {
      */
     public  void onLongin(){
         if(NetUtil.checkNetState(mContext)){
-
+            username.set("admin");
+            password.set("admin");
             if(TextUtils.isEmpty(username.get())||TextUtils.isEmpty(password.get())){
                 mLogin.showToast(mContext.getString(R.string.error_loginempty),0);
                 return;
             }
-            mLogin.showProgress();
+
+            //mLogin.showProgress();
             Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().Checklogin(username.get(),password.get());
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {
                         @Override
                         public void onCompleted() {
-                            mLogin.stopProgress();
+                           // mLogin.stopProgress();
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            mLogin.stopProgress();
+                            //mLogin.stopProgress();
                             mLogin.showToast("登陆异常："+e,1);
                             Log.i("dd",e.toString());
                         }
@@ -76,6 +80,12 @@ public class LoginViewModel extends BaseObservable  {
                                     String user=new Gson().toJson(resultModel.getData());
                                     TitanApplication.mUserModel=new Gson().fromJson(user,UserModel.class);
                                     mLogin.showToast("登陆成功",0);
+                                    if(isremember.get()){
+                                        TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
+                                        TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
+
+                                    }
+
                                     //mLogin.showToast("登陆成功",0);
                                     mLogin.onNext();
                                 }else {
@@ -91,6 +101,22 @@ public class LoginViewModel extends BaseObservable  {
                         }
                     });
         }
+    }
+
+    /**
+     * 记住用户
+     */
+    public void onCheckRemember(){
+      if(isremember.get()){
+          mLogin.showToast("用户已记住",1);
+          isremember.set(true);
+
+      }else {
+          mLogin.showToast("记住用户已取消",1);
+          isremember.set(false);
+      }
+      TitanApplication.Titansp.edit().putBoolean(TitanApplication.KEYNAME_REMEMBER,isremember.get()).apply();
+
     }
 
     /**

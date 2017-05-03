@@ -3,19 +3,23 @@ package com.titan.gyslfh.main;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,21 +32,23 @@ import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.geometry.Polyline;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
-import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.LineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
-import com.titan.forestranger.MyApplication;
-import com.titan.forestranger.UpAlarmActivity;
+import com.titan.ViewModelHolder;
+import com.titan.data.source.local.LocalDataSource;
 import com.titan.gis.TrackUtil;
+import com.titan.gyslfh.TitanApplication;
+import com.titan.gyslfh.UpAlarmActivity;
+import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
+import com.titan.gyslfh.login.LoginActivity;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.newslfh.R;
+import com.titan.util.ActivityUtils;
 import com.titan.util.DateUtil;
-import com.titan.util.UpdateUtil;
 
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -51,11 +57,20 @@ import java.util.LinkedList;
 /**
  * 主界面
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IMain {
+
+    public static final String MAIN_VIEWMODEL_TAG = "MAIN_VIEWMODEL_TAG";
+
     //
     private LocationService locationService;
 
-    private MapView mMapView;
+    private DrawerLayout mDrawerLayout;
+
+    private MainViewModel mViewModel;
+    //轨迹开关
+    Switch sw_istrack;
+
+    //private MapView mMapView;
     Button btn_loc,btn_track,btn_relogin;
     public  static  TextView tv_msg;
     Context mContext;
@@ -100,58 +115,133 @@ public class MainActivity extends AppCompatActivity {
     public static float[] EARTH_WEIGHT = {0.1f,0.2f,0.4f,0.6f,0.8f}; // 推算计算权重_地球// 存放历史定位结果的链表，最大存放当前结果的前5次定位结果
     BDLocation bdLocation=null;
     double distance;
+
+    SharedPreferences mSharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //MyApplication.getInstance().addActivity(this);
+        TitanApplication.getInstance().addActivity(this);
         mContext=this;
-        //MyApplication.mainActivity=this;
-        mMapView= (MapView) findViewById(R.id.mapview);
-        ArcGISMap mMap = new ArcGISMap(Basemap.createImagery());
-        mMapView.setMap(mMap);
-        /*ArcGISTiledLayer imglayer=new ArcGISTiledLayer(getResources().getString(R.string.ahtiditu));
-        Basemap basemap=new Basemap(imglayer);
-        ArcGISMap mMap = new ArcGISMap(basemap);
-        mMapView.setMap(mMap);*/
-        //mMapView.getop.addView(imglayer);
-        spatialReference=mMap.getSpatialReference();
-        // add graphics overlay to MapView.
-        graphicsOverlay = addGraphicsOverlay(mMapView);
-        // get the MapView's LocationDisplay
-        mLocationDisplay = mMapView.getLocationDisplay();
-        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-        //适合徒步
-        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.NAVIGATION);
-        intiView();
+
+        //setupNavigationDrawer();
+
+        MainFragment mainFragment = findOrCreateViewFragment();
+
+        mViewModel = findOrCreateViewModel();
+
+        // Link View and ViewModel
+        mainFragment.setViewModel(mViewModel);
+
+
+
+        initView();
         intiPermisson();
 
-        // Listen to changes in the status of the location data source.
-        mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
+
+    }
+
+    private void initView() {
+        mSharedPreferences=mContext.getSharedPreferences(TitanApplication.PREFS_NAME,0);
+        sw_istrack = (Switch) findViewById(R.id.sw_istrack);
+        sw_istrack.setChecked(mSharedPreferences.getBoolean("istrack",false));
+        sw_istrack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
-
-                // If LocationDisplay started OK, then continue.
-                if (dataSourceStatusChangedEvent.isStarted())
-                    return;
-
-                // No error is reported, then continue.
-                if (dataSourceStatusChangedEvent.getError() == null)
-                    return;
-
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(mContext, "轨迹跟踪开启", Toast.LENGTH_SHORT).show();
+                }else {
+                    graphicsOverlay.getGraphics().remove(trackPolyLine);
+                    Toast.makeText(mContext, "轨迹跟踪关闭", Toast.LENGTH_SHORT).show();
+                }
+                mSharedPreferences.edit().putBoolean("istrack",isChecked).apply();
             }
         });
-        if(!mLocationDisplay.isStarted()){
-            mLocationDisplay.startAsync();
-        }
-        upTask=new MyAsyncTask();
-        if(MyApplication.IntetnetISVisible){
-            UpdateUtil updateUtil=new UpdateUtil(mContext);
-            updateUtil.executeUpdate();
-        }
+        //
+    }
 
+    /**
+     * 初始化
+     */
+    /*private void setupNavigationDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+    }*/
 
+    /**
+     * 设置点击事件
+     * @param navigationView
+     */
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            //切换帐号
+                            case R.id.list_navigation_menu_resign:
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                // Do nothing, we're already on that screen
+                                break;
+                            case R.id.list_nav_menu_setting:
+                                Intent intent1 = new Intent(mContext, LoginActivity.class);
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                        // Close the navigation drawer when an item is selected.
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+    @NonNull
+    private MainFragment findOrCreateViewFragment() {
+        MainFragment tasksFragment =
+                (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (tasksFragment == null) {
+            // Create the fragment
+            tasksFragment = MainFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(
+                    getSupportFragmentManager(), tasksFragment, R.id.content_frame);
+        }
+        return tasksFragment;
+    }
+
+    @NonNull
+    private MainViewModel findOrCreateViewModel() {
+        // In a configuration change we might have a ViewModel present. It's retained using the
+        // Fragment Manager.
+        @SuppressWarnings("unchecked")
+        ViewModelHolder<MainViewModel> retainedViewModel =
+                (ViewModelHolder<MainViewModel>) getSupportFragmentManager()
+                        .findFragmentByTag(MAIN_VIEWMODEL_TAG);
+
+        if (retainedViewModel != null && retainedViewModel.getViewmodel() != null) {
+            // If the model was retained, return it.
+            return retainedViewModel.getViewmodel();
+        } else {
+             // There is no ViewModel yet, create it.
+            MainViewModel viewModel = new MainViewModel(getApplicationContext(), this);
+            // and bind it to this Activity's lifecycle using the Fragment Manager.
+            ActivityUtils.addFragmentToActivity(
+                    getSupportFragmentManager(),
+                    ViewModelHolder.createContainer(viewModel),
+                    MAIN_VIEWMODEL_TAG);
+            return viewModel;
+        }
     }
 
     /**
@@ -182,24 +272,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     *  初始化view
-     */
-    private void intiView() {
-        //定位
-        btn_loc= (Button) findViewById(R.id.btn_loc);
-        //推送消息
-         tv_msg= (TextView) findViewById(R.id.tv_msg);
-        //轨迹跟踪
-        //btn_track= (Button) findViewById(R.id.btn_track);
-        //更改登录
-        btn_track= (Button) findViewById(R.id.btn_relogin);
-    }
+
 
     /***
      * 接收定位结果消息，并显示在地图上
      */
-    private Handler locHander = new Handler() {
+    /*private Handler locHander = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -225,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-    };
+    };*/
 
     private GraphicsOverlay addGraphicsOverlay(MapView mapView) {
         //create the graphics overlay
@@ -242,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Location permission was granted. This would have been triggered in response to failing to start the
             // LocationDisplay, so try starting this again.
-            mLocationDisplay.startAsync();
+            //mLocationDisplay.startAsync();
         } else {
             // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
             // request permission UX will be shown again, option should be shown to allow never showing the UX again.
@@ -258,36 +336,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // -----------location config ------------
         //定位初始化
-         locationService = ((MyApplication) getApplication()).locationService;
+         locationService = ((TitanApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mListener);
         //注册监听
-        int type = getIntent().getIntExtra("from", 0);
+        /*int type = getIntent().getIntExtra("from", 0);
         if (type == 0) {
             locationService.setLocationOption(locationService.getDefaultLocationClientOption());
         } else if (type == 1) {
             locationService.setLocationOption(locationService.getOption());
-        }
-
-        mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-
-        if (!mLocationDisplay.isStarted())
-            mLocationDisplay.startAsync();
-
-        locationService.start();// 定位SDK
-        currentPoint=mLocationDisplay.getLocation().getPosition();
-        try{
-            if(currentPoint!=null&&(currentPoint.getX()>0&&currentPoint.getY()>0)){
-                String lon=locformat.format(currentPoint.getX());
-                String lat=locformat.format(currentPoint.getY());
-                Toast.makeText(mContext,"经度："+lon+"\n纬度："
-                        +lat,Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(mContext,"获取当前位置异常 请设置定位模式为:准确度高",Toast.LENGTH_SHORT).show();
-            }
-        }catch (Exception e){
-            Toast.makeText(mContext,"获取当前位置异常",Toast.LENGTH_SHORT).show();
-        }
+        }*/
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+        locationService.start();
+        // 定位SDK
 
 
 
@@ -298,9 +359,6 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onStop() {
-        // TODO Auto-generated method stub
-      /*  locationService.unregisterListener(mListener); //注销掉监听
-        locationService.stop(); //停止定位服务*/
         super.onStop();
     }
 
@@ -338,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
                   Unit u= sp.getUnit();
                      distance= GeometryEngine.distanceBetween(currentPoint,lastPoint);
                 }*/
+                currentPoint=new Point(bdLocation.getLongitude(),bdLocation.getLatitude());
                 lastPoint=currentPoint;
                /* bdLocation =location;
                 new MyAsyncTask().execute("uplocation");*/
@@ -387,6 +446,8 @@ public class MainActivity extends AppCompatActivity {
                   *//*  sb.append("\ndescribe : ");
                     sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");*//*
                 }*/
+            }else {
+                Toast.makeText(mContext, "定位失败", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -440,23 +501,7 @@ public class MainActivity extends AppCompatActivity {
         return locData;
     }
 
-    /**
-     * 轨迹跟踪
-     * @param view
-     */
-    public void onTrack(View view) {
-        if (btn_track.getText().toString().equals(getString(R.string.track))){
-            btn_track.setText(getString(R.string.trackoff));
-            //new trackAsyncTask().execute();
-            istrack=true;
 
-        }else{
-            istrack=false;
-           // graphicsOverlay.
-            graphicsOverlay.getGraphics().remove(trackPolyLine);
-            btn_track.setText(getString(R.string.track));
-        }
-    }
 
     /**
      * 更改登录
@@ -467,16 +512,40 @@ public class MainActivity extends AppCompatActivity {
             locationService.unregisterListener(mListener); //注销掉监听
             locationService.stop(); //停止定位服务
         }
-        finish();
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+
+
+    @Override
+    public void onNext() {
+
     }
 
     /**
      * 一键报警
-     * @param view
      */
-    public void onAlarm(View view) {
-         Intent intent =new Intent(mContext,UpAlarmActivity.class);
-          startActivity(intent);
+    @Override
+    public void onAlarm() {
+        Intent intent =new Intent(mContext,UpAlarmActivity.class);
+        mContext.startActivity(intent);
+    }
+
+    /**
+     * 接警信息
+     */
+    @Override
+    public void onAlarmInfo() {
+        Intent intent =new Intent(mContext,AlarmInfoActivity.class);
+        mContext.startActivity(intent);
+    }
+
+    @Override
+    public void showToast(String info, int type) {
+        Toast.makeText(mContext, info, type).show();
     }
 
     /**
@@ -578,15 +647,15 @@ public class MainActivity extends AppCompatActivity {
         if(pt!=null){
             String lon = locformat.format(pt.getX());
             String lat = locformat.format(pt.getY());
-            if (MyApplication.IntetnetISVisible)
+            if (TitanApplication.IntetnetISVisible)
             {
                 try {
                     // 上传轨迹到服务器
                     //boolean isuploc=webService.UPLonLat(MyApplication.SBH, lon,lat, uptime);
                     // 上传轨迹到本地数据库
-                   /* boolean isup = DataBaseHelper.UploadLocalDatebase(MyApplication.SBH,
-                            lon, lat, uptime,"1");*/
-                    if(true){
+                    boolean isup = LocalDataSource.getInstance(mContext).saveTrackPoint();
+                            //.UploadLocalDatebase(TitanApplication.SBH, lon, lat, uptime,"1");
+                    if(isup){
                         return upPtSuccess;
                     }else {
                         return upPtError;
@@ -627,25 +696,25 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         // exitApp();
         long secondTime = System.currentTimeMillis();
-        if (secondTime - firstTime > 2000) { // 如果两次按键时间间隔大于2秒，则不退出
+        if (secondTime - firstTime > 800) { // 如果两次按键时间间隔大于2秒，则不退出
 
             Toast.makeText(mContext,"再按一次退出程序",Toast.LENGTH_SHORT).show();
             firstTime = secondTime;// 更新firstTime
 
         } else {
-            MyApplication.getInstance().finshAllActivities();
+            TitanApplication.getInstance().finshAllActivities();
            // System.exit(0);// 否则退出程序
         }
     }
     @Override
     protected void onPause() {
         super.onPause();
-        mMapView.pause();
+        //mMapView.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mMapView.resume();
+        //mMapView.resume();
     }
 }

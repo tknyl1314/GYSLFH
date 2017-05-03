@@ -9,7 +9,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import java.util.LinkedList;
 
 /**
- * Created by Whs on 2016/12/12 0012.
+ * Created by Whs on 2016/12/12 0012
  */
 public class TrackUtil {
     public static float[] EARTH_WEIGHT = {0.1f,0.2f,0.4f,0.6f,0.8f}; // 推算计算权重_地球

@@ -99,8 +99,8 @@ public class UpdateUtil {
 			case DOWN_COMPLETE:
 				Toast.makeText(mcontext, "下载完成", Toast.LENGTH_SHORT).show();
 				break;
-				case SERVER_ERROR:
-                    Toast.makeText(mcontext, "服务器异常请检查后重试", Toast.LENGTH_SHORT).show();
+                case SERVER_ERROR:
+                    Toast.makeText(mcontext, "更新时服务器异常请检查后重试", Toast.LENGTH_SHORT).show();
 					break;
 			}
 

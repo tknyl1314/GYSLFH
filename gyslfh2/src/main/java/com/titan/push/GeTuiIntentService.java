@@ -11,7 +11,7 @@ import com.igexin.sdk.message.FeedbackCmdMessage;
 import com.igexin.sdk.message.GTCmdMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.igexin.sdk.message.SetTagCmdMessage;
-import com.titan.forestranger.MyApplication;
+import com.titan.gyslfh.TitanApplication;
 
 /**
  * 继承 GTIntentService 接收来自个推的消息, 所有消息在线程中回调, 如果注册了该服务, 则务必要在 AndroidManifest中声明, 否则无法接受消息<br>
@@ -165,6 +165,6 @@ public class GeTuiIntentService extends GTIntentService {
         Message msg = Message.obtain();
         msg.what = what;
         msg.obj = data;
-        MyApplication.sendMessage(msg);
+        TitanApplication.sendMessage(msg);
     }
 }

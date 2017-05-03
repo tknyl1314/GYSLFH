@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.titan.forestranger.MyApplication;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.services.MyIntentService;
 
 
@@ -26,12 +26,12 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
          if(networkInfo==null){
         	 Log.i("通知", "当前的网络连接不可用");
              Toast.makeText(context, "当前网络不可用", Toast.LENGTH_LONG).show();
-             MyApplication.IntetnetISVisible=false;
+             TitanApplication.IntetnetISVisible=false;
              return;
          }
          boolean available = networkInfo.isAvailable();  
-         if(available){  
-        	 MyApplication.IntetnetISVisible=true;
+         if(available){
+             TitanApplication.IntetnetISVisible=true;
           Log.i("通知", "当前的网络连接可用");
           //部分机型报错
          /* State state = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();  
@@ -67,7 +67,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
          else{  
           Log.i("通知", "当前的网络连接不可用");
           Toast.makeText(context, "当前网络不可用", Toast.LENGTH_LONG).show();
-          MyApplication.IntetnetISVisible=false;
+             TitanApplication.IntetnetISVisible=false;
          }  
          
         

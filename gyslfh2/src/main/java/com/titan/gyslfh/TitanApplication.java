@@ -12,10 +12,10 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.view.View;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.gyslfh.login.UserModel;
+import com.titan.gyslfh.main.MainActivity;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.util.NetUtil;
 
@@ -49,9 +49,17 @@ public class TitanApplication extends Application{
     public static ActivityManager instance;
     /** 推送*/
     private static GTHandler handler;
+    //推送消息接收界面
     public static MainActivity mainActivity;
     //透传数据
     public static String  payloadData;
+    /** 用户信息 */
+    public static final String PREFS_NAME = "MyPrefsFile";
+    //是否记住用户信息
+    public static final String KEYNAME_REMEMBER = "isremember";
+    public static final String KEYNAME_USERNAME = "username";
+    public static final String KEYNAME_PSD = "password";
+    public static SharedPreferences Titansp;
 
     public static TitanApplication getInstance() {
         if(singleton!=null){
@@ -78,7 +86,7 @@ public class TitanApplication extends Application{
         //mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         //SDKInitializer.initialize(getApplicationContext());
         //intiData();
-
+        Titansp=getSharedPreferences(PREFS_NAME,0);
         /** 获取当前网络状态 */
         getNetState();
         getDeviceInfo();
@@ -220,10 +228,10 @@ public class TitanApplication extends Application{
                     if (mainActivity != null) {
                         payloadData=msg.obj.toString().trim();
                         if(mainActivity!=null){
-                            if(MainActivity.tv_msg.getVisibility()==View.GONE){
+                            /*if(MainActivity.tv_msg.getVisibility()==View.GONE){
                                 MainActivity.tv_msg.setVisibility(View.VISIBLE);
                                 MainActivity.tv_msg.setText(msg.obj.toString());
-                            }
+                            }*/
 
 
                             //MainActivity.tv_msg.append(msg.obj + "\n");

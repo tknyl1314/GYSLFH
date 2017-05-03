@@ -1,7 +1,5 @@
 package com.titan.gyslfh.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -13,18 +11,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.igexin.sdk.PushManager;
 import com.titan.ViewModelHolder;
-import com.titan.gyslfh.MainActivity;
+import com.titan.gyslfh.TitanApplication;
+import com.titan.gyslfh.main.MainActivity;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.ActivityLoginBinding;
 import com.titan.push.GeTui;
 import com.titan.push.GeTuiIntentService;
 import com.titan.push.GeTuiPushService;
 import com.titan.util.ActivityUtils;
+import com.titan.util.TitanUtil;
 import com.titan.util.ToastUtil;
 
 
@@ -54,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TitanApplication.getInstance().addActivity(this);
         mContext=this;
         setContentView(R.layout.activity_login);
         //final View root = inflater.inflate(R.layout.activity_login, false);
@@ -61,7 +61,11 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
             mViewDataBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
         }
         mViewModel = findOrCreateViewModel();
+        //
+        mViewModel.isremember.set(TitanApplication.Titansp.getBoolean("isremember",false));
         mViewDataBinding.setViewmodel(mViewModel);
+        //显示版本号
+        mViewDataBinding.tvAppversion.setText(mContext.getString(R.string.app_version)+ TitanUtil.getVersionCode(mContext));
     }
 
 
@@ -136,7 +140,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     /**
      * Shows the progress UI and hides the login form.
      */
-    private void showProgress(final boolean show) {
+   /* private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -166,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
             mViewDataBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             mViewDataBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
+    }*/
 
     /**
      * 跳转主界面
@@ -174,18 +178,17 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     @Override
     public void onNext() {
         Intent intent=new Intent(mContext,MainActivity.class);
-
         startActivity(intent);
     }
 
     @Override
     public void showProgress() {
-        showProgress(true);
+        //showProgress(true);
     }
 
     @Override
     public void stopProgress() {
-        showProgress(false);
+        //showProgress(false);
 
     }
 

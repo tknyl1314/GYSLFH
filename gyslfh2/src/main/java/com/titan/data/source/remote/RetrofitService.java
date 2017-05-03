@@ -23,6 +23,10 @@ public interface RetrofitService {
     @GET("/FireServices.asmx/getAreaInfo")
     Observable<String> getAreaInfo(@Query("date") String date, @Query("action") String action);
     //获取火警信息
-    @GET("/FireServices.asmx/getAlarmInfo")
-    Observable<String> getAlarmInfo(@Query("date") String date, @Query("action") String action);
+    @GET("/FireServices.asmx/getAlarmRecords")
+    Observable<String> getAlarmInfo(@Query("strWhere") String strWhere, @Query("dqid") String dqid,@Query("pageIndex") String pagenum,@Query("pageCount") String count);
+    //获取未回警信息
+    @GET("/FireServices.asmx/getUnDealAlaramRecords")
+    Observable<String> getUnDealAlarmInfo(@Query("strWhere") String strWhere, @Query("dqid") String dqid,@Query("pageIndex") String pagenum,@Query("pageCount") String count);
+
 }
