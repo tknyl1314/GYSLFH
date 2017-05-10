@@ -1,5 +1,6 @@
 package com.titan.gyslfh.main;
 
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.titan.newslfh.databinding.MainFragBinding;
+import com.titan.util.SnackbarUtils;
 
 /**
  * Created by whs on 2017/4/28
@@ -63,7 +65,20 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setupSnackbar();
+
         intiMapView();
+    }
+
+    private void setupSnackbar() {
+        mMainViewModel.snackbarText.addOnPropertyChangedCallback(
+                new Observable.OnPropertyChangedCallback() {
+                    @Override
+                    public void onPropertyChanged(Observable observable, int i) {
+                        SnackbarUtils.showSnackbar(getView(), mMainViewModel.getSnackbarText());
+
+                    }
+                });
     }
 
 

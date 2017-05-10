@@ -14,17 +14,17 @@ public class ResultModel<T> implements Serializable {
      * data : {"dqid":"1472","dqName":"中国","role":"超级管理员","accountStatus":"1","clientID":"","userID":"1","dqLevel":"1"}
      */
     //返回结果标识
-    private String result;
+    private boolean result;
     //返回数据
     private T data;
     //返回错误信息
     private String message;
 
-    public String getResult() {
+    public boolean getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(boolean result) {
         this.result = result;
     }
 
@@ -44,6 +44,4 @@ public class ResultModel<T> implements Serializable {
         this.message = message;
     }
 
-    public static class DataBean {
-    }
 }

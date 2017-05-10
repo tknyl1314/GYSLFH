@@ -1,192 +1,222 @@
 package com.titan.gyslfh.alarminfo;
 
+import java.util.List;
+
 /**
  * Created by whs on 2017/5/3
  */
 
 public class AlarmInfoModel {
 
+
     /**
-     * ID : 1
-     * DAILYID : gys201705030001
-     * UNIONID :
-     * RECEIPTTIME : 2017/5/3 10:24:20
-     * ORIGINID : 5
-     * TEL : 1234567,76543321
-     * LON : 106.512190
-     * LAT : 26.81600640
-     * POLICECASE : 出动警力情况测试
-     * POLICETIME : 2017/5/3 11:24:05
-     * REPORTTIME : 2017/5/3 11:24:03
-     * REPORTCASE : 上报情况测试
-     * REMARK : 备注情况测试
-     * ADDRESS : 修文县谷堡乡平寨村
-     * DQID : 572
-     * ORIGIN : 森林防火部门
-     * NOTICEAREA : 白云区,花溪区,经济技术开发区,观山湖区,乌当区,清镇市,云岩区,南明区,开阳县,息烽县,修文县
-     * ROWNUM : 1
+     * recordCount : 1
+     * ds : [{"ID":"1","DAILYID":"gys201705030001","UNIONID":"","RECEIPTTIME":"2017/5/3 10:24:20","ORIGINID":"5","TEL":"1234567,76543321","LON":"106.512190","LAT":"26.81600640","POLICECASE":"出动警力情况测试","POLICETIME":"2017/5/3 11:24:05","REPORTTIME":"2017/5/3 11:24:03","REPORTCASE":"上报情况测试","REMARK":"备注情况测试","ADDRESS":"修文县谷堡乡平寨村","DQID":"572","ORIGIN":"森林防火部门","NOTICEAREA":"白云区,花溪区,经济技术开发区,观山湖区,乌当区,清镇市,云岩区,南明区,开阳县,息烽县,修文县","ROWNUM":"1"}]
      */
 
-    private String ID;
-    private String DAILYID;
-    private String UNIONID;
-    private String RECEIPTTIME;
-    private String ORIGINID;
-    private String TEL;
-    private String LON;
-    private String LAT;
-    private String POLICECASE;
-    private String POLICETIME;
-    private String REPORTTIME;
-    private String REPORTCASE;
-    private String REMARK;
-    private String ADDRESS;
-    private String DQID;
-    private String ORIGIN;
-    private String NOTICEAREA;
-    private String ROWNUM;
+    private String recordCount;
+    private List<AlarmInfo> ds;
 
-    public String getID() {
-        return ID;
+    public String getRecordCount() {
+        return recordCount;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setRecordCount(String recordCount) {
+        this.recordCount = recordCount;
     }
 
-    public String getDAILYID() {
-        return DAILYID;
+    public List<AlarmInfo> getDs() {
+        return ds;
     }
 
-    public void setDAILYID(String DAILYID) {
-        this.DAILYID = DAILYID;
+    public void setDs(List<AlarmInfo> ds) {
+        this.ds = ds;
     }
 
-    public String getUNIONID() {
-        return UNIONID;
-    }
+    public static class AlarmInfo {
 
-    public void setUNIONID(String UNIONID) {
-        this.UNIONID = UNIONID;
-    }
+        /**
+         * ID : 1
+         * DAILYID : gys201705030001
+         * UNIONID :
+         * RECEIPTTIME : 2017/5/3 10:24:20
+         * ORIGINID : 5
+         * TEL : 1234567,76543321
+         * LON : 106.512190
+         * LAT : 26.81600640
+         * POLICECASE : 出动警力情况测试
+         * POLICETIME : 2017/5/3 11:24:05
+         * REPORTTIME : 2017/5/3 11:24:03
+         * REPORTCASE : 上报情况测试
+         * REMARK : 备注情况测试
+         * ADDRESS : 修文县谷堡乡平寨村
+         * DQID : 572
+         * ORIGIN : 森林防火部门
+         * NOTICEAREA : 白云区,花溪区,经济技术开发区,观山湖区,乌当区,清镇市,云岩区,南明区,开阳县,息烽县,修文县
+         * ROWNUM : 1
+         */
 
-    public String getRECEIPTTIME() {
-        return RECEIPTTIME;
-    }
+        private String ID;
+        private String DAILYID;
+        private String UNIONID;
+        private String RECEIPTTIME;
+        private String ORIGINID;
+        private String TEL;
+        private String LON;
+        private String LAT;
+        private String POLICECASE;
+        private String POLICETIME;
+        private String REPORTTIME;
+        private String REPORTCASE;
+        private String REMARK;
+        private String ADDRESS;
+        private String DQID;
+        private String ORIGIN;
+        private String NOTICEAREA;
+        private String ROWNUM;
 
-    public void setRECEIPTTIME(String RECEIPTTIME) {
-        this.RECEIPTTIME = RECEIPTTIME;
-    }
+        public String getID() {
+            return ID;
+        }
 
-    public String getORIGINID() {
-        return ORIGINID;
-    }
+        public void setID(String ID) {
+            this.ID = ID;
+        }
 
-    public void setORIGINID(String ORIGINID) {
-        this.ORIGINID = ORIGINID;
-    }
+        public String getDAILYID() {
+            return DAILYID;
+        }
 
-    public String getTEL() {
-        return TEL;
-    }
+        public void setDAILYID(String DAILYID) {
+            this.DAILYID = DAILYID;
+        }
 
-    public void setTEL(String TEL) {
-        this.TEL = TEL;
-    }
+        public String getUNIONID() {
+            return UNIONID;
+        }
 
-    public String getLON() {
-        return LON;
-    }
+        public void setUNIONID(String UNIONID) {
+            this.UNIONID = UNIONID;
+        }
 
-    public void setLON(String LON) {
-        this.LON = LON;
-    }
+        public String getRECEIPTTIME() {
+            return RECEIPTTIME;
+        }
 
-    public String getLAT() {
-        return LAT;
-    }
+        public void setRECEIPTTIME(String RECEIPTTIME) {
+            this.RECEIPTTIME = RECEIPTTIME;
+        }
 
-    public void setLAT(String LAT) {
-        this.LAT = LAT;
-    }
+        public String getORIGINID() {
+            return ORIGINID;
+        }
 
-    public String getPOLICECASE() {
-        return POLICECASE;
-    }
+        public void setORIGINID(String ORIGINID) {
+            this.ORIGINID = ORIGINID;
+        }
 
-    public void setPOLICECASE(String POLICECASE) {
-        this.POLICECASE = POLICECASE;
-    }
+        public String getTEL() {
+            return TEL;
+        }
 
-    public String getPOLICETIME() {
-        return POLICETIME;
-    }
+        public void setTEL(String TEL) {
+            this.TEL = TEL;
+        }
 
-    public void setPOLICETIME(String POLICETIME) {
-        this.POLICETIME = POLICETIME;
-    }
+        public String getLON() {
+            return LON;
+        }
 
-    public String getREPORTTIME() {
-        return REPORTTIME;
-    }
+        public void setLON(String LON) {
+            this.LON = LON;
+        }
 
-    public void setREPORTTIME(String REPORTTIME) {
-        this.REPORTTIME = REPORTTIME;
-    }
+        public String getLAT() {
+            return LAT;
+        }
 
-    public String getREPORTCASE() {
-        return REPORTCASE;
-    }
+        public void setLAT(String LAT) {
+            this.LAT = LAT;
+        }
 
-    public void setREPORTCASE(String REPORTCASE) {
-        this.REPORTCASE = REPORTCASE;
-    }
+        public String getPOLICECASE() {
+            return POLICECASE;
+        }
 
-    public String getREMARK() {
-        return REMARK;
-    }
+        public void setPOLICECASE(String POLICECASE) {
+            this.POLICECASE = POLICECASE;
+        }
 
-    public void setREMARK(String REMARK) {
-        this.REMARK = REMARK;
-    }
+        public String getPOLICETIME() {
+            return POLICETIME;
+        }
 
-    public String getADDRESS() {
-        return ADDRESS;
-    }
+        public void setPOLICETIME(String POLICETIME) {
+            this.POLICETIME = POLICETIME;
+        }
 
-    public void setADDRESS(String ADDRESS) {
-        this.ADDRESS = ADDRESS;
-    }
+        public String getREPORTTIME() {
+            return REPORTTIME;
+        }
 
-    public String getDQID() {
-        return DQID;
-    }
+        public void setREPORTTIME(String REPORTTIME) {
+            this.REPORTTIME = REPORTTIME;
+        }
 
-    public void setDQID(String DQID) {
-        this.DQID = DQID;
-    }
+        public String getREPORTCASE() {
+            return REPORTCASE;
+        }
 
-    public String getORIGIN() {
-        return ORIGIN;
-    }
+        public void setREPORTCASE(String REPORTCASE) {
+            this.REPORTCASE = REPORTCASE;
+        }
 
-    public void setORIGIN(String ORIGIN) {
-        this.ORIGIN = ORIGIN;
-    }
+        public String getREMARK() {
+            return REMARK;
+        }
 
-    public String getNOTICEAREA() {
-        return NOTICEAREA;
-    }
+        public void setREMARK(String REMARK) {
+            this.REMARK = REMARK;
+        }
 
-    public void setNOTICEAREA(String NOTICEAREA) {
-        this.NOTICEAREA = NOTICEAREA;
-    }
+        public String getADDRESS() {
+            return ADDRESS;
+        }
 
-    public String getROWNUM() {
-        return ROWNUM;
-    }
+        public void setADDRESS(String ADDRESS) {
+            this.ADDRESS = ADDRESS;
+        }
 
-    public void setROWNUM(String ROWNUM) {
-        this.ROWNUM = ROWNUM;
+        public String getDQID() {
+            return DQID;
+        }
+
+        public void setDQID(String DQID) {
+            this.DQID = DQID;
+        }
+
+        public String getORIGIN() {
+            return ORIGIN;
+        }
+
+        public void setORIGIN(String ORIGIN) {
+            this.ORIGIN = ORIGIN;
+        }
+
+        public String getNOTICEAREA() {
+            return NOTICEAREA;
+        }
+
+        public void setNOTICEAREA(String NOTICEAREA) {
+            this.NOTICEAREA = NOTICEAREA;
+        }
+
+        public String getROWNUM() {
+            return ROWNUM;
+        }
+
+        public void setROWNUM(String ROWNUM) {
+            this.ROWNUM = ROWNUM;
+        }
     }
 }

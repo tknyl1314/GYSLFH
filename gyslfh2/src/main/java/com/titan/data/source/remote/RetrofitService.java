@@ -28,5 +28,6 @@ public interface RetrofitService {
     //获取未回警信息
     @GET("/FireServices.asmx/getUnDealAlaramRecords")
     Observable<String> getUnDealAlarmInfo(@Query("strWhere") String strWhere, @Query("dqid") String dqid,@Query("pageIndex") String pagenum,@Query("pageCount") String count);
-
+    @GET("/FireServices.asmx/upLoadTrackPoint")
+    Observable<String> upLoadTrackPoint(@Query("pt") String point);
 }

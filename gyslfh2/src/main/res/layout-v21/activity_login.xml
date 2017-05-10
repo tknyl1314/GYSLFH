@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:gravity="center"
-            android:text="@string/version"
+            android:text="@string/app_version"
             />
         <TextView
             android:layout_marginTop="5dp"

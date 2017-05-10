@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'bugly'
 //GreenDao
-apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 bugly {
     appId = '900039321'
@@ -24,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "com.titan.newslfh"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -45,6 +44,15 @@ android {
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+    }
+
+    greendao {
+        //当前数据库版本
+        schemaVersion 1
+        //由GreenDao自动生成代码所在的包名，默认的是在项目包下面新建一个gen。
+        daoPackage 'com.titan.data.greendao'
+        //设置自动生成代码的目录
+        targetGenDir 'src/main/java'
     }
     sourceSets {
         main {
@@ -110,7 +118,7 @@ dependencies {
     /** Retrofit  */
 
     /** GreenDao  */
-    //compile 'org.greenrobot:greendao:3.2.2'
+    compile 'org.greenrobot:greendao:3.2.2'
     // add library
     compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
         exclude module: 'stax-api'
@@ -135,4 +143,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+
+
+    /*compile 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:2.0.1'
+    compile 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:2.0.1'*/
 }

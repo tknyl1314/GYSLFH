@@ -7,6 +7,11 @@
     <string name="error_network">网络异常，请检查网络连接</string>
     <string name="error_loginempty">请输入用户名或密码</string>
 
+    <string name="error_uploc2local">上传坐标到本地异常</string>
+    <string name="error_uploc2server">上传坐标到服务器异常</string>
+    <string name="success_uploc">上传坐标成功</string>
+
+
     <!--服务器地址-->
     <string name="serverhost">http://101.201.54.143:8027/</string>
 
@@ -59,4 +64,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="alarminfo">接警信息</string>
     <string name="rememberuser">记住用户</string>
+    <string name="no_items">暂无数据</string>
+    <string name="alarmentry">接警录入</string>
+    <string name="backalarm">回警</string>
+    <string name="userinfo">个人中心</string>
+    <string name="alarmstatics">火情统计</string>
+    <string name="uploction">上传轨迹</string>
 </resources>

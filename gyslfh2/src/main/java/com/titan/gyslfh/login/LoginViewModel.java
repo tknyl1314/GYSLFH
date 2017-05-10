@@ -45,8 +45,8 @@ public class LoginViewModel extends BaseObservable  {
      */
     public  void onLongin(){
         if(NetUtil.checkNetState(mContext)){
-            username.set("admin");
-            password.set("admin");
+            username.set("byq");
+            password.set("byq");
             if(TextUtils.isEmpty(username.get())||TextUtils.isEmpty(password.get())){
                 mLogin.showToast(mContext.getString(R.string.error_loginempty),0);
                 return;
@@ -74,12 +74,14 @@ public class LoginViewModel extends BaseObservable  {
                             try {
                                 String cid= PushManager.getInstance().getClientid(mContext);
                                 ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
-                                if(resultModel.getResult().equals("1")){
+                                boolean is=resultModel.getResult();
+
+                                if(resultModel.getResult()){
                                 /*String dd=resultModel.getData().toString();
                                 mLogin.showToast("登陆成功"+dd,1);*/
                                     String user=new Gson().toJson(resultModel.getData());
                                     TitanApplication.mUserModel=new Gson().fromJson(user,UserModel.class);
-                                    mLogin.showToast("登陆成功",0);
+                                    mLogin.showToast("登陆成功"+is,0);
                                     if(isremember.get()){
                                         TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
                                         TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();

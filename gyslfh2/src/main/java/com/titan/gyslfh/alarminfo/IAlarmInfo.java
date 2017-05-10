@@ -5,5 +5,4 @@ package com.titan.gyslfh.alarminfo;
  */
 
 public interface IAlarmInfo {
-
 }

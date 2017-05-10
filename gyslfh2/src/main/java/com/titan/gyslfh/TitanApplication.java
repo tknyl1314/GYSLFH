@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.titan.data.source.local.GreenDaoManager;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.gyslfh.main.MainActivity;
 import com.titan.loction.baiduloc.LocationService;
@@ -35,7 +36,7 @@ public class TitanApplication extends Application{
     public LocationService locationService;
     /** 震动器（百度定位） */
     Vibrator mVibrator;
-    Context mContext;
+    static Context mContext;
     String dbname="SMLY.sqlite";
     public  SharedPreferences sharedPreferences=null;
     public  static  TitanApplication singleton;
@@ -90,6 +91,9 @@ public class TitanApplication extends Application{
         /** 获取当前网络状态 */
         getNetState();
         getDeviceInfo();
+        //数据库初始化
+        GreenDaoManager.getInstance();
+
         //registerDevice();
         if (handler == null) {
             handler = new GTHandler();
@@ -213,6 +217,10 @@ public class TitanApplication extends Application{
 
     public static void sendMessage(Message msg) {
         handler.sendMessage(msg);
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 
     /**

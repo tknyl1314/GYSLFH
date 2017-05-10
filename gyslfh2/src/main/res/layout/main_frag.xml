@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
     <data>
         <import type="android.view.View" />
         <variable
@@ -17,30 +18,79 @@
             android:id="@+id/mapview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/rg_main">
+            android:layout_above="@+id/rg_menus">
         </com.esri.arcgisruntime.mapping.view.MapView>
         <RadioGroup
-            android:id="@+id/rg_main"
+            android:id="@+id/rg_menus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
+            <!--火警上报-->
             <RadioButton
                 android:id="@+id/rb_alarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="1dp"
+                android:onClick="@{()->viewmodel.mMain.onAlarm()}"
                 android:text="@string/upalarm"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:onClick="@{()->viewmodel.onAlarm()}"
                 style="@style/style_RadioButton"
-                />
+                android:drawableTop="@drawable/rb_upalarm_selector"/>
+            <!--接警录入-->
             <RadioButton
-                android:text="@string/alarminfo"
-                android:id="@+id/rb_alarminfo"
-                android:layout_width="wrap_content"
+                android:id="@+id/rb_alarmentry"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:onClick="@{()->viewmodel.onAlarmInfo()}"
+                android:layout_weight="1"
+                android:drawablePadding="1dp"
+                android:text="@string/alarmentry"
+                android:visibility="@{viewmodel.userlevel>3 ? View.GONE:View.VISIBLE}"
                 style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_enter_selector" />
+            <!--回警-->
+            <RadioButton
+                android:id="@+id/rb_backalarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="1dp"
+                android:text="@string/backalarm"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_back_selector"
                 />
+            <!--接警信息-->
+            <RadioButton
+                android:id="@+id/rb_alarminfo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="1dp"
+                android:text="@string/alarminfo"
+                android:onClick="@{()->viewmodel.mMain.onAlarmInfo()}"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_alarminfo_selector" />
+            <!--火情统计-->
+            <RadioButton
+                android:id="@+id/rb_alarmstatics"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:text="@string/alarmstatics"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_alarminfo_selector"
+                />
+            <!-- 个人中心 -->
+            <RadioButton
+                android:id="@+id/rb_userinfo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawablePadding="1dp"
+                android:text="@string/userinfo"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_user_selector"/>
         </RadioGroup>
     </RelativeLayout>
 </layout>

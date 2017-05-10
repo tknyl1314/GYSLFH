@@ -46,15 +46,14 @@
                     android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="66dp"
-                    android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
-                       android:layout_below="@+id/login_name"
                     android:ems="10"
                     android:gravity="left|center"
                     android:inputType="textPassword"
-                    android:textColor="@color/balck" >
+                    android:textColor="@color/balck"
+                    android:layout_below="@+id/login_name"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true">
                 </EditText>
 
             </RelativeLayout>

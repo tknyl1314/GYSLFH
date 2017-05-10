@@ -4,13 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
-public class AlarmInfoActivity extends AppCompatActivity implements  IAlarmInfo{
+public class AlarmInfoActivity extends AppCompatActivity implements IAlarmInfo ,AlarmInfoItemNav{
     Context mContext;
     private AlarmInfoViewModel mViewModel;
     public static final String ALARMINFO_VIEWMODEL_TAG = "ALARMINFO_VIEWMODEL_TAG";
@@ -68,5 +69,12 @@ public class AlarmInfoActivity extends AppCompatActivity implements  IAlarmInfo{
             return viewModel;
         }
     }
+
+    @Override
+    public void openAlarmInfoDetails(String id) {
+        Toast.makeText(mContext, "id:"+id, Toast.LENGTH_SHORT).show();
+    }
+
+
 
 }

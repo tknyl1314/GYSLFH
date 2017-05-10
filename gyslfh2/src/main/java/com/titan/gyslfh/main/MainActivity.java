@@ -17,21 +17,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.geometry.Polyline;
 import com.esri.arcgisruntime.geometry.SpatialReference;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
@@ -70,9 +66,6 @@ public class MainActivity extends AppCompatActivity implements IMain {
     //轨迹开关
     Switch sw_istrack;
 
-    //private MapView mMapView;
-    Button btn_loc,btn_track,btn_relogin;
-    public  static  TextView tv_msg;
     Context mContext;
     LocationDisplay mLocationDisplay;
     /**定位需要动态获取的权限*/
@@ -274,36 +267,6 @@ public class MainActivity extends AppCompatActivity implements IMain {
 
 
 
-    /***
-     * 接收定位结果消息，并显示在地图上
-     */
-    /*private Handler locHander = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            try {
-                BDLocation location = msg.getData().getParcelable("loc");
-                int iscal = msg.getData().getInt("iscalculate");
-                if (location != null) {
-                    //LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-                    if (iscal == 0) {
-                       // bitmap = BitmapDescriptorFactory.fromResource(R.drawable.huaji); // 非推算结果
-                    } else {
-                        bdLocation=location;
-                        new MyAsyncTask().execute("uplocation");
-                       // bitmap = BitmapDescriptorFactory.fr
-                        // omResource(R.drawable.icon_openmap_focuse_mark); // 推算结果
-                    }
-
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-        }
-
-    };*/
 
     private GraphicsOverlay addGraphicsOverlay(MapView mapView) {
         //create the graphics overlay
@@ -336,9 +299,9 @@ public class MainActivity extends AppCompatActivity implements IMain {
         super.onStart();
         // -----------location config ------------
         //定位初始化
-         locationService = ((TitanApplication) getApplication()).locationService;
+        locationService = ((TitanApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(mListener);
+        locationService.registerListener(mViewModel);
         //注册监听
         /*int type = getIntent().getIntExtra("from", 0);
         if (type == 0) {
@@ -365,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements IMain {
     @Override
     protected void onDestroy() {
         if(locationService!=null){
-            locationService.unregisterListener(mListener); //注销掉监听
+            locationService.unregisterListener(mViewModel); //注销掉监听
             locationService.stop(); //停止定位服务
         }
         super.onDestroy();
@@ -374,33 +337,34 @@ public class MainActivity extends AppCompatActivity implements IMain {
     /**
      * 定位结果回调，重写onReceiveLocation方法，可以直接拷贝如下代码到自己工程中修改
      */
-    private BDLocationListener mListener = new BDLocationListener() {
+    /*private BDLocationListener mListener = new BDLocationListener() {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-               /* Message locMsg = locHander.obtainMessage();
+               *//* Message locMsg = locHander.obtainMessage();
                 Bundle locData;
                 locData = Algorithm(location);//定位平滑
                 if (locData != null) {
                     locData.putParcelable("loc", location);
                     locMsg.setData(locData);
                     locHander.sendMessage(locMsg);
-                }*/
+                }*//*
                 bdLocation=location;
 
-                new MyAsyncTask().execute("uplocation");
-                /*if(lastPoint!=null){
+                //new MyAsyncTask().execute("uplocation");
+
+                *//*if(lastPoint!=null){
                   SpatialReference sp=  currentPoint.getSpatialReference();
                   Unit u= sp.getUnit();
                      distance= GeometryEngine.distanceBetween(currentPoint,lastPoint);
-                }*/
+                }*//*
                 currentPoint=new Point(bdLocation.getLongitude(),bdLocation.getLatitude());
                 lastPoint=currentPoint;
-               /* bdLocation =location;
-                new MyAsyncTask().execute("uplocation");*/
-              /*  if (lastPoint != null) {
+               *//* bdLocation =location;
+                new MyAsyncTask().execute("uplocation");*//*
+              *//*  if (lastPoint != null) {
                     Message locMsg = locHander.obtainMessage();
                     Bundle locData;
                     locData = Algorithm(location);//定位平滑
@@ -408,23 +372,23 @@ public class MainActivity extends AppCompatActivity implements IMain {
                         locData.putParcelable("loc", location);
                         locMsg.setData(locData);
                         locHander.sendMessage(locMsg);
-                    }*/
-                   /* double distance = GeometryEngine.distanceBetween(currentPoint, lastPoint);
-                    double distance1 = GeometryEngine.distanceGeodetic(currentPoint, lastPoint, new LinearUnit(LinearUnitId.METERS), new AngularUnit(AngularUnitId.SECONDS), GeodeticCurveType.GEODESIC).getDistance();*/
+                    }*//*
+                   *//* double distance = GeometryEngine.distanceBetween(currentPoint, lastPoint);
+                    double distance1 = GeometryEngine.distanceGeodetic(currentPoint, lastPoint, new LinearUnit(LinearUnitId.METERS), new AngularUnit(AngularUnitId.SECONDS), GeodeticCurveType.GEODESIC).getDistance();*//*
                    // new MyAsyncTask().execute("uplocation");
-                    /*if (distance > 10) {
+                    *//*if (distance > 10) {
                         if (upTask != null) {
                             upTask.execute("uplocation");
                         } else {
                             new MyAsyncTask().equals("uplocation");
                         }
-                    }*/
+                    }*//*
 
-                /*if (istrack) {
+                *//*if (istrack) {
                     new trackAsyncTask().execute();
-                }*/
+                }*//*
                 //lastPoint = currentPoint;
-              /*  if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
+              *//*  if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
 
                 } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                     // 运营商信息
@@ -435,22 +399,22 @@ public class MainActivity extends AppCompatActivity implements IMain {
                 } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
                 } else if (location.getLocType() == BDLocation.TypeServerError) {
 
-                   *//* sb.append("\ndescribe : ");
-                    sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");*//*
+                   *//**//* sb.append("\ndescribe : ");
+                    sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");*//**//*
                 } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
                     Toast.makeText(mContext,"服务端网络定位失败：请向技术人员反馈",Toast.LENGTH_SHORT).show();
-                    *//*sb.append("\ndescribe : ");
-                    sb.append("网络不同导致定位失败，请检查网络是否通畅");*//*
+                    *//**//*sb.append("\ndescribe : ");
+                    sb.append("网络不同导致定位失败，请检查网络是否通畅");*//**//*
                 } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
                     Toast.makeText(mContext,"无法获取有效定位依据导致定位失败：请向技术人员反馈",Toast.LENGTH_SHORT).show();
-                  *//*  sb.append("\ndescribe : ");
-                    sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");*//*
-                }*/
+                  *//**//*  sb.append("\ndescribe : ");
+                    sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");*//**//*
+                }*//*
             }else {
                 Toast.makeText(mContext, "定位失败", Toast.LENGTH_SHORT).show();
             }
         }
-    };
+    };*/
 
     /***
      * 平滑策略代码实现方法，主要通过对新定位和历史定位结果进行速度评分，
@@ -509,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements IMain {
      */
     public void onRelogin(View view) {
         if(locationService!=null){
-            locationService.unregisterListener(mListener); //注销掉监听
+            locationService.unregisterListener(mViewModel); //注销掉监听
             locationService.stop(); //停止定位服务
         }
         Intent intent = new Intent(mContext, LoginActivity.class);
@@ -615,10 +579,10 @@ public class MainActivity extends AppCompatActivity implements IMain {
         protected void onPostExecute(String result) {
             if(result.equals(upPtError)){
                 Toast.makeText(mContext,"坐标上传异常",Toast.LENGTH_SHORT).show();
-            }else if(result.equals(upPtSuccess)){
+            }/*else if(result.equals(upPtSuccess)){
                 Toast.makeText(mContext,upPtSuccess,Toast.LENGTH_SHORT).show();
-            }
-            else if(result.equals(track)){
+            }*/
+            /*else if(result.equals(track)){
                 if (trackPolyLine == null) {
 
                     PointCollection ptc = new PointCollection(SpatialReferences.getWgs84());
@@ -631,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements IMain {
                 }
             }else{
                 Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
     }
 
