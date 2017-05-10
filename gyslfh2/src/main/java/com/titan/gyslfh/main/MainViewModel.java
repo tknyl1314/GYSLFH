@@ -6,6 +6,7 @@ package com.titan.gyslfh.main;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -13,6 +14,7 @@ import com.baidu.location.BDLocationListener;
 import com.esri.arcgisruntime.geometry.Point;
 import com.titan.data.source.local.GreenDaoManager;
 import com.titan.data.source.remote.RetrofitHelper;
+import com.titan.gis.TrackUtil;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.model.TrackPoint;
 import com.titan.newslfh.R;
@@ -67,14 +69,16 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
         // TODO Auto-generated method stub
         if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
 
-            /*Message locMsg = locHander.obtainMessage();
+            /*
+            Message locMsg = locHander.obtainMessage();
             Bundle locData;
             locData = Algorithm(location);
             if (locData != null) {
                 locData.putParcelable("loc", location);
                 locMsg.setData(locData);
                 locHander.sendMessage(locMsg);
-            } */
+            }
+            */
             /*bdLocation=location;
 
                 currentPoint=new Point(bdLocation.getLongitude(),bdLocation.getLatitude());
@@ -89,24 +93,6 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
             Toast.makeText(mContext, "定位失败", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    /**
-     * 一键报警
-     */
-   /* public void onAlarm() {
-        mMain.onAlarm();
-
-    }*/
-
-    /**
-     * 接警信息
-     */
-    /*public void onAlarmInfo()
-    {
-        mMain.onAlarmInfo();
-    }*/
-
     /**
      * 上传轨迹点
      */
@@ -195,6 +181,9 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
                 });
 
     }
+
+
+
 
 
 }
