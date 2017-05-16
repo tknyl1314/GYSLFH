@@ -30,4 +30,7 @@ public interface RetrofitService {
     Observable<String> getUnDealAlarmInfo(@Query("strWhere") String strWhere, @Query("dqid") String dqid,@Query("pageIndex") String pagenum,@Query("pageCount") String count);
     @GET("/FireServices.asmx/upLoadTrackPoint")
     Observable<String> upLoadTrackPoint(@Query("pt") String point);
+    /*接警信息录入*/
+    @GET("/FireServices.asmx/AddReceiptAlarm")
+    Observable<String> sendInputAlarmInfo(@Query("jsonText") String json);
 }

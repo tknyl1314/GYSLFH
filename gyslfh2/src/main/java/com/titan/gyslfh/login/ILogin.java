@@ -13,4 +13,5 @@ public interface ILogin {
      void  showProgress();
      void  stopProgress();
      void  showToast(String info,int type);
+
 }

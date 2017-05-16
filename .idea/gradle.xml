@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/gyslfh2" />
             <option value="$PROJECT_DIR$/mylib" />
+            <option value="$PROJECT_DIR$/timepicke" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

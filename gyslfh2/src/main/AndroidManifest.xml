@@ -63,7 +63,7 @@
             android:name="com.titan.push.GeTuiPushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice"></service>
+            android:process=":pushservice"/>
 
         <!-- 注册监听网络变化的广播 -->
         <receiver
@@ -103,7 +103,10 @@
         <activity
             android:name="com.titan.gyslfh.DeleteImageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.titan.gyslfh.alarminfo.AlarmInfoActivity"></activity>
+        <activity android:name="com.titan.gyslfh.alarminfo.AlarmInfoActivity"/>
+        <!--一键报警-->
+        <activity android:name="com.titan.gyslfh.inputAlarm.InputAlarmActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

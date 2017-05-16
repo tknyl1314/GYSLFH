@@ -12,6 +12,7 @@
     <color name="gray">#bfbfbf</color>
     <color name="black">#000000</color>
     <color name="blue">#0079C6</color>
+    <color name="bg_gray">#efeef3</color>
 
 
 </resources>

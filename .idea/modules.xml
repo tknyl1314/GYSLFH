@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/gyslfh2/gyslfh2.iml" filepath="$PROJECT_DIR$/gyslfh2/gyslfh2.iml" />
       <module fileurl="file://$PROJECT_DIR$/mylib/mylib.iml" filepath="$PROJECT_DIR$/mylib/mylib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/timepicke/timepicke.iml" filepath="$PROJECT_DIR$/timepicke/timepicke.iml" />
     </modules>
   </component>
 </project>

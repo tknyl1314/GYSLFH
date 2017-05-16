@@ -5,5 +5,16 @@
         <item>病虫害上报</item>
         <item>盗砍滥伐</item>
     </string-array>
+    
+    <string-array name="inputalarm_source">
+        <item>--请选择--</item>
+        <item>110</item>
+        <item>119</item>
+        <item>市民</item>
+        <item>森林防火部门</item>
+        <item>机场空管</item>
+        <item>其他</item>
+    </string-array>
+    
 </resources>
     <!--  <item>请选择上报类型</item>-->

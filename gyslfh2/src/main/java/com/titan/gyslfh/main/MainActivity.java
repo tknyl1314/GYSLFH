@@ -40,6 +40,7 @@ import com.titan.gis.TrackUtil;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.UpAlarmActivity;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
+import com.titan.gyslfh.inputAlarm.InputAlarmActivity;
 import com.titan.gyslfh.login.LoginActivity;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.newslfh.R;
@@ -264,8 +265,6 @@ public class MainActivity extends AppCompatActivity implements IMain {
 
 
     }
-
-
 
 
     private GraphicsOverlay addGraphicsOverlay(MapView mapView) {
@@ -494,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements IMain {
      */
     @Override
     public void onAlarm() {
-        Intent intent =new Intent(mContext,UpAlarmActivity.class);
+        Intent intent =new Intent(mContext,InputAlarmActivity.class);
         mContext.startActivity(intent);
     }
 
