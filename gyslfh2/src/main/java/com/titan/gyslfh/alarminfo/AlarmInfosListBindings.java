@@ -28,7 +28,7 @@ public class AlarmInfosListBindings {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter("app:items")
+    @BindingAdapter({"items"})
     public static void setItems(RecyclerView recyclerView, List<AlarmInfoModel.AlarmInfo> items) {
         AlarmInfoFragment.RVAdapter_listobject adapter = (AlarmInfoFragment.RVAdapter_listobject) recyclerView.getAdapter();
         if (adapter != null)

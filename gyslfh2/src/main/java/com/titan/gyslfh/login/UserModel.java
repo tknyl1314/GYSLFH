@@ -4,7 +4,7 @@ package com.titan.gyslfh.login;
  * Created by whs on 2017/4/27
  */
 
-public class UserModel {
+public class UserModel  {
 
     /**
      * dqid : 1472

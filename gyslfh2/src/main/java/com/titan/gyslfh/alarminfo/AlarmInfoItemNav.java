@@ -6,4 +6,7 @@ package com.titan.gyslfh.alarminfo;
 
 public interface AlarmInfoItemNav {
     void openAlarmInfoDetails(String id);
+
+    void openAlarmInfoDetails(AlarmInfoModel.AlarmInfo alarmInfo);
+
 }

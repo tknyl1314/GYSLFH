@@ -34,7 +34,7 @@ public class TrackUtil {
      *501～700：key验证失败，请按照说明文档重新申请KEY。
      */
     // 存放历史定位结果的链表，最大存放当前结果的前5次定位结果
-    private LinkedList<LocationEntity> locationList = new LinkedList<LocationEntity>();
+    private static LinkedList<LocationEntity> locationList = new LinkedList<LocationEntity>();
 
     public static float[] EARTH_WEIGHT = {0.1f,0.2f,0.4f,0.6f,0.8f}; // 推算计算权重_地球
     //public static float[] MOON_WEIGHT = {0.0167f,0.033f,0.067f,0.1f,0.133f};
@@ -51,7 +51,7 @@ public class TrackUtil {
      *
      * @return Bundle
      */
-    private Bundle Algorithm(BDLocation location) {
+    public static Bundle Algorithm(BDLocation location) {
         Bundle locData = new Bundle();
         double curSpeed = 0;
         if (locationList.isEmpty() || locationList.size() < 2) {

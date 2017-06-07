@@ -1,5 +1,6 @@
 package com.titan.gyslfh.alarminfo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class AlarmInfoModel {
         this.ds = ds;
     }
 
-    public static class AlarmInfo {
+    public static class AlarmInfo implements Serializable {
 
         /**
          * ID : 1
@@ -54,6 +55,10 @@ public class AlarmInfoModel {
          * ORIGIN : 森林防火部门
          * NOTICEAREA : 白云区,花溪区,经济技术开发区,观山湖区,乌当区,清镇市,云岩区,南明区,开阳县,息烽县,修文县
          * ROWNUM : 1
+         *
+         * ISFIRE:是否火警
+         *
+         * BACKID:回警ID
          */
 
         private String ID;
@@ -74,6 +79,22 @@ public class AlarmInfoModel {
         private String ORIGIN;
         private String NOTICEAREA;
         private String ROWNUM;
+        private String ISFIRE;
+
+        public String getBACKID() {
+            return BACKID;
+        }
+
+        public void setBACKID(String BACKID) {
+            this.BACKID = BACKID;
+        }
+
+        private String BACKID;
+        /**
+         *  :
+         */
+
+
 
         public String getID() {
             return ID;
@@ -217,6 +238,14 @@ public class AlarmInfoModel {
 
         public void setROWNUM(String ROWNUM) {
             this.ROWNUM = ROWNUM;
+        }
+
+        public String getISFIRE() {
+            return ISFIRE;
+        }
+
+        public void setISFIRE(String ISFIRE) {
+            this.ISFIRE = ISFIRE;
         }
     }
 }

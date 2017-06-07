@@ -27,6 +27,7 @@ public class RetrofitHelper {
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
     private static RetrofitHelper instance = null;
     private Retrofit mRetrofit = null;
+    private Retrofit mWeatherRetrofit=null;
     public static RetrofitHelper getInstance(Context context){
         if (instance == null){
             instance = new RetrofitHelper(context);
@@ -55,9 +56,20 @@ public class RetrofitHelper {
                 //.addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+        //获取气象数据
+        mWeatherRetrofit=new Retrofit.Builder()
+                .baseUrl("http://222.85.160.4/")
+                .client(okHttpClientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
     }
     public RetrofitService getServer(){
         return mRetrofit.create(RetrofitService.class);
+    }
+
+    public MeteorologyService getWeatherServer(){
+        return mWeatherRetrofit.create(MeteorologyService.class);
     }
    /* private class MyNetworkInterceptor implements Interceptor
     {

@@ -103,26 +103,26 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     //compile 'com.esri.arcgis.android:arcgis-android:10.2.7'
-    compile project(':BaiduNavi')
+    //compile project(':BaiduNavi')
     compile project(':mylib')
     //IconButton for Android
     compile 'com.githang:com-phillipcalvin-iconbutton:1.0.1@aar'
-    /** 解决method 超出限制          */
+    /** 解决method 超出限制                 */
     //compile 'com.android.support:multidex:1.0.0'
     //compile 'com.esri.arcgis.android:arcgis-android:10.2.8'
-    /** 集成bugly          */
+    /** 集成bugly                 */
     // (注：从2.1.5开始要分开Bugly SDK和NDK的配置）
     compile 'com.tencent.bugly:crashreport:latest.release'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.1.5
     //compile 'com.tencent.bugly:nativecrashreport:2.2.0'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
-    /** 个推          */
+    /** 个推                 */
     //compile 'com.getui:sdk:2.9.0.0'
-    /** Redis          */
+    /** Redis                 */
     compile files('libs/jedis-2.8.1.jar')
-    /** butterknife          */
+    /** butterknife                 */
     compile 'com.jakewharton:butterknife:8.4.0'
-    /** databinding          */
+    /** databinding                 */
     //compile 'com.kelin.mvvmlight:library:1.0.0'
     //apt 'com.jakewharton:butterknife-compiler:8.4.0'
     //compile "com.aaronhan:rtspclient:0.7"
@@ -141,5 +141,12 @@ dependencies {
     //compile files('libs/ksoap2-android.jar')
     compile files('libs/ksoap2-android.jar')
     compile 'com.google.code.gson:gson:2.7'
+    compile files('libs/HCNetSDK.jar')
+    compile files('libs/PlayerSDK.jar')
+    compile files('libs/AudioEngineSDK.jar')
+    provided files('libs/BaiduLBS_Android.jar')
+    compile files('libs/spatialite-android-library.jar')
+    compile files('libs/commons-lang3-3.4.jar')
+    compile files('libs/GetuiSDK2.9.0.0.jar')
 }
 

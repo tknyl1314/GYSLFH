@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.data.source.local.GreenDaoManager;
 import com.titan.gyslfh.login.UserModel;
@@ -41,6 +42,14 @@ public class TitanApplication extends Application{
     public  SharedPreferences sharedPreferences=null;
     public  static  TitanApplication singleton;
 
+    public static UserModel getmUserModel() {
+        return mUserModel;
+    }
+
+    public static void setmUserModel(UserModel mUserModel) {
+        TitanApplication.mUserModel = mUserModel;
+    }
+
     public static UserModel mUserModel;
     /** 数据存储路径 */
     static  String filePath = null;
@@ -60,7 +69,7 @@ public class TitanApplication extends Application{
     public static final String KEYNAME_REMEMBER = "isremember";
     public static final String KEYNAME_USERNAME = "username";
     public static final String KEYNAME_PSD = "password";
-    public static SharedPreferences Titansp;
+    public static SharedPreferences mSharedPreferences;
 
     public static TitanApplication getInstance() {
         if(singleton!=null){
@@ -85,14 +94,14 @@ public class TitanApplication extends Application{
         /** 百度定位初始化 */
         locationService = new LocationService(getApplicationContext());
         //mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-        //SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         //intiData();
-        Titansp=getSharedPreferences(PREFS_NAME,0);
+        mSharedPreferences=getSharedPreferences(PREFS_NAME,0);
         /** 获取当前网络状态 */
         getNetState();
         getDeviceInfo();
         //数据库初始化
-        GreenDaoManager.getInstance();
+        GreenDaoManager.getInstance(this);
 
         //registerDevice();
         if (handler == null) {

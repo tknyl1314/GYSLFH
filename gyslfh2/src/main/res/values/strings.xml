@@ -3,17 +3,48 @@
     <string name="app_name">贵阳森林防火</string>
     <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
     <string name="app_version">版本号：</string>
+    <string name="dbname">DB_SLFH</string>
     <!--提示-->
     <string name="error_network">网络异常，请检查网络连接</string>
     <string name="error_loginempty">请输入用户名或密码</string>
 
     <string name="error_uploc2local">上传坐标到本地异常</string>
     <string name="error_uploc2server">上传坐标到服务器异常</string>
+
+    <string name="error_getweather">获取森林火险数据失败</string>
+    <string name="success_getweather">获取森林火险数据成功</string>
+
+    <string name="error_getalarminfodetail">获取火警详细信息异常</string>
+
+
     <string name="success_uploc">上传坐标成功</string>
+    <string name="success_upload">上报成功</string>
+    <string name="failure_upload">上报失败</string>
+    <string name="error_noticecountry">请选择通知区县</string>
+    <string name="error_phonenumber">请输入正确的手机号或电话号码</string>
+
+
+    <string name="imgs">最多可上传3张图片</string>
+
+
+    <!--Dialog-->
+
+    <string name="title_progress">正在上传</string>
+    <string name="content_progress">上传中……</string>
 
 
     <!--服务器地址-->
+    <!--
     <string name="serverhost">http://101.201.54.143:8027/</string>
+-->
+
+    <string name="serverhost">http://192.168.1.16:8040/</string>
+
+    <!--GIS服务地址-->
+    <string name="gisserverhost">http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/ThematicMap/FeatureServer</string>
+    <!--
+    http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/FireThematicMap/FeatureServer
+-->
 
     <string name="startloc">开始定位</string>
     <string name="stoploc">停止定位</string>
@@ -76,20 +107,54 @@
     <string name="fireresource">报警来源: </string>
 
     <!--接警信息录入-->
+    <string name="countrys">请选择区县</string>
+    <string name="origin">请选择接警来源</string>
+    <string name="status">请选择火情状态</string>
+
+
     <string name="inputalarm">接警录入</string>
-    <string name="inputalarm_address">火警详细地址</string>
+    <string name="inputalarm_address">火情地址</string>
+    <string name="inputalarm_orgin">火警来源</string>
+
+    <string name="inputalarm_status">火情状态</string>
+
+
     <string name="inputalarm_lon">经度</string>
     <string name="inputalarm_lat">纬度</string>
     <string name="inputalarm_policecase">出警情况</string>
     <string name="inputalarm_policetime">出警时间</string>
     <string name="inputalarm_reporttime">上报时间</string>
     <string name="inputalarm_reportcase">上报情况</string>
-    <string name="inputalarm_ssdq">火警所属地区</string>
+    <string name="inputalarm_ssdq">所属地区</string>
     <string name="inputalarm_tel">电话号码</string>
     <string name="inputalarm_remark">备注</string>
     <string name="inputalarm_isWork">是否查岗</string>
-    <string name="inputalarm_noticeAreaIDs">通知地区</string>
+    <string name="inputalarm_noticeAreaIDs">通知区县</string>
     <string name="inputalarm_dqid">通知地区ID</string>
     <string name="inputalarm_submit">提交</string>
     <string name="picselect_tip">图片最多只能选择三个</string>
+    <string name="map_base">基础地图</string>
+    <string name="map_img">影像地图</string>
+    <string name="map_firerisk">森林火险图</string>
+    <string name="select">请选择</string>
+    <string name="upload">上   报</string>
+    <string name="noinspect">不查岗</string>
+    <string name="inspect">查岗</string>
+    <string name="nodata">暂无数据</string>
+    <string name="alarm_number">接警编号:</string>
+    <string name="alarm_time">报警时间:</string>
+    <string name="alarm_orgin">报警来源:</string>
+    <string name="alarm_phonenumber">报警电话:</string>
+    <string name="alarm_lon">经度:</string>
+    <string name="alarm_lat">纬度:</string>
+    <string name="alarm_backtime">回警时间</string>
+    <string name="alarmback">回警</string>
+    <string name="alarminfo_status">火情状态</string>
+    <string name="alarminfo_isfire">是否火情</string>
+    <string name="alarminfo_type">火情类型</string>
+    <string name="backalarm_psrson">核实人员</string>
+    <string name="backalarm_info">核实情况</string>
+    <string name="firetype">火情类型</string>
+
+
 </resources>

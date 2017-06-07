@@ -1193,9 +1193,13 @@ public class MonitorActivity extends Activity implements Callback,OnTouchListene
 		 * m_oUser.getText().toString(); String strPsd =
 		 * m_oPsd.getText().toString();
 		 */
+		//ip
 		String strIP = m_oIPAddr;
+		//端口
 		int nPort = Integer.parseInt(m_oPort);
+		//用户名
 		String strUser = m_oUser;
+		//密码
 		String strPsd = m_oPsd;
 		// call NET_DVR_Login_v30 to login on, port 8000 as default
 		int iLogID = HCNetSDK.getInstance().NET_DVR_Login_V30(strIP, nPort,

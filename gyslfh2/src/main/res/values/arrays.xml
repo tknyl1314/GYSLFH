@@ -1,20 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="upalarmtype">
-        <item>火情上报</item>
-        <item>病虫害上报</item>
-        <item>盗砍滥伐</item>
+
+    <string-array name="firestatus">
+        <item>正在燃烧</item>
+        <item>已经熄灭</item>
     </string-array>
-    
-    <string-array name="inputalarm_source">
-        <item>--请选择--</item>
-        <item>110</item>
+    <string-array name="firetype">
+        <item>烧荒积肥</item>
+        <item>森林火灾</item>
+        <item>荒火</item>
+    </string-array>
+    <!--火情状态-->
+    <string-array name="alarm_isfire">
+        <item>是</item>
+        <item>不是</item>
+        <item>正在核实</item>
+        <item>转发到林场</item>
+        <item>不属于本地区</item>
+    </string-array>
+    <!--火警来源-->
+    <string-array name="alarm_source">
         <item>119</item>
+        <item>110</item>
         <item>市民</item>
-        <item>森林防火部门</item>
         <item>机场空管</item>
-        <item>其他</item>
+        <item>森林防火部门</item>
+        <item>移动平板</item>
+        <item>微信</item>
     </string-array>
-    
+
+    <string-array name="countrys">
+        <item>云岩区</item>
+        <item>南明区</item>
+        <item>白云区</item>
+        <item>息烽县</item>
+        <item>乌当区</item>
+        <item>清镇市</item>
+        <item>修文县</item>
+        <item>开阳县</item>
+        <item>花溪区</item>
+        <item>观山湖区</item>
+        <item>顺海林场</item>
+        <item>长坡岭林场</item>
+        <item>贵安新区</item>
+    </string-array>
+    <string-array name="countrys_id">
+        <item>1464</item>
+        <item>1463</item>
+        <item>1459</item>
+        <item>1461</item>
+        <item>1466</item>
+        <item>1465</item>
+        <item>1460</item>
+        <item>1462</item>
+        <item>1469</item>
+        <item>1467</item>
+        <item>901</item>
+        <item>911</item>
+        <item>贵安新区</item>
+    </string-array>
+
+
 </resources>
     <!--  <item>请选择上报类型</item>-->

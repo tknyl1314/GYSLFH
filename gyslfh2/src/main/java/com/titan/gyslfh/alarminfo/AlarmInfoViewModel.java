@@ -3,7 +3,6 @@ package com.titan.gyslfh.alarminfo;
 import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.graphics.drawable.Drawable;
@@ -29,61 +28,29 @@ public class AlarmInfoViewModel extends BaseViewModel {
 
     public final ObservableList<AlarmInfoModel.AlarmInfo> mAlarmInfos = new ObservableArrayList<>();
 
-    //public final ObservableField<AlarmInfoModel.AlarmInfo> alarminfo=new ObservableField<>();
-
-
-    //public final ItemBinding<AlarmInfoModel.AlarmInfo> itemBinding = ItemBinding.of(BR.alarminfo, R.layout.item_alarminfo);
-    //数据加载
-    public final ObservableBoolean dataLoading = new ObservableBoolean(false);
 
     public final ObservableField<Integer> totalcount = new ObservableField<>();
-
-
     //火警ID
     public  final ObservableField<String>  alarmId=new ObservableField<>();
-
-    //时间
-    public  final ObservableField<String>  time=new ObservableField<>();
-    //地址
-    public  final ObservableField<String>  address=new ObservableField<>();
-    //来源
-    public  final ObservableField<String>  origin=new ObservableField<>();
-
-    //状态
-    public  final ObservableField<String>  status=new ObservableField<>();
     //empty label
     public final ObservableField<String> noItemLabel = new ObservableField<>();
     //empty iocn
     public final ObservableField<Drawable> noItemIconRes = new ObservableField<>();
 
-
-
-
     private AlarmInfoItemNav mAlarmInfoItemNav;
 
     private Context mContext;
-    public AlarmInfoViewModel(Context context,AlarmInfoItemNav alarmInfoItemNav){
+
+
+    public AlarmInfoViewModel(Context context, AlarmInfoItemNav alarmInfoItemNav){
+
         this.mAlarmInfoItemNav=alarmInfoItemNav;
         this.mContext=context;
-        //设置emptyview
 
-        /*mAlarmInfos.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                AlarmInfoModel.AlarmInfo alarmInfo=mAlarmInfo.get();
-                if(alarmInfo!=null){
-                    time.set(alarmInfo.getRECEIPTTIME());
-                    address.set(alarmInfo.getADDRESS());
-                    origin.set(alarmInfo.getORIGIN());
-                }
-            }
-        });*/
 
     }
 
-    /*public void setAlarmInfo(AlarmInfoModel.AlarmInfo alarmInfo){
-        this.mAlarmInfo.set(alarmInfo);
-    }*/
+
 
     @Bindable
     public boolean isEmpty() {
@@ -98,7 +65,7 @@ public class AlarmInfoViewModel extends BaseViewModel {
     /**
      * 加载数据
      */
-    private void loadData(final boolean showLoadingUI) {
+    public void loadData(final boolean showLoadingUI) {
         if(showLoadingUI) {
             dataLoading.set(true);
 
@@ -141,6 +108,8 @@ public class AlarmInfoViewModel extends BaseViewModel {
                             snackbarText.set("获取数据"+totalcount.get());
 
                             notifyPropertyChanged(BR.empty); // It's a @Bindable so update manually
+
+                            //notifyChange();
 
                             //mAlarmInfos.add( infos.getDs());
                             //mAlarmInfos= (ObservableList<AlarmInfoModel.AlarmInfo>) infos.getDs();

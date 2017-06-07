@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <import type="android.view.View" />
+        <variable
+            name="view"
+            type="com.titan.gyslfh.alarminfo.AlarmInfoFragment"/>
+
+        <variable
+            name="viewmodel"
+            type="com.titan.gyslfh.backalarm.AlarmListViewModel"/>
+    </data>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl"
+        android:onRefresh="@{viewmodel}"
+
+        app:refreshing="@{viewmodel.dataLoading}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcl_alarminfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alarms="@{viewmodel.mAlarmInfos}"
+        >
+    </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/noTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="@{viewmodel.empty ? View.VISIBLE : View.GONE}">
+
+
+        <ImageView
+            android:id="@+id/noTasksIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@{viewmodel.noItemIconRes}" />
+
+        <TextView
+            android:id="@+id/noTasksMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@{viewmodel.noItemLabel}"
+            android:layout_marginBottom="@dimen/list_item_padding"/>
+
+    </LinearLayout>
+</FrameLayout>
+</layout>

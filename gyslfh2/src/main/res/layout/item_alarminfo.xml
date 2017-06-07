@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <import type="android.view.View"/>
-        <!-- <variable
-             name="alarminfo"
-             type="com.titan.gyslfh.alarminfo.AlarmInfoModel.AlarmInfo"/>-->
-        <variable
-            name="viewmodel"
-            type="com.titan.gyslfh.alarminfo.AlarmInfoItemViewModel"/>
-    </data>
+   <data>
+       <import type="android.view.View"/>
+       <variable
+           name="viewmodel"
+           type="com.titan.gyslfh.alarminfo.AlarmInfoItemViewModel"/>
+   </data>
     <android.support.v7.widget.CardView
         android:elevation="4dp"
         android:layout_width="match_parent"
@@ -30,7 +27,7 @@
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{@string/getfiretime+viewmodel.time}'/>
+                android:text='@{"接警时间："+viewmodel.time}'/>
             <TextView
                 android:layout_below="@+id/tv_time"
                 android:id="@+id/tv_origin"
@@ -38,7 +35,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{@string/fireresource+viewmodel.origin}'/>
+                android:text='@{"报警来源："+viewmodel.origin}'/>
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_below="@+id/tv_time"
@@ -48,7 +45,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{@string/firestate+viewmodel.status}'/>
+                android:text='@{"状态："+viewmodel.isfire}'/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:id="@+id/tv_address"
@@ -57,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="1"
-                android:text='@{@string/fireaddress+viewmodel.address}'/>
+                android:text='@{"火警地址："+viewmodel.address}'/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

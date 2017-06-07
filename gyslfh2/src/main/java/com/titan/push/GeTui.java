@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import com.igexin.sdk.PushManager;
 
 /**
- * Created by Whs on 2016/12/20 0020.
+ * Created by Whs on 2016/12/20 0020
  */
 public class GeTui {
     public static String appkey = "";

@@ -51,9 +51,12 @@ public class LoginViewModel extends BaseObservable  {
                 mLogin.showToast(mContext.getString(R.string.error_loginempty),0);
                 return;
             }
+            //个推ClientId
+            String cid= PushManager.getInstance().getClientid(mContext);
+            //Log.e("TITAN",cid);
 
             //mLogin.showProgress();
-            Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().Checklogin(username.get(),password.get());
+            Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().Checklogin(username.get(),password.get(),cid);
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {
@@ -72,19 +75,18 @@ public class LoginViewModel extends BaseObservable  {
                         public void onNext(String json) {
                             //mLogin.showToast("获取结果",0);
                             try {
-                                String cid= PushManager.getInstance().getClientid(mContext);
                                 ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
-                                boolean is=resultModel.getResult();
 
                                 if(resultModel.getResult()){
                                 /*String dd=resultModel.getData().toString();
                                 mLogin.showToast("登陆成功"+dd,1);*/
                                     String user=new Gson().toJson(resultModel.getData());
-                                    TitanApplication.mUserModel=new Gson().fromJson(user,UserModel.class);
-                                    mLogin.showToast("登陆成功"+is,0);
+                                    //TitanApplication.mUserModel=new Gson().fromJson(user,UserModel.class);
+                                    TitanApplication.setmUserModel(new Gson().fromJson(user,UserModel.class));
+                                    //mLogin.showToast("登陆成功"+is,0);
                                     if(isremember.get()){
-                                        TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
-                                        TitanApplication.Titansp.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
+                                        TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
+                                        TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
 
                                     }
 
@@ -117,7 +119,7 @@ public class LoginViewModel extends BaseObservable  {
           mLogin.showToast("记住用户已取消",1);
           isremember.set(false);
       }
-      TitanApplication.Titansp.edit().putBoolean(TitanApplication.KEYNAME_REMEMBER,isremember.get()).apply();
+      TitanApplication.mSharedPreferences.edit().putBoolean(TitanApplication.KEYNAME_REMEMBER,isremember.get()).apply();
 
     }
 

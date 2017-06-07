@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+   <data>
+       <import type="android.view.View"/>
+       <variable
+           name="viewmodel"
+           type="com.titan.gyslfh.layercontrol.LayerItemViewModel"/>
+   </data>
+    <android.support.v7.widget.CardView
+        android:elevation="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:paddingLeft="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{()->viewmodel.onLayerCheck()}">
+        
+        
+        <CheckedTextView
+            android:checked="@{viewmodel.ischeck}"
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+            android:text="@{viewmodel.mLayer.get().getName()}"/>
+    </android.support.v7.widget.CardView>
+</layout>

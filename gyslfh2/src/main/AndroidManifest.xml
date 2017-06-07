@@ -3,8 +3,11 @@
     package="com.titan.newslfh">
 
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <!--网络位置 WIFI和基站定位-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--GPS位置-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -19,8 +22,6 @@
     <!-- 读取本地照片 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    ;
-
     <!-- iBeancon功能所需权限 -->
     <!--
 <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -58,6 +59,16 @@
         </service>
         <!-- 用户自定义服务继承自GTIntentService,作为SDK与APP桥梁服务,用来接收各种消息和命令回复 -->
         <service android:name="com.titan.push.GeTuiIntentService" />
+        <!-- 第三方应用配置 -->
+        <meta-data
+            android:name="PUSH_APPID"
+            android:value="${GETUI_APP_ID}" />
+        <meta-data
+            android:name="PUSH_APPKEY"
+            android:value="${GETUI_APP_KEY}" />
+        <meta-data
+            android:name="PUSH_APPSECRET"
+            android:value="${GETUI_APP_SECRET}" />
         <!-- 配置SDK核心服务 -->
         <service
             android:name="com.titan.push.GeTuiPushService"
@@ -77,19 +88,22 @@
         <activity
             android:name="com.titan.gyslfh.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboardHidden|orientation">
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.titan.gyslfh.main.MainActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
+        <!--<activity
             android:name="com.titan.gyslfh.UpAlarmActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden" />-->
         <!-- 相册界面 -->
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
@@ -100,13 +114,20 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
+       <!-- <activity
             android:name="com.titan.gyslfh.DeleteImageActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--火警管理-->
         <activity android:name="com.titan.gyslfh.alarminfo.AlarmInfoActivity"/>
-        <!--一键报警-->
-        <activity android:name="com.titan.gyslfh.inputAlarm.InputAlarmActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <!--火情上报-->
+        <activity android:name="com.titan.gyslfh.upfireinfo.UpAlarmActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+        <!--回警-->
+        <activity android:name="com.titan.gyslfh.backalarm.BackAlarmActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+        <!--视频监控-->
+        <activity android:name="com.titan.gyslfh.monitor.MonitorActivity"
+            android:configChanges="keyboardHidden|orientation"/>
     </application>
 
 </manifest>

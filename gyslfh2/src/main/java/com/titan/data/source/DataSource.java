@@ -16,6 +16,10 @@
 
 package com.titan.data.source;
 
+import com.titan.gyslfh.backalarm.BackAlarmModel;
+import com.titan.model.FireRiskModel;
+import com.titan.model.TrackPoint;
+
 /**
  * Main entry point for accessing tasks data.
  */
@@ -35,7 +39,47 @@ public interface DataSource {
         void onDataNotAvailable();
     }*/
 
-    boolean saveTrackPoint();
+    /**
+     * 获取气象信息
+     */
+    interface getWeatherCallback {
+
+        void onFailure(String info);
+
+        void onSuccess(FireRiskModel fireRiskModel);
+    }
+
+
+    interface uploadCallback {
+
+        void onFailure(String info);
+
+        void onSuccess(String data);
+    }
+
+
+    interface saveCallback {
+
+        void onFailure(String info);
+
+        void onSuccess(String data);
+    }
+    //上报火情和接警录入
+    void uplaodAlarmInfo(String infojson,uploadCallback callback);
+    //上传轨迹
+    void saveTrackPoint(TrackPoint trackPoint,saveCallback callback);
+    //火情未回警数量
+    void getUnDealAlarmCount(String dqid,uploadCallback callback);
+    //获取火险等级图层
+    //void getFireRiskInfo(String date,String hour,String ThematicType,getWeatherCallback callback);
+
+    void getAlarmInfoDetail(String alarmid,saveCallback callback);
+
+    void getAlarmInfoList(String querystr,String dqid,String index,String number ,saveCallback callback);
+
+    void onBackAlarm(BackAlarmModel backAlarmModel,saveCallback callback);
+
+    void getDvrInfo();
 
 
 }

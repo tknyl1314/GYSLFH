@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by whs on 2016/10/14.
+ * Created by whs on 2016/10/14
  */
 
 public class UploadInfo {

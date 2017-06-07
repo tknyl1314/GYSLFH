@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <ImageButton
+        android:layout_marginTop="5dp"
+        android:id="@+id/btn_plot_ARROW"
+        style="@style/iv_maptools"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_arrow"
+        android:text="箭头标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+    <ImageButton android:id="@+id/btn_plot_JUNGLE"
+        style="@style/iv_maptools"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_jungle"
+        android:text="集结地标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+    <ImageButton android:id="@+id/btn_plot_FIREAREA"
+        style="@style/iv_maptools"
+        android:layout_marginTop="5dp"
+
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_firearea"
+        android:text="火场范围标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+    <ImageButton android:id="@+id/btn_plot_FIREBREAK"
+        style="@style/iv_maptools"
+        android:layout_marginTop="5dp"
+
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_break"
+        android:text="防火带标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+
+    <ImageButton android:id="@+id/btn_plot_FIREPOINT"
+        style="@style/iv_maptools"
+        android:layout_marginTop="5dp"
+
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_firept"
+        android:text="火点标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+
+    <ImageButton android:id="@+id/btn_plot_FLAG"
+        style="@style/iv_maptools"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_plot_bg"
+        android:src="@drawable/plot_flag"
+        android:text="旗帜标绘"
+        tools:ignore="ContentDescription,HardcodedText" />
+</LinearLayout>

@@ -1,0 +1,158 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewmodel"
+            type="com.titan.gyslfh.alarminfo.AlarmDetailViewModel" />
+    </data>
+<!--
+    android:visibility="@{viewmodel.mAlarmInfoDetail==null ? View.VISIBLE : View.GONE}"
+-->
+   <!-- <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/noTasksIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_empty" />
+
+        <TextView
+            android:id="@+id/noTasksMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/nodata"
+            android:layout_marginBottom="@dimen/list_item_padding"/>
+    </LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray">
+        <ScrollView
+            android:id="@+id/sv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:divider="@drawable/divider"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_number" />
+
+                    <EditText
+                        android:id="@+id/et_alarmnumber"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.number}" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_time" />
+
+                    <EditText
+                        android:id="@+id/et_alarmtime"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.reporttime}" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_orgin" />
+
+                    <EditText
+                        android:id="@+id/et_orgin"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.origin}" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_phonenumber" />
+
+                    <EditText
+                        android:id="@+id/et_phonumber"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.phonenumber}" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_lon" />
+
+                    <EditText
+                        android:id="@+id/et_lon"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.LON}" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/et_content_line"
+                        android:minWidth="100dp"
+                        android:text="@string/alarm_lat" />
+
+                    <EditText
+                        android:id="@+id/et_lat"
+                        style="@style/et_content_line"
+                        android:layout_width="match_parent"
+                        android:text="@{viewmodel.LAT}" />
+                </LinearLayout>
+
+                <TextView
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/et_content_line"
+                    android:text="@{viewmodel.backalarminfo}"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

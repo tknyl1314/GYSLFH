@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewmodel"
+            type="com.titan.gis.callout.CalloutViewModel">
+
+        </variable>
+    </data>
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="right"
+        android:background="@color/white"
+        android:src="@drawable/ic_close"
+        android:contentDescription=""
+        tools:ignore="ContentDescription" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        >
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/et_content_line"/>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/callout_nav"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="导航"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/btn_monitor"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            style="@style/btn_commit"
+            android:text="视频监控"
+            android:textColor="@color/white" />
+
+<!--
+        android:visibility="@{viewmodel.ismonitor ? View.GONE : View.VISIBLE}"
+-->
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+</layout>

@@ -3,17 +3,21 @@ package com.titan.gyslfh.alarminfo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
+import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
-public class AlarmInfoActivity extends AppCompatActivity implements IAlarmInfo ,AlarmInfoItemNav{
+public class AlarmInfoActivity extends AppCompatActivity implements  AlarmInfoItemNav{
     Context mContext;
     private AlarmInfoViewModel mViewModel;
+
+    private AlarmInfoFragment mFragment;
     public static final String ALARMINFO_VIEWMODEL_TAG = "ALARMINFO_VIEWMODEL_TAG";
 
 
@@ -26,12 +30,13 @@ public class AlarmInfoActivity extends AppCompatActivity implements IAlarmInfo ,
 
         //setupNavigationDrawer();
 
-        AlarmInfoFragment alarmInfoFragment = findOrCreateViewFragment();
+         mFragment = findOrCreateViewFragment();
+
 
         mViewModel = findOrCreateViewModel();
 
         // Link View and ViewModel
-        alarmInfoFragment.setViewModel(mViewModel);
+        mFragment.setViewModel(mViewModel);
     }
 
     private AlarmInfoFragment findOrCreateViewFragment() {
@@ -72,7 +77,27 @@ public class AlarmInfoActivity extends AppCompatActivity implements IAlarmInfo ,
 
     @Override
     public void openAlarmInfoDetails(String id) {
-        Toast.makeText(mContext, "id:"+id, Toast.LENGTH_SHORT).show();
+        //getFragmentManager().
+        /*Toast.makeText(mContext, "id:"+id, Toast.LENGTH_SHORT).show();
+        Intent intent=new Intent(AlarmInfoActivity.this,AlarmInfoDetailActivity.class);
+        intent.putExtra("alramid",id);
+        startActivity(intent);*/
+        replaceFragment(id);
+    }
+
+    @Override
+    public void openAlarmInfoDetails(AlarmInfoModel.AlarmInfo alarmInfo) {
+        replaceFragment(alarmInfo.getID());
+    }
+
+    private void replaceFragment(String alarmid) {
+        FragmentManager manager =getSupportFragmentManager();
+        AlarmDetailFragment alarmDetailFragment =  AlarmDetailFragment.newInstance(alarmid);
+        AlarmDetailViewModel viewModel= new AlarmDetailViewModel(mContext,alarmDetailFragment, Injection.provideDataRepository(mContext));
+        alarmDetailFragment.setViewModel(viewModel);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.content_frame, alarmDetailFragment);
+        transaction.commit();
     }
 
 

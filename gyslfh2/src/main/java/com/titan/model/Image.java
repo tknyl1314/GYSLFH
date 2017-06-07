@@ -1,56 +1,48 @@
 package com.titan.model;
 
 /**
- * Created by Administrator on 2016/10/10.
+ * Created by Administrator on 2016/10/10
  */
 
 public class Image {
 
-    private String FJ_NAME;
-    private String REMARK;
-    private String FJ_URL;
+    private String name;
+    private String path;
+    private String data;
 
     public Image()
     {
 
     }
 
-    public Image(String FJ_NAME, String REMARK, String FJ_URL) {
-        this.FJ_NAME = FJ_NAME;
-        this.FJ_URL = FJ_URL;
-        this.REMARK = REMARK;
+
+    public Image(String name, String path, String data) {
+        this.name = name;
+        this.path = path;
+        this.data = data;
     }
 
-    public Image(String FJ_URL) {
-        this.FJ_URL = FJ_URL;
+    public String getName() {
+        return name;
     }
 
-    public Image(String FJ_URL, String REMARK) {
-        this.FJ_URL = FJ_URL;
-        this.REMARK = REMARK;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getREMARK() {
-        return REMARK;
+    public String getPath() {
+        return path;
     }
 
-    public String getFJ_NAME() {
-        return FJ_NAME;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public String getFJ_URL() {
-        return FJ_URL;
+    public String getData() {
+        return data;
     }
 
-    public void setFJ_NAME(String FJ_NAME) {
-        this.FJ_NAME = FJ_NAME;
-    }
-
-    public void setFJ_URL(String FJ_URL) {
-        this.FJ_URL = FJ_URL;
-    }
-
-    public void setREMARK(String REMARK) {
-        this.REMARK = REMARK;
+    public void setData(String data) {
+        this.data = data;
     }
 }

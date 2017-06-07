@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
@@ -19,57 +20,161 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/rg_menus">
+
         </com.esri.arcgisruntime.mapping.view.MapView>
+        <!--定位-->
+       <android.support.v7.widget.CardView
+           android:foregroundGravity="center"
+           android:layout_above="@+id/rg_menus"
+           android:onClick="@{()->viewmodel.onLocation()}"
+           android:elevation="4dp"
+           android:layout_marginLeft="20dp"
+           android:layout_marginBottom="20dp"
+           style="@style/cardview">
+           <ImageView
+               android:layout_width="32dp"
+               android:layout_height="32dp"
+               android:layout_margin="5dp"
+               android:id="@+id/btn_myloc"
+               android:background="@drawable/ic_myloc"
+                />
+       </android.support.v7.widget.CardView>
+
+        <!--图层控制-->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_layercontrol"
+            android:foregroundGravity="center"
+            android:onClick="@{()->viewmodel.showLayerDialog()}"
+            android:elevation="4dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_alignParentRight="true"
+            style="@style/cardview">
+            <ImageView
+                style="@style/iv_maptools"
+                android:id="@+id/btn_maplayers"
+                android:src="@drawable/ic_layers"
+                />
+        </android.support.v7.widget.CardView>
+
+       <!-- <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            style="@style/iv_maptools"
+            android:id="@+id/iv_layercontrol"
+            android:background="@drawable/ic_layers"
+            />-->
+
+        <!--导航-->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_nav"
+            android:visibility="gone"
+            android:foregroundGravity="center"
+            android:onClick="@{()->viewmodel.showLayerDialog()}"
+            android:elevation="4dp"
+            android:layout_below="@+id/cv_layercontrol"
+            android:layout_alignStart="@+id/cv_layercontrol"
+            android:layout_marginTop="10dp"
+            style="@style/cardview">
+            <ImageView
+                style="@style/iv_maptools"
+                android:id="@+id/btn_nav"
+                android:background="@drawable/ic_layers"
+                />
+        </android.support.v7.widget.CardView>
+
+        <!--标绘-->
+        <!--<android.support.v7.widget.CardView
+            android:id="@+id/cv_plot"
+            android:foregroundGravity="center"
+            android:onClick="@{()->viewmodel.showLayerDialog()}"
+            android:elevation="4dp"
+            android:layout_below="@+id/cv_nav"
+            android:layout_alignStart="@+id/cv_layercontrol"
+            android:layout_marginTop="10dp"
+            style="@style/cardview">
+            <ImageView
+                style="@style/iv_maptools"
+                android:id="@+id/btn_plot"
+                android:background="@drawable/ic_layers"
+                />
+        </android.support.v7.widget.CardView>-->
+
+
+        <!--标绘-->
+        <ImageView
+            style="@style/iv_maptools"
+            android:id="@+id/iv_plot"
+            android:background="@color/white"
+            android:src="@drawable/ic_plot"
+            android:layout_marginTop="11dp"
+            android:onClick="@{()->viewmodel.startPlot()}"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/cv_layercontrol"
+            android:layout_alignStart="@+id/cv_layercontrol" />
+        <!--导航-->
+        <ImageView
+            style="@style/iv_maptools"
+            android:id="@+id/iv_nav"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_plot"
+            android:onClick="@{()->viewmodel.startNavigation()}"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/iv_plot"
+            android:layout_alignStart="@+id/cv_layercontrol" />
         <RadioGroup
+            android:elevation="4dp"
             android:id="@+id/rg_menus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
-            <!--火警上报-->
+            <!--火警上报\接警录入-->
             <RadioButton
                 android:id="@+id/rb_alarm"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="1dp"
-                android:onClick="@{()->viewmodel.mMain.onAlarm()}"
+                android:onClick="@{()->viewmodel.onAlarm()}"
                 android:text="@string/upalarm"
                 style="@style/style_RadioButton"
                 android:drawableTop="@drawable/rb_upalarm_selector"/>
-            <!--接警录入-->
+            <!--市级接警录入-->
             <RadioButton
                 android:id="@+id/rb_alarmentry"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="1dp"
                 android:text="@string/alarmentry"
                 android:visibility="@{viewmodel.userlevel>3 ? View.GONE:View.VISIBLE}"
                 style="@style/style_RadioButton"
+                android:onClick="@{()->viewmodel.onAlarm()}"
                 android:drawableTop="@drawable/rb_enter_selector" />
-            <!--回警-->
+            <!--县级回警-->
             <RadioButton
                 android:id="@+id/rb_backalarm"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="1dp"
+                android:visibility="@{viewmodel.userlevel>3 ? View.VISIBLE:View.GONE}"
                 android:text="@string/backalarm"
                 style="@style/style_RadioButton"
+                android:onClick="@{()->viewmodel.onBackAlarm()}"
                 android:drawableTop="@drawable/rb_back_selector"
                 />
             <!--接警信息-->
             <RadioButton
                 android:id="@+id/rb_alarminfo"
+                style="@style/style_RadioButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="1dp"
-                android:text="@string/alarminfo"
-                android:onClick="@{()->viewmodel.mMain.onAlarmInfo()}"
-                style="@style/style_RadioButton"
-                android:drawableTop="@drawable/rb_alarminfo_selector" />
+                android:drawableTop="@drawable/rb_alarminfo_selector"
+                android:onClick="@{()->viewmodel.onAlarmInfo()}"
+                android:text="@string/alarminfo" />
             <!--火情统计-->
             <RadioButton
                 android:id="@+id/rb_alarmstatics"
@@ -87,7 +192,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawablePadding="1dp"
                 android:text="@string/userinfo"
                 style="@style/style_RadioButton"
                 android:drawableTop="@drawable/rb_user_selector"/>

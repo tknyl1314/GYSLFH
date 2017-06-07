@@ -34,10 +34,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
 
     public static final String LOGIN_VIEWMODEL_TAG = "LOGIN_VIEWMODEL_TAG";
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
 
     Context mContext;
 
@@ -62,10 +58,12 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
         }
         mViewModel = findOrCreateViewModel();
         //
-        mViewModel.isremember.set(TitanApplication.Titansp.getBoolean("isremember",false));
+        mViewModel.isremember.set(TitanApplication.mSharedPreferences.getBoolean("isremember",false));
         mViewDataBinding.setViewmodel(mViewModel);
         //显示版本号
         mViewDataBinding.tvAppversion.setText(mContext.getString(R.string.app_version)+ TitanUtil.getVersionCode(mContext));
+
+
     }
 
 
@@ -95,10 +93,18 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     @Override
     protected void onStart() {
         super.onStart();
-        //parseManifests();
+
+        parseManifests();
+
         intiPermisson();
         //个推初始化
+        // 注册 intentService 后 PushDemoReceiver 无效, sdk 会使用 DemoIntentService 传递数据,
+        // AndroidManifest 对应保留一个即可(如果注册 DemoIntentService, 可以去掉 PushDemoReceiver, 如果注册了
+        // IntentService, 必须在 AndroidManifest 中声明)
         PushManager.getInstance().registerPushIntentService(mContext.getApplicationContext(), GeTuiIntentService.class);
+        //String cid= PushManager.getInstance().getClientid(mContext);
+
+
     }
 
     /**
@@ -110,11 +116,11 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
         boolean phoneSatePermission = ContextCompat.checkSelfPermission(mContext,  GeTui.GTreqPermission[1]) ==
                 PackageManager.PERMISSION_GRANTED;
         /**个推权限请求*/
-        if (Build.VERSION.SDK_INT >= 23 && !sdCardWritePermission || !phoneSatePermission) {
+        if (Build.VERSION.SDK_INT >= 23 && !sdCardWritePermission || !phoneSatePermission ) {
             ActivityCompat.requestPermissions(this, GeTui.GTreqPermission,
                     GeTui.GTrequestCode);
         }else {
-            PushManager.getInstance().initialize(this.getApplicationContext(), userPushService);
+            PushManager.getInstance().initialize(mContext.getApplicationContext(), userPushService);
         }
     }
     /**
@@ -137,40 +143,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-   /* private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mViewDataBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-            mViewDataBinding.loginForm.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mViewDataBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mViewDataBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            mViewDataBinding.loginProgress.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mViewDataBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mViewDataBinding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            mViewDataBinding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }*/
 
     /**
      * 跳转主界面

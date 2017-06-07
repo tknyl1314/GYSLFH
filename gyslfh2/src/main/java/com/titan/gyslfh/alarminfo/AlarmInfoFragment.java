@@ -8,16 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.titan.data.source.remote.RetrofitHelper;
-import com.titan.gyslfh.TitanApplication;
-import com.titan.model.ResultModel;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.FragmentAlarmInfoBinding;
 import com.titan.newslfh.databinding.ItemAlarminfoBinding;
@@ -25,11 +20,6 @@ import com.titan.util.LoadDataScrollController;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,83 +88,20 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
         }*/
     }
 
-    /**
-     * 初始化数据
-     */
-    private void initData() {
-        Observable<String> observable = RetrofitHelper.getInstance(getActivity()).getServer().getAlarmInfo("", TitanApplication.mUserModel.getDqid(),count+"",pagecount);
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
 
-
-                        /*if (alarmInfoList.size() > 0) {
-                            intiRecyclerView(alarmInfoList);
-                        } else {
-                            Toast.makeText(getActivity(), "未获取到数据", Toast.LENGTH_SHORT).show();
-                        }*/
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("error",e.toString());
-                        Toast.makeText(getActivity(), "获取接警信息异常" + e, Toast.LENGTH_LONG).show();
-
-
-                    }
-
-                    @Override
-                    public void onNext(String json) {
-                        Gson gson=new Gson();
-                        ResultModel<AlarmInfoModel> resultModel=gson.fromJson(json, ResultModel.class);
-                        if(resultModel.getResult()){
-                            AlarmInfoModel infos=gson.fromJson(gson.toJson(resultModel.getData()),AlarmInfoModel.class);
-                            totalcount= Integer.valueOf(infos.getRecordCount());
-                            Log.e("Titan",totalcount+"");
-                            alarmInfoList=infos.getDs();
-
-
-                        }else {
-                            Toast.makeText(getActivity(), "获取数据失败", Toast.LENGTH_SHORT).show();
-                        }
-                        //data = GsonFactory.jsonToArrayList(s, LawInfo.class);
-
-                    }
-                });
-    }
 
     /**
      *
      */
     private void intiRecyclerView() {
 
-        RVAdapter_listobject mAdapter = new RVAdapter_listobject<AlarmInfoModel.AlarmInfo>(getActivity(),new ArrayList<AlarmInfoModel.AlarmInfo>(0), (AlarmInfoItemNav) getActivity());
+        RVAdapter_listobject mAdapter = new RVAdapter_listobject<>(getActivity(),new ArrayList<AlarmInfoModel.AlarmInfo>(0), (AlarmInfoItemNav) getActivity());
 
         mViewDataBinding.rclAlarminfo.setAdapter(mAdapter);
 
         mViewDataBinding.rclAlarminfo.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mViewDataBinding.rclAlarminfo.addOnScrollListener(mController);
-
-        //mViewDataBinding.executePendingBindings();
-
-        /*if (alarmInfoList != null && alarmInfoList.size()>0) {//数据不为空
-            //data.get(0).setAttachment(getResources().getDrawable(R.drawable.nopicture));
-            RVAdapter_listobject mAdapter = new RVAdapter_listobject<AlarmInfoModel.AlarmInfo>(getActivity(),alarmInfoList, (AlarmInfoItemNav) getActivity());
-
-            mViewDataBinding.rclAlarminfo.setAdapter(mAdapter);
-
-            mViewDataBinding.rclAlarminfo.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-            mViewDataBinding.rclAlarminfo.addOnScrollListener(mController);
-        } else {
-            //mViewDataBinding.rclAlarminfo.set
-            //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
-            //Toast.setToast((Activity) mContext, "数据不存在");
-        }*/
 
 
     }
@@ -226,12 +153,8 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -250,6 +173,8 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
     @Override
     public void refresh() {
+        //mViewModel.loadData(true);
+
 
     }
 
@@ -288,14 +213,12 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
         private  List<T> listobj;
         private  AlarmInfoItemNav mAlarmInfoItemNav;
-
-
         private  Context mContext;
 
 
         public RVAdapter_listobject(Context context,List<T> listdata ,AlarmInfoItemNav alarmInfoItemNav){
             this.mContext=context;
-            //this.listobj=listdata;
+            this.listobj=listdata;
             this.mAlarmInfoItemNav=alarmInfoItemNav;
             setList(listdata);
         }
@@ -335,7 +258,6 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
             // with that element
 
             AlarmInfoModel.AlarmInfo alarminfo= (AlarmInfoModel.AlarmInfo) listobj.get(position);
-
             RVAdapter_listobject.ViewHolder holder= (ViewHolder) viewHolder;
             final AlarmInfoItemViewModel viewmodel = new AlarmInfoItemViewModel(mContext,mAlarmInfoItemNav);
             //holder.getBinding().setVariable(BR.uploadinfo,listobj.get(position));

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewmodel"
+            type="com.titan.gyslfh.upfireinfo.UpAlarmViewModel"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        >
+
+    <ScrollView
+        android:id="@+id/sv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            android:background="@color/white"
+            android:divider="@drawable/divider">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    style="@style/et_content_line"
+                    android:text="@string/inputalarm_address"
+                />
+
+                <EditText
+                    android:id="@+id/inputAlarm_address"
+                    style="@style/et_content_line"
+                    android:layout_width="match_parent"
+                    android:hint="@string/inputalarm_address"
+                    android:text="@={viewmodel.address}" />
+
+            </LinearLayout>
+            <!--火警来源-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="@{viewmodel.type==1 ? View.GONE : View.VISIBLE}"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    style="@style/et_content_line"
+                    android:text="@string/inputalarm_orgin"
+                    />
+
+                <Button
+                    android:id="@+id/btn_orgin"
+                    android:text="@={viewmodel.alarmsouce}"
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showOriginDialog()}"
+                    />
+
+            </LinearLayout>
+            <!--火情状态-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    style="@style/et_content_line"
+                    android:text="@string/inputalarm_status"
+                    />
+
+                <Button
+                    android:id="@+id/btn_status"
+                    android:text="@={viewmodel.alarmsouce}"
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showStatusDialog()}"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_lon"
+                     />
+
+                <EditText
+                    android:id="@+id/inputAlarm_lon"
+                    style="@style/et_content_line"
+                    android:layout_width="match_parent"
+                    android:hint="@string/inputalarm_lon"
+                    android:inputType="number"
+                    android:text='@={""+viewmodel.lon}' />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_lat"
+                     />
+
+                <EditText
+                    android:id="@+id/inputAlarm_lat"
+                    android:layout_width="match_parent"
+                    style="@style/et_content_line"
+                    android:hint="@string/inputalarm_lat"
+                    android:text='@={""+viewmodel.lat}'/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.type==1 ? View.GONE : View.VISIBLE}"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_policecase"
+                     />
+
+                <EditText
+                    android:id="@+id/inputAlarm_policeCase"
+                    android:layout_width="match_parent"
+                    style="@style/et_content_line"
+                    android:text="@={viewmodel.policeCase}"
+                    android:hint="@string/inputalarm_policecase" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.type == 1? View.GONE : View.VISIBLE}"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_policetime"
+                    />
+                <Button
+                    android:id="@+id/btn_policeTime"
+                    android:text="@={viewmodel.policeTime}"
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showDateDialog(2)}"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    style="@style/et_content_line"
+                    android:text="@string/inputalarm_reporttime"
+                     />
+
+                <Button
+                    android:id="@+id/btn_reportTime"
+                    android:text="@={viewmodel.reportTime}"
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showDateDialog(1)}"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.type ==1? View.GONE : View.VISIBLE}"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_reportcase"
+                     />
+
+                <EditText
+                    android:id="@+id/et_reportCase"
+                    android:layout_width="match_parent"
+                    style="@style/et_content_line"
+                    android:text="@={viewmodel.reportCase}"
+                    android:hint="@string/inputalarm_reportcase" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    style="@style/et_content_line"
+                    android:text="@string/inputalarm_ssdq"
+                     />
+
+
+                <Button
+                    android:id="@+id/btn_region"
+                    android:text='@{viewmodel.noticeAreaIDs.size>0?"已选择"+viewmodel.noticeAreaIDs.size+"个区县":"请选择"}'
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showCountrySelectDialog(1)}"
+                    />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_tel"
+                     />
+
+                <EditText
+                    android:id="@+id/et_pb"
+                    android:layout_width="match_parent"
+                    style="@style/et_content_line"
+                    android:text="@={viewmodel.tel}"
+                    android:hint="@string/inputalarm_tel" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/et_content_line"
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_remark"
+                     />
+
+                <EditText
+                    android:id="@+id/inputAlarm_remark"
+                    android:layout_width="match_parent"
+                    style="@style/et_content_line"
+                    android:text="@={viewmodel.remark}"
+                    android:hint="@string/inputalarm_remark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.type ==1? View.GONE : View.VISIBLE}"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_isWork"
+                    style="@style/et_content_line" />
+
+               <RadioGroup
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal">
+                   <RadioButton
+                       android:text="@string/noinspect"
+                       android:id="@+id/rb_isinspect"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:checked="@={!viewmodel.iswork}"
+                       android:layout_height="match_parent" />
+                   <RadioButton
+                       android:text="@string/inspect"
+                       android:id="@+id/rb_notinspect"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:checked="@={viewmodel.iswork}"
+                       android:layout_height="match_parent" />
+               </RadioGroup>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:minWidth="100dp"
+                    android:text="@string/inputalarm_noticeAreaIDs"
+                    style="@style/et_content_line" />
+
+                <Button
+                    android:id="@+id/btn_noticeareaids"
+                    style="@style/btn_select"
+                    android:onClick="@{()->viewmodel.showCountrySelectDialog(2)}"
+                    android:text='@{viewmodel.noticeAreaIDs.size>0?"已选择"+viewmodel.noticeAreaIDs.size+"个区县":"请选择"}' />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_photos"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:padding="15dp"
+                    android:background="@color/bg_gray"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:onClick="@{()->viewmodel.onTakePhoto()}"
+                    android:src="@drawable/ic_camera"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_imgs"
+                    android:background="@color/bg_gray"
+                    android:layout_width="wrap_content"
+                    app:photos="@{viewmodel.imgs}"
+                    android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
+               <!-- <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/adv_test"
+                    android:layout_width="80dp"
+                    android:layout_gravity="right"
+                    app:actualImageUri="/storage/C01A-21A7/DCIM/IMMQY/IMG_20170522153811.jpg"
+                    android:layout_height="match_parent" />-->
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+     <LinearLayout
+         android:id="@+id/ll_bottom"
+         android:layout_alignParentBottom="true"
+         android:showDividers="beginning"
+         android:divider="@drawable/divider"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <Button
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             style="@style/btn_commit"
+             android:padding="5dp"
+             android:layout_marginRight="20dp"
+             android:layout_marginLeft="20dp"
+             android:layout_margin="10dp"
+             android:text="@string/upload"
+             android:onClick="@{()->viewmodel.upLoadAlarmInfo()}"
+             />
+     </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

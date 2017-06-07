@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
         <import type="android.view.View" />
         <variable
             name="view"
             type="com.titan.gyslfh.alarminfo.AlarmInfoFragment"/>
-
         <variable
             name="viewmodel"
             type="com.titan.gyslfh.alarminfo.AlarmInfoViewModel"/>
@@ -32,6 +30,7 @@
         app:items="@{viewmodel.mAlarmInfos}"
         >
     </android.support.v7.widget.RecyclerView>
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout

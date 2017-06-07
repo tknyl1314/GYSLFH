@@ -18,8 +18,18 @@ package com.titan.data.source.local;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.titan.data.source.DataSource;
+import com.titan.gyslfh.backalarm.BackAlarmModel;
+import com.titan.model.TrackPoint;
+import com.titan.newslfh.R;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -29,12 +39,15 @@ public class LocalDataSource implements DataSource {
 
     private static LocalDataSource INSTANCE;
 
-    private DbHelper mDbHelper;
+    //private DbHelper mDbHelper;
+
+    private Context mContext;
 
     // Prevent direct instantiation.
     private LocalDataSource(@NonNull Context context) {
         //checkNotNull(context);
-        mDbHelper = new DbHelper(context);
+        this.mContext=context;
+        //mDbHelper = new DbHelper(context);
     }
 
     public static LocalDataSource getInstance(@NonNull Context context) {
@@ -46,8 +59,74 @@ public class LocalDataSource implements DataSource {
 
 
 
+
     @Override
-    public boolean saveTrackPoint() {
-        return true;
+    public void uplaodAlarmInfo(String infojson,uploadCallback callback) {
     }
+
+    @Override
+    public void saveTrackPoint(final TrackPoint trackPoint , final saveCallback callback) {
+        //String ptjson=new Gson().toJson(trackPoint,TrackPoint.class);
+        Observable.create(new Observable.OnSubscribe<TrackPoint>() {
+            @Override
+            public void call(Subscriber<? super TrackPoint> subscriber) {
+                /*String time = DateUtil.dateFormat(new Date());
+                String userid= TitanApplication.mUserModel.getUserID();
+                TrackPoint tp= new TrackPoint(null,time,point.getX(),point.getY(),userid,status);*/
+                try {
+                    long d=GreenDaoManager.getInstance(mContext).getNewSession().getTrackPointDao().insert(trackPoint);
+                    subscriber.onNext(trackPoint);
+
+                }catch (Exception e){
+                    subscriber.onError(e);
+                }
+            }}).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<TrackPoint>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("TITAN",e.toString());
+                        callback.onFailure(e.toString());
+
+                    }
+
+                    @Override
+                    public void onNext(TrackPoint point) {
+                         callback.onSuccess(mContext.getString(R.string.success_uploc));
+                    }
+                });
+
+    }
+
+    @Override
+    public void getUnDealAlarmCount(String dqid, uploadCallback callback) {
+
+    }
+
+    @Override
+    public void getAlarmInfoDetail(String alarmid, saveCallback callback) {
+
+    }
+
+    @Override
+    public void getAlarmInfoList(String querystr, String dqid, String index, String number, saveCallback callback) {
+
+    }
+
+    @Override
+    public void onBackAlarm(BackAlarmModel backAlarmModel, saveCallback callback) {
+
+    }
+
+    @Override
+    public void getDvrInfo() {
+
+    }
+
+
 }

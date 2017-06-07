@@ -12,6 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class TrackPoint  {
+    /**id 自增长*/
     @Id(autoincrement = true)
     private Long id;
     /**上传时间*/
@@ -27,18 +28,35 @@ public class TrackPoint  {
     /**用户id*/
     @Property(nameInDb = "USERID")
     private String userid;
+    /**TAG 0：常规点 1:起点 2：终点*/
+    @Property(nameInDb = "TAG")
+    private int tag;
+    /**WKID 坐标系*/
+    @Property(nameInDb = "WKID")
+    private String wkid;
+    /**SBH 设备号*/
+    @Property(nameInDb = "SBH")
+    private String sbh;
     /**状态 1:已上传到服务器 0:未上传 */
     @Property(nameInDb = "STATUS")
     private int status;
-    @Generated(hash = 911014896)
+    /**REMARK 备用字段*/
+    @Property(nameInDb = "REMARK")
+    private String REMARK;
+    @Generated(hash = 1809735010)
     public TrackPoint(Long id, @NotNull String time, double lon, double lat,
-            String userid, int status) {
+            String userid, int tag, String wkid, String sbh, int status,
+            String REMARK) {
         this.id = id;
         this.time = time;
         this.lon = lon;
         this.lat = lat;
         this.userid = userid;
+        this.tag = tag;
+        this.wkid = wkid;
+        this.sbh = sbh;
         this.status = status;
+        this.REMARK = REMARK;
     }
     @Generated(hash = 546431815)
     public TrackPoint() {
@@ -73,14 +91,37 @@ public class TrackPoint  {
     public void setUserid(String userid) {
         this.userid = userid;
     }
+    public int getTag() {
+        return this.tag;
+    }
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
+    public String getWkid() {
+        return this.wkid;
+    }
+    public void setWkid(String wkid) {
+        this.wkid = wkid;
+    }
+    public String getSbh() {
+        return this.sbh;
+    }
+    public void setSbh(String sbh) {
+        this.sbh = sbh;
+    }
     public int getStatus() {
         return this.status;
     }
     public void setStatus(int status) {
         this.status = status;
     }
-    
-
-
-
+    public String getREMARK() {
+        return this.REMARK;
+    }
+    public void setREMARK(String REMARK) {
+        this.REMARK = REMARK;
+    }
+   
+   
+   
 }
