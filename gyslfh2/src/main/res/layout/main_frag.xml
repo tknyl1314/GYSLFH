@@ -120,10 +120,23 @@
             android:id="@+id/iv_nav"
             android:background="@color/white"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_plot"
+            android:src="@drawable/ic_navigation"
             android:onClick="@{()->viewmodel.startNavigation()}"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_below="@+id/iv_plot"
+            android:layout_alignStart="@+id/cv_layercontrol" />
+
+        <!--导航-->
+        <ImageView
+            style="@style/iv_maptools"
+            android:id="@+id/iv_test"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_navigation"
+            android:onClick="@{()->viewmodel.test()}"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_below="@+id/iv_nav"
             android:layout_alignStart="@+id/cv_layercontrol" />
         <RadioGroup
             android:elevation="4dp"
@@ -138,7 +151,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="@{()->viewmodel.onAlarm()}"
+                android:onClick="@{()->viewmodel.onAlarm(1)}"
                 android:text="@string/upalarm"
                 style="@style/style_RadioButton"
                 android:drawableTop="@drawable/rb_upalarm_selector"/>
@@ -151,7 +164,7 @@
                 android:text="@string/alarmentry"
                 android:visibility="@{viewmodel.userlevel>3 ? View.GONE:View.VISIBLE}"
                 style="@style/style_RadioButton"
-                android:onClick="@{()->viewmodel.onAlarm()}"
+                android:onClick="@{()->viewmodel.onAlarm(2)}"
                 android:drawableTop="@drawable/rb_enter_selector" />
             <!--县级回警-->
             <RadioButton

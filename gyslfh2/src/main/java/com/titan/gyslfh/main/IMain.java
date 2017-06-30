@@ -12,9 +12,10 @@ public interface IMain {
 
 
      /**
-      * 火警上报|接警录入
+      * 1:火警上报
+      * 2:接警录入
       */
-     void onAlarm();
+     void onAlarm(int type);
 
      /**
       * 接警管理
@@ -40,6 +41,11 @@ public interface IMain {
       * 标绘
       */
      void Plot(boolean isplot);
+
+     /**
+      * 开启导航
+      */
+     void  startNavigation(boolean isnav);
 
      /**
       * 测试方法

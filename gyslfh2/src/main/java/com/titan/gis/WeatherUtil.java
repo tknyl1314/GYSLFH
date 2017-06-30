@@ -1,13 +1,10 @@
 package com.titan.gis;
 
-import android.graphics.Color;
-
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.geometry.PolygonBuilder;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.view.Graphic;
-import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
 import com.titan.model.FireRiskModel;
 
 import java.util.ArrayList;
@@ -21,12 +18,12 @@ import java.util.List;
 public class WeatherUtil {
 
     //火险等级样式
-    private static SimpleFillSymbol risk1_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.GREEN, null);
+   /* private static SimpleFillSymbol risk1_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.GREEN, null);
     private static SimpleFillSymbol risk2_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.BLUE, null);
     private static SimpleFillSymbol risk3_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.YELLOW, null);
     private static SimpleFillSymbol risk4_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.rgb(255, 165, 58), null);
     private static SimpleFillSymbol risk5_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.RED, null);
-
+*/
 
 
 
@@ -50,30 +47,27 @@ public class WeatherUtil {
                 switch (level) {
 
                     case 1:
-                        graphic = new Graphic(polygonGeometry.toGeometry(), risk1_Symbol);
+                        graphic = new Graphic(polygonGeometry.toGeometry(), SymbolUtil.risk1_Symbol);
                         break;
                     case 2:
-                        graphic = new Graphic(polygonGeometry.toGeometry(), risk2_Symbol);
+                        graphic = new Graphic(polygonGeometry.toGeometry(), SymbolUtil.risk2_Symbol);
 
                         break;
                     case 3:
-                        graphic = new Graphic(polygonGeometry.toGeometry(), risk3_Symbol);
+                        graphic = new Graphic(polygonGeometry.toGeometry(), SymbolUtil.risk3_Symbol);
 
                         break;
                     case 4:
-                        graphic = new Graphic(polygonGeometry.toGeometry(), risk4_Symbol);
+                        graphic = new Graphic(polygonGeometry.toGeometry(), SymbolUtil.risk4_Symbol);
 
                         break;
                     case 5:
-                        graphic = new Graphic(polygonGeometry.toGeometry(), risk5_Symbol);
+                        graphic = new Graphic(polygonGeometry.toGeometry(), SymbolUtil.risk5_Symbol);
                         break;
                 }
                 graphics.add(graphic);
 
             }
-
-            //mainFragment.mGraphicsOverlay.getGraphics().add(graphic);
-
 
         }
         return  graphics;

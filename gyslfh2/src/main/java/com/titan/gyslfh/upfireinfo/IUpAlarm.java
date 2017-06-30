@@ -41,4 +41,11 @@ public interface IUpAlarm extends AlarmInfoInterface {
      * 火情状态
      */
     void showStatusDialog();
+
+    /**
+     * 选择地址
+     */
+    void showSelectAddress();
+
+
 }

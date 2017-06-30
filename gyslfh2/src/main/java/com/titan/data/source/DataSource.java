@@ -79,7 +79,7 @@ public interface DataSource {
 
     void onBackAlarm(BackAlarmModel backAlarmModel,saveCallback callback);
 
-    void getDvrInfo();
+    //void getDvrInfo();
 
 
 }

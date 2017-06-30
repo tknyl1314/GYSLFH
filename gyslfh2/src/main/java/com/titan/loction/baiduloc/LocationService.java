@@ -92,6 +92,7 @@ public class LocationService {
 		    mOption.setIsNeedLocationPoiList(false);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
 		    mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
 			mOption.setIsNeedAltitude(true);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
+			mOption.setEnableSimulateGps(false);//设置是否允许模拟GPS true:允许； false:不允许，默认为false
 		}
 		return mOption;
 	}

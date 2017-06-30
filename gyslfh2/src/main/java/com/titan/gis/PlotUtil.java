@@ -268,44 +268,6 @@ public class PlotUtil implements OnClickListener {
             return super.onFling(from, to, velocityX, velocityY);
         }
 
-       /* @Override
-        public boolean onDoubleTouchDrag(MotionEvent event) {
-            //return super.onDoubleTouchDrag(event);
-            Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(event.getX()), Math.round(event.getY())));
-            if (point == null || point.isEmpty()) {
-                return false;
-            }
-            if (active) {
-                switch (mPlotType) {
-					//火场范围
-                    case FIREAREA:
-                        //polygon.lineTo(point);
-                        mPolygonBuilder.addPoint(point);
-                        mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolygonBuilder.toGeometry());
-
-                       *//* if(mGraphicsOverlay.getGraphics().get(plotgraphicID)==null){
-
-                          mGraphicsOverlay.getGraphics().add(plotgraphicID,mPolylineBuilder.toGeometry())
-                        }else {
-
-                        }*//*
-
-                        //plotgraphiclayer.updateGraphic(plotgraphicID, polygon);
-						//mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry();
-                        break;
-					//防火带
-                    case FIREBREAK:
-                        mPolylineBuilder.addPoint(point);
-                        mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolylineBuilder.toGeometry());
-                        //polyline.lineTo(point);
-                        //plotgraphiclayer.updateGraphic(plotgraphicID, polyline);
-                        break;
-                }
-
-                return false;
-            }
-            return super.onDoubleTouchDrag(event);
-        }*/
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
@@ -358,7 +320,7 @@ public class PlotUtil implements OnClickListener {
                             //polygon.lineTo(point);
                             mPolygonBuilder.addPoint(point);
                             polygon=mPolygonBuilder.toGeometry();
-                            plotgarphic = PlotUtil.plot_BEZIER_POLYGON(point, plotgraphicID);
+                            //plotgarphic = PlotUtil.plot_BEZIER_POLYGON(point, plotgraphicID);
 
                             mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(polygon);
 
@@ -471,12 +433,9 @@ public class PlotUtil implements OnClickListener {
                 break;
             //箭头
 			case ARROW:
-
-
 			    mPolygonBuilder=new PolygonBuilder(mPtCollection);
                 //polyline = new Polyline(mPtCollection);
 				plotgarphic = new Graphic(mPolygonBuilder.toGeometry(), plotArrowfill);
-
                 mGraphicsOverlay.getGraphics().add(plotgarphic);
 
                 break;

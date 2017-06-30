@@ -3,6 +3,7 @@ package com.titan.data.source;
 import android.content.Context;
 
 import com.titan.data.source.local.LocalDataSource;
+import com.titan.data.source.remote.RemotDataSource;
 import com.titan.data.source.remote.RemoteDataSource;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.backalarm.BackAlarmModel;
@@ -12,7 +13,7 @@ import com.titan.model.TrackPoint;
  * Created by whs on 2017/5/18
  */
 
-public class DataRepository implements DataSource {
+public class DataRepository implements DataSource ,RemotDataSource{
     private Context mContext;
 
     private static DataRepository INSTANCE = null;
@@ -79,11 +80,6 @@ public class DataRepository implements DataSource {
         mRemoteDataSource.onBackAlarm(backAlarmModel,callback);
     }
 
-    @Override
-    public void getDvrInfo() {
-
-    }
-
 
     /**
      * @param date
@@ -94,5 +90,10 @@ public class DataRepository implements DataSource {
      */
     public void getFireRiskInfo(String date, String hour, String ThematicType, getWeatherCallback callback) {
         mRemoteDataSource.getFireRiskInfo(date,hour,ThematicType,callback);
+    }
+
+    @Override
+    public void getDvrInfo(String str, getCallback callback) {
+        mRemoteDataSource.getDvrInfo(str,callback);
     }
 }

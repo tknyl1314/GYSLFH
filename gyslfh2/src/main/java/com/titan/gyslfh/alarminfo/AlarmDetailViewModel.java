@@ -19,8 +19,10 @@ import java.util.List;
 
 public class AlarmDetailViewModel extends BaseViewModel {
 
-    private AlarmDetailInterface mViewInterface;
 
+
+    private AlarmDetailInterface mViewInterface;
+    //火警信息和回警信息
     public ObservableField<AlarmInfoDetailModel> mAlarmInfoDetail=new ObservableField<>();
 
     public ObservableField<Boolean> databinding=new ObservableField<>();
@@ -60,11 +62,10 @@ public class AlarmDetailViewModel extends BaseViewModel {
                 //snackbarText.set(info);
                 AlarmInfoDetailModel alarmInfoDetailModel=mAlarmInfoDetail.get();
                 if(alarmInfoDetailModel==null){
-                    snackbarText.set("加载数据失败");
+                    //snackbarText.set("加载数据失败");
                 }else {
                     //接警信息
-                   AlarmInfoModel.AlarmInfo alarmInfo= alarmInfoDetailModel.getAlarmBackRecord().
-                            get(0).getReceiptInfo().get(0);
+                   AlarmInfoModel.AlarmInfo alarmInfo= alarmInfoDetailModel.getAlarmInfo();
                     number.set(alarmInfo.getID());
                     reporttime.set(alarmInfo.getRECEIPTTIME());
                     origin.set(alarmInfo.getORIGIN());
@@ -75,17 +76,17 @@ public class AlarmDetailViewModel extends BaseViewModel {
                     isfire.set(alarmInfo.getISFIRE());
                     mbackinfo.delete(0,mbackinfo.length());
                     //回警信息
-                    List<AlarmInfoDetailModel.AlarmBackRecordBean.BackInfoBean> backinfos=alarmInfoDetailModel.getAlarmBackRecord().get(1).getBackInfo();
-                    for (AlarmInfoDetailModel.AlarmBackRecordBean.BackInfoBean backinfo:backinfos){
+                    List<AlarmInfoDetailModel.BackInfoBean> backinfos=alarmInfoDetailModel.getBackInfo();
+                    for (AlarmInfoDetailModel.BackInfoBean backinfo:backinfos){
                         String backstatus="";
                         switch (backinfo.getBACKSTATUS()){
-                            case "0":
+                            case 0:
                                 backstatus="未查看";
                                 break;
-                            case "1":
+                            case 1:
                                 backstatus="查看未回复";
                                 break;
-                            case "3":
+                            case 3:
                                 backstatus="已回复";
                                 break;
                         }
@@ -107,7 +108,7 @@ public class AlarmDetailViewModel extends BaseViewModel {
                 Log.e("TItan",info);
                 mIsDataLoading=false;
                 mAlarmInfoDetail.set(null);
-
+                snackbarText.set("加载数据失败"+info);
 
             }
 
@@ -115,7 +116,6 @@ public class AlarmDetailViewModel extends BaseViewModel {
             public void onSuccess(String data) {
                 AlarmInfoDetailModel alarmDetail=new Gson().fromJson(data,AlarmInfoDetailModel.class);
                 mAlarmInfoDetail.set(alarmDetail);
-
                 mIsDataLoading=false;
                 notifyChange();
 

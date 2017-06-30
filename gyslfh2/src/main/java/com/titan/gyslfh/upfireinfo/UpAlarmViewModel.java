@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.titan.BaseViewModel;
@@ -12,17 +13,21 @@ import com.titan.data.source.DataSource;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.main.MainViewModel;
 import com.titan.model.Image;
+import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.util.BitmapUtil;
 import com.titan.util.FileUtils;
 import com.titan.util.NetUtil;
+import com.titan.util.TitanTextUtils;
 import com.titan.util.TitanUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
 import cn.finalteam.rxgalleryfinal.bean.MediaBean;
@@ -45,8 +50,8 @@ public class UpAlarmViewModel extends BaseViewModel {
     //上报类型 1：火情上报 2：接警录入
     public ObservableField<Integer> type=new ObservableField<>(1);
     //接警来源 5：平板
-    public ObservableField<String> alarmsouce=new ObservableField<>("5");
-
+    //public ObservableField<String> alarmsouce=new ObservableField<>("5");
+    public ObservableField<Map<String,Object>> orgin=new ObservableField<>();
     //火情状态
     public ObservableField<String> status=new ObservableField<>();
     //火警地址
@@ -77,7 +82,8 @@ public class UpAlarmViewModel extends BaseViewModel {
     public ObservableField<String> tel=new ObservableField<>();
     //备注
     public ObservableField<String> remark=new ObservableField<>();
-
+    //位置信息
+    public ObservableField<TitanLocation> titanloc=new ObservableField<>();
 
 
 
@@ -98,6 +104,8 @@ public class UpAlarmViewModel extends BaseViewModel {
 
 
 
+
+
     public UpAlarmViewModel(Context context,IUpAlarm iUpAlarm,DataRepository dataRepository) {
         mContext=context;
         this.mUpAlrm=iUpAlarm;
@@ -107,20 +115,22 @@ public class UpAlarmViewModel extends BaseViewModel {
 
         //地区等级 市级3，区县 4
         userlevel.set(Integer.valueOf(TitanApplication.mUserModel.getDqLevel()));
-        if(userlevel.get()<=3){
-            type.set(2);
+        //设置地址
+        if(titanloc.get()!=null){
+            address.set(titanloc.get().getAddress());
+
         }
+
         Date d = new Date(System.currentTimeMillis());
         //上报时间
         reportTime.set(sf.format(d));
         //出警时间
         policeTime.set(sf.format(d));
-
-
-
-
-
-
+        //接警来源
+        Map<String,Object> map=new HashMap<>();
+        map.put("id", 6);
+        map.put("name","移动平板");
+        orgin.set(map);
         noticeAreaIDs.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Integer>>() {
             @Override
             public void onChanged(ObservableList<Integer> integers) {
@@ -163,6 +173,9 @@ public class UpAlarmViewModel extends BaseViewModel {
             if(checkContent()){
                 mUpAlrm.showProgress(true);
                  String json=intiUplaodAlarmInfo();
+                if(json==null||json.equals("")){
+                    return;
+                }
                 //json="{\"address\":\"火警详细地址\",\"lon\":117,\"lat\":\"78\",\"policeCase\":\"css\",\"policeTime\":\"2010-11-23 22:33:44\",\"reportTime\":\"2010-11-23 22:33:44\",\"reportCase\":\"huaha\",\"dqid\":\"1490\",\"dqname\":\"贵阳市\",\"userID\":\"4\",\"tel\":\"12345\",\"remark\":\"sss\",\"isWork\":\"0\",\"noticeAreaIDs\":\"[1,2,3]\",\"pic\":\"[]\"}";
                 mDataRepository.uplaodAlarmInfo(json, new DataSource.uploadCallback() {
                     @Override
@@ -208,7 +221,7 @@ public class UpAlarmViewModel extends BaseViewModel {
                 uploadAlarmInfo.setISWORK("0");
             }
             //接警来源
-            uploadAlarmInfo.setORIGINID(alarmsouce.get());
+            uploadAlarmInfo.setORIGINID( orgin.get().get("id")+"");
             //通知区县id
             uploadAlarmInfo.setNOTICEAREAS(noticeAreaIDs);
             //纬度
@@ -246,6 +259,7 @@ public class UpAlarmViewModel extends BaseViewModel {
 
         }catch (Exception e){
             snackbarText.set("数据初始化异常"+e);
+            return null;
         }
         return json;
 
@@ -261,19 +275,25 @@ public class UpAlarmViewModel extends BaseViewModel {
             snackbarText.set(mContext.getString(R.string.error_noticecountry));
             return false;
         }
-        /*if (TitanTextUtils.isMobileNumber(tel.get())&& TitanTextUtils.isPhoneNumber(tel.get())){
+        //检查电话电话
+
+        //boolean ism=TitanTextUtils.isMobileNumber(tel.get());
+        //boolean isph=TitanTextUtils.isPhoneNumber(tel.get());
+        if (!TitanTextUtils.isMobileNumber(tel.get()) && !TitanTextUtils.isPhoneNumber(tel.get())){
             snackbarText.set(mContext.getString(R.string.error_phonenumber));
             return false;
-        }*/
+        }
 
+        if(TextUtils.isEmpty(address.get())){
+            snackbarText.set(mContext.getString(R.string.error_address));
+            return false;
+        }
         switch (type.get()){
             //火情上报
             case 1:
-
                 break;
             //接警录入
             case 2:
-
                 break;
         }
 
@@ -304,6 +324,16 @@ public class UpAlarmViewModel extends BaseViewModel {
         mUpAlrm.showCountrySelectDialog(type);
 
     }
+
+    /**
+     * 选择地址
+     */
+    public void showSelectAddress(){
+
+        mUpAlrm.showSelectAddress();
+
+    }
+
 
     /**
      * 火警来源

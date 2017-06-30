@@ -31,6 +31,7 @@ public class AlarmListViewModel extends BaseViewModel {
 
     private int index=1;
 
+
     //每页条数
     public ObservableInt pagenumber=new ObservableInt(10);
     //数据加载
@@ -85,7 +86,6 @@ public class AlarmListViewModel extends BaseViewModel {
                 //refresh
             case 1:
                 mAlarmInfos.clear();
-
                 index=1;
                 break;
             //loadmore

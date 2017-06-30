@@ -8,13 +8,15 @@ import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
+import com.titan.gis.selectaddress.SelectAddressFragment;
+import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
 /**
- * 火情上报
+ * 火情上报／接警录入
  */
-public class UpAlarmActivity extends BaseActivity  {
+public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragment.OnFragmentInteractionListener{
 
 
 
@@ -22,12 +24,30 @@ public class UpAlarmActivity extends BaseActivity  {
 
     private UpAlarmViewModel mViewModel;
 
+    private TitanLocation titanLocation;
+
+    private  int type;
+
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upalarm);
+
         mUpAlarmFragment= (UpAlarmFragment) findOrCreateViewFragment();
+
         mViewModel= (UpAlarmViewModel) findOrCreateViewModel();
+        //int type=getIntent().getIntExtra("type",1);
+
+        type= getIntent().getIntExtra("type",1);
+        //位置信息
+        titanLocation= (TitanLocation) getIntent().getExtras().getSerializable("loc");
+
+        mViewModel.type.set(type);
+        mViewModel.titanloc.set(titanLocation);
+        mViewModel.address.set(titanLocation.getAddress());
         mUpAlarmFragment.setViewModel(mViewModel);
         //mContext=this;
 
@@ -71,5 +91,11 @@ public class UpAlarmActivity extends BaseActivity  {
     }
 
 
-
+    @Override
+    public void onGetNewAddress(TitanLocation titanLocation) {
+        mViewModel.type.set(type);
+        mViewModel.address.set(titanLocation.getAddress());
+        mViewModel.titanloc.set(titanLocation);
+        mUpAlarmFragment.setViewModel(mViewModel);
+    }
 }

@@ -123,10 +123,6 @@ public class LocalDataSource implements DataSource {
 
     }
 
-    @Override
-    public void getDvrInfo() {
-
-    }
 
 
 }

@@ -6,6 +6,8 @@
         backgroundColor="#98F5FF"
         cornerCurve="15dip"
         flat="true"
+        leaderWidth="20"
+         leaderLength="10"
         frameColor="#ffdcdada" />-->
 
     <calloutStyle
@@ -13,7 +15,7 @@
         borderColor="@android:color/white"
         borderWidth="4"
         cornerRadius="20"
-        leaderLength="10"
+
         leaderPosition="AUTOMATIC"
         leaderWidth="20"
         maxHeight="500"

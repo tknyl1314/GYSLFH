@@ -10,21 +10,18 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.titan.BaseViewModel;
-import com.titan.data.source.remote.RetrofitHelper;
+import com.titan.data.source.DataRepository;
+import com.titan.data.source.DataSource;
 import com.titan.gyslfh.TitanApplication;
-import com.titan.model.ResultModel;
 import com.titan.newslfh.BR;
-
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import com.titan.util.LoadDataScrollController;
 
 /**
  * Created by whs on 2017/5/3
+ * 接警信息列表
  */
 
-public class AlarmInfoViewModel extends BaseViewModel {
+public class AlarmInfoViewModel extends BaseViewModel implements LoadDataScrollController.OnRecycleRefreshListener {
 
     public final ObservableList<AlarmInfoModel.AlarmInfo> mAlarmInfos = new ObservableArrayList<>();
 
@@ -37,16 +34,24 @@ public class AlarmInfoViewModel extends BaseViewModel {
     //empty iocn
     public final ObservableField<Drawable> noItemIconRes = new ObservableField<>();
 
-    private AlarmInfoItemNav mAlarmInfoItemNav;
-
-    private Context mContext;
+    private AlarmInfoListInterface mAlarmInfoItemNav;
 
 
-    public AlarmInfoViewModel(Context context, AlarmInfoItemNav alarmInfoItemNav){
+    //请求页码数
+    private int pageindex=1;
+    //最大请求页面数
+    private int maxpageindex=0;
+    //每次请求条数
+    private final  int pagecount=10;
+    //查询参数
+    private String querystr="";
+
+
+    public AlarmInfoViewModel(Context context, AlarmInfoListInterface alarmInfoItemNav,DataRepository dataRepository){
 
         this.mAlarmInfoItemNav=alarmInfoItemNav;
         this.mContext=context;
-
+        this.mDataRepository=dataRepository;
 
     }
 
@@ -58,69 +63,93 @@ public class AlarmInfoViewModel extends BaseViewModel {
     }
 
 
+    /**
+     * 首次加载
+     */
     public void start() {
-        loadData(true);
+        pageindex=1;
+        loadData(0,true);
+        //mAlarmInfoItemNav.refreshData(mAlarmInfos);
     }
 
     /**
      * 加载数据
      */
-    public void loadData(final boolean showLoadingUI) {
+    public void loadData(final int type, boolean showLoadingUI) {
         if(showLoadingUI) {
             dataLoading.set(true);
 
         }
-        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getAlarmInfo("", TitanApplication.mUserModel.getDqid(),"1","10");
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        dataLoading.set(false);
+        mDataRepository.getAlarmInfoList(querystr, TitanApplication.mUserModel.getDqid(), pageindex + "", pagecount+"", new DataSource.saveCallback() {
+            @Override
+            public void onFailure(String info) {
+                dataLoading.set(false);
+                Log.e("error",info.toString());
+                snackbarText.set("获取数据异常："+info);
+            }
 
-                        //setupRefreshLayout();
-                        //intiRecyclerView(alarmInfoList);
-                    }
+            @Override
+            public void onSuccess(String data) {
+                dataLoading.set(false);
+                Gson gson=new Gson();
+                AlarmInfoModel infos=gson.fromJson(data,AlarmInfoModel.class);
+                totalcount.set(Integer.valueOf(infos.getRecordCount()));
+                //获取页数
+                maxpageindex= (int) Math.ceil(totalcount.get().doubleValue()/pagecount);
+                switch (type){
 
-                    @Override
-                    public void onError(Throwable e) {
+                    case 0:
+                        //初始化
+                        mAlarmInfos.clear();
 
-                        dataLoading.set(false);
-
-                        Log.e("error",e.toString());
-                        snackbarText.set("获取数据异常："+e);
-                    }
-
-                    @Override
-                    public void onNext(String json) {
-                        Gson gson=new Gson();
-                        ResultModel<AlarmInfoModel> resultModel=gson.fromJson(json, ResultModel.class);
-                        if(resultModel.getResult()){
-                            AlarmInfoModel infos=gson.fromJson(gson.toJson(resultModel.getData()),AlarmInfoModel.class);
-                            totalcount.set(Integer.valueOf(infos.getRecordCount()));
-                            //Log.e("Titan",totalcount+"");
-                            mAlarmInfos.clear();
-
-                            /*for (AlarmInfoModel.AlarmInfo alarminfo: infos.getDs()) {
-                               mAlarmInfos.add(new AlarmInfoItemViewModel(alarminfo))  ;
-                            }*/
-                            mAlarmInfos.addAll(infos.getDs());
-                            snackbarText.set("获取数据"+totalcount.get());
-
-                            notifyPropertyChanged(BR.empty); // It's a @Bindable so update manually
-
-                            //notifyChange();
-
-                            //mAlarmInfos.add( infos.getDs());
-                            //mAlarmInfos= (ObservableList<AlarmInfoModel.AlarmInfo>) infos.getDs();
-
-
+                    case 1:
+                        //加载更多
+                        mAlarmInfos.addAll(infos.getDs());
+                        if(type==0){
+                            snackbarText.set("已是最新");
                         }else {
-                            snackbarText.set("获取数据失败："+resultModel.getMessage());
-                           // Toast.makeText(getActivity(), "获取数据失败", Toast.LENGTH_SHORT).show();
+                            snackbarText.set("总共有"+totalcount.get()+"条记录  "+"已加载"+mAlarmInfos.size()+"条");
                         }
 
-                    }
-                });
+                        break;
+
+                }
+                //mAlarmInfos.clear();
+                //mAlarmInfos.addAll(infos.getDs());
+
+                //snackbarText.set("总共有"+totalcount.get()+"条记录  "+"已加载"+mAlarmInfos.size()+"条");
+                notifyPropertyChanged(BR.empty);
+                //停止更新
+                mAlarmInfoItemNav.stopUpdate();
+
+            }
+        });
+    }
+
+    /**
+     * 下拉刷新(更新UI)
+     */
+    @Override
+    public void refresh() {
+        pageindex=1;
+        loadData(0,true);
+
+
+    }
+
+    /**
+     * 加载更多
+     */
+    @Override
+    public void loadMore() {
+
+        pageindex++;
+        if(pageindex>maxpageindex){
+            snackbarText.set("已经是最后了");
+            return;
+        }
+        loadData(1,true);
+
+
     }
 }

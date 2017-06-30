@@ -24,7 +24,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
+# 个推
 -dontwarn com.igexin.**
 -keep class com.igexin.** { *; }
 -keep class org.json.** { *; }

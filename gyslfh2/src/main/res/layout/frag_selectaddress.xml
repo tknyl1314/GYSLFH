@@ -1,0 +1,40 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.titan.gis.selectaddress.SelectAddressFragment">
+   <data>
+
+      <variable
+          name="viewmodel"
+          type="com.titan.gis.selectaddress.SelectAddressViewModel" />
+   </data>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+   <com.baidu.mapapi.map.MapView
+       android:id="@+id/mapview"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+   </com.baidu.mapapi.map.MapView>
+   <ImageView
+       android:id="@+id/iv_add"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center"
+       android:src="@drawable/ic_add"/>
+   <Button
+       android:id="@+id/btn_confirmloc"
+       android:layout_gravity="center|bottom"
+       style="@style/btn_commit"
+       android:text="@string/confirm"
+       android:layout_width="200dp"
+       android:layout_height="50dp" />
+
+   <!-- <com.esri.arcgisruntime.mapping.view.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.esri.arcgisruntime.mapping.view.MapView>-->
+
+
+
+</FrameLayout>
+</layout>

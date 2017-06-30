@@ -50,7 +50,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
               bindService(intent,coon,Service.BIND_AUTO_CREATE)*/
 
               //上传轨迹点
-             Intent startServiceIntent = new Intent(context,MyIntentService.class);
+              Intent startServiceIntent = new Intent(context,MyIntentService.class);
  		    Bundle bundle = new Bundle();
  		    bundle.putString("name", "upPointHistory");
  		    startServiceIntent.putExtras(bundle);

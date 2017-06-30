@@ -10,8 +10,6 @@ import com.hikvision.netsdk.RealPlayCallBack;
 
 import org.MediaPlayer.PlayM4.Player;
 
-import static com.titan.push.GeTuiPushService.TAG;
-
 /**
  * Created by whs on 2017/6/1
  * 海康视频监控帮助类
@@ -19,14 +17,20 @@ import static com.titan.push.GeTuiPushService.TAG;
 
 public class HikVisionUtil {
 
-    private static  int m_iLogID = -1; // return by NET_DVR_Login_v30
+    private static final String TAG ="HiKVision";
+    //当前通道号
+    private int m_td;
+
+    private int m_iLogID = -1; // return by NET_DVR_Login_v30
     private int m_iPlayID = -1; // return by NET_DVR_RealPlay_V30
     private int m_iPlaybackID = -1; // return by NET_DVR_PlayBackByTime
-    private static NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = null;
+    private  NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = null;
 
-    public static int m_iPort = -1; // play port
-    private static int m_iStartChan = 0; // start channel no
-    private static int m_iChanNum = 0; // channel number
+    private    int m_iPort = -1; // play port
+    //起始通道
+    private    int m_iStartChan = 0; // start channel no
+    //通道数量
+    private  int m_iChanNum = 0; // channel number
 
     public HikVisionUtil() {
     }
@@ -38,7 +42,7 @@ public class HikVisionUtil {
      * @brief SDK init
      * @return true - success;false - fail
      */
-    public static boolean initSdk()
+    public  boolean initSdk()
     {
         // init net sdk
         if (!HCNetSDK.getInstance().NET_DVR_Init())
@@ -52,10 +56,66 @@ public class HikVisionUtil {
         return true;
     }
 
+    public  int getM_iLogID() {
+        return m_iLogID;
+    }
+
+    public  void setM_iLogID(int m_iLogID) {
+        this.m_iLogID = m_iLogID;
+    }
+
+    public int getM_iPlayID() {
+        return m_iPlayID;
+    }
+
+    public void setM_iPlayID(int m_iPlayID) {
+        this.m_iPlayID = m_iPlayID;
+    }
+
+    public int getM_iPlaybackID() {
+        return m_iPlaybackID;
+    }
+
+    public void setM_iPlaybackID(int m_iPlaybackID) {
+        this.m_iPlaybackID = m_iPlaybackID;
+    }
+
+    public  NET_DVR_DEVICEINFO_V30 getM_oNetDvrDeviceInfoV30() {
+        return m_oNetDvrDeviceInfoV30;
+    }
+
+    public static void setM_oNetDvrDeviceInfoV30(NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30) {
+        m_oNetDvrDeviceInfoV30 = m_oNetDvrDeviceInfoV30;
+    }
+
+    public int getM_iPort() {
+        return m_iPort;
+    }
+
+    public void setM_iPort(int m_iPort) {
+        this.m_iPort = m_iPort;
+    }
+
+    public int getM_iStartChan() {
+        return m_iStartChan;
+    }
+
+    public void setM_iStartChan(int m_iStartChan) {
+        this.m_iStartChan = m_iStartChan;
+    }
+
+    public int getM_iChanNum() {
+        return m_iChanNum;
+    }
+
+    public void setM_iChanNum(int m_iChanNum) {
+        this.m_iChanNum = m_iChanNum;
+    }
+
     /**
      * 登陆硬盘录像机
      */
-    public static boolean loginDVR(String ip,int port,String username,String psd)
+    public   boolean loginDVR(String ip,int port,String username,String psd)
     {
         try
         {
@@ -109,7 +169,7 @@ public class HikVisionUtil {
 
     }
 
-    private static int loginDevice(String ip, int port, String username, String psd)
+    private  int loginDevice(String ip, int port, String username, String psd)
     {
         // get instance
         m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
@@ -158,13 +218,14 @@ public class HikVisionUtil {
     /**
      * @return exception instance
      */
-    private static ExceptionCallBack getExceptiongCbf()
+    private  ExceptionCallBack getExceptiongCbf()
     {
         ExceptionCallBack oExceptionCbf = new ExceptionCallBack()
         {
             public void fExceptionCallBack(int iType, int iUserID, int iHandle)
             {
                 System.out.println("recv exception, type:" + iType);
+                Log.e(TAG,"recv exception, type:" + iType);
             }
         };
         return oExceptionCbf;
@@ -221,18 +282,33 @@ public class HikVisionUtil {
         Log.i(TAG, "m_iStartChan:" + m_iStartChan);
 
         NET_DVR_PREVIEWINFO previewInfo = new NET_DVR_PREVIEWINFO();
+
+        //HCNetSDK.getInstance().NET_DVR_GetDVRConfig()
+
         //通道号，目前设备模拟通道号从1开始，数字通道的起始通道号通过NET_DVR_GetDVRConfig（配置命令NET_DVR_GET_IPPARACFG_V40）获取（dwStartDChan）。
-        previewInfo.lChannel = m_iStartChan;
-        if(TD>0){
+        /*previewInfo.lChannel = m_iStartChan+13;
+        previewInfo.lChannel = m_iStartChan+TD;*/
+        /*previewInfo.lChannel = TD + 32;
+        m_td=TD+32;*/
+        previewInfo.lChannel = TD+32;
+        m_td=previewInfo.lChannel;
+        //previewInfo.lChannel = TD;
+
+        /*if(TD>0){
             previewInfo.lChannel = TD + 32;
-            m_iStartChan = TD+ 32;
-           /* nomor_port=m_oPort;
-            nomor_td=TD;*/
-        }
+            //m_iStartChan = TD+ 32;
+           // m_iStartChan=0;
+            *//*previewInfo.lChannel = TD;
+            m_iStartChan = TD;*//*
+           *//* nomor_port=m_oPort;
+            nomor_td=TD;*//*
+        }*/
 
 
-        previewInfo.dwStreamType = 1; // 码流类型：0-主码流，1-子码流，2-码流3，3-虚拟码流，以此类推
+        previewInfo.dwStreamType = 0; // 码流类型：0-主码流，1-子码流，2-码流3，3-虚拟码流，以此类推
         previewInfo.bBlocked = 0;//0- 非阻塞取流，1- 阻塞取流。如果阻塞取流，SDK内部connect失败将会有5s的超时才能够返回，不适合于轮询取流操作。
+        //连接方式：0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RTP/HTTP
+        previewInfo.dwLinkMode =0;
         // HCNetSDK start preview
         m_iPlayID = HCNetSDK.getInstance().NET_DVR_RealPlay_V40(m_iLogID,
                 previewInfo, callback);
@@ -245,8 +321,7 @@ public class HikVisionUtil {
             return;
         }
 
-        Log.i(TAG,
-                "NetSdk Play sucess ***********************3***************************");
+        Log.i(TAG, "NetSdk Play sucess ***********************3***************************");
         //m_oPreviewBtn.setText("停止预览");
     }
 
@@ -270,7 +345,7 @@ public class HikVisionUtil {
         stopSinglePlayer();
     }
 
-    private void stopSinglePlayer()
+    public  void stopSinglePlayer()
     {
         Player.getInstance().stopSound();
         // player stop play
@@ -294,19 +369,36 @@ public class HikVisionUtil {
     }
 
     /**
+     * @fn Cleanup
+     * @author zhuzhenlei
+     * @brief cleanup
+     *            [in]
+     *            [out]
+     * @return NULL
+     */
+    public  void Cleanup()
+    {
+        // release player resource
+
+        Player.getInstance().freePort(m_iPort);
+        m_iPort = -1;
+
+        // release net SDK resource
+        HCNetSDK.getInstance().NET_DVR_Cleanup();
+    }
+
+    /**
      * 云台开始向左
      * @param PTZCommand
      * @param start 0:开始 1:结束
      * @return
      */
-    public static boolean PTZControl (int PTZCommand,int start) {
+    public  boolean PTZControl (int PTZCommand,int start) {
         if (!HCNetSDK.getInstance().NET_DVR_PTZControl_Other(
-                m_iLogID, m_iStartChan, PTZCommand, 0))
+                m_iLogID, m_td, PTZCommand, start))
         {
-            Log.e(TAG,
-                    "start PAN_RIGHT failed with error code: "
-                            + HCNetSDK.getInstance()
-                            .NET_DVR_GetLastError());
+            Log.e(TAG, "start PAN_RIGHT failed with error code: " + HCNetSDK.getInstance().NET_DVR_GetLastError());
+
             return false;
         } else
         {

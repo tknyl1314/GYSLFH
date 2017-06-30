@@ -21,11 +21,14 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.baidu.navisdk.adapter.BNRoutePlanNode;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
+import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gis.WeatherUtil;
@@ -34,8 +37,11 @@ import com.titan.gyslfh.layercontrol.ILayerControl;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
 import com.titan.gyslfh.login.LoginActivity;
+import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.model.FireRiskModel;
+import com.titan.navi.BNDemoGuideActivity;
+import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
@@ -56,6 +62,14 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     private LocationService locationService;
 
     private DrawerLayout mDrawerLayout;
+
+    public MainViewModel getmViewModel() {
+        return mViewModel;
+    }
+
+    public void setmViewModel(MainViewModel mViewModel) {
+        this.mViewModel = mViewModel;
+    }
 
     private MainViewModel mViewModel;
 
@@ -78,9 +92,20 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
 
     SharedPreferences mSharedPreferences;
     //主界面
-    private  MainFragment mainFragment;
+    public   MainFragment mainFragment;
     //图层控制
     private LayerControlFragment layerControlFragment;
+
+    public BaiduNavi getmBaiduNavi() {
+        return mBaiduNavi;
+    }
+
+    public void setmBaiduNavi(BaiduNavi mBaiduNavi) {
+        this.mBaiduNavi = mBaiduNavi;
+    }
+
+    //导航
+    public BaiduNavi mBaiduNavi;
 
 
     //构建
@@ -98,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TitanApplication.getInstance().addActivity(this);
+
+        //测试
+        String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
+        TitanApplication.setmUserModel(new Gson().fromJson(user,UserModel.class));
 
         TitanApplication.mainActivity=this;
         mContext=this;
@@ -122,7 +151,12 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         getPersimmions();
 
 
+        //initNavi();
+
+
     }
+
+
 
     @TargetApi(23)
     private void getPersimmions() {
@@ -208,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
      * 设置点击事件
      * @param navigationView
      */
-    private void setupDrawerContent(NavigationView navigationView) {
+    /*private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -235,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
                         return true;
                     }
                 });
-    }
+    }*/
 
     @NonNull
     private MainFragment findOrCreateViewFragment() {
@@ -414,75 +448,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     }
 
 
-   /* *//**
-     * 一键报警
-     *//*
-    @Override
-    public void onAlarm() {
-        Intent intent =new Intent(mContext,UpAlarmActivity.class);
-        mContext.startActivity(intent);
-    }
-
-    *//**
-     * 接警信息
-     *//*
-    @Override
-    public void onAlarmInfo() {
-        Intent intent =new Intent(mContext,AlarmInfoActivity.class);
-        mContext.startActivity(intent);
-    }
-
-    *//**
-     * 回警
-     *//*
-    @Override
-    public void onBackAlarm() {
-        Intent intent =new Intent(mContext,BackAlarmActivity.class);
-        mContext.startActivity(intent);
-    }
-
-    *//**
-     * 定位到当前位置
-     *//*
-    @Override
-    public void onLocation(Point currentPoint) {
-        mainFragment.mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
-
-        mainFragment.mLocationDisplay.startAsync();
-    }
-
-
-
-    @Override
-    public void showToast(String info, int type) {
-        Toast.makeText(mContext, info, type).show();
-    }
-
-    *//**
-     * 绘制轨迹
-     * @param pointList
-     *//*
-    @Override
-    public void showTrackLine(List<Point> pointList) {
-        if(pointList.size()==1){
-            try{
-
-                PointCollection pointCollection=new PointCollection((Iterable<Point>) pointList.iterator());
-                lineBuilder = new PolylineBuilder(pointCollection);
-
-            }catch(Exception e) {
-                Log.e("TITAN",e.toString());
-                ToastUtil.setToast(mContext,"轨迹异常："+e);
-            }
-        }else {
-            lineBuilder.addPoint(pointList.get(pointList.size()-1));
-        }
-        if(lineBuilder!=null){
-            mainFragment.addTrackLineGraphic(lineBuilder.toGeometry(),lineSymbol);
-
-        }
-    }*/
-
 
     /**
      * 图层控制
@@ -590,5 +555,42 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         super.onResume();
         //mMapView.resume();
     }
+
+    public class RoutePlanListener implements BaiduNaviManager.RoutePlanListener {
+
+        private BNRoutePlanNode mBNRoutePlanNode = null;
+
+        public RoutePlanListener(BNRoutePlanNode node) {
+            mBNRoutePlanNode = node;
+        }
+
+        @Override
+        public void onJumpToNavigator() {
+            /*
+             * 设置途径点以及resetEndNode会回调该接口
+             */
+
+            /*for (Activity ac : activityList) {
+
+                if (ac.getClass().getName().endsWith("BNDemoGuideActivity")) {
+
+                    return;
+                }
+            }*/
+            Intent intent = new Intent(mContext, BNDemoGuideActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BaiduNavi.ROUTE_PLAN_NODE, mBNRoutePlanNode);
+            intent.putExtras(bundle);
+            startActivity(intent);
+
+        }
+
+        @Override
+        public void onRoutePlanFailed() {
+            // TODO Auto-generated method stub
+            Toast.makeText(mContext, "计算路径失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

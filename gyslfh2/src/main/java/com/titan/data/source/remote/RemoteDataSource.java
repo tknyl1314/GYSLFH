@@ -8,9 +8,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.titan.data.source.DataSource;
 import com.titan.gyslfh.TitanApplication;
+import com.titan.gyslfh.alarminfo.AlarmInfoDetailModel;
 import com.titan.gyslfh.alarminfo.AlarmInfoModel;
 import com.titan.gyslfh.backalarm.BackAlarmModel;
 import com.titan.gyslfh.login.UserModel;
+import com.titan.gyslfh.monitor.MonitorModel1;
 import com.titan.model.FireRiskModel;
 import com.titan.model.ResultModel;
 import com.titan.model.TrackPoint;
@@ -26,7 +28,7 @@ import rx.schedulers.Schedulers;
  * Created by whs on 2017/5/18
  */
 
-public class RemoteDataSource implements DataSource {
+public class RemoteDataSource implements DataSource,RemotDataSource {
     private Context mContext;
     private static RemoteDataSource INSTANCE;
 
@@ -41,12 +43,6 @@ public class RemoteDataSource implements DataSource {
         }
         return INSTANCE;
     }
-
-
-
-
-
-
 
     @Override
     public void uplaodAlarmInfo(String infojson, final uploadCallback callback) {
@@ -176,14 +172,14 @@ public class RemoteDataSource implements DataSource {
                         //callback.onSuccess(json);
 
                         try {
-                            ResultModel<UserModel> resultModel=new Gson().fromJson(json, ResultModel.class);
+                            ResultModel<AlarmInfoDetailModel> resultModel=new Gson().fromJson(json, ResultModel.class);
                             if(resultModel.getResult()){
                                 callback.onSuccess(new Gson().toJson(resultModel.getData()));
                             }else {
-                                callback.onFailure(mContext.getString(R.string.error_getalarminfodetail)+resultModel.getMessage());
+                                callback.onFailure(mContext.getString(R.string.error_getbackalarm)+resultModel.getMessage());
                             }
                         }catch (JsonSyntaxException e){
-                            callback.onFailure(mContext.getString(R.string.error_getalarminfodetail)+e.toString());
+                            callback.onFailure(mContext.getString(R.string.error_getbackalarm)+e.toString());
                         }
                         //callback.onSuccess(json);
 
@@ -263,10 +259,6 @@ public class RemoteDataSource implements DataSource {
                 });
     }
 
-    @Override
-    public void getDvrInfo() {
-
-    }
 
     public void getFireRiskInfo(String date, String hour, String ThematicType, final getWeatherCallback callback) {
 
@@ -292,5 +284,41 @@ public class RemoteDataSource implements DataSource {
                 });
 
 
+    }
+
+    @Override
+    public void getDvrInfo(String str, final getCallback callback) {
+        //String json=new Gson().toJson(backAlarmModel,BackAlarmModel.class);
+        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getDvrInfo(str);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+
+                        Log.e("error",e.toString());
+                        callback.onFailure(e.toString());
+                        //snackbarText.set("获取数据异常："+e);
+                    }
+
+                    @Override
+                    public void onNext(String json) {
+                        Gson gson=new Gson();
+                        ResultModel<MonitorModel1> resultModel=gson.fromJson(json, ResultModel.class);
+                        if(resultModel.getResult()){
+                            callback.onSuccess(new Gson().toJson(resultModel.getData()));
+                            //AlarmInfoModel infos=gson.fromJson(gson.toJson(resultModel.getData()),AlarmInfoModel.class);
+
+                        }else {
+                            callback.onFailure(resultModel.getMessage());
+                        }
+
+                    }
+                });
     }
 }

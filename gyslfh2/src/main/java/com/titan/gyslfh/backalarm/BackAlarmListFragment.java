@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.titan.Injection;
-import com.titan.gyslfh.alarminfo.AlarmInfoItemNav;
+import com.titan.gyslfh.alarminfo.AlarmInfoListInterface;
 import com.titan.gyslfh.alarminfo.AlarmInfoModel;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.FragAlarminfolistBinding;
@@ -32,7 +32,7 @@ import java.util.List;
  * Use the {@link BackAlarmListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BackAlarmListFragment extends Fragment  implements BackAlarmInterface,AlarmInfoItemNav, LoadDataScrollController.OnRecycleRefreshListener{
+public class BackAlarmListFragment extends Fragment  implements BackAlarmInterface,AlarmInfoListInterface, LoadDataScrollController.OnRecycleRefreshListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -233,6 +233,12 @@ public class BackAlarmListFragment extends Fragment  implements BackAlarmInterfa
     @Override
     public void openAlarmInfoDetails(AlarmInfoModel.AlarmInfo alarmInfo) {
         addFragment(alarmInfo);
+    }
+
+
+    @Override
+    public void stopUpdate() {
+
     }
 
     private void addFragment(AlarmInfoModel.AlarmInfo alarmInfo) {

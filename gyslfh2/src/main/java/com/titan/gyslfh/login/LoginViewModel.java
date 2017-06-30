@@ -45,8 +45,8 @@ public class LoginViewModel extends BaseObservable  {
      */
     public  void onLongin(){
         if(NetUtil.checkNetState(mContext)){
-            username.set("byq");
-            password.set("byq");
+           /* username.set("admin");
+            password.set("admin");*/
             if(TextUtils.isEmpty(username.get())||TextUtils.isEmpty(password.get())){
                 mLogin.showToast(mContext.getString(R.string.error_loginempty),0);
                 return;
@@ -133,5 +133,14 @@ public class LoginViewModel extends BaseObservable  {
     }
 
 
-
+    /**
+     * 初始化
+     */
+    public void onStart() {
+        isremember.set(TitanApplication.mSharedPreferences.getBoolean(TitanApplication.KEYNAME_REMEMBER,false));
+        if(isremember.get()){
+            username.set(TitanApplication.mSharedPreferences.getString(TitanApplication.KEYNAME_USERNAME,""));
+            password.set(TitanApplication.mSharedPreferences.getString(TitanApplication.KEYNAME_PSD,""));
+        }
+    }
 }

@@ -46,12 +46,18 @@ public interface RetrofitService {
     Observable<String> getUnDealAlarmCount(@Query("dqid") String dqid);
 
     /*获取火警详细信息*/
-    @GET("/FireServices.asmx/getUnReturnAlarmRecords")
+    /*@GET("/FireServices.asmx/getUnReturnAlarmRecords")
+    Observable<String> getAlarmInfoDetail(@Query("receiptid") String alarmid);*/
+
+    @GET("/FireServices.asmx/getDetailAlarmMessage")
     Observable<String> getAlarmInfoDetail(@Query("receiptid") String alarmid);
 
     /*获取火警详细信息*/
     @GET("/FireServices.asmx/backAlarm")
     Observable<String> onBackAlarm(@Query("jsonText") String backalarm);
+    /*获取监控点对应的硬盘录像机信息*/
+    @GET("/FireServices.asmx/getMonitorTD")
+    Observable<String> getDvrInfo(@Query("jsonText") String backalarm);
 
 
 

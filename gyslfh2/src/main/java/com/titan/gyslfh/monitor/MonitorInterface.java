@@ -6,4 +6,9 @@ package com.titan.gyslfh.monitor;
 
 public interface MonitorInterface {
     void processRealData(int i, int iDataType, byte[] pDataBuffer, int iDataSize, int streamRealtime);
+
+    /**
+     * 视频预览
+     */
+    void onPreview();
 }

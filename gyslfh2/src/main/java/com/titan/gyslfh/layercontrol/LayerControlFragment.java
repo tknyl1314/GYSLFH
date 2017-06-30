@@ -105,15 +105,10 @@ public class LayerControlFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        intiRadioGroup();
         intiRecyclerView();
     }
 
-    private void intiRadioGroup() {
-       //Drawable d= mViewDataBinding.rbMapfirerisk.getCompoundDrawables()[1];
-       // d.set
-    }
+
 
     /**
      *

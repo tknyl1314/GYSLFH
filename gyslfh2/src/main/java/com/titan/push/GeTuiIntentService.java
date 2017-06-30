@@ -38,6 +38,11 @@ public class GeTuiIntentService extends GTIntentService {
         Log.d(TAG, "onReceiveServicePid -> " + pid);
     }
 
+    /**
+     * 获取接收到到数据
+     * @param context
+     * @param msg
+     */
     @Override
     public void onReceiveMessageData(Context context, GTTransmitMessage msg) {
         String appid = msg.getAppid();
@@ -156,6 +161,7 @@ public class GeTuiIntentService extends GTIntentService {
         String result = feedbackCmdMsg.getResult();
         long timestamp = feedbackCmdMsg.getTimeStamp();
         String cid = feedbackCmdMsg.getClientId();
+        //feedbackCmdMsg.get
 
         Log.d(TAG, "onReceiveCommandResult -> " + "appid = " + appid + "\ntaskid = " + taskid + "\nactionid = " + actionid + "\nresult = " + result
                 + "\ncid = " + cid + "\ntimestamp = " + timestamp);

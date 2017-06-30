@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -23,7 +25,10 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+import com.titan.gis.selectaddress.SelectAddressFragment;
+import com.titan.gis.selectaddress.SelectAddressViewModel;
 import com.titan.model.Image;
+import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.UpalarmFragBinding;
 import com.titan.util.SnackbarUtils;
@@ -32,10 +37,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by whs on 2017/5/17
+ * 火警上报／接警录入
  */
 
 public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetListener {
@@ -91,8 +99,6 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
         setupSnackbar();
 
         intiRecyclerView();
-
-
 
         getRequeatPermission();
 
@@ -290,18 +296,24 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
      */
     @Override
     public void showOriginDialog() {
+
         new MaterialDialog.Builder(getActivity())
                 .title(getActivity().getString(R.string.origin))
                 .items((CharSequence[]) getActivity().getResources().getStringArray(R.array.alarm_source))
-                .cancelable(false)
+                .cancelable(true)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                        mViewModel.alarmsouce.set(""+position);
+                        Map<String,Object> map=new HashMap<>();
+                        map.put("id", position+1);
+                        map.put("name",text);
+                        //map.put(1, (String) text);
+                        mViewModel.orgin.set(map);
                     }
                 })
                 .build()
                 .show();
+
     }
 
     /**
@@ -322,6 +334,35 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
                 .build()
                 .show();
 
+    }
+
+    /**
+     * 选择地址
+     */
+    @Override
+    public void showSelectAddress() {
+        replaceFragment(mViewModel.titanloc.get());
+
+        //replaceFragment();
+
+
+    }
+
+    /**
+     * 界面跳转
+     * @param location
+     */
+    private void replaceFragment(TitanLocation location) {
+        FragmentManager manager =getFragmentManager();
+        SelectAddressFragment selectAddressFragment =  SelectAddressFragment.newInstance(location);
+        SelectAddressViewModel viewModel= new SelectAddressViewModel(getActivity(),selectAddressFragment);
+        selectAddressFragment.setViewModel(viewModel);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.content_frame, selectAddressFragment);
+        transaction.addToBackStack(null);
+        //设置过度动画
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
     }
 
     @Override

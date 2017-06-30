@@ -14,11 +14,14 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.data.source.local.GreenDaoManager;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.gyslfh.main.MainActivity;
 import com.titan.loction.baiduloc.LocationService;
+import com.titan.model.FireInfo;
+import com.titan.push.PushMsg;
 import com.titan.util.NetUtil;
 
 import java.util.Arrays;
@@ -243,8 +246,11 @@ public class TitanApplication extends Application{
                 //接受到信息
                 case 0:
                     if (mainActivity != null) {
+                        //透传数据
                         payloadData=msg.obj.toString().trim();
                         if(mainActivity!=null){
+                            PushMsg<FireInfo> pushMsg=new Gson().fromJson(payloadData, PushMsg.class);
+                            mainActivity.mainFragment.showFirePt(pushMsg.getCONTENT());
                             /*if(MainActivity.tv_msg.getVisibility()==View.GONE){
                                 MainActivity.tv_msg.setVisibility(View.VISIBLE);
                                 MainActivity.tv_msg.setText(msg.obj.toString());
@@ -253,12 +259,6 @@ public class TitanApplication extends Application{
 
                             //MainActivity.tv_msg.append(msg.obj + "\n");
                         }
-
-                      /*  payloadData.append((String) msg.obj);
-                        payloadData.append("\n");
-                        if (GetuiSdkDemoActivity.tLogView != null) {
-                            GetuiSdkDemoActivity.tLogView.append(msg.obj + "\n");
-                        }*/
                     }
                     break;
                 //获取clientid

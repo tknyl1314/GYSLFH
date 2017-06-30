@@ -6,17 +6,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.titan.Injection;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.FragmentAlarmInfoBinding;
 import com.titan.newslfh.databinding.ItemAlarminfoBinding;
 import com.titan.util.LoadDataScrollController;
+import com.titan.util.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ import java.util.List;
  * Use the {@link AlarmInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlarmInfoFragment extends Fragment implements LoadDataScrollController.OnRecycleRefreshListener{
+public class AlarmInfoFragment extends Fragment implements AlarmInfoListInterface  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,6 +48,8 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
     private  List<AlarmInfoModel.AlarmInfo> alarmInfoList=null;
 
     private FragmentAlarmInfoBinding mViewDataBinding;
+
+    private  RVAdapter_listobject mAdapter;
 
 
     // TODO: Rename and change types of parameters
@@ -91,11 +96,11 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
 
     /**
-     *
+     * 初始化
      */
     private void intiRecyclerView() {
 
-        RVAdapter_listobject mAdapter = new RVAdapter_listobject<>(getActivity(),new ArrayList<AlarmInfoModel.AlarmInfo>(0), (AlarmInfoItemNav) getActivity());
+        mAdapter = new RVAdapter_listobject<>(getActivity(),new ArrayList<AlarmInfoModel.AlarmInfo>(0),this);
 
         mViewDataBinding.rclAlarminfo.setAdapter(mAdapter);
 
@@ -105,7 +110,6 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
 
     }
-
 
 
     @Override
@@ -128,8 +132,8 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
                 new android.databinding.Observable.OnPropertyChangedCallback() {
                     @Override
                     public void onPropertyChanged(android.databinding.Observable observable, int i) {
-                       // SnackbarUtils.showSnackbar(getView(), mTasksViewModel.getSnackbarText());
-                        Toast.makeText(getActivity(),mViewModel.snackbarText.get(),Toast.LENGTH_SHORT).show();
+                        SnackbarUtils.showSnackbar(getView(), mViewModel.getSnackbarText());
+                        //Toast.makeText(getActivity(),mViewModel.snackbarText.get(),Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -171,17 +175,78 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
         this.mViewModel=mViewModel;
     }
 
-    @Override
+    /**
+     *
+     */
+    /*@Override
     public void refresh() {
-        //mViewModel.loadData(true);
+        mViewModel.setPageindex(1);
+        mViewModel.loadData(0,true);
+    }*/
+
+    /**
+     *
+     */
+    /*@Override
+    public void loadMore() {
+        //pageindex++;
+        mViewModel.loadData(1,true);
+
+    }*/
+
+    @Override
+    public void openAlarmInfoDetails(AlarmInfoModel.AlarmInfo alarmInfo) {
+        replaceFragment(alarmInfo.getID());
+    }
+
+    private void replaceFragment(String alarmid) {
+        FragmentManager manager =getFragmentManager();
+        AlarmDetailFragment alarmDetailFragment =  AlarmDetailFragment.newInstance(alarmid);
+        AlarmDetailViewModel viewModel= new AlarmDetailViewModel(getActivity(),alarmDetailFragment, Injection.provideDataRepository(getActivity()));
+        alarmDetailFragment.setViewModel(viewModel);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.content_frame, alarmDetailFragment);
+        transaction.addToBackStack(null);
+        //设置过度动画
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
+    }
+
+    /*@Override
+    public void loadMoreData(List<AlarmInfoModel.AlarmInfo> alarmInfos) {
+        try{
+            if(alarmInfos.size()>0){
+                mAdapter.add(alarmInfos);
+                mController.setLoadDataStatus(false);
+            }
+        }catch(Exception e) {
+             mViewModel.snackbarText.set("数据加载异常"+e.toString());
+        }
 
 
     }
 
     @Override
-    public void loadMore() {
+    public void refreshData(List<AlarmInfoModel.AlarmInfo> alarmInfos) {
+       try{
+           if(alarmInfos.size()>0){
+               mAdapter.refresh(alarmInfos);
+               mController.setLoadDataStatus(false);
+           }
 
+       }catch(Exception e) {
+           mViewModel.snackbarText.set("数据刷新异常"+e.toString());
+       }
+
+
+
+    }*/
+
+    @Override
+    public void stopUpdate() {
+        mController.setLoadDataStatus(false);
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -204,7 +269,7 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
         /**
          * 创建控制器，同时使当前activity实现数据监听回调接口
          */
-        mController = new LoadDataScrollController(this);
+        mController = new LoadDataScrollController(mViewModel);
         mViewDataBinding.srl.setOnRefreshListener(mController);
 
     }
@@ -212,11 +277,11 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
     public static class RVAdapter_listobject<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private  List<T> listobj;
-        private  AlarmInfoItemNav mAlarmInfoItemNav;
+        private  AlarmInfoListInterface mAlarmInfoItemNav;
         private  Context mContext;
 
 
-        public RVAdapter_listobject(Context context,List<T> listdata ,AlarmInfoItemNav alarmInfoItemNav){
+        public RVAdapter_listobject(Context context,List<T> listdata ,AlarmInfoListInterface alarmInfoItemNav){
             this.mContext=context;
             this.listobj=listdata;
             this.mAlarmInfoItemNav=alarmInfoItemNav;
@@ -259,7 +324,7 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
 
             AlarmInfoModel.AlarmInfo alarminfo= (AlarmInfoModel.AlarmInfo) listobj.get(position);
             RVAdapter_listobject.ViewHolder holder= (ViewHolder) viewHolder;
-            final AlarmInfoItemViewModel viewmodel = new AlarmInfoItemViewModel(mContext,mAlarmInfoItemNav);
+            final AlarmInfoItemViewModel viewmodel = new AlarmInfoItemViewModel(mContext,mAlarmInfoItemNav, Injection.provideDataRepository(mContext));
             //holder.getBinding().setVariable(BR.uploadinfo,listobj.get(position));
             //holder.getBinding().executePendingBindings();
             viewmodel.alarminfo.set(alarminfo);
@@ -297,6 +362,7 @@ public class AlarmInfoFragment extends Fragment implements LoadDataScrollControl
                 listobj.clear();
             }
             listobj.addAll(newlawlist);
+            //snackbarText.set("总共有"+totalcount.get()+"条记录  "+"已加载"+mAlarmInfos.size()+"条");
             notifyDataSetChanged();
         }
 

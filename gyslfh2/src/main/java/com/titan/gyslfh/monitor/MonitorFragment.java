@@ -3,6 +3,7 @@ package com.titan.gyslfh.monitor;
 import android.content.Context;
 import android.databinding.Observable;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,7 +35,7 @@ import org.MediaPlayer.PlayM4.Player;
  */
 public class MonitorFragment extends Fragment implements MonitorInterface, SurfaceHolder.Callback,View.OnTouchListener{
 
-    private static final String TAG ="MONITOR" ;
+    private static final String TAG ="MONITOR";
     private MonitorViewModel mViewModel;
     //手势
     private GestureDetector mGestureDetector;
@@ -51,6 +52,18 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    public HikVisionUtil getmHikVisionUtil() {
+        return mHikVisionUtil;
+    }
+
+    public void setmHikVisionUtil(HikVisionUtil mHikVisionUtil) {
+        this.mHikVisionUtil = mHikVisionUtil;
+    }
+
+    private HikVisionUtil mHikVisionUtil;
+    //媒体播放器
+    private MediaPlayer mediaPlayer;
 
     public MonitorFragment() {
         // Required empty public constructor
@@ -82,7 +95,7 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        if (!HikVisionUtil.initSdk())
+        if (!mHikVisionUtil.initSdk())
         {
             getActivity().finish();
         }
@@ -92,7 +105,9 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //mHikVisionUtil=new HikVisionUtil();
         mDataBinding=FragMonitorBinding.inflate(inflater,container,false);
+        mViewModel.setmHikVersionUtil(mHikVisionUtil);
         mDataBinding.setViewmodel(mViewModel);
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.frag_monitor, container, false);
@@ -171,14 +186,14 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         holder.setFormat(PixelFormat.TRANSLUCENT);
-        Log.i(TAG, "surface is created" + HikVisionUtil.m_iPort);
-        if (-1 == HikVisionUtil.m_iPort)
+        Log.i(TAG, "surface is created" + mHikVisionUtil.getM_iPort());
+        if (-1 == mHikVisionUtil.getM_iPort())
         {
             return;
         }
         Surface surface = holder.getSurface();
         if (true == surface.isValid()) {
-            if (false == Player.getInstance().setVideoWindow(HikVisionUtil.m_iPort, 0, holder)) {
+            if (false == Player.getInstance().setVideoWindow(mHikVisionUtil.getM_iPort(), 0, holder)) {
                 Log.e(TAG, "Player setVideoWindow failed!");
             }
         }
@@ -193,13 +208,13 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-        Log.i(TAG, "Player setVideoWindow release!" + HikVisionUtil.m_iPort);
-        if (-1 == HikVisionUtil.m_iPort)
+        Log.i(TAG, "Player setVideoWindow release!" + mHikVisionUtil.getM_iPort());
+        if (-1 == mHikVisionUtil.getM_iPort())
         {
             return;
         }
         if (true == holder.getSurface().isValid()) {
-            if (false == Player.getInstance().setVideoWindow(HikVisionUtil.m_iPort, 0, null)) {
+            if (false == Player.getInstance().setVideoWindow(mHikVisionUtil.getM_iPort(), 0, null)) {
                 Log.e(TAG, "Player setVideoWindow failed!");
             }
         }
@@ -218,29 +233,30 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
         if (HCNetSDK.NET_DVR_SYSHEAD == iDataType)
         {
 
-            int m_iPort = Player.getInstance().getPort();
-            if (m_iPort == -1)
+            //m_iPort = Player.getInstance().getPort();
+            mHikVisionUtil.setM_iPort(Player.getInstance().getPort());
+            if (mHikVisionUtil.getM_iPort() == -1)
             {
                 Log.e(TAG, "getPort is failed with: "
-                        + Player.getInstance().getLastError(m_iPort));
+                        + Player.getInstance().getLastError(mHikVisionUtil.getM_iPort()));
                 return;
             }
-            Log.i(TAG, "getPort succ with: " + m_iPort);
+            Log.i(TAG, "getPort succ with: " + mHikVisionUtil.getM_iPort());
             if (iDataSize > 0)
             {
-                if (!Player.getInstance().setStreamOpenMode(m_iPort,
+                if (!Player.getInstance().setStreamOpenMode(mHikVisionUtil.getM_iPort(),
                         iStreamMode)) // set stream mode
                 {
                     Log.e(TAG, "setStreamOpenMode failed");
                     return;
                 }
-                if (!Player.getInstance().openStream(m_iPort, pDataBuffer,
+                if (!Player.getInstance().openStream(mHikVisionUtil.getM_iPort(), pDataBuffer,
                         iDataSize, 2 * 1024 * 1024)) // open stream
                 {
                     Log.e(TAG, "openStream failed");
                     return;
                 }
-                if (!Player.getInstance().play(m_iPort,
+                if (!Player.getInstance().play(mHikVisionUtil.getM_iPort(),
                         mDataBinding.svPlayer.getHolder()))
                 {
                     Log.e(TAG, "play failed");
@@ -253,7 +269,70 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
 					 * Player.getInstance().getLastError(m_iPort)); return; }
 					 */
             }
+
         }
+        else
+        {
+            if (!Player.getInstance().inputData(mHikVisionUtil.getM_iPort(), pDataBuffer,
+                    iDataSize))
+            {
+                // Log.e(TAG, "inputData failed with: " +
+                // Player.getInstance().getLastError(m_iPort));
+                for (i = 0; i < 4000 && mHikVisionUtil.getM_iPlaybackID() >= 0; i++)
+                {
+                    if (!Player.getInstance().inputData(mHikVisionUtil.getM_iPort(),
+                            pDataBuffer, iDataSize))
+                        Log.e(TAG, "inputData failed with: "
+                                + Player.getInstance()
+                                .getLastError(mHikVisionUtil.getM_iPort()));
+                    else
+                        break;
+                    try
+                    {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onPreview() {
+        /*if(mediaPlayer==null){
+            mediaPlayer = new MediaPlayer();
+        }
+        try {
+            mediaPlayer.reset();
+            //子码流：
+
+            // rtsp://admin:12345@192.0.0.64/mpeg4/ch1/sub/av_stream
+
+            //rtsp://admin:12345@192.0.0.64/h264/ch1/sub/av_stream
+            String rtsp="rtsp://admin:admin12345@"+monitorip+":554/h264/ch1/sub/av_stream";
+            mediaPlayer.setDataSource(rtsp);
+            mediaPlayer.setDisplay(mDataBinding.svPlayer.getHolder());
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                    Message msg=new Message();
+                    msg.what=4;
+                    myhanHandler.sendMessage(msg);
+                }
+            });
+            mediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message msg=new Message();
+            msg.what=3;
+            myhanHandler.sendMessage(msg);
+        }*/
     }
 
     /**
@@ -294,24 +373,24 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
             if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE
                     && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
                 //pt_goleft();
-                HikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,0);
+                mHikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,0);
                 try {
                     float t1 = xlen / Math.abs(velocityX);
                     float t2 = xlen % Math.abs(velocityX);
                     long time = (long) (xlen / Math.abs(velocityX) + xlen % Math.abs(velocityX)) * 1000;
                     if (time < 0 || time > 10000) {
-                        HikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
 
 
                     } else {
 
                         Thread.sleep(time);
-                        HikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
 
                     }
 
                 } catch (InterruptedException e) {
-                    HikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
+                    mHikVisionUtil.PTZControl(PTZCommand.PAN_LEFT,1);
                     e.printStackTrace();
                 }
                 Log.i("MyGesture", "Fling left");
@@ -319,65 +398,65 @@ public class MonitorFragment extends Fragment implements MonitorInterface, Surfa
 
             } else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE
                     && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                HikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,0);
+                mHikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,0);
                 try {
                     long time = (long) (xlen / Math.abs(velocityX) + xlen % Math.abs(velocityX)) * 1000;
                     if (time < 0 || time > 10000) {
-                        HikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
                     } else {
                         Thread.sleep(time);
                         //pt_stopright();
-                        HikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
 
                     }
 
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    HikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
+                    mHikVisionUtil.PTZControl(PTZCommand.PAN_RIGHT,1);
                     e.printStackTrace();
                 }
                 Log.i("MyGesture", "Fling right");
-                Toast.makeText(getActivity(), "Fling Right", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "正在向右", Toast.LENGTH_SHORT).show();
             }
             // 手势向下 down
             if ((e2.getY() - e1.getY()) > 200) {
-                HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,0);
+                mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,0);
                 try {
                     long time = (long) (ylen / Math.abs(velocityY) + ylen % Math.abs(velocityY)) * 1000;
                     if (time < 0 || time > 10000) {
-                        HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     } else {
 
                         Thread.sleep(time);
-                        HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     }
 
                 } catch (InterruptedException e) {
-                    HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                    mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     e.printStackTrace();
                 }
                 Log.i("MyGesture", "Fling Down");
-                Toast.makeText(getActivity(), "Fling Down", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "正在向下", Toast.LENGTH_SHORT).show();
             }
             // 手势向上 up
             if ((e1.getY() - e2.getY()) > 200) {
-                HikVisionUtil.PTZControl(PTZCommand.TILT_UP,0);
+                mHikVisionUtil.PTZControl(PTZCommand.TILT_UP,0);
                 try {
                     long time = (long) (ylen / Math.abs(velocityY) + ylen % Math.abs(velocityY)) * 1000;
                     if (time < 0 || time > 10000) {
-                        HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     } else {
 
                         Thread.sleep(time);
-                        HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                        mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     }
 
                 } catch (InterruptedException e) {
-                    HikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
+                    mHikVisionUtil.PTZControl(PTZCommand.TILT_DOWN,1);
                     e.printStackTrace();
                 }
                 Log.i("MyGesture", "Fling Up");
-                Toast.makeText(getActivity(), "Fling Up", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "正在向上", Toast.LENGTH_SHORT).show();
             }
 
             return true;

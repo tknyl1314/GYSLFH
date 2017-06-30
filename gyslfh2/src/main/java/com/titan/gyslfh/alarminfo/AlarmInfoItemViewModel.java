@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 
+import com.titan.data.source.DataRepository;
 import com.titan.newslfh.R;
 
 /**
@@ -22,11 +23,11 @@ public class AlarmInfoItemViewModel extends AlarmInfoViewModel {
     //状态
     public  final ObservableField<String>  isfire=new ObservableField<>();
 
-    private AlarmInfoItemNav mAlarmInfoItemNav;
+    private AlarmInfoListInterface mAlarmInfoItemNav;
     private  Context mContext;
 
-    public AlarmInfoItemViewModel(Context context, final AlarmInfoItemNav alarmInfoItemNav){
-        super(context,alarmInfoItemNav);
+    public AlarmInfoItemViewModel(Context context, final AlarmInfoListInterface alarmInfoItemNav, DataRepository dataRepository){
+        super(context,alarmInfoItemNav,dataRepository);
         this.mContext=context;
         this.mAlarmInfoItemNav=alarmInfoItemNav;
         this.alarminfo.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {

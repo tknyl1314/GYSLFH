@@ -20,7 +20,6 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl"
         android:onRefresh="@{viewmodel}"
-
         app:refreshing="@{viewmodel.dataLoading}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,8 +30,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:alarms="@{viewmodel.mAlarmInfos}"
+        android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}"
         >
+
     </android.support.v7.widget.RecyclerView>
+<!--
+-->
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout

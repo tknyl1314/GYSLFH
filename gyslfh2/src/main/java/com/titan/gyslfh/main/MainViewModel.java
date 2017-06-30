@@ -21,6 +21,7 @@ import com.titan.data.source.DataSource;
 import com.titan.gis.TrackUtil;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.layercontrol.ILayerControl;
+import com.titan.model.TitanLocation;
 import com.titan.model.TrackPoint;
 import com.titan.util.DateUtil;
 
@@ -31,14 +32,28 @@ import java.util.Date;
  * Created by Whs on 2016/12/1 0001
  */
 public class MainViewModel extends BaseObservable implements BDLocationListener {
-
+    //是否开启标绘
     public ObservableBoolean isplot=new ObservableBoolean(false);
+    //是否开启导航
+    public ObservableBoolean isnav=new ObservableBoolean(false);
     //用户等级
     public final ObservableField<Integer> userlevel = new ObservableField<>();
     //用户当前位置
     public static final ObservableField<Point> currentPoint = new ObservableField<>();
+
+    public TitanLocation getTitanloc() {
+        return titanloc.get();
+    }
+
+    public void setTitanloc(ObservableField<TitanLocation> titanloc) {
+        this.titanloc = titanloc;
+    }
+
+    //位置
+    private  ObservableField<TitanLocation> titanloc = new ObservableField<>();
     //是否跟踪轨迹
     public final ObservableField<Boolean> istrack = new ObservableField<>();
+
 
     public final ObservableList<Point> listpt = new ObservableArrayList<>();
 
@@ -89,8 +104,8 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
     /**
      * 一键报警
      */
-    public void onAlarm(){
-        mMain.onAlarm();
+    public void onAlarm(int type){
+        mMain.onAlarm(type);
     }
 
     /**
@@ -140,8 +155,26 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
      * 开启导航
      */
     public void startNavigation(){
+       if(isplot.get()) {
+           snackbarText.set("请先关闭标绘功能");
+           return;
 
-       mMain.test();
+       }
+       if(isnav.get()){
+           isnav.set(false);
+           snackbarText.set("导航已关闭");
+       }else {
+           isnav.set(true);
+       }
+       mMain.startNavigation(isnav.get());
+    }
+
+    /**
+     * 开启导航
+     */
+    public void test(){
+
+        mMain.test();
     }
 
 
@@ -162,7 +195,10 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
             Bundle locData;
             locData = TrackUtil.Algorithm(bdLocation);
             Point pt=new Point(bdLocation.getLongitude(),bdLocation.getLatitude());
+            TitanLocation titanLocation=new TitanLocation(bdLocation.getLongitude(),bdLocation.getLatitude(),bdLocation.getAddrStr());
+            titanloc.set(titanLocation);
             currentPoint.set(pt);
+
 
            if (locData != null) {
                 //BDLocation location=locData.getParcelable("loc");

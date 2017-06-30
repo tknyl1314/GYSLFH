@@ -80,6 +80,13 @@ public class AlarmInfoModel {
         private String NOTICEAREA;
         private String ROWNUM;
         private String ISFIRE;
+        /**
+         * BACKSTATUS : 0
+         * RN : 1
+         */
+
+        private String BACKSTATUS;
+        private String RN;
 
         public String getBACKID() {
             return BACKID;
@@ -246,6 +253,22 @@ public class AlarmInfoModel {
 
         public void setISFIRE(String ISFIRE) {
             this.ISFIRE = ISFIRE;
+        }
+
+        public String getBACKSTATUS() {
+            return BACKSTATUS;
+        }
+
+        public void setBACKSTATUS(String BACKSTATUS) {
+            this.BACKSTATUS = BACKSTATUS;
+        }
+
+        public String getRN() {
+            return RN;
+        }
+
+        public void setRN(String RN) {
+            this.RN = RN;
         }
     }
 }

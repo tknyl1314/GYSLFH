@@ -3,7 +3,6 @@ package com.titan.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -57,7 +56,7 @@ public class MyIntentService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		//Logger log=LoggerManager.getLoggerInstance();  
 		 //Intent是从Activity发过来的，携带识别参数，根据参数不同执行不同的任务
-	    String action = intent.getExtras().getString("name");
+	   /* String action = intent.getExtras().getString("name");
 	    switch (action) {
 	    //上传历史轨迹
 		case "upPointHistory":
@@ -96,7 +95,7 @@ public class MyIntentService extends IntentService {
 
 		default:
 			break;
-		}
+		}*/
 		
 	}
 

@@ -16,6 +16,9 @@
 
     <string name="error_getalarminfodetail">获取火警详细信息异常</string>
 
+    <string name="error_getbackalarm">获取回警信息异常</string>
+
+
 
     <string name="success_uploc">上传坐标成功</string>
     <string name="success_upload">上报成功</string>
@@ -34,11 +37,11 @@
 
 
     <!--服务器地址-->
-    <!--
     <string name="serverhost">http://101.201.54.143:8027/</string>
--->
 
+    <!--
     <string name="serverhost">http://192.168.1.16:8040/</string>
+-->
 
     <!--GIS服务地址-->
     <string name="gisserverhost">http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/ThematicMap/FeatureServer</string>
@@ -155,6 +158,12 @@
     <string name="backalarm_psrson">核实人员</string>
     <string name="backalarm_info">核实情况</string>
     <string name="firetype">火情类型</string>
+    <string name="title_route_guide_demo">导航</string>
+    <string name="monitor_preview">可见光视频</string>
+    <string name="Antitheft_preview">防盗视频</string>
+    <string name="Infrared_preview">红外视频</string>
+    <string name="error_address">请输入地址</string>
+    <string name="confirm">确定位置</string>
 
 
 </resources>

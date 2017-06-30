@@ -23,14 +23,24 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcl_alarminfo"
+   <!-- <com.titan.gyslfh.ScrollChildSwipeRefreshLayout
+        android:id="@+id/srl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:items="@{viewmodel.mAlarmInfos}"
-        >
-    </android.support.v7.widget.RecyclerView>
+        app:enabled="@{viewmodel.dataLoading}"
+        app:refreshing="@{viewmodel.dataLoading}"
+        >-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcl_alarminfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:items="@{viewmodel.mAlarmInfos}"
+            >
+        </android.support.v7.widget.RecyclerView>
 
+<!--
+        app:items="@{viewmodel.mAlarmInfos}"
+-->
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout

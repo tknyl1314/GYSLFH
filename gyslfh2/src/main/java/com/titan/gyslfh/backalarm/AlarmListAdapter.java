@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.titan.gyslfh.alarminfo.AlarmInfoItemNav;
+import com.titan.Injection;
 import com.titan.gyslfh.alarminfo.AlarmInfoItemViewModel;
+import com.titan.gyslfh.alarminfo.AlarmInfoListInterface;
 import com.titan.gyslfh.alarminfo.AlarmInfoModel;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.ItemAlarminfoBinding;
@@ -21,11 +22,11 @@ import java.util.List;
 
 public class AlarmListAdapter <T> extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<T> listobj;
-    private AlarmInfoItemNav mAlarmInfoItemNav;
+    private AlarmInfoListInterface mAlarmInfoItemNav;
     private Context mContext;
 
 
-    public AlarmListAdapter(Context context,List<T> listdata ,AlarmInfoItemNav alarmInfoItemNav){
+    public AlarmListAdapter(Context context,List<T> listdata ,AlarmInfoListInterface alarmInfoItemNav){
         this.mContext=context;
         this.listobj=listdata;
         this.mAlarmInfoItemNav=alarmInfoItemNav;
@@ -67,7 +68,7 @@ public class AlarmListAdapter <T> extends  RecyclerView.Adapter<RecyclerView.Vie
         AlarmInfoModel.AlarmInfo alarminfo= (AlarmInfoModel.AlarmInfo) listobj.get(position);
         ViewHolder holder= (ViewHolder) viewHolder;
         ///BackAlarmViewModel viewModel=new BackAlarmViewModel(mContext,)
-        final AlarmInfoItemViewModel viewmodel = new AlarmInfoItemViewModel(mContext,mAlarmInfoItemNav);
+        final AlarmInfoItemViewModel viewmodel = new AlarmInfoItemViewModel(mContext,mAlarmInfoItemNav, Injection.provideDataRepository(mContext));
         viewmodel.alarminfo.set(alarminfo);
         holder.getBinding().setViewmodel(viewmodel);
     }

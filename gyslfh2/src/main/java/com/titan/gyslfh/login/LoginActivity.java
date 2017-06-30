@@ -2,6 +2,7 @@ package com.titan.gyslfh.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -23,12 +24,13 @@ import com.titan.push.GeTui;
 import com.titan.push.GeTuiIntentService;
 import com.titan.push.GeTuiPushService;
 import com.titan.util.ActivityUtils;
+import com.titan.util.DeviceUtil;
 import com.titan.util.TitanUtil;
 import com.titan.util.ToastUtil;
 
 
 /**
- * 登陆界面.
+ * 登陆界面
  */
 public class LoginActivity extends AppCompatActivity implements ILogin {
 
@@ -51,6 +53,11 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
         super.onCreate(savedInstanceState);
         TitanApplication.getInstance().addActivity(this);
         mContext=this;
+        if(DeviceUtil.isTablet(mContext)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+
         setContentView(R.layout.activity_login);
         //final View root = inflater.inflate(R.layout.activity_login, false);
         if (mViewDataBinding == null) {
@@ -65,7 +72,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
 
 
     }
-
 
     private LoginViewModel findOrCreateViewModel() {
         // In a configuration change we might have a ViewModel present. It's retained using the
@@ -107,6 +113,12 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewModel.onStart();
+    }
+
     /**
      * 初始化权限
      */
@@ -120,7 +132,10 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
             ActivityCompat.requestPermissions(this, GeTui.GTreqPermission,
                     GeTui.GTrequestCode);
         }else {
+            //个推初始化
             PushManager.getInstance().initialize(mContext.getApplicationContext(), userPushService);
+            //注册服务
+            PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), GeTuiIntentService.class);
         }
     }
     /**
@@ -133,10 +148,15 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
             if ((grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 PushManager.getInstance().initialize(this.getApplicationContext(), userPushService);
+                //注册服务
+                PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), GeTuiIntentService.class);
             } else {
+
                 Log.e("GT", "We highly recommend that you need to grant the special permissions before initializing the SDK, otherwise some "
                         + "functions will not work");
                 PushManager.getInstance().initialize(this.getApplicationContext(), userPushService);
+                //注册服务
+                PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), GeTuiIntentService.class);
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);

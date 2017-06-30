@@ -1,6 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.titan.gyslfh.monitor.MonitorFragment">
+
     <data>
 
         <variable
@@ -8,9 +9,54 @@
             type="com.titan.gyslfh.monitor.MonitorViewModel" />
     </data>
 
-    <SurfaceView
-        android:id="@+id/sv_Player"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#0000ff00" />
+        android:layout_height="match_parent">
+
+        <SurfaceView
+            android:id="@+id/sv_Player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_bottom"
+            android:background="#0000ff00" />
+
+        <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_preview"
+                style="@style/btn_commit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{()->viewmodel.startPreview(1)}"
+                android:text="@string/monitor_preview" />
+
+            <Button
+                android:id="@+id/btn_Infrared"
+                style="@style/btn_commit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{()->viewmodel.startPreview(2)}"
+                android:text="@string/Infrared_preview" />
+
+            <Button
+                android:id="@+id/btn_Antitheft"
+                style="@style/btn_commit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="@{()->viewmodel.startPreview(3)}"
+                android:text="@string/Antitheft_preview" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
 </layout>
