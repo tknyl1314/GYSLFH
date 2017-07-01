@@ -1,13 +1,9 @@
-language: java
-
-jdk:
-  - oraclejdk7
-  
-sudo: required
-
-before_install:
-     - chmod +x gradlew
-
-
+language: android
+android:
+  components:
+    - build-tools-22.0.1
+    - android-23
+    - extra-android-m2repository
+    - extra-android-support
 script:
-  - ./gradlew clean build -i --continue
+  - ./gradlew assembleRelease
