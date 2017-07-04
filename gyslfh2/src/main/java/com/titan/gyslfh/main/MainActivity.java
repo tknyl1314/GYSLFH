@@ -10,20 +10,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.baidu.navisdk.adapter.BNRoutePlanNode;
-import com.baidu.navisdk.adapter.BaiduNaviManager;
-import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
@@ -40,7 +34,6 @@ import com.titan.gyslfh.login.LoginActivity;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.model.FireRiskModel;
-import com.titan.navi.BNDemoGuideActivity;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
@@ -58,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
 
 
-    //
+    //定位服务
     private LocationService locationService;
 
-    private DrawerLayout mDrawerLayout;
+    //private DrawerLayout mDrawerLayout;
 
     public MainViewModel getmViewModel() {
         return mViewModel;
@@ -83,26 +76,12 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
             .ACCESS_COARSE_LOCATION};
     private int requestCode = 2;
 
-    public static   Point getCurrentPoint() {
-        return currentPoint;
-    }
-
-    /**当前位置*/
-    public static Point currentPoint=null;
-
     SharedPreferences mSharedPreferences;
     //主界面
     public   MainFragment mainFragment;
     //图层控制
     private LayerControlFragment layerControlFragment;
 
-    public BaiduNavi getmBaiduNavi() {
-        return mBaiduNavi;
-    }
-
-    public void setmBaiduNavi(BaiduNavi mBaiduNavi) {
-        this.mBaiduNavi = mBaiduNavi;
-    }
 
     //导航
     public BaiduNavi mBaiduNavi;
@@ -123,11 +102,10 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TitanApplication.getInstance().addActivity(this);
-
-        //测试
+        //测试市级用户
         String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
         TitanApplication.setmUserModel(new Gson().fromJson(user,UserModel.class));
-
+        //推送回调
         TitanApplication.mainActivity=this;
         mContext=this;
 
@@ -149,10 +127,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         //intiPermisson();
 
         getPersimmions();
-
-
-        //initNavi();
-
 
     }
 
@@ -240,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
 
     /**
      * 设置点击事件
-     * @param navigationView
      */
     /*private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -301,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         } else {
             //LayerControlViewModel layerControlViewModel=new LayerControlViewModel(getApplicationContext(),this);
              // There is no ViewModel yet, create it.
-            MainViewModel viewModel = new MainViewModel(getApplicationContext(), Injection.provideDataRepository(mContext), (IMain) mainFragment,this);
+            MainViewModel viewModel = new MainViewModel(getApplicationContext(), Injection.provideDataRepository(mContext),mainFragment,this);
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),
@@ -327,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
             //LayerControlViewModel layerControlViewModel=new LayerControlViewModel(getApplicationContext(),this);
 
             // There is no ViewModel yet, create it.
-            LayerControlViewModel viewModel = new LayerControlViewModel(getApplicationContext(), this,Injection.provideDataRepository(mContext),mainFragment.getmMap().getOperationalLayers());
+            LayerControlViewModel viewModel = new LayerControlViewModel(getApplicationContext(), this,Injection.provideDataRepository(mContext),mainFragment.getmLayerlist());
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),
@@ -457,7 +430,8 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     public void showLayerControl(boolean isshow) {
 
         if(layerControlFragment==null){
-            layerControlFragment=LayerControlFragment.getInstance();
+
+            layerControlFragment=LayerControlFragment.getInstance(mainFragment.getmLayerlist());
 
             mlayerControlViewModel=findOrCreateLayerViewModel();
 
@@ -489,8 +463,20 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
      */
     @Override
     public void onCheckLayer(int index ,boolean isvisable) {
-        Toast.makeText(mContext,"图层ID"+index,Toast.LENGTH_SHORT).show();
-        mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
+        //String layername=mainFragment.getmMap().getOperationalLayers().get(index).getName();
+       /* if(isvisable){
+            mViewModel.snackbarText.set(layername+"已添加");
+        }else {
+            mViewModel.snackbarText.set(layername+"已移除");
+
+        }*/
+        //Toast.makeText(mContext,"已添加图层"+layername,Toast.LENGTH_SHORT).show();
+        if(mViewModel.isSceneView.get()){
+            mainFragment.getmScene().getOperationalLayers().get(index).setVisible(isvisable);
+        }else {
+            mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
+
+        }
 
     }
 
@@ -507,23 +493,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     public void closeWeatherLayer() {
         mainFragment.mGraphicsOverlay.getGraphics().clear();
     }
-
-    /*@Override
-    public void Plot(boolean isplot) {
-        *//*if (isplot) {
-
-            mainFragment.plotUtil.closePlotDialog();
-            mapView.setOnTouchListener(myTouchListener);
-            ToastUtil.setToast(MapActivity.this, "标绘功能已关闭");
-        } else {
-            plotUtil = new PlotUtil(MapActivity.this, mapView);
-            isplot = true;
-            ToastUtil.setToast(MapActivity.this, "标绘功能已开启");
-            mapView.setOnTouchListener(plotUtil.plotTouchListener);
-            plotUtil.showPlotDialog(v);
-        }*//*
-    }
-*/
 
 
     /**
@@ -556,41 +525,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         //mMapView.resume();
     }
 
-    public class RoutePlanListener implements BaiduNaviManager.RoutePlanListener {
 
-        private BNRoutePlanNode mBNRoutePlanNode = null;
-
-        public RoutePlanListener(BNRoutePlanNode node) {
-            mBNRoutePlanNode = node;
-        }
-
-        @Override
-        public void onJumpToNavigator() {
-            /*
-             * 设置途径点以及resetEndNode会回调该接口
-             */
-
-            /*for (Activity ac : activityList) {
-
-                if (ac.getClass().getName().endsWith("BNDemoGuideActivity")) {
-
-                    return;
-                }
-            }*/
-            Intent intent = new Intent(mContext, BNDemoGuideActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BaiduNavi.ROUTE_PLAN_NODE, mBNRoutePlanNode);
-            intent.putExtras(bundle);
-            startActivity(intent);
-
-        }
-
-        @Override
-        public void onRoutePlanFailed() {
-            // TODO Auto-generated method stub
-            Toast.makeText(mContext, "计算路径失败", Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
 }

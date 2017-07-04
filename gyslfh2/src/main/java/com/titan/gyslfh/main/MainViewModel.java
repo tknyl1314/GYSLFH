@@ -32,6 +32,8 @@ import java.util.Date;
  * Created by Whs on 2016/12/1 0001
  */
 public class MainViewModel extends BaseObservable implements BDLocationListener {
+    //是否开启三维场景
+    public ObservableBoolean isSceneView=new ObservableBoolean(false);
     //是否开启标绘
     public ObservableBoolean isplot=new ObservableBoolean(false);
     //是否开启导航
@@ -281,72 +283,6 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
 
     }
 
-    /**
-     * 上传轨迹到本地数据库
-     * @param point
-     */
-   /* private void upToLocalDb(final Point point, final int status) {
-        Observable.create(new Observable.OnSubscribe<Point>() {
-            @Override
-            public void call(Subscriber<? super Point> subscriber) {
-                String time = DateUtil.dateFormat(new Date());
-                String userid=TitanApplication.mUserModel.getUserID();
-                TrackPoint tp= new TrackPoint(null,time,point.getX(),point.getY(),userid,status);
-                long d=GreenDaoManager.getInstance().getNewSession().getTrackPointDao().insert(tp);
-                //snackbarText.set(d+"");
-                subscriber.onNext(point);
-                subscriber.onCompleted();
-                //subscriber.onError();
-
-            }}).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Point>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("TITAN",e.toString());
-                        snackbarText.set(mContext.getString(R.string.error_uploc2server)+e);
-
-                    }
-
-                    @Override
-                    public void onNext(Point point) {
-                        snackbarText.set(mContext.getString(R.string.success_uploc));
-                    }
-                });
-
-    }*/
-
-    /**
-     * 上传轨迹点到服务端
-     */
-  /*  private void upToServerDb(final Point point) {
-        Observable<String> observable=RetrofitHelper.getInstance(mContext).getServer().upLoadTrackPoint("");
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onCompleted() {
-                        upToLocalDb(point,1);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-
-                    }
-                });
-
-    }
-*/
 
     /**
      *

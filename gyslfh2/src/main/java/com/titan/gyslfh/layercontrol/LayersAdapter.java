@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.esri.arcgisruntime.layers.Layer;
-import com.esri.arcgisruntime.mapping.LayerList;
 import com.titan.Injection;
+import com.titan.model.TitanLayer;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.ItemLayerBinding;
+
+import java.util.List;
 
 /**
  * Created by whs on 2017/5/16
@@ -19,11 +20,13 @@ import com.titan.newslfh.databinding.ItemLayerBinding;
 
 public class LayersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private LayerList mLayers;
+    //private LayerList mLayers;
+    private List<TitanLayer> mLayers;
     private ILayerControl mIlayerControl;
+
     //private DataRepository mDataRepository;
 
-    public LayersAdapter(Context mContext, LayerList layers,ILayerControl iLayerControl) {
+    public LayersAdapter(Context mContext, List<TitanLayer> layers,ILayerControl iLayerControl) {
         this.mContext = mContext;
         ///this.mLayers = layers;
 
@@ -34,12 +37,12 @@ public class LayersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         //this.mILayerItem=iLayerItem;
     }
 
-    private void setList(LayerList layerlist) {
+    private void setList(List<TitanLayer> layerlist) {
         this.mLayers = layerlist;
         notifyDataSetChanged();
     }
 
-    public void replaceData(LayerList layerlist) {
+    public void replaceData(List<TitanLayer> layerlist) {
         setList(layerlist);
 
     }
@@ -65,13 +68,16 @@ public class LayersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Layer layer=mLayers.get(position);
+        TitanLayer layer=mLayers.get(position);
         final LayerItemViewModel viewmodel = new LayerItemViewModel(mContext,mIlayerControl, Injection.provideDataRepository(mContext),mLayers);
         ViewHolder viewHolder= (ViewHolder) holder;
         //String layername=layer.getName();
         viewmodel.layerindex.set(position);
-        viewmodel.ischeck.set(layer.isVisible());
-        viewmodel.mLayer.set(layer);
+        viewmodel.ischeck.set(layer.isVisiable());
+        //viewmodel.ischeck.set(layer.isVisible());
+        //viewmodel.mLayer.set(layer);
+        viewmodel.mLayerName.set(layer.getName());
+        //String layername=layer.getName();
         viewHolder.getBinding().setViewmodel(viewmodel);
 
     }

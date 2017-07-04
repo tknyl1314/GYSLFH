@@ -6,13 +6,15 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ObservableMap;
 
-import com.esri.arcgisruntime.mapping.LayerList;
 import com.titan.BaseViewModel;
 import com.titan.data.source.DataRepository;
 import com.titan.data.source.DataSource;
 import com.titan.model.FireRiskModel;
+import com.titan.model.TitanLayer;
 import com.titan.util.DateUtil;
 import com.titan.util.NetUtil;
+
+import java.util.List;
 
 /**
  * Created by whs on 2017/5/11
@@ -21,7 +23,8 @@ import com.titan.util.NetUtil;
 public class LayerControlViewModel extends BaseViewModel {
 
 
-    public ObservableField<LayerList> mLayerList=new ObservableField<>();
+   // public ObservableField<LayerList> mLayerList=new ObservableField<>();
+   public ObservableField<List<TitanLayer>> mLayerList=new ObservableField<>();
     //选中底图index
     public ObservableInt selectposition=new ObservableInt(0);
     ObservableMap mCheckInfo=new ObservableArrayMap();
@@ -32,7 +35,7 @@ public class LayerControlViewModel extends BaseViewModel {
     private Context mContext;
     private ILayerControl mLayerControl;
     private DataRepository mDataRepository;
-    public LayerControlViewModel(Context context, ILayerControl iLayerControl, DataRepository dataRepository,LayerList layerlist){
+    public LayerControlViewModel(Context context, ILayerControl iLayerControl, DataRepository dataRepository,List<TitanLayer> layerlist){
         this.mContext=context;
         this.mLayerControl=iLayerControl;
         this.mLayerList.set(layerlist);

@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.titan.gyslfh.main.MainFragment;
+import com.titan.model.TitanLayer;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.LayercontrolFragBinding;
+
+import java.util.List;
 
 /**
  * Created by WHS on 2017/1/4
@@ -29,11 +31,17 @@ public class LayerControlFragment extends DialogFragment {
 
 
     private LayercontrolFragBinding mViewDataBinding;
-    private LayerControlViewModel mLayerControlViewModel;
+    private LayerControlViewModel mViewModel;
 
     private  static LayerControlFragment Singleton;
 
     LayersAdapter mAdapter;
+
+    //private static  LayerList mLayerList;
+
+    private static List<TitanLayer> mLayerList;
+
+
     /**
      * Create a new instance of
      */
@@ -41,7 +49,9 @@ public class LayerControlFragment extends DialogFragment {
         return new LayerControlFragment();
     }
 
-    public static LayerControlFragment getInstance(){
+    public static LayerControlFragment getInstance(List<TitanLayer> layerList){
+        mLayerList=layerList;
+        //return  new LayerControlFragment();
         if(Singleton==null){
             Singleton=new LayerControlFragment();
         }
@@ -50,13 +60,13 @@ public class LayerControlFragment extends DialogFragment {
     }
 
     public void setViewModel(LayerControlViewModel viewModel) {
-        mLayerControlViewModel = viewModel;
+        mViewModel = viewModel;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewDataBinding=DataBindingUtil.inflate(inflater, R.layout.layercontrol_frag,container,true);
-        mViewDataBinding.setViewmodel(mLayerControlViewModel);
+        mViewDataBinding.setViewmodel(mViewModel);
         return mViewDataBinding.getRoot();
     }
 
@@ -105,16 +115,18 @@ public class LayerControlFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        intiRecyclerView();
+
     }
 
 
 
+
+
     /**
-     *
+     * 初始化图层控制图层列表
      */
     private void intiRecyclerView() {
-        mAdapter=new LayersAdapter(getActivity(), MainFragment.mMap.getOperationalLayers(),(ILayerControl) getActivity());
+        mAdapter=new LayersAdapter(getActivity(),mLayerList,(ILayerControl) getActivity());
         mViewDataBinding.rvLayers.setAdapter(mAdapter);
         mViewDataBinding.rvLayers.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -141,7 +153,7 @@ public class LayerControlFragment extends DialogFragment {
 
     @Override
     public void onResume() {
-
+        intiRecyclerView();
         super.onResume();
     }
 

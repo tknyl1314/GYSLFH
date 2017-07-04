@@ -25,6 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
-            android:text="@{viewmodel.mLayer.get().getName()}"/>
+            android:text="@{viewmodel.mLayerName}"/>
     </android.support.v7.widget.CardView>
 </layout>

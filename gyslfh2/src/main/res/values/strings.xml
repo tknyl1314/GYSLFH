@@ -45,6 +45,14 @@
 
     <!--GIS服务地址-->
     <string name="gisserverhost">http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/ThematicMap/FeatureServer</string>
+    <string name="gisserverhost1">http://222.85.147.93:6080/arcgis/rest/services/GYSLFHService/ThematicMap/FeatureServer</string>
+
+    <string name="zturl">http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/ThematicMap/MapServer</string>
+    <string name="zturl1">http://222.85.147.93:6080/arcgis/rest/services/GYSLFHService/ThematicMap/MapServer</string>
+    <string name="zturl2">http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer</string>
+
+    <string name="zturl3">http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/ThematicMap/MapServer</string>
+
     <!--
     http://101.201.54.143:6080/arcgis/rest/services/OtitanFire/FireThematicMap/FeatureServer
 -->
@@ -54,6 +62,9 @@
     <string name="location_permission_denied">未获取定位权限</string>
     <!-- <string name="webserviceurl">http://101.201.54.143:8031/SMLY/FireService/SMLYService.asmx</string>-->
     <string name="webserviceurl">http://101.201.54.143:9011/GISService.asmx</string>
+    <!--三维地形服务-->
+    <string name="elevation_image_service">http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer</string>
+
 
     <!--应用更新地址-->
     <string name="updateurl">http://101.201.54.143:8031/smly/apk/Version.xml</string>
@@ -164,6 +175,13 @@
     <string name="Infrared_preview">红外视频</string>
     <string name="error_address">请输入地址</string>
     <string name="confirm">确定位置</string>
+    <string name="active">可用的</string>
+    <string name="error">加载失败</string>
+    <string name="loading">正在加载</string>
+    <string name="notVisible">不可见</string>
+    <string name="outOfScale">超出范围</string>
+    <string name="unknown">未知</string>
+    <string name="map_map3d">三维场景</string>
 
 
 </resources>

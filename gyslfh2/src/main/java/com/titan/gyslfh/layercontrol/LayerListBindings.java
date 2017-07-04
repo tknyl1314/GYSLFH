@@ -19,7 +19,9 @@ package com.titan.gyslfh.layercontrol;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
-import com.esri.arcgisruntime.mapping.LayerList;
+import com.titan.model.TitanLayer;
+
+import java.util.List;
 
 /**
  * Contains {@link BindingAdapter}s for the {@link com.esri.arcgisruntime.layers.Layer} list.
@@ -29,7 +31,7 @@ public class LayerListBindings {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter({"items"})
-    public static void setItems(RecyclerView recyclerView, LayerList items) {
+    public static void setItems(RecyclerView recyclerView, List<TitanLayer> items) {
         LayersAdapter adapter = (LayersAdapter) recyclerView.getAdapter();
         if (adapter != null)
         {

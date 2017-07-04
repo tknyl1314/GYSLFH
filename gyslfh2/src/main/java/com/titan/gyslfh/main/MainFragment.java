@@ -23,6 +23,7 @@ import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.Feature;
 import com.esri.arcgisruntime.data.FeatureQueryResult;
+import com.esri.arcgisruntime.data.Field;
 import com.esri.arcgisruntime.data.QueryParameters;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.geometry.Envelope;
@@ -30,16 +31,22 @@ import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
+import com.esri.arcgisruntime.mapping.ArcGISScene;
+import com.esri.arcgisruntime.mapping.ArcGISTiledElevationSource;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
+import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedEvent;
+import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.mapping.view.SceneView;
 import com.esri.arcgisruntime.symbology.Symbol;
 import com.google.gson.Gson;
 import com.titan.gis.PlotUtil;
@@ -51,6 +58,7 @@ import com.titan.gyslfh.monitor.MonitorActivity;
 import com.titan.gyslfh.monitor.MonitorModel;
 import com.titan.gyslfh.upfireinfo.UpAlarmActivity;
 import com.titan.model.FireInfo;
+import com.titan.model.TitanLayer;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.CalloutBinding;
@@ -106,8 +114,30 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private PlotUtil mPlotUtil;
     //导航模块
     private BaiduNavi mBaiduNavi;
+    //三维场景
+    private SceneView mSceneView;
+
+    public ArcGISScene getmScene() {
+        return mScene;
+    }
+
+    public void setmScene(ArcGISScene mScene) {
+        this.mScene = mScene;
+    }
+
+    //
+    private ArcGISScene mScene;
 
     private SymbolUtil mSymbolUtil;
+    //地图
+    private boolean mapisloaded=false;
+
+    public List<TitanLayer> getmLayerlist() {
+        return mLayerlist;
+    }
+
+    //专题图层
+    private  List<TitanLayer> mLayerlist=new ArrayList<>();
 
 
 
@@ -229,24 +259,81 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private void intiMapView() {
         //ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");//去除水印的
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud8065403504,none,RP5X0H4AH7CLJ9HSX018");
-        //初始化地图
-        mMap = new ArcGISMap(Basemap.createStreets());
-        //添加绘制图层
-        mGraphicsOverlay=addGraphicsOverlay(mMainFragBinding.mapview);
+        //初始化底图()
+        mMap = new ArcGISMap(Basemap.createOpenStreetMap());
+
+        //instantiate an ArcGISMap with OpenStreetMap Basemap
+        // mMap = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 34.056295, -117.195800, 10);
+
         for (int i = 1; i <=layers ; i++) {
             String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
             ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
+            //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
             //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
             FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
             featuretables.add(serviceFeatureTable);
             featurelayers.add(featureLayer);
             featureLayer.setVisible(false);
+            TitanLayer titanLayer=new TitanLayer();
+            String name=featureLayer.getName();
+            titanLayer.setName(name);
+            titanLayer.setVisiable(false);
+            titanLayer.setUrl(layerurl);
+            mLayerlist.add(titanLayer);
+
             boolean isadd=mMap.getOperationalLayers().add(featureLayer);
+
             if(isadd){
-                Log.e("Titan", String.valueOf(i)) ;
+                name=featureLayer.getName();
+                Log.e("图层加载成功",featureLayer.getName()) ;
             }
 
         }
+        mMainFragBinding.mapview.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
+            @Override
+            public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
+                // get the layer which changed it's state
+                Layer layer = layerViewStateChangedEvent.getLayer();
+
+                // get the View Status of the layer
+                // View status will be either of ACTIVE, ERROR, LOADING, NOT_VISIBLE, OUT_OF_SCALE, UNKNOWN
+                String viewStatus = layerViewStateChangedEvent.getLayerViewStatus().iterator().next().toString();
+
+                final int layerIndex = mMap.getOperationalLayers().indexOf(layer);
+                String name=layerViewStateChangedEvent.getLayer().getName();
+                if(layerIndex>=0){
+                    mLayerlist.get(layerIndex).setName(name);
+                    viewStatusString(layerIndex,viewStatus);
+
+                }
+                //Log.e("info", layerIndex+viewStatusString(viewStatus) );
+
+                // finding and updating status of the layer
+                /*switch (layerIndex) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+
+
+                }*/
+
+            }
+        });
+
+
+
+        //添加绘制图层
+        mGraphicsOverlay=addGraphicsOverlay(mMainFragBinding.mapview);
         mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
             @Override
             public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
@@ -256,16 +343,23 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 // set the status in the TextView accordingly
                 switch (mapLoadStatus) {
                     case "LOADING":
+                        Log.e("Titan","LOADING");
                         break;
 
                     case "FAILED_TO_LOAD":
+
+                        mMainViewModel.snackbarText.set("图层加载异常");
+                        Log.e("Titan","图层加载异常");
                         break;
 
                     case "NOT_LOADED":
+                        Log.e("Titan","NOT_LOADED");
+
                         break;
 
                     case "LOADED":
                         setTouchListener();
+                        Log.e("Titan","图层加载完成");
                         Log.e("TItan","WKID"+mMainFragBinding.mapview.getSpatialReference().getWKText());
                         break;
 
@@ -316,6 +410,42 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         }*/
 
     }
+    /**
+     * The method looks up the view status of the layer and returns a string which is displayed
+     *
+     * @param status View Status of the layer
+     * @return String equivalent of the status
+     */
+    private String viewStatusString (int layerindex,String status) {
+
+        switch(status) {
+            case "ACTIVE":
+                mLayerlist.get(layerindex).setVisiable(true);
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
+                return getActivity().getString(R.string.active);
+
+            case "ERROR":
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.error));
+                return getActivity().getString(R.string.error);
+
+            case "LOADING":
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.loading));
+                return getActivity().getString(R.string.loading);
+
+            case "NOT_VISIBLE":
+                mLayerlist.get(layerindex).setVisiable(false);
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
+                return getActivity().getString(R.string.notVisible);
+
+            case "OUT_OF_SCALE":
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.outOfScale));
+                return getActivity().getString(R.string.outOfScale);
+
+        }
+
+        return getActivity().getString(R.string.unknown);
+
+    }
 
     /**
      * 设置地图点击监听事件
@@ -364,6 +494,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                                 try {
                                     //call get on the future to get the result
                                     result = future.get();
+                                    //result.getFields().get(1).getAlias()
 
                                     // create an Iterator
                                     Iterator<Feature> iterator = result.iterator();
@@ -375,6 +506,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                                     while (iterator.hasNext()){
                                         feature = iterator.next();
 
+
                                         // create a Map of all available attributes as name value pairs
                                         //Map<String, Object> attr = feature.getAttributes();
 
@@ -385,7 +517,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                                         Envelope envelope = feature.getGeometry().getExtent();
                                         mMapView.setViewpointGeometryAsync(envelope, 200);
                                         mCallout.setLocation(clickPoint);
-                                        mCallout.setContent(createCallView(feature.getAttributes()));
+                                        //mCallout.setContent(createCallView(feature.getAttributes()));
+                                        mCallout.setContent(createCallView(result.getFields(),feature.getAttributes()));
                                         mCallout.show();
                                     }
 
@@ -417,6 +550,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * @param position
      */
     public void selectBasemap(int position){
+        if(position!=3)
+        mMainViewModel.isSceneView.set(false);
         switch (position){
             //基础图
             case 0:
@@ -430,14 +565,62 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
             case 2:
                 mMap.setBasemap(Basemap.createStreets());
                 break;
+            //三维场景
+            case 3:
+                mMainViewModel.isSceneView.set(true);
+                int dd=mMainFragBinding.mapview.getVisibility();
+                mMainFragBinding.mapview.setVisibility(View.INVISIBLE);
+                init3D();
+                loadLayers();
+                //mMap.setBasemap(Basemap.createStreets());
+                break;
         }
+    }
+
+    /**
+     * 加载图层数据
+     */
+    private void loadLayers() {
+        for (TitanLayer layer :mLayerlist){
+            if(layer.isVisiable()){
+                ServiceFeatureTable serviceFeatureTable=new ServiceFeatureTable(layer.getUrl());
+                FeatureLayer featurelayer=new FeatureLayer(serviceFeatureTable);
+                mScene.getOperationalLayers().add(featurelayer);
+
+            }
+        }
+    }
+
+    /**
+     * 初始化三维场景
+     */
+    private void init3D() {
+
+        // inflate SceneView from layout
+        //mSceneView = mMainFragBinding.sceneView;
+
+        // create a scene and add a basemap to it
+        mScene = new ArcGISScene();
+        mScene.setBasemap(Basemap.createImagery());
+        mMainFragBinding.sceneView.setScene(mScene);
+        //去除版权声明
+        mMainFragBinding.sceneView.setAttributionTextVisible(false);
+        // add base surface for elevation data
+        ArcGISTiledElevationSource elevationSource = new ArcGISTiledElevationSource(
+                getResources().getString(R.string.elevation_image_service));
+        mScene.getBaseSurface().getElevationSources().add(elevationSource);
+
+        // add a camera and initial camera position
+        //Camera camera = new Camera(28.4, 83.9, 10010.0, 10.0, 80.0, 300.0);
+        //mMainFragBinding.sceneView.setViewpointCamera(camera);
+
     }
 
     /**
      * 创建callout
      * @return
      */
-    public View createCallView(Map<String, Object> attr){
+    public View createCallView(List<Field> fields,Map<String, Object> attr){
 
         final MonitorModel monitorModel=new MonitorModel("","","","","","");
 
@@ -449,45 +632,52 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         StringBuffer calloutcontent=new StringBuffer();
         calloutcontent.append("");
         try {
+
+
             final Set<String> keys = attr.keySet();
             if(keys.contains("MONITORIP")){
                 btn_monitor.setVisibility(View.VISIBLE);
                 //alloutViewModel.ismonitor.set(true);
 
             }
-            for(String key:keys) {
-                Object value = attr.get(key);
+
+            for (Field field :fields){
+                String alias=field.getAlias();
+                Object value=  attr.get(field.getName());
+
                 // format observed field value as date
                 if (value instanceof GregorianCalendar) {
                     //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
                     //DateUtil.getYMD(((GregorianCalendar) value).getTime());
                     value = DateUtil.getYMD(((GregorianCalendar) value).getTime());
                 }
-                if(key.equals("MONITORIP")&& value!=null){
+                if(field.getName().equals("MONITORIP")&& value!=null){
                     monitorModel.setMONITORIP((String) value);
 
                 }
 
-                if(key.equals("NTITHEFTIP")&& value!=null){
+                if(field.getName().equals("NTITHEFTIP")&& value!=null){
                     monitorModel.setANTITHEFTIP((String) value);
 
                 }
-                if(key.equals("INFRAREDIP")&& value!=null){
+                if(field.getName().equals("INFRAREDIP")&& value!=null){
                     monitorModel.setINFRAREDIP((String) value);
 
                 }
-                if(key.equals("MONITORDVR")&& value!=null){
+                if(field.getName().equals("MONITORDVR")&& value!=null){
 
                     monitorModel.setMONITORDVR((String) value );
                 }
-                if(key.equals("INFRAREDDVR")&& value!=null){
+                if(field.getName().equals("INFRAREDDVR")&& value!=null){
                     monitorModel.setINFRAREDDVR((String) value);
                 }
-                if(key.equals("ANTITHEFTDVR")&& value!=null){
+                if(field.getName().equals("ANTITHEFTDVR")&& value!=null){
                     monitorModel.setANTITHEFTDVR((String) value);
                 }
-                calloutcontent.append(key + " | " + value + "\n");
+                calloutcontent.append(alias + " | " + value + "\n");
+
             }
+
 
         } catch (Exception e) {
             Toast.makeText(getActivity(),"获取属性信息异常"+e,Toast.LENGTH_LONG).show();
@@ -654,6 +844,10 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         }
     }
 
+    /**
+     * 开启导航
+     * @param isnav
+     */
     @Override
     public void startNavigation(boolean isnav) {
        if(mMainViewModel.isnav.get()){
@@ -670,8 +864,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
            setTouchListener();
        }
 
-        //getActivity().
-        //routeplanToNavi(BNRoutePlanNode.CoordinateType.WGS84);
     }
 
 
@@ -701,4 +893,5 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //mMapView.setViewpointGeometryAsync(envelope, 200);
 
     }
+
 }

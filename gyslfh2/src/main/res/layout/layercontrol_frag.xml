@@ -33,18 +33,19 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <HorizontalScrollView
             android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:scrollbars="none"
             android:orientation="horizontal">
 
 
             <RadioGroup
                 android:id="@+id/rg_maps"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
@@ -93,6 +94,18 @@
                     android:textColor="@color/black"
                     android:onClick="@{()->viewmodel.selectBasemap(2)}"
                     android:text="@string/map_firerisk" />
+                <RadioButton
+                    android:id="@+id/rb_map3d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:button="@null"
+                    android:drawableTop="@drawable/rb_mapfirerisk_selector"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:onClick="@{()->viewmodel.selectBasemap(3)}"
+                    android:text="@string/map_map3d" />
             </RadioGroup>
             <!--<ImageView
                 android:background="@drawable/mapfirerisk_normal_test"
@@ -106,7 +119,7 @@
                 te
                 />-->
 
-        </LinearLayout>
+        </HorizontalScrollView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_layers"
             android:layout_width="match_parent"
