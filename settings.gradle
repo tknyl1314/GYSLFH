@@ -1,4 +1,4 @@
-include  ':mylib',':gyslfh2'
+include  ':gyslfh2'
 //,':app'
         //':app',
 //, ':timepicke'
