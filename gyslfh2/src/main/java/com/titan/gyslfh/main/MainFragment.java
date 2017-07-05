@@ -94,10 +94,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         return mMap;
     }
 
-    public void setmMap(ArcGISMap mMap) {
-        this.mMap = mMap;
-    }
-
     //基础图层
     public static ArcGISMap mMap;
     //专题图层数量
@@ -115,10 +111,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private PlotUtil mPlotUtil;
     //导航模块
     private BaiduNavi mBaiduNavi;
-
+    //样式库
     private SymbolUtil mSymbolUtil;
-    //地图
-    private boolean mapisloaded=false;
 
     public List<TitanLayer> getmLayerlist() {
         return mLayerlist;
