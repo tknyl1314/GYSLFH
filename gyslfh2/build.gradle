@@ -112,7 +112,7 @@ dependencies {
     //compile 'com.github.wuhongsheng:TitanLib:0.3.8'
     //compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
     compile 'com.github.wuhongsheng:TitanLib:0.4'

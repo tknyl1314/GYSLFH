@@ -4,7 +4,6 @@ package com.titan.gyslfh.main;
  */
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.esri.arcgisruntime.geometry.Point;
+import com.titan.BaseViewModel;
 import com.titan.data.source.DataRepository;
 import com.titan.data.source.DataSource;
 import com.titan.gis.TrackUtil;
@@ -32,7 +32,7 @@ import java.util.Date;
 /**
  * Created by Whs on 2016/12/1 0001
  */
-public class MainViewModel extends BaseObservable implements BDLocationListener {
+public class MainViewModel extends BaseViewModel implements BDLocationListener {
     //是否开启三维场景
     public ObservableBoolean isSceneView=new ObservableBoolean(false);
     //是否开启标绘
