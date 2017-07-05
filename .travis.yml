@@ -1,9 +1,18 @@
 language: android
 android:
   components:
-    - build-tools-22.0.1
-    - android-23
-    - extra-android-m2repository
-    - extra-android-support
+  - build-tools-22.0.1
+  - android-23
+  - extra-android-m2repository
+  - extra-android-support
 script:
-  - ./gradlew assembleRelease
+- "./gradlew assembleRelease"
+deploy:
+  provider: releases
+  api_key:
+    secure: fn94fmvze1e/rEOyaRTIZAs7MOk9gUjKIFOMti9lkb1wIPfr4rcEBy1Nqti027SW4Tuxw4KxhEt9sZbmUy/RTPmash4ahskEGCzn5DDlx7Xz5Dz8E0kE5qYBs6WoZnrmoh1kBDV9gIucLGT4101Mi/VNTctmLi0KNW9RxuoLr6nNtEirrNimQSxUzSYXtDMOWvK+R1uZ8LrvQv/rWf/bIwx1BJkO/CRc7plw65X55uTbLeOKGpm141XugENVti9/xHSOPzaEnlDiYT4lMng+i7kdK+Qb7xESMZQ+YDd9Kkek6JaHm8gVNhTp0tFzulNViWSh22j3BRhScyzPeBUgCwbJZn7MZq3Tu7y4Ebyd5jNUh87KIPKbWQ1iwHd6P8oIzSCtsCbAI/XiCETLE2WdiQWaU6bfI3tYnk+PIyGKMaMwArCoAM350yrconv6TcNSyCvLLZxzwswLD/LsFJLOoDOUIRh558dGU0kHMW/n6renXbXouChe9twCRRzgBrfwLn1e9LSLmsmQx1s0JkX8mGhx5g3KnqHpFM9EQbJR2T0xk3HzdG0uEEAoRNdb8RpZXF8pZMraUZryeqF1wo4f4+AIhcxg1vOvfbhTIQeDAYH86g2VdJsDBWNVjvZW5XhWDxEJpT1U2aqoywgeYsdjiSRGzg5nrkSztw5AnduqOpI=
+  file: gyslfh2/build/outputs/apk/app-release.apk
+  skip_cleanup: true
+  on:
+    tags: true
+

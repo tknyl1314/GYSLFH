@@ -19,7 +19,6 @@
     <string name="error_getbackalarm">获取回警信息异常</string>
 
 
-
     <string name="success_uploc">上传坐标成功</string>
     <string name="success_upload">上报成功</string>
     <string name="failure_upload">上报失败</string>

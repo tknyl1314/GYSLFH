@@ -1,4 +1,4 @@
-package com.titan.gyslfh.upfireinfo;
+package com.titan.gyslfh.sceneview;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,59 +6,56 @@ import android.support.v4.app.Fragment;
 
 import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
-import com.titan.Injection;
 import com.titan.ViewModelHolder;
-import com.titan.gis.selectaddress.SelectAddressFragment;
+import com.titan.gyslfh.main.SceneFragment;
+import com.titan.gyslfh.main.SceneViewModel;
+import com.titan.model.TitanLayer;
 import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
+import java.util.List;
+
 /**
- * 火情上报／接警录入
+ * 三维场景界面
  */
-public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragment.OnFragmentInteractionListener{
+public class SceneActivity extends BaseActivity  {
 
 
 
-    private UpAlarmFragment mUpAlarmFragment;
+    private SceneFragment mFragment;
 
-    private UpAlarmViewModel mViewModel;
-
+    private SceneViewModel mViewModel;
+    //位置信息
     private TitanLocation titanLocation;
-
-    private  int type;
-
-
+    //图层信息
+    private List<TitanLayer> mLayerList;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upalarm);
-
-        mUpAlarmFragment= (UpAlarmFragment) findOrCreateViewFragment();
-
-        mViewModel= (UpAlarmViewModel) findOrCreateViewModel();
-        //int type=getIntent().getIntExtra("type",1);
-
-        type= getIntent().getIntExtra("type",1);
+        setContentView(R.layout.activity_scene);
         //位置信息
         titanLocation= (TitanLocation) getIntent().getExtras().getSerializable("loc");
+        //图层信息
+        mLayerList= (List<TitanLayer>) getIntent().getExtras().getSerializable("layers");
 
-        mViewModel.type.set(type);
-        mViewModel.titanloc.set(titanLocation);
-        mViewModel.address.set(titanLocation.getAddress());
-        mUpAlarmFragment.setViewModel(mViewModel);
+        mFragment= (SceneFragment) findOrCreateViewFragment();
+
+        mViewModel= (SceneViewModel) findOrCreateViewModel();
+
+        mFragment.setViewModel(mViewModel);
         //mContext=this;
 
     }
     @Override
     public Fragment findOrCreateViewFragment() {
-        UpAlarmFragment tasksFragment =
-                (UpAlarmFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        SceneFragment tasksFragment =
+                (SceneFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (tasksFragment == null) {
             // Create the fragment
-            tasksFragment = UpAlarmFragment.newInstance();
+            tasksFragment = SceneFragment.newInstance(titanLocation,mLayerList);
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(), tasksFragment, R.id.content_frame);
         }
@@ -70,8 +67,8 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
         // In a configuration change we might have a ViewModel present. It's retained using the
         // Fragment Manager.
         @SuppressWarnings("unchecked")
-        ViewModelHolder<UpAlarmViewModel> retainedViewModel =
-                (ViewModelHolder<UpAlarmViewModel>) getSupportFragmentManager()
+        ViewModelHolder<SceneViewModel> retainedViewModel =
+                (ViewModelHolder<SceneViewModel>) getSupportFragmentManager()
                         .findFragmentByTag(VIEWMODEL_TAG);
 
         if (retainedViewModel != null && retainedViewModel.getViewmodel() != null) {
@@ -80,7 +77,7 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
         } else {
             //LayerControlViewModel layerControlViewModel=new LayerControlViewModel(getApplicationContext(),this);
             // There is no ViewModel yet, create it.
-            UpAlarmViewModel viewModel = new UpAlarmViewModel(getApplicationContext(),mUpAlarmFragment, Injection.provideDataRepository(mContext));
+            SceneViewModel viewModel = new SceneViewModel(getApplicationContext(),mFragment);
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),
@@ -88,18 +85,5 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
                     VIEWMODEL_TAG);
             return viewModel;
         }
-    }
-
-
-    /**
-     * 更新地址
-     * @param titanLocation
-     */
-    @Override
-    public void onGetNewAddress(TitanLocation titanLocation) {
-        mViewModel.type.set(type);
-        mViewModel.address.set(titanLocation.getAddress());
-        mViewModel.titanloc.set(titanLocation);
-        mUpAlarmFragment.setViewModel(mViewModel);
     }
 }

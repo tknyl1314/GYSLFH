@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "com.titan.newslfh"
-        minSdkVersion 18
+        minSdkVersion 18  //Andoird 4.3
         targetSdkVersion 23//百度导航要求
         versionCode 1
         versionName "2.0"
@@ -109,12 +109,13 @@ dependencies {
     compile files('libs/HCNetSDK.jar')
     compile files('libs/PlayerSDK.jar')
     compile files('libs/jedis-2.8.1.jar')
+    //compile 'com.github.wuhongsheng:TitanLib:0.3.8'
+    //compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
-    //compile 'com.github.wuhongsheng:TitanLib:0.3.8'
     compile 'com.github.wuhongsheng:TitanLib:0.4'
-    //compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }

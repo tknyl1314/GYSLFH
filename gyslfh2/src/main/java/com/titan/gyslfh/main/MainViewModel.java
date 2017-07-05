@@ -172,11 +172,18 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
     }
 
     /**
-     * 开启导航
+     * 开启测试
      */
     public void test(){
 
         mMain.test();
+    }
+
+    /**
+     * 三维场景
+     */
+    public void openScene(){
+        mMain.openScene();
     }
 
 

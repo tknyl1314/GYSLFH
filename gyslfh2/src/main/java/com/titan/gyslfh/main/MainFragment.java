@@ -35,8 +35,6 @@ import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.ArcGISScene;
-import com.esri.arcgisruntime.mapping.ArcGISTiledElevationSource;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
@@ -46,7 +44,6 @@ import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedEvent;
 import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
-import com.esri.arcgisruntime.mapping.view.SceneView;
 import com.esri.arcgisruntime.symbology.Symbol;
 import com.google.gson.Gson;
 import com.titan.gis.PlotUtil;
@@ -56,6 +53,7 @@ import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
 import com.titan.gyslfh.backalarm.BackAlarmActivity;
 import com.titan.gyslfh.monitor.MonitorActivity;
 import com.titan.gyslfh.monitor.MonitorModel;
+import com.titan.gyslfh.sceneview.SceneActivity;
 import com.titan.gyslfh.upfireinfo.UpAlarmActivity;
 import com.titan.model.FireInfo;
 import com.titan.model.TitanLayer;
@@ -66,6 +64,7 @@ import com.titan.newslfh.databinding.MainFragBinding;
 import com.titan.util.DateUtil;
 import com.titan.util.SnackbarUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -75,6 +74,7 @@ import java.util.Set;
 
 /**
  * Created by whs on 2017/4/28
+ * 主界面
  */
 
 public class MainFragment extends Fragment implements IMain, CalloutInterface {
@@ -104,6 +104,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private final  int layers=9;
     //专题图层
     private List<ServiceFeatureTable> featuretables=new ArrayList<>();
+
     private List<FeatureLayer> featurelayers=new ArrayList<>();
 
     //地图查询callout
@@ -114,19 +115,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private PlotUtil mPlotUtil;
     //导航模块
     private BaiduNavi mBaiduNavi;
-    //三维场景
-    private SceneView mSceneView;
-
-    public ArcGISScene getmScene() {
-        return mScene;
-    }
-
-    public void setmScene(ArcGISScene mScene) {
-        this.mScene = mScene;
-    }
-
-    //
-    private ArcGISScene mScene;
 
     private SymbolUtil mSymbolUtil;
     //地图
@@ -138,6 +126,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     //专题图层
     private  List<TitanLayer> mLayerlist=new ArrayList<>();
+    //第一次加载
+    private  boolean firstLoad=true;
 
 
 
@@ -264,31 +254,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
         //instantiate an ArcGISMap with OpenStreetMap Basemap
         // mMap = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 34.056295, -117.195800, 10);
+        loadLyaers();
 
-        for (int i = 1; i <=layers ; i++) {
-            String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
-            ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
-            //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
-            //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
-            FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
-            featuretables.add(serviceFeatureTable);
-            featurelayers.add(featureLayer);
-            featureLayer.setVisible(false);
-            TitanLayer titanLayer=new TitanLayer();
-            String name=featureLayer.getName();
-            titanLayer.setName(name);
-            titanLayer.setVisiable(false);
-            titanLayer.setUrl(layerurl);
-            mLayerlist.add(titanLayer);
-
-            boolean isadd=mMap.getOperationalLayers().add(featureLayer);
-
-            if(isadd){
-                name=featureLayer.getName();
-                Log.e("图层加载成功",featureLayer.getName()) ;
-            }
-
-        }
         mMainFragBinding.mapview.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
             @Override
             public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
@@ -302,30 +269,19 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 final int layerIndex = mMap.getOperationalLayers().indexOf(layer);
                 String name=layerViewStateChangedEvent.getLayer().getName();
                 if(layerIndex>=0){
+
                     mLayerlist.get(layerIndex).setName(name);
-                    viewStatusString(layerIndex,viewStatus);
+                    //viewStatusString(layerIndex,viewStatus);
+
+                    /*if(firstLoad){
+                        //是否首次加载
+                        mLayerlist.get(layerIndex).setName(name);
+
+                    }else {
+                    }*/
 
                 }
-                //Log.e("info", layerIndex+viewStatusString(viewStatus) );
 
-                // finding and updating status of the layer
-                /*switch (layerIndex) {
-                    case 0:
-
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        break;
-
-
-                }*/
 
             }
         });
@@ -358,6 +314,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                         break;
 
                     case "LOADED":
+                        //loadLyaers();
+                        firstLoad=false;
                         setTouchListener();
                         Log.e("Titan","图层加载完成");
                         Log.e("TItan","WKID"+mMainFragBinding.mapview.getSpatialReference().getWKText());
@@ -408,6 +366,37 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
             UpdateUtil updateUtil=new UpdateUtil(getActivity());
             updateUtil.executeUpdate();
         }*/
+
+    }
+
+    /**
+     * 加载专题图层
+     */
+    private void loadLyaers(){
+        for (int i = 1; i <=layers ; i++) {
+            String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
+            ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
+            //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
+            //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
+            FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
+            featuretables.add(serviceFeatureTable);
+            featurelayers.add(featureLayer);
+            featureLayer.setVisible(false);
+            TitanLayer titanLayer=new TitanLayer();
+            String name=featureLayer.getName();
+            titanLayer.setName(name);
+            titanLayer.setVisiable(false);
+            titanLayer.setUrl(layerurl);
+            mLayerlist.add(titanLayer);
+
+            mMap.getOperationalLayers().add(featureLayer);
+
+            /*if(isadd){
+                name=featureLayer.getName();
+                Log.e("图层加载成功",featureLayer.getName()) ;
+            }*/
+
+        }
 
     }
     /**
@@ -482,7 +471,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
                         // call select features
                         final ListenableFuture<FeatureQueryResult> future =featureTable.queryFeaturesAsync(query, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
-                       /* if(future.isDone()){
+                      /* if(future.isDone()){
                             //第二次查询
                             break;
                         }*/
@@ -498,7 +487,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
                                     // create an Iterator
                                     Iterator<Feature> iterator = result.iterator();
-
 
                                     Feature feature = null;
                                     // cycle through selections
@@ -566,55 +554,20 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 mMap.setBasemap(Basemap.createStreets());
                 break;
             //三维场景
-            case 3:
-                mMainViewModel.isSceneView.set(true);
+            /*case 3:
+               *//* mMainViewModel.isSceneView.set(true);
                 int dd=mMainFragBinding.mapview.getVisibility();
                 mMainFragBinding.mapview.setVisibility(View.INVISIBLE);
                 init3D();
-                loadLayers();
+                loadLayers();*//*
                 //mMap.setBasemap(Basemap.createStreets());
-                break;
+                break;*/
         }
     }
 
-    /**
-     * 加载图层数据
-     */
-    private void loadLayers() {
-        for (TitanLayer layer :mLayerlist){
-            if(layer.isVisiable()){
-                ServiceFeatureTable serviceFeatureTable=new ServiceFeatureTable(layer.getUrl());
-                FeatureLayer featurelayer=new FeatureLayer(serviceFeatureTable);
-                mScene.getOperationalLayers().add(featurelayer);
 
-            }
-        }
-    }
 
-    /**
-     * 初始化三维场景
-     */
-    private void init3D() {
 
-        // inflate SceneView from layout
-        //mSceneView = mMainFragBinding.sceneView;
-
-        // create a scene and add a basemap to it
-        mScene = new ArcGISScene();
-        mScene.setBasemap(Basemap.createImagery());
-        mMainFragBinding.sceneView.setScene(mScene);
-        //去除版权声明
-        mMainFragBinding.sceneView.setAttributionTextVisible(false);
-        // add base surface for elevation data
-        ArcGISTiledElevationSource elevationSource = new ArcGISTiledElevationSource(
-                getResources().getString(R.string.elevation_image_service));
-        mScene.getBaseSurface().getElevationSources().add(elevationSource);
-
-        // add a camera and initial camera position
-        //Camera camera = new Camera(28.4, 83.9, 10010.0, 10.0, 80.0, 300.0);
-        //mMainFragBinding.sceneView.setViewpointCamera(camera);
-
-    }
 
     /**
      * 创建callout
@@ -869,7 +822,33 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     @Override
     public void test() {
-        startActivity(new Intent(getActivity(), MonitorActivity.class));
+
+
+
+        /*FragmentManager manager =getFragmentManager();
+
+        SceneFragment sceneFragment =  SceneFragment.newInstance(mMainViewModel.getTitanloc(),mLayerlist);
+        SceneViewModel viewModel= new SceneViewModel(getActivity(),sceneFragment);
+        sceneFragment.setViewModel(viewModel);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.content_frame, sceneFragment);
+        transaction.addToBackStack(null);
+        //设置过度动画
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();*/
+
+        //SceneFragment sceneFragment = getActivity().findOrCreateSceneViewFragment();
+        //startActivity(new Intent(getActivity(), MonitorActivity.class));
+    }
+
+    @Override
+    public void openScene() {
+        Intent intent=new Intent(getActivity(), SceneActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("loc",mMainViewModel.getTitanloc());
+        bundle.putSerializable("layers", (Serializable) mLayerlist);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

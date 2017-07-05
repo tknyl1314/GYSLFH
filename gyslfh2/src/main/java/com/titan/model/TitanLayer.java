@@ -1,11 +1,13 @@
 package com.titan.model;
 
+import java.io.Serializable;
+
 /**
  * Created by whs on 2017/7/3
  * 图层类
  */
 
-public class TitanLayer {
+public class TitanLayer implements Serializable {
     //图层名称
     private String name;
     //图层地址

@@ -153,6 +153,11 @@
             android:configChanges="keyboardHidden|orientation"/>
         <!--视频监控-->
         <activity android:name="com.titan.gyslfh.monitor.MonitorActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboardHidden|orientation"/>
+        <!--三维场景-->
+        <activity android:name="com.titan.gyslfh.sceneview.SceneActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation"/>
         <!--百度导航页-->
         <activity

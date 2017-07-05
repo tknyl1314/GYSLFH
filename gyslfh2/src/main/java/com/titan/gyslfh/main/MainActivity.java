@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     SharedPreferences mSharedPreferences;
     //主界面
     public   MainFragment mainFragment;
+    //三维场景
+    public  SceneFragment sceneFragment;
     //图层控制
     private LayerControlFragment layerControlFragment;
 
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         //setupNavigationDrawer();
 
         mainFragment = findOrCreateViewFragment();
+
 
 
         mViewModel = findOrCreateViewModel();
@@ -257,6 +260,19 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         return tasksFragment;
     }
 
+    /*@NonNull
+    private SceneFragment findOrCreateSceneViewFragment() {
+        SceneFragment tasksFragment =
+                (SceneFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (tasksFragment == null) {
+            // Create the fragment
+            tasksFragment = SceneFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(
+                    getSupportFragmentManager(), tasksFragment, R.id.content_frame);
+        }
+        return tasksFragment;
+    }
+*/
 
 
     @NonNull

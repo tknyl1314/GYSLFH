@@ -52,6 +52,11 @@ public interface IMain {
       */
      void test();
 
+     /**
+      * 三维场景
+      */
+    void openScene();
+
 
     //void removeTrackLine();
 }
