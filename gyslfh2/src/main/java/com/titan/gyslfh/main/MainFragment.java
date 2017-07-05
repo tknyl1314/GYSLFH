@@ -269,7 +269,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 final int layerIndex = mMap.getOperationalLayers().indexOf(layer);
                 String name=layerViewStateChangedEvent.getLayer().getName();
                 if(layerIndex>=0){
-
                     mLayerlist.get(layerIndex).setName(name);
                     //viewStatusString(layerIndex,viewStatus);
 

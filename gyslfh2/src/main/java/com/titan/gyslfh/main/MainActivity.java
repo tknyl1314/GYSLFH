@@ -487,12 +487,13 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
 
         }*/
         //Toast.makeText(mContext,"已添加图层"+layername,Toast.LENGTH_SHORT).show();
-        if(mViewModel.isSceneView.get()){
+        /*if(mViewModel.isSceneView.get()){
             mainFragment.getmScene().getOperationalLayers().get(index).setVisible(isvisable);
         }else {
             mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
 
-        }
+        }*/
+        mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
 
     }
 
