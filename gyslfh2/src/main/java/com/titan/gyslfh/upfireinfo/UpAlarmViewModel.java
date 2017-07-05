@@ -2,6 +2,7 @@ package com.titan.gyslfh.upfireinfo;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.text.TextUtils;
@@ -76,7 +77,8 @@ public class UpAlarmViewModel extends BaseViewModel {
     public ObservableField<String> userid=new ObservableField<>();
 
     //是否查岗
-    public ObservableField<Boolean> iswork=new ObservableField<>(false);
+    //public ObservableField<Boolean> iswork=new ObservableField<>(false);
+    public ObservableBoolean iswork=new ObservableBoolean(false);
 
     //电话
     public ObservableField<String> tel=new ObservableField<>();

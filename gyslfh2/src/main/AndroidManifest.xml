@@ -110,7 +110,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
         <activity
             android:name="com.titan.gyslfh.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -122,25 +121,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity
+<!--<activity
             android:name="com.titan.gyslfh.main.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />-->
-        <!--<activity
+<!--<activity
             android:name="com.titan.gyslfh.UpAlarmActivity"
             android:windowSoftInputMode="stateHidden" />-->
-        <!-- 相册界面 -->
-        <activity
+<!-- 相册界面 -->
+<activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
+<activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-       <!-- <activity
+<!-- <activity
             android:name="com.titan.gyslfh.DeleteImageActivity"
             android:theme="@style/AppTheme.NoActionBar" />-->
         <!--火警管理-->

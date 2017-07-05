@@ -3,6 +3,7 @@ package com.titan.gyslfh;
 import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ObservableList;
 
 import com.google.gson.Gson;
@@ -47,10 +48,13 @@ public class AlarmViewModel extends BaseViewModel {
     protected SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
 
     //用户等级
-    public ObservableField<Integer> userlevel=new ObservableField<>();
+    //public ObservableField<Integer> userlevel=new ObservableField<>();
+
+    public ObservableInt userlevel=new ObservableInt();
 
     //上报类型 1：火情上报 2：接警录入
-    public ObservableField<Integer> type=new ObservableField<>(1);
+    //public ObservableField<Integer> type=new ObservableField<>(1);
+    public ObservableInt type =new ObservableInt(1);
     //接警来源 5：平板
     public ObservableField<String> alarmsouce=new ObservableField<>("5");
     //火情状态

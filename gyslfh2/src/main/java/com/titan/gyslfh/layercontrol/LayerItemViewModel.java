@@ -1,10 +1,10 @@
 package com.titan.gyslfh.layercontrol;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 
 import com.esri.arcgisruntime.layers.Layer;
-import com.esri.arcgisruntime.mapping.LayerList;
 import com.titan.data.source.DataRepository;
 import com.titan.model.TitanLayer;
 
@@ -18,7 +18,8 @@ public class LayerItemViewModel extends LayerControlViewModel {
     //图层信息
     public final   ObservableField<Layer> mLayer=new ObservableField<>();
     //是否选中
-    public final   ObservableField<Boolean> ischeck=new ObservableField<>(false);
+    public final  ObservableBoolean ischeck=new ObservableBoolean(false);
+
     //图层index
     public final   ObservableField<Integer> layerindex=new ObservableField<>();
 

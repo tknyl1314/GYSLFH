@@ -5,6 +5,7 @@ package com.titan.gyslfh.login;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,7 +33,8 @@ public class LoginViewModel extends BaseObservable  {
     //密码
     public final ObservableField<String> password = new ObservableField<>();
     //是否记住用户
-    public final ObservableField<Boolean> isremember = new ObservableField<>();
+    //public final ObservableField<Boolean> isremember = new ObservableField<>();
+    public final ObservableBoolean isremember=new ObservableBoolean(true);
 
     private Context mContext;
     private ILogin mLogin;

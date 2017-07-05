@@ -140,7 +140,7 @@
             android:background="@color/white"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_3dscene"
-            android:onClick="@{()->viewmodel.test()}"
+            android:onClick="@{()->viewmodel.openScene()}"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_below="@+id/iv_nav"
             android:layout_alignStart="@+id/cv_layercontrol" />
@@ -152,7 +152,7 @@
             android:layout_marginTop="10dp"
             android:visibility="gone"
             android:src="@drawable/ic_navigation"
-            android:onClick="@{()->viewmodel.openScene()}"
+            android:onClick="@{()->viewmodel.test()}"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_below="@+id/iv_scene"
             android:layout_alignStart="@+id/cv_layercontrol" />

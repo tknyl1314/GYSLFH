@@ -373,7 +373,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     private void loadLyaers(){
         for (int i = 1; i <=layers ; i++) {
-            String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
+            String layerurl=getActivity().getString(R.string.gisserverhost1)+"/"+i;
             ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
             //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
             //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
