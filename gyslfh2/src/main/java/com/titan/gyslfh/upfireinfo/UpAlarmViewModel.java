@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ObservableList;
 import android.text.TextUtils;
 
@@ -49,7 +50,8 @@ public class UpAlarmViewModel extends BaseViewModel {
     public ObservableField<Integer> userlevel=new ObservableField<>();
 
     //上报类型 1：火情上报 2：接警录入
-    public ObservableField<Integer> type=new ObservableField<>(1);
+    //public ObservableField<Integer> type=new ObservableField<>(1);
+    public ObservableInt type =new ObservableInt(1);
     //接警来源 5：平板
     //public ObservableField<String> alarmsouce=new ObservableField<>("5");
     public ObservableField<Map<String,Object>> orgin=new ObservableField<>();

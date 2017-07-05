@@ -8,6 +8,7 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +40,9 @@ public class MainViewModel extends BaseObservable implements BDLocationListener 
     //是否开启导航
     public ObservableBoolean isnav=new ObservableBoolean(false);
     //用户等级
-    public final ObservableField<Integer> userlevel = new ObservableField<>();
+   // public final ObservableField<Integer> userlevel = new ObservableField<>();
+
+    public ObservableInt userlevel =new ObservableInt();
     //用户当前位置
     public static final ObservableField<Point> currentPoint = new ObservableField<>();
 

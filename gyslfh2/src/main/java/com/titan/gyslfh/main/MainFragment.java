@@ -270,15 +270,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 String name=layerViewStateChangedEvent.getLayer().getName();
                 if(layerIndex>=0){
                     mLayerlist.get(layerIndex).setName(name);
-                    //viewStatusString(layerIndex,viewStatus);
-
-                    /*if(firstLoad){
-                        //是否首次加载
-                        mLayerlist.get(layerIndex).setName(name);
-
-                    }else {
-                    }*/
-
+                    viewStatusString(layerIndex,viewStatus);
                 }
 
 
@@ -295,6 +287,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 String mapLoadStatus;
                 mapLoadStatus = loadStatusChangedEvent.getNewLoadStatus().name();
                 // map load status can be any of LOADING, FAILED_TO_LOAD, NOT_LOADED or LOADED
+
                 // set the status in the TextView accordingly
                 switch (mapLoadStatus) {
                     case "LOADING":
@@ -409,7 +402,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         switch(status) {
             case "ACTIVE":
                 mLayerlist.get(layerindex).setVisiable(true);
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
+                //mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
                 return getActivity().getString(R.string.active);
 
             case "ERROR":
@@ -422,7 +415,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
             case "NOT_VISIBLE":
                 mLayerlist.get(layerindex).setVisiable(false);
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
+                //mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
                 return getActivity().getString(R.string.notVisible);
 
             case "OUT_OF_SCALE":
