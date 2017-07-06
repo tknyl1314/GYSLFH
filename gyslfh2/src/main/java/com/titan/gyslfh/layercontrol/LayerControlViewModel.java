@@ -40,13 +40,6 @@ public class LayerControlViewModel extends BaseViewModel {
         this.mLayerControl=iLayerControl;
         this.mLayerList.set(layerlist);
         this.mDataRepository=dataRepository;
-
-        /*selectposition.addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int i) {
-
-            }
-        });*/
     }
 
 
@@ -55,7 +48,7 @@ public class LayerControlViewModel extends BaseViewModel {
      * 关闭图层控制弹框
      */
     public void closeLayerControl(){
-        mLayerControl.showLayerControl(false);
+        mLayerControl.closeLayerControl();
     }
 
     /**

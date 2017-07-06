@@ -9,10 +9,9 @@ import com.titan.model.FireRiskModel;
 
 public interface ILayerControl {
     /**
-     * 图层控制
-     * @param isshow
+     * close
      */
-    void showLayerControl(boolean isshow);
+    void closeLayerControl();
 
     /**
      * 底图选择

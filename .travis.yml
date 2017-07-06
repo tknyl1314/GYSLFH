@@ -2,7 +2,7 @@ language: android
 
 jdk: oraclejdk8
 
-group: deprecated-2017Q2
+#group: deprecated-2017Q2
 
 android:
   components:

@@ -21,7 +21,6 @@ import com.titan.data.source.DataRepository;
 import com.titan.data.source.DataSource;
 import com.titan.gis.TrackUtil;
 import com.titan.gyslfh.TitanApplication;
-import com.titan.gyslfh.layercontrol.ILayerControl;
 import com.titan.model.TitanLocation;
 import com.titan.model.TrackPoint;
 import com.titan.util.DateUtil;
@@ -77,7 +76,7 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
     private Context mContext;
     private IMain mMain;
-    private ILayerControl mLayerControl;
+    //private ILayerControl mLayerControl;
 
     private DataRepository mDataRepository;
 
@@ -86,10 +85,9 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
     /**经纬度格式化*/
     DecimalFormat locformat=new DecimalFormat(".000000");
-    public MainViewModel(Context context,DataRepository dataRepository, IMain mlogin, ILayerControl iLayerControl) {
+    public MainViewModel(Context context,DataRepository dataRepository, IMain main) {
         this.mContext = context;
-        this.mMain=mlogin;
-        this.mLayerControl=iLayerControl;
+        this.mMain=main;
         this.mDataRepository=dataRepository;
 
 
@@ -153,7 +151,7 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
      * 图层控制
      */
     public void showLayerDialog(){
-        mLayerControl.showLayerControl(true);
+        mMain.showLayerControl();
         //mMain.onLocation(currentPoint.get());
     }
 

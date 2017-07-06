@@ -16,34 +16,28 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
-import com.esri.arcgisruntime.mapping.Viewpoint;
-import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
-import com.titan.gis.WeatherUtil;
 import com.titan.gyslfh.TitanApplication;
-import com.titan.gyslfh.layercontrol.ILayerControl;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
 import com.titan.gyslfh.login.LoginActivity;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
-import com.titan.model.FireRiskModel;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 主界面
  */
-public class MainActivity extends AppCompatActivity implements ILayerControl{
+public class MainActivity extends AppCompatActivity {
 
     public static final String MAIN_VIEWMODEL_TAG = "MAIN_VIEWMODEL_TAG";
-    //图层控制
+       //图层控制
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
 
     //定位服务
@@ -274,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         } else {
             //LayerControlViewModel layerControlViewModel=new LayerControlViewModel(getApplicationContext(),this);
              // There is no ViewModel yet, create it.
-            MainViewModel viewModel = new MainViewModel(getApplicationContext(), Injection.provideDataRepository(mContext),mainFragment,this);
+            MainViewModel viewModel = new MainViewModel(getApplicationContext(), Injection.provideDataRepository(mContext),mainFragment);
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),
@@ -284,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         }
     }
 
-    @NonNull
+    /*@NonNull
     private LayerControlViewModel findOrCreateLayerViewModel() {
         // In a configuration change we might have a ViewModel present. It's retained using the
         // Fragment Manager.
@@ -310,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
             return viewModel;
         }
     }
-
+*/
 
 
 
@@ -399,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
      * 图层控制
      * @param isshow
      */
-    @Override
+    /*@Override
     public void showLayerControl(boolean isshow) {
 
         if(layerControlFragment==null){
@@ -420,38 +414,22 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         }
     }
 
-    /**
+    *//**
      * 选择底图
      * @param position
-     */
+     *//*
     @Override
     public void showBaseMap(int position) {
         mainFragment.selectBasemap(position);
     }
-
-    /**
+    *//**
      * 添加专题图层
      * @param index
      * @param isvisable
-     */
+     *//*
     @Override
     public void onCheckLayer(int index ,boolean isvisable) {
-        //String layername=mainFragment.getmMap().getOperationalLayers().get(index).getName();
-       /* if(isvisable){
-            mViewModel.snackbarText.set(layername+"已添加");
-        }else {
-            mViewModel.snackbarText.set(layername+"已移除");
-
-        }*/
-        //Toast.makeText(mContext,"已添加图层"+layername,Toast.LENGTH_SHORT).show();
-        /*if(mViewModel.isSceneView.get()){
-            mainFragment.getmScene().getOperationalLayers().get(index).setVisible(isvisable);
-        }else {
-            mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
-
-        }*/
         mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
-
     }
 
     @Override
@@ -466,8 +444,7 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     @Override
     public void closeWeatherLayer() {
         mainFragment.mGraphicsOverlay.getGraphics().clear();
-    }
-
+    }*/
 
     /**
      * 监听回退按钮

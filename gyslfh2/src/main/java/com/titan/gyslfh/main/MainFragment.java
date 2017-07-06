@@ -31,7 +31,6 @@ import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.layers.FeatureLayer;
-import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -40,17 +39,18 @@ import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
-import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedEvent;
-import com.esri.arcgisruntime.mapping.view.LayerViewStateChangedListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.Symbol;
 import com.google.gson.Gson;
+import com.titan.Injection;
 import com.titan.gis.PlotUtil;
 import com.titan.gis.SymbolUtil;
 import com.titan.gis.callout.CalloutInterface;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
 import com.titan.gyslfh.backalarm.BackAlarmActivity;
+import com.titan.gyslfh.layercontrol.LayerControlFragment;
+import com.titan.gyslfh.layercontrol.LayerControlViewModel;
 import com.titan.gyslfh.monitor.MonitorActivity;
 import com.titan.gyslfh.monitor.MonitorModel;
 import com.titan.gyslfh.sceneview.SceneActivity;
@@ -78,11 +78,17 @@ import java.util.Set;
  */
 
 public class MainFragment extends Fragment implements IMain, CalloutInterface {
+
+    //图层控制
+    public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
+
     private MainViewModel mMainViewModel;
 
     public MainFragBinding mMainFragBinding;
 
     public CalloutBinding mCalloutBinding;
+    //图层控制
+    private LayerControlFragment mlayerControlFragment;
 
     LocationDisplay mLocationDisplay;
     //绘制图层
@@ -113,6 +119,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private BaiduNavi mBaiduNavi;
     //样式库
     private SymbolUtil mSymbolUtil;
+
+
 
     public List<TitanLayer> getmLayerlist() {
         return mLayerlist;
@@ -245,12 +253,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud8065403504,none,RP5X0H4AH7CLJ9HSX018");
         //初始化底图()
         mMap = new ArcGISMap(Basemap.createOpenStreetMap());
-
+        mMainFragBinding.mapview.setMap(mMap);
         //instantiate an ArcGISMap with OpenStreetMap Basemap
         // mMap = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 34.056295, -117.195800, 10);
-        loadLyaers();
+        //loadLyaers();
 
-        mMainFragBinding.mapview.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
+        /*mMainFragBinding.mapview.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
             @Override
             public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
                 // get the layer which changed it's state
@@ -270,7 +278,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
             }
         });
-
+*/
 
 
         //添加绘制图层
@@ -321,7 +329,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         // create the feature layer using the service feature table
 
 
-        mMainFragBinding.mapview.setMap(mMap);
         // get the callout that shows attributes
         mCallout = mMainFragBinding.mapview.getCallout();
         mCallout.setStyle(new Callout.Style(getActivity(),R.xml.calloutstyle));
@@ -396,7 +403,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         switch(status) {
             case "ACTIVE":
                 mLayerlist.get(layerindex).setVisiable(true);
-                //mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
                 return getActivity().getString(R.string.active);
 
             case "ERROR":
@@ -409,7 +416,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
             case "NOT_VISIBLE":
                 mLayerlist.get(layerindex).setVisiable(false);
-                //mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
+                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
                 return getActivity().getString(R.string.notVisible);
 
             case "OUT_OF_SCALE":
@@ -524,8 +531,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * @param position
      */
     public void selectBasemap(int position){
-        if(position!=3)
-        mMainViewModel.isSceneView.set(false);
         switch (position){
             //基础图
             case 0:
@@ -832,9 +837,19 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         Intent intent=new Intent(getActivity(), SceneActivity.class);
         Bundle bundle=new Bundle();
         bundle.putSerializable("loc",mMainViewModel.getTitanloc());
-        bundle.putSerializable("layers", (Serializable) mLayerlist);
+        bundle.putSerializable("layers", (Serializable) LayerControlFragment.getmLayerList());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void showLayerControl() {
+        if(mlayerControlFragment==null){
+            mlayerControlFragment= LayerControlFragment.getInstance(mMap,mMainFragBinding.mapview,mGraphicsOverlay);
+            LayerControlViewModel viewModel=new LayerControlViewModel(getActivity(),mlayerControlFragment, Injection.provideDataRepository(getActivity()),mLayerlist);
+            mlayerControlFragment.setViewModel(viewModel);
+        }
+        mlayerControlFragment.show(getFragmentManager(),LAYERCONTROL_TAG);
     }
 
     @Override
@@ -858,5 +873,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //mMapView.setViewpointGeometryAsync(envelope, 200);
 
     }
+
 
 }

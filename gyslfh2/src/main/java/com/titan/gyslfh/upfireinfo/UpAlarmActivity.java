@@ -35,20 +35,26 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upalarm);
-
+        mContext=this;
         mUpAlarmFragment= (UpAlarmFragment) findOrCreateViewFragment();
 
         mViewModel= (UpAlarmViewModel) findOrCreateViewModel();
         //int type=getIntent().getIntExtra("type",1);
+        try{
+            type= getIntent().getIntExtra("type",1);
+            //位置信息
+            titanLocation= (TitanLocation) getIntent().getExtras().getSerializable("loc");
 
-        type= getIntent().getIntExtra("type",1);
-        //位置信息
-        titanLocation= (TitanLocation) getIntent().getExtras().getSerializable("loc");
-
-        mViewModel.type.set(type);
-        mViewModel.titanloc.set(titanLocation);
-        mViewModel.address.set(titanLocation.getAddress());
-        mUpAlarmFragment.setViewModel(mViewModel);
+            mViewModel.type.set(type);
+            mViewModel.titanloc.set(titanLocation);
+            mViewModel.address.set(titanLocation.getAddress());
+            mUpAlarmFragment.setViewModel(mViewModel);
+        }catch(Exception e) {
+            mViewModel.address.set(mContext.getString(R.string.error_address));
+            mUpAlarmFragment.setViewModel(mViewModel);
+            mViewModel.snackbarText.set(e.toString());
+            //ToastUtil.setToast(mContext,this.getString(R.string.error));
+        }
         //mContext=this;
 
     }

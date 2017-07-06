@@ -55,7 +55,12 @@ public interface IMain {
      /**
       * 三维场景
       */
-    void openScene();
+     void openScene();
+
+     /**
+      * 图层控制
+      */
+     void showLayerControl();
 
 
     //void removeTrackLine();

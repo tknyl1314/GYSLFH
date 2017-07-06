@@ -172,7 +172,7 @@
     <string name="monitor_preview">可见光视频</string>
     <string name="Antitheft_preview">防盗视频</string>
     <string name="Infrared_preview">红外视频</string>
-    <string name="error_address">请输入地址</string>
+    <string name="error_address">获取位置异常</string>
     <string name="confirm">确定位置</string>
     <string name="active">可用的</string>
     <string name="error">加载失败</string>
