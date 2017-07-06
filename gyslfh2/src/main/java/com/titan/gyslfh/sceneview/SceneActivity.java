@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
 import com.titan.ViewModelHolder;
-import com.titan.gyslfh.main.SceneFragment;
-import com.titan.gyslfh.main.SceneViewModel;
 import com.titan.model.TitanLayer;
 import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;

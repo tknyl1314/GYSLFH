@@ -1,4 +1,4 @@
-package com.titan.gyslfh.main;
+package com.titan.gyslfh.sceneview;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -31,7 +31,7 @@ import java.util.List;
  * create an instance of this fragment.
  * 三维场景
  */
-public class SceneFragment extends Fragment implements SceneView{
+public class SceneFragment extends Fragment implements SceneView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,7 +45,7 @@ public class SceneFragment extends Fragment implements SceneView{
 
     private static SceneFragment singleton;
 
-    private   SceneViewModel mViewModel;
+    private SceneViewModel mViewModel;
 
     private FragSceneBinding mDataBinding;
 

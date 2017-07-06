@@ -29,6 +29,7 @@ import com.titan.util.DateUtil;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+
 /**
  * Created by Whs on 2016/12/1 0001
  */
@@ -57,7 +58,9 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
     //位置
     private  ObservableField<TitanLocation> titanloc = new ObservableField<>();
     //是否跟踪轨迹
-    public final ObservableField<Boolean> istrack = new ObservableField<>();
+    //public final ObservableField<Boolean> istrack = new ObservableField<>();
+
+    public ObservableBoolean istrack =new ObservableBoolean(false);
 
 
     public final ObservableList<Point> listpt = new ObservableArrayList<>();
@@ -105,6 +108,19 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
 
     }
+    /**
+     * 轨迹开关
+     */
+    public void switchTrack(){
+        Log.e("TAG", "switchTrack: ");
+        istrack.set(!istrack.get());
+        if(istrack.get()){
+            snackbarText.set("已开启");
+        }else {
+            snackbarText.set("已关闭");
+        }
+    }
+
 
     /**
      * 一键报警

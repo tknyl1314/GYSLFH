@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import com.esri.arcgisruntime.symbology.MarkerSymbol;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.titan.newslfh.R;
 
 /**
@@ -22,6 +23,9 @@ public class SymbolUtil {
     public static SimpleFillSymbol risk3_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.YELLOW, null);
     public static SimpleFillSymbol risk4_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.rgb(255, 165, 58), null);
     public static SimpleFillSymbol risk5_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.RED, null);
+
+    //轨迹线样式
+    public static SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.parseColor("#1266E6"), 4);
 
 
     /**态势标绘样式*/

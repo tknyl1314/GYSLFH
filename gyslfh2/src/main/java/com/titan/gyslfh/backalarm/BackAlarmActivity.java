@@ -16,9 +16,7 @@ import com.titan.util.ActivityUtils;
 
 public class BackAlarmActivity extends BaseActivity {
     private AlarmListViewModel mViewModel;
-
     private BackAlarmListFragment mFragment;
-    //public static final String ALARMINFO_VIEWMODEL_TAG = "ALARMINFO_VIEWMODEL_TAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

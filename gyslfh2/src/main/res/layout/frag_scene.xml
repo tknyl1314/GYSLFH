@@ -1,11 +1,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.titan.gyslfh.main.SceneFragment">
+    >
     <data>
 
         <variable
             name="viewmodel"
-            type="com.titan.gyslfh.main.SceneViewModel"/>
+            type="com.titan.gyslfh.sceneview.SceneViewModel"/>
     </data>
 
 

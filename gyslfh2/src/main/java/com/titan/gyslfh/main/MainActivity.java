@@ -6,12 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
-import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
@@ -49,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     public static final String MAIN_VIEWMODEL_TAG = "MAIN_VIEWMODEL_TAG";
     //图层控制
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
-
 
     //定位服务
     private LocationService locationService;
@@ -79,20 +74,13 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
     SharedPreferences mSharedPreferences;
     //主界面
     public   MainFragment mainFragment;
-    //三维场景
-    public  SceneFragment sceneFragment;
     //图层控制
     private LayerControlFragment layerControlFragment;
-
-
     //导航
     public BaiduNavi mBaiduNavi;
-
-
     //构建
     PolylineBuilder lineBuilder=null;
-    //轨迹线样式
-    final  SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.parseColor("#1266E6"), 4);
+
 
 
 
@@ -106,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         TitanApplication.getInstance().addActivity(this);
         //测试市级用户
         String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
-        TitanApplication.setmUserModel(new Gson().fromJson(user,UserModel.class));
+        //区县用户
+        String byquser="{\"dqid\":\"1459\",\"dqName\":\"白云区\",\"role\":\"区县用户\",\"accountStatus\":\"1\",\"clientID\":\"231431\",\"userID\":\"10\",\"dqLevel\":\"4\"}";
+        TitanApplication.setmUserModel(new Gson().fromJson(byquser,UserModel.class));
         //推送回调
         TitanApplication.mainActivity=this;
         mContext=this;
@@ -115,19 +105,14 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
 
         mainFragment = findOrCreateViewFragment();
 
-
-
         mViewModel = findOrCreateViewModel();
-
         // Link View and ViewModel
         mainFragment.setViewModel(mViewModel);
 
 
 
 
-        initView();
-
-        //intiPermisson();
+        //initView();
 
         getPersimmions();
 
@@ -200,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
                 mViewModel.istrack.set(isChecked);
             }
         });
-        //
     }
 
     /**
@@ -327,33 +311,6 @@ public class MainActivity extends AppCompatActivity implements ILayerControl{
         }
     }
 
-    /**
-     * 初始化权限
-     */
-    private void intiPermisson() {
-        // If an error is found, handle the failure to start.
-        // Check permissions to see if failure may be due to lack of permissions.
-        boolean permissionCheck1 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[0]) ==
-                PackageManager.PERMISSION_GRANTED;
-        boolean permissionCheck2 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[1]) ==
-                PackageManager.PERMISSION_GRANTED;
-
-        if (Build.VERSION.SDK_INT >= 23&&!(permissionCheck1 && permissionCheck2)) {
-            // If permissions are not already granted, request permission from the user.
-            ActivityCompat.requestPermissions(MainActivity.this, reqPermissions, requestCode);
-        } else {
-            // Report other unknown failure types to the user - for example, location services may not
-            // be enabled on the device.
-                    /*String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
-                            .getSource().getLocationDataSource().getError().getMessage());*/
-            //String message="获取定位信息异常，请检查GPS是否开启";
-            //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-            // Update UI to reflect that the location display did not actually start
-            //mSpinner.setSelection(0, true);
-        }
-
-
-    }
 
 
 
