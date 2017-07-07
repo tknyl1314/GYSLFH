@@ -99,12 +99,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    /** 个推            */
+    /**个推*/
     //compile 'com.getui:sdk:2.10.2.0'
     compile files('libs/GetuiSDK2.10.2.0.jar')
-
-    /** Spatialite         */
+    /** Spatialite*/
     //compile files('libs/spatialite-android-library.jar')
+    /**海康*/
     compile files('libs/AudioEngineSDK.jar')
     compile files('libs/HCNetSDK.jar')
     compile files('libs/PlayerSDK.jar')
@@ -115,7 +115,7 @@ dependencies {
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
-    compile 'com.github.wuhongsheng:TitanLib:0.4'
+    compile 'com.github.wuhongsheng:TitanLib:0.4.1'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }
