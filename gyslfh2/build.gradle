@@ -86,6 +86,9 @@ android {
 
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 
     /*externalNativeBuild {
         ndkBuild {
@@ -118,4 +121,8 @@ dependencies {
     compile 'com.github.wuhongsheng:TitanLib:0.4.1'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd",TimeZone.getTimeZone("GMT+08"))
 }
