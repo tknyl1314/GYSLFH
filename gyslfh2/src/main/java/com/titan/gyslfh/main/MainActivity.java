@@ -1,12 +1,10 @@
 package com.titan.gyslfh.main;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -16,20 +14,16 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
-import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
 import com.titan.gyslfh.login.LoginActivity;
-import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
-
-import java.util.ArrayList;
 
 /**
  * 主界面
@@ -75,22 +69,17 @@ public class MainActivity extends AppCompatActivity {
     //构建
     PolylineBuilder lineBuilder=null;
 
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TitanApplication.getInstance().addActivity(this);
         //测试市级用户
-        String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
+        //String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
         //区县用户
-        String byquser="{\"dqid\":\"1459\",\"dqName\":\"白云区\",\"role\":\"区县用户\",\"accountStatus\":\"1\",\"clientID\":\"231431\",\"userID\":\"10\",\"dqLevel\":\"4\"}";
-        TitanApplication.setmUserModel(new Gson().fromJson(byquser,UserModel.class));
+        //String byquser="{\"dqid\":\"1459\",\"dqName\":\"白云区\",\"role\":\"区县用户\",\"accountStatus\":\"1\",\"clientID\":\"231431\",\"userID\":\"10\",\"dqLevel\":\"4\"}";
+
+        //TitanApplication.setmUserModel(new Gson().fromJson(byquser,UserModel.class));
         //推送回调
         TitanApplication.mainActivity=this;
         mContext=this;
@@ -102,25 +91,20 @@ public class MainActivity extends AppCompatActivity {
         mViewModel = findOrCreateViewModel();
         // Link View and ViewModel
         mainFragment.setViewModel(mViewModel);
-
-
-
-
         //initView();
-
-        getPersimmions();
+        //getPersimmions();
 
     }
 
 
 
-    @TargetApi(23)
+   /* @TargetApi(23)
     private void getPersimmions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ArrayList<String> permissions = new ArrayList<String>();
-            /***
+            *//***
              * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
-             */
+             *//*
             // 定位精确位置
             if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -128,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
             if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-			/*
+			*//*
 			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
-			 */
+			 *//*
             // 读写权限
             if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 //permissionInfo += "Manifest.permission.WRITE_EXTERNAL_STORAGE Deny \n";
@@ -159,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             return true;
         }
-    }
+    }*/
 
     private void initView() {
         mSharedPreferences=mContext.getSharedPreferences(TitanApplication.PREFS_NAME,0);
@@ -238,19 +222,7 @@ public class MainActivity extends AppCompatActivity {
         return tasksFragment;
     }
 
-    /*@NonNull
-    private SceneFragment findOrCreateSceneViewFragment() {
-        SceneFragment tasksFragment =
-                (SceneFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (tasksFragment == null) {
-            // Create the fragment
-            tasksFragment = SceneFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), tasksFragment, R.id.content_frame);
-        }
-        return tasksFragment;
-    }
-*/
+
 
 
     @NonNull
@@ -278,37 +250,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*@NonNull
-    private LayerControlViewModel findOrCreateLayerViewModel() {
-        // In a configuration change we might have a ViewModel present. It's retained using the
-        // Fragment Manager.
-        @SuppressWarnings("unchecked")
-        ViewModelHolder<LayerControlViewModel> retainedViewModel =
-                (ViewModelHolder<LayerControlViewModel>) getSupportFragmentManager()
-                        .findFragmentByTag(LAYERCONTROL_TAG);
-
-        if (retainedViewModel != null && retainedViewModel.getViewmodel() != null) {
-            // If the model was retained, return it.
-            return retainedViewModel.getViewmodel();
-        } else {
-            //LayerControlViewModel layerControlViewModel=new LayerControlViewModel(getApplicationContext(),this);
-
-            // There is no ViewModel yet, create it.
-            LayerControlViewModel viewModel = new LayerControlViewModel(getApplicationContext(), this,Injection.provideDataRepository(mContext),mainFragment.getmLayerlist());
-            // and bind it to this Activity's lifecycle using the Fragment Manager.
-            ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(),
-                    ViewModelHolder.createContainer(viewModel),
-                    LAYERCONTROL_TAG);
-
-            return viewModel;
-        }
-    }
-*/
-
-
-
-
 
 
     @Override
@@ -318,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
             // Location permission was granted. This would have been triggered in response to failing to start the
             // LocationDisplay, so try starting this again.
             mainFragment.mLocationDisplay.startAsync();
+            locationService.start();
         } else {
             // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
             // request permission UX will be shown again, option should be shown to allow never showing the UX again.
@@ -332,23 +274,13 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onStart();
         // -----------location config ------------
-        //定位初始化
+      /*  //定位初始化
         locationService = ((TitanApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mViewModel);
-        //注册监听
-        /*int type = getIntent().getIntExtra("from", 0);
-        if (type == 0) {
-            locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        } else if (type == 1) {
-            locationService.setLocationOption(locationService.getOption());
-        }*/
         locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();
+        locationService.start();*/
         // 定位SDK
-
-
-
 
     }
     /**
@@ -357,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        //locationService.stop();
     }
 
     @Override
@@ -388,64 +319,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    /**
-     * 图层控制
-     * @param isshow
-     */
-    /*@Override
-    public void showLayerControl(boolean isshow) {
-
-        if(layerControlFragment==null){
-
-            layerControlFragment=LayerControlFragment.getInstance(mainFragment.getmLayerlist());
-
-            mlayerControlViewModel=findOrCreateLayerViewModel();
-
-            layerControlFragment.setViewModel(mlayerControlViewModel);
-        }
-        if(isshow){
-            //layerControlFragment.setStyle();
-            //LayerControlFragment.getInstance().show(getSupportFragmentManager(),LAYERCONTROL_TAG);
-            layerControlFragment.show(getSupportFragmentManager(),LAYERCONTROL_TAG);
-        }else {
-            //LayerControlFragment.getInstance().dismiss();
-            layerControlFragment.dismiss();
-        }
-    }
-
-    *//**
-     * 选择底图
-     * @param position
-     *//*
-    @Override
-    public void showBaseMap(int position) {
-        mainFragment.selectBasemap(position);
-    }
-    *//**
-     * 添加专题图层
-     * @param index
-     * @param isvisable
-     *//*
-    @Override
-    public void onCheckLayer(int index ,boolean isvisable) {
-        mainFragment.getmMap().getOperationalLayers().get(index).setVisible(isvisable);
-    }
-
-    @Override
-    public void showWeatherLayer(FireRiskModel fireRiskModel) {
-        List<Graphic> graphics=WeatherUtil.creatFireRiskGraphicsOverlay(fireRiskModel);
-        mainFragment.mGraphicsOverlay.getGraphics().addAll(graphics);
-        //设置透明度
-        mainFragment.mGraphicsOverlay.setOpacity((float) 0.6);
-        mainFragment.mMainFragBinding.mapview.setViewpoint(new Viewpoint(mainFragment.mGraphicsOverlay.getExtent()));
-    }
-
-    @Override
-    public void closeWeatherLayer() {
-        mainFragment.mGraphicsOverlay.getGraphics().clear();
-    }*/
-
     /**
      * 监听回退按钮
      */
@@ -467,16 +340,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //mMapView.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //mMapView.resume();
     }
-
-
-
 
 }

@@ -1,8 +1,10 @@
 package com.titan.gyslfh.main;
 
+import android.Manifest;
 import android.content.Intent;
 import android.databinding.Observable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -47,6 +49,7 @@ import com.titan.Injection;
 import com.titan.gis.PlotUtil;
 import com.titan.gis.SymbolUtil;
 import com.titan.gis.callout.CalloutInterface;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
 import com.titan.gyslfh.backalarm.BackAlarmActivity;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
@@ -55,6 +58,7 @@ import com.titan.gyslfh.monitor.MonitorActivity;
 import com.titan.gyslfh.monitor.MonitorModel;
 import com.titan.gyslfh.sceneview.SceneActivity;
 import com.titan.gyslfh.upfireinfo.UpAlarmActivity;
+import com.titan.loction.baiduloc.LocationService;
 import com.titan.model.FireInfo;
 import com.titan.model.TitanLayer;
 import com.titan.navi.BaiduNavi;
@@ -72,13 +76,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
+
 /**
  * Created by whs on 2017/4/28
  * 主界面
  */
-
+@RuntimePermissions
 public class MainFragment extends Fragment implements IMain, CalloutInterface {
-
     //图层控制
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
 
@@ -119,20 +126,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     private BaiduNavi mBaiduNavi;
     //样式库
     private SymbolUtil mSymbolUtil;
-
-
-
-    public List<TitanLayer> getmLayerlist() {
-        return mLayerlist;
-    }
-
     //专题图层
     private  List<TitanLayer> mLayerlist=new ArrayList<>();
     //第一次加载
     private  boolean firstLoad=true;
-
-
-
+    //定位客户端
+    private LocationService mLocationService;
 
 
     public MainFragment() {
@@ -142,6 +141,50 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public static MainFragment newInstance() {
         return new MainFragment();
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initBaiduLoc();
+
+
+    }
+
+    /**
+     * 初始化百度定位
+     */
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void initBaiduLoc() {
+
+        //定位初始化
+        mLocationService = TitanApplication.locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        mLocationService.registerListener(mMainViewModel);
+        mLocationService.setLocationOption(mLocationService.getDefaultLocationClientOption());
+        mLocationService.start();
+        /*//声明LocationClient类
+        mLocationClient = new LocationClient(getActivity());
+        //注册监听函数
+        mLocationClient.registerLocationListener(mMainViewModel);
+        mLocationClient.setLocOption(LocUtil.getLocationClientOption());
+        mLocationClient.start();*/
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    /**
+     * 未获取定位权限
+     */
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    void showDeniedForLoc() {
+        mMainViewModel.snackbarText.set(getActivity().getString(R.string.location_permission_denied));
+    }
+
+
 
     @Override
     public void onResume() {
@@ -156,6 +199,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mMainFragBinding.mapview.pause();
 
     }
+
 
     @Nullable
     @Override
@@ -186,9 +230,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         initPlot();
 
         initNavi();
-
-
-
 
     }
 
@@ -361,74 +402,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         }*/
 
     }
-
-    /**
-     * 加载专题图层
-     */
-    private void loadLyaers(){
-        for (int i = 1; i <=layers ; i++) {
-            String layerurl=getActivity().getString(R.string.gisserverhost1)+"/"+i;
-            ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
-            //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
-            //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
-            FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
-            featuretables.add(serviceFeatureTable);
-            featurelayers.add(featureLayer);
-            featureLayer.setVisible(false);
-            TitanLayer titanLayer=new TitanLayer();
-            String name=featureLayer.getName();
-            titanLayer.setName(name);
-            titanLayer.setVisiable(false);
-            titanLayer.setUrl(layerurl);
-            mLayerlist.add(titanLayer);
-
-            mMap.getOperationalLayers().add(featureLayer);
-
-            /*if(isadd){
-                name=featureLayer.getName();
-                Log.e("图层加载成功",featureLayer.getName()) ;
-            }*/
-
-        }
-
-    }
-    /**
-     * The method looks up the view status of the layer and returns a string which is displayed
-     *
-     * @param status View Status of the layer
-     * @return String equivalent of the status
-     */
-    private String viewStatusString (int layerindex,String status) {
-
-        switch(status) {
-            case "ACTIVE":
-                mLayerlist.get(layerindex).setVisiable(true);
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已加载");
-                return getActivity().getString(R.string.active);
-
-            case "ERROR":
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.error));
-                return getActivity().getString(R.string.error);
-
-            case "LOADING":
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.loading));
-                return getActivity().getString(R.string.loading);
-
-            case "NOT_VISIBLE":
-                mLayerlist.get(layerindex).setVisiable(false);
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+"已移除");
-                return getActivity().getString(R.string.notVisible);
-
-            case "OUT_OF_SCALE":
-                mMainViewModel.snackbarText.set(mLayerlist.get(layerindex).getName()+getActivity().getString(R.string.outOfScale));
-                return getActivity().getString(R.string.outOfScale);
-
-        }
-
-        return getActivity().getString(R.string.unknown);
-
-    }
-
     /**
      * 设置地图点击监听事件
      */
@@ -525,39 +498,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
         });
     }
-
-    /**
-     * 选择底图
-     * @param position
-     */
-    public void selectBasemap(int position){
-        switch (position){
-            //基础图
-            case 0:
-                mMap.setBasemap(Basemap.createStreets());
-                break;
-            //影像图
-            case 1:
-                mMap.setBasemap(Basemap.createImagery());
-                break;
-            //森林火险等级图
-            case 2:
-                mMap.setBasemap(Basemap.createStreets());
-                break;
-            //三维场景
-            /*case 3:
-               *//* mMainViewModel.isSceneView.set(true);
-                int dd=mMainFragBinding.mapview.getVisibility();
-                mMainFragBinding.mapview.setVisibility(View.INVISIBLE);
-                init3D();
-                loadLayers();*//*
-                //mMap.setBasemap(Basemap.createStreets());
-                break;*/
-        }
-    }
-
-
-
 
 
     /**
@@ -668,7 +608,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mapView.getGraphicsOverlays().add(graphicsOverlay);
         return graphicsOverlay;
     }
-
     /**
      * 添加轨迹图形
      * @param geometry
@@ -852,13 +791,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mlayerControlFragment.show(getFragmentManager(),LAYERCONTROL_TAG);
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
-
-        System.out.print(true);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+        MainFragmentPermissionsDispatcher.
+    }*/
 
 
     /**

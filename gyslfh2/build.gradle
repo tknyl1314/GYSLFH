@@ -74,10 +74,29 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+    signingConfigs {
+        //签名的配置
+        release {
+            storeFile file("Titan.jks")
+            storePassword '123123'
+            keyAlias 'titan打包'
+            keyPassword '123123'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                if (variant.buildType.name.equals('release')) {
+                    variant.outputs.each { output -> def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = "GYSLFH_${releaseTime()}${defaultConfig.versionName}.apk"
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                    }
+                }
+            }
         }
         debug {
             //shrinkResources false//去除不用的资源文件
@@ -87,6 +106,7 @@ android {
         }
     }
     lintOptions {
+        //设置编译的lint开关，程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建
         abortOnError false
     }
 
@@ -121,6 +141,12 @@ dependencies {
     compile 'com.github.wuhongsheng:TitanLib:0.4.1'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+    /**PermissionsDispatcher*/
+    compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
+    }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
 }
 
 def releaseTime() {

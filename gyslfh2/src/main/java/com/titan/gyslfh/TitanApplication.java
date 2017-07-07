@@ -36,8 +36,13 @@ public class TitanApplication extends Application{
     /** 获取设备号序列号信息 */
     public static String SBH, XLH;
     public static String MOBILE_MODEL;
+
+    public LocationService getLocationService() {
+        return locationService;
+    }
+
     /** 百度位置监听服务 */
-    public LocationService locationService;
+    public static LocationService locationService;
     /** 震动器（百度定位） */
     Vibrator mVibrator;
     static Context mContext;

@@ -38,6 +38,8 @@ allprojects {
 
         }
         maven { url 'https://jitpack.io' }
+        //permission
+        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 
     }
 }
