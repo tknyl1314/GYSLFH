@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -252,14 +251,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
+   /* @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // If request is cancelled, the result arrays are empty.
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Location permission was granted. This would have been triggered in response to failing to start the
             // LocationDisplay, so try starting this again.
             mainFragment.mLocationDisplay.startAsync();
-            locationService.start();
+            //locationService.start();
         } else {
             // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
             // request permission UX will be shown again, option should be shown to allow never showing the UX again.
@@ -268,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             // Update UI to reflect that the location display did not actually start
             // mSpinner.setSelection(0, true);
         }
-    }
+    }*/
     @Override
     protected void onStart() {
         // TODO Auto-generated method stub
@@ -293,10 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if(locationService!=null){
-            locationService.unregisterListener(mViewModel); //注销掉监听
-            locationService.stop(); //停止定位服务
-        }
         super.onDestroy();
     }
 

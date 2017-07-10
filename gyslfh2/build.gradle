@@ -91,7 +91,7 @@ android {
                 if (variant.buildType.name.equals('release')) {
                     variant.outputs.each { output -> def outputFile = output.outputFile
                         if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                            def fileName = "GYSLFH_${releaseTime()}${defaultConfig.versionName}.apk"
+                            def fileName = "GYSLFH_${releaseTime()}_${defaultConfig.versionName}_release.apk"
                             output.outputFile = new File(outputFile.parent, fileName)
                         }
                     }
@@ -102,6 +102,16 @@ android {
             //shrinkResources false//去除不用的资源文件
             minifyEnabled false  //是否混淆  Android Studio disables ProGuard when using Instant Run.
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                if (variant.buildType.name.equals('debug')) {
+                    variant.outputs.each { output -> def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = "GYSLFH_${releaseTime()}_${defaultConfig.versionName}_debug.apk"
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                    }
+                }
+            }
 
         }
     }

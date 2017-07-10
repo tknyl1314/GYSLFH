@@ -96,7 +96,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public CalloutBinding mCalloutBinding;
     //图层控制
     private LayerControlFragment mlayerControlFragment;
-
+    //当前位置显示
     LocationDisplay mLocationDisplay;
     //绘制图层
     public GraphicsOverlay mGraphicsOverlay;
