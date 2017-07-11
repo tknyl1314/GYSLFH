@@ -15,4 +15,14 @@ public interface RemotDataSource {
      * 获取监控点硬盘录像机信息
      */
     void getDvrInfo(String str,getCallback callback);
+
+
+    /**
+     * 检查用户登陆
+     * @param username
+     * @param psd
+     * @param cid  推送客户端id
+     * @param callback
+     */
+    void checkLogin(String username,String psd,String cid,getCallback callback);
 }

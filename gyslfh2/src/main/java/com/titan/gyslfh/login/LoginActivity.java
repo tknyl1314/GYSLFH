@@ -1,23 +1,21 @@
 package com.titan.gyslfh.login;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.igexin.sdk.PushManager;
+import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
-import com.titan.gyslfh.main.MainActivity;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.ActivityLoginBinding;
 import com.titan.push.GeTui;
@@ -25,14 +23,13 @@ import com.titan.push.GeTuiIntentService;
 import com.titan.push.GeTuiPushService;
 import com.titan.util.ActivityUtils;
 import com.titan.util.DeviceUtil;
-import com.titan.util.TitanUtil;
 import com.titan.util.ToastUtil;
 
 
 /**
  * 登陆界面
  */
-public class LoginActivity extends AppCompatActivity implements ILogin {
+public class LoginActivity extends AppCompatActivity  {
 
     public static final String LOGIN_VIEWMODEL_TAG = "LOGIN_VIEWMODEL_TAG";
 
@@ -48,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
 
     private LoginViewModel mViewModel;
     private ActivityLoginBinding mViewDataBinding;
+    private LoginFragment mFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,17 +57,13 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
 
 
         setContentView(R.layout.activity_login);
-        //final View root = inflater.inflate(R.layout.activity_login, false);
-        if (mViewDataBinding == null) {
-            mViewDataBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
-        }
-        mViewModel = findOrCreateViewModel();
-        //
-        mViewModel.isremember.set(TitanApplication.mSharedPreferences.getBoolean("isremember",false));
-        mViewDataBinding.setViewmodel(mViewModel);
-        //显示版本号
-        mViewDataBinding.tvAppversion.setText(mContext.getString(R.string.app_version)+ TitanUtil.getVersionCode(mContext));
 
+        mFragment = findOrCreateViewFragment();
+
+        mViewModel = findOrCreateViewModel();
+        mViewModel.isremember.set(TitanApplication.mSharedPreferences.getBoolean("isremember",false));
+        // Link View and ViewModel
+        mFragment.setViewModel(mViewModel);
 
     }
 
@@ -86,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
             return retainedViewModel.getViewmodel();
         } else {
             // There is no ViewModel yet, create it.
-            LoginViewModel viewModel = new LoginViewModel(getApplicationContext(), this);
+            LoginViewModel viewModel = new LoginViewModel(getApplicationContext(), mFragment, Injection.provideDataRepository(mContext));
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),
@@ -94,6 +88,19 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
                     LOGIN_VIEWMODEL_TAG);
             return viewModel;
         }
+    }
+
+    @NonNull
+    private LoginFragment findOrCreateViewFragment() {
+        LoginFragment tasksFragment =
+                (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (tasksFragment == null) {
+            // Create the fragment
+            tasksFragment = LoginFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(
+                    getSupportFragmentManager(), tasksFragment, R.id.content_frame);
+        }
+        return tasksFragment;
     }
 
     @Override
@@ -116,8 +123,9 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     @Override
     protected void onResume() {
         super.onResume();
-        mViewModel.onStart();
+        //mViewModel.onStart();
     }
+
 
     /**
      * 初始化权限
@@ -167,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     /**
      * 跳转主界面
      */
-    @Override
+    /*@Override
     public void onNext() {
         Intent intent=new Intent(mContext,MainActivity.class);
         startActivity(intent);
@@ -187,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin {
     @Override
     public void showToast(String info,int type) {
         Toast.makeText(mContext, info, type).show();
-    }
+    }*/
 
 
     /**

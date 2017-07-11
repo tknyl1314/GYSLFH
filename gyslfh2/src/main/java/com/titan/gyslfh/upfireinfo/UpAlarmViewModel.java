@@ -193,6 +193,7 @@ public class UpAlarmViewModel extends BaseViewModel {
                     public void onSuccess(String data) {
                         mUpAlrm.showProgress(false);
                         snackbarText.set(data);
+                        mUpAlrm.finish();
                     }
                 });
             }

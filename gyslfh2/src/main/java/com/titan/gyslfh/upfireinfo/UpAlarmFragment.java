@@ -56,8 +56,6 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     private Dialog mCountrysDiallg;
     //时间选择
     private TimePickerDialog mTimePickerDialog;
-    //接警来源
-    private Dialog mAlarmOriginDialog;
     //时间类型
     private int timetype=1;
     //adapter
@@ -346,6 +344,11 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
         //replaceFragment();
 
 
+    }
+
+    @Override
+    public void finish() {
+        getActivity().finish();
     }
 
     /**

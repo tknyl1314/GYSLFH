@@ -321,4 +321,69 @@ public class RemoteDataSource implements DataSource,RemotDataSource {
                     }
                 });
     }
+
+    /**
+     * 登陆
+     * @param username
+     * @param psd
+     * @param cid      推送客户端id
+     * @param callback
+     */
+    @Override
+    public void checkLogin(String username, String psd, String cid, final getCallback callback) {
+        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().Checklogin(username,psd,cid);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorResumeNext(new HttpResponseFunc<String>())
+                .subscribe(new TitanSubscriber<String>(){
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+
+                    @Override
+                    protected void onError(ExceptionEngine.ApiException ex) {
+                        callback.onFailure(ex.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String json) {
+                        Gson gson=new Gson();
+                        ResultModel<UserModel> resultModel=gson.fromJson(json, ResultModel.class);
+                        if(resultModel.getResult()){
+                            callback.onSuccess(new Gson().toJson(resultModel.getData()));
+
+                        }else {
+                            callback.onFailure(resultModel.getMessage());
+                        }
+                    }
+                });
+                /*.subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+
+                        Log.e("error",e.toString());
+                        callback.onFailure(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String json) {
+                        Gson gson=new Gson();
+                        ResultModel<MonitorModel1> resultModel=gson.fromJson(json, ResultModel.class);
+                        if(resultModel.getResult()){
+                            callback.onSuccess(new Gson().toJson(resultModel.getData()));
+
+                        }else {
+                            callback.onFailure(resultModel.getMessage());
+                        }
+
+                    }
+                });*/
+    }
 }

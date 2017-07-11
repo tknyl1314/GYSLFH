@@ -272,7 +272,7 @@
                             android:layout_width="match_parent"
                             style="@style/et_content_line"
                             android:text="@={viewmodel.tel}"
-                            android:hint="@string/inputalarm_tel" />
+                            android:hint="@string/inputalarm_tel_hint" />
 
                     </LinearLayout>
 

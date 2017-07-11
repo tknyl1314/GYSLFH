@@ -47,13 +47,17 @@ public class RetrofitHelper {
     private void resetApp() {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         //okHttpClientBuilder.addNetworkInterceptor(new MyNetworkInterceptor());
+        //5秒超时
         okHttpClientBuilder.connectTimeout(5, TimeUnit.SECONDS);
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(mCntext.getResources().getString(R.string.serverhost))
+                //设置OKHttpClient
                 .client(okHttpClientBuilder.build())
+                //Xml转换器
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 //.addConverterFactory(GsonConverterFactory.create())
+                //Rx
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         //获取气象数据
@@ -64,10 +68,19 @@ public class RetrofitHelper {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }
+
+    /**
+     * 常规接口
+     * @return
+     */
     public RetrofitService getServer(){
         return mRetrofit.create(RetrofitService.class);
     }
 
+    /**
+     * 气象数据接口
+     * @return
+     */
     public MeteorologyService getWeatherServer(){
         return mWeatherRetrofit.create(MeteorologyService.class);
     }

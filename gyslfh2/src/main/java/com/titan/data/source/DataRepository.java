@@ -96,4 +96,9 @@ public class DataRepository implements DataSource ,RemotDataSource{
     public void getDvrInfo(String str, getCallback callback) {
         mRemoteDataSource.getDvrInfo(str,callback);
     }
+
+    @Override
+    public void checkLogin(String username, String psd, String cid, getCallback callback) {
+        mRemoteDataSource.checkLogin(username,psd,cid,callback);
+    }
 }

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.layers.ArcGISMapImageLayer;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.layers.Layer;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.Viewpoint;
@@ -49,21 +53,19 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
     LayersAdapter mAdapter;
 
-    //private static  LayerList mLayerList;
 
-    public static List<TitanLayer> getmLayerList() {
+    public  List<TitanLayer> getmLayerList() {
         return mLayerList;
     }
 
     private static  List<TitanLayer> mLayerList=new ArrayList<>();
     private static ArcGISMap marcGISMap;
     //加载图层的序号
-    private int[] layers=new int[]{0,1,2,3,4,5,6,7,8};
+    private int[] layers=new int[]{1,2,3,4,5,6,7,8,9};
 
     private static MapView mMapView;
 
     private static GraphicsOverlay mGraphicsOverlay;
-
 
 
     /**
@@ -106,13 +108,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         //此处可以设置Dialog的style等等
         super.onCreate(savedInstanceState);
 
-        /*DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics( dm );
-        getDialog().getWindow().setLayout( dm.widthPixels, getDialog().getWindow().getAttributes()..height );*/
-
-        //this.getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        //若想无法直接点击外部取消dialog 可设置为false
-
         setCancelable(false);
 
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.DialogFragment);
@@ -126,68 +121,71 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         //mLayerList.clear();
 
         if(mLayerList.isEmpty()){
-            loadLyaers();
+            //loadLyaers();
+            initLayers();
             mViewModel.mLayerList.set(mLayerList);
+        }else {
+            intiRecyclerView();
         }
         return mViewDataBinding.getRoot();
     }
 
-
     /**
-     * 设置dialog弹出来的位置
+     * 出事图层信息
      */
-    /*private void setDialogLocation() {
-        //获取通知栏高度
-        Rect rect = new Rect();
-        getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-        getDialog().getWindow().setGravity(Gravity.RIGHT | Gravity.TOP);
-        *//**
-         *   int[] ll=new int[2];
-             MapFragment.iv_more.getLocationInWindow(ll);
-         *   如果iv_more在左边，也可以这样做 lp.x=ll[0],因为我不管设置Gravity在左或右边，原点一直在右边
-         *//*
-        WindowManager.LayoutParams lp = getDialog().getWindow().getAttributes();
-        //因为iv_more按钮距离右边是16dp
-        //lp.x = ConversionUtil.dip2px(getActivity(), 16);
-        //设置n - rect.top + MapFragment.iv_more.getHeight() 那么dialogment的高度就和iv_more相同，我在往下移动10dp
-        //lp.y = MapFragment.location_iv_more[1] - rect.top + MapFragment.iv_more.getHeight() + ConversionUtil.dip2px(getActivity(), 10);
-        getDialog().getWindow().setAttributes(lp);
-    }*/
+    private void initLayers() {
+
+        final ArcGISMapImageLayer dad=new ArcGISMapImageLayer(getActivity().getString(R.string.zturl));
+        dad.setVisible(false);
+        dad.addLoadStatusChangedListener(new LoadStatusChangedListener() {
+            @Override
+            public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
+                String mapLoadStatus = loadStatusChangedEvent.getNewLoadStatus().name();
+                // set the status in the TextView accordingly
+                switch (mapLoadStatus) {
+                    case "LOADING":
+                        Log.e("Titan","LOADING");
+                        break;
+
+                    case "FAILED_TO_LOAD":
+
+                        Log.e("Titan","图层加载异常");
+                        break;
+
+                    case "NOT_LOADED":
+                        Log.e("Titan","NOT_LOADED");
+
+                        break;
+
+                    case "LOADED":
+                        //List<MapServiceLayerIdInfo>  d=  dad.getMapServiceInfo().getLayerInfos();
+                        for(int i:layers){
+                            String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
+                            String layername=dad.getMapServiceInfo().getLayerInfos().get(i).getName();
+                            int layerid= (int) dad.getMapServiceInfo().getLayerInfos().get(i).getId();
+                            TitanLayer layer=new TitanLayer();
+                            layer.setName(layername);
+                            layer.setIndex(layerid);
+                            layer.setUrl(layerurl);
+                            layer.setVisiable(false);
+                            mLayerList.add(layer);
+                            ServiceFeatureTable service=new ServiceFeatureTable(layerurl);
+                            FeatureLayer flayer=new FeatureLayer(service);
+                            flayer.setVisible(false);
+                            marcGISMap.getOperationalLayers().add(flayer);
+
+                        }
+                        intiRecyclerView();
+                        break;
+
+                    default :
+                        break;
+                }
 
 
-
-
-
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    /**
-     * 加载专题图层
-     */
-    private void loadLyaers(){
-        for (int i = 0; i <layers.length; i++) {
-            String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+layers[i];
-            ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(layerurl);
-            //设置缓存模式
-            serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.ON_INTERACTION_CACHE);
-            //String name=serviceFeatureTable.getLayerInfo().getServiceLayerName();
-            //serviceFeatureTable.setFeatureRequestMode(ServiceFeatureTable.FeatureRequestMode.MANUAL_CACHE);
-            FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
-            //featuretables.add(serviceFeatureTable);
-            //featurelayers.add(featureLayer);
-            featureLayer.setVisible(false);
-            TitanLayer titanLayer=new TitanLayer();
-            String name=featureLayer.getName();
-            titanLayer.setName(name);
-            titanLayer.setVisiable(false);
-            titanLayer.setUrl(layerurl);
-            mLayerList.add(titanLayer);
-            marcGISMap.getOperationalLayers().add(featureLayer);
-        }
+            }
+        });
+        marcGISMap.getOperationalLayers().add(dad);
         mMapView.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
             @Override
             public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
@@ -200,14 +198,20 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
                 final int layerIndex = marcGISMap.getOperationalLayers().indexOf(layer);
                 String name=layerViewStateChangedEvent.getLayer().getName();
-                if(layerIndex>=0){
-                    mLayerList.get(layerIndex).setName(name);
-                    viewStatusString(layerIndex,viewStatus);
+                if(layerIndex>0){
+                    viewStatusString(layerIndex-1,viewStatus);
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
     }
+
 
     /**
      * The method looks up the view status of the layer and returns a string which is displayed
@@ -223,10 +227,11 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                 mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"已加载");
                 //return getActivity().getString(R.string.active);
             case "ERROR":
-                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+getActivity().getString(R.string.error));
+
+                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"加载失败");
                 //return getActivity().getString(R.string.error);
             case "LOADING":
-                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+getActivity().getString(R.string.loading));
+                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"正在加载");
                 //return getActivity().getString(R.string.loading);
 
             case "NOT_VISIBLE":
@@ -235,7 +240,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                 //return getActivity().getString(R.string.notVisible);
 
             case "OUT_OF_SCALE":
-                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+getActivity().getString(R.string.outOfScale));
+                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"超出范围");
                 //return getActivity().getString(R.string.outOfScale);
 
         }
@@ -277,7 +282,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
     @Override
     public void onResume() {
-        intiRecyclerView();
         super.onResume();
     }
 
@@ -292,9 +296,15 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         selectBasemap(position);
     }
 
+    /**
+     * 图层点击
+     * @param index
+     * @param isvisable
+     */
     @Override
     public void onCheckLayer(int index, boolean isvisable) {
-       marcGISMap.getOperationalLayers().get(index).setVisible(isvisable);
+        marcGISMap.getOperationalLayers().get(index+1).setVisible(isvisable);
+        mLayerList.get(index).setVisiable(isvisable);
     }
 
     @Override

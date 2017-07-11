@@ -111,8 +111,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public static ArcGISMap mMap;
     //专题图层数量
     private final  int layers=9;
-    //专题图层
-    private List<ServiceFeatureTable> featuretables=new ArrayList<>();
 
     private List<FeatureLayer> featurelayers=new ArrayList<>();
 
@@ -155,19 +153,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
     public void initBaiduLoc() {
-
         //定位初始化
         mLocationService = TitanApplication.locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         mLocationService.registerListener(mMainViewModel);
         mLocationService.setLocationOption(mLocationService.getDefaultLocationClientOption());
         mLocationService.start();
-        /*//声明LocationClient类
-        mLocationClient = new LocationClient(getActivity());
-        //注册监听函数
-        mLocationClient.registerLocationListener(mMainViewModel);
-        mLocationClient.setLocOption(LocUtil.getLocationClientOption());
-        mLocationClient.start();*/
     }
 
     @Override
@@ -294,7 +285,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud8065403504,none,RP5X0H4AH7CLJ9HSX018");
         //初始化底图()
         mMap = new ArcGISMap(Basemap.createOpenStreetMap());
-        mMainFragBinding.mapview.setMap(mMap);
         //instantiate an ArcGISMap with OpenStreetMap Basemap
         // mMap = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 34.056295, -117.195800, 10);
         //loadLyaers();
@@ -362,6 +352,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
             }
         });
+        mMainFragBinding.mapview.setMap(mMap);
+
 
         // create feature layer with its service feature table
         // create the service feature table
@@ -425,15 +417,22 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 query.setReturnGeometry(true);
 
                 List<ServiceFeatureTable> tt=new ArrayList<>();
-                for (int i = 0; i <mMap.getOperationalLayers().size() ; i++) {
-                    if(mMap.getOperationalLayers().get(i).isVisible()){
-                        tt.add(featuretables.get(i));
+                int dd=mlayerControlFragment.getmLayerList().size();
+                for (TitanLayer tlayer:mlayerControlFragment.getmLayerList()){
+                    if(tlayer.isVisiable()){
+                        tt.add(new ServiceFeatureTable(tlayer.getUrl()));
                     }
                 }
-
-                for (ServiceFeatureTable featureTable:tt){
-                    //featureTable.get
-                    //FeatureLayer featureLayer = new FeatureLayer(featureTable);
+                /*for (int i = 0; i <mMap.getOperationalLayers().size() ; i++) {
+                    mlayerControlFragment.getmLayerList()
+                    if(mMap.getOperationalLayers().get(i).isVisible()){
+                        tt.add(mlayerControlFragment.getFeaturetables().get(i));
+                    }
+                }*/
+                if(tt.size()>0){
+                    for (ServiceFeatureTable featureTable:tt){
+                        //featureTable.get
+                        //FeatureLayer featureLayer = new FeatureLayer(featureTable);
 
                         // call select features
                         final ListenableFuture<FeatureQueryResult> future =featureTable.queryFeaturesAsync(query, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
@@ -490,6 +489,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                             }
                         });
                     }
+                }
                 return super.onSingleTapConfirmed(e);
             }
 
@@ -725,6 +725,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
              mPlotUtil.closePlotDialog();
            // plotUtil.showPlotDialog(v);
         }
+
+
+
     }
 
     /**
@@ -776,7 +779,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         Intent intent=new Intent(getActivity(), SceneActivity.class);
         Bundle bundle=new Bundle();
         bundle.putSerializable("loc",mMainViewModel.getTitanloc());
-        bundle.putSerializable("layers", (Serializable) LayerControlFragment.getmLayerList());
+        bundle.putSerializable("layers", (Serializable) mlayerControlFragment.getmLayerList());
         intent.putExtras(bundle);
         startActivity(intent);
     }

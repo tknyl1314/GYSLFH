@@ -48,4 +48,8 @@ public interface IUpAlarm extends AlarmInfoInterface {
     void showSelectAddress();
 
 
+    /**
+     * 关闭界面
+     */
+    void finish();
 }

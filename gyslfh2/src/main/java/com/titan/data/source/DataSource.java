@@ -64,6 +64,8 @@ public interface DataSource {
 
         void onSuccess(String data);
     }
+
+
     //上报火情和接警录入
     void uplaodAlarmInfo(String infojson,uploadCallback callback);
     //上传轨迹

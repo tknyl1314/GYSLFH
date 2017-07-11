@@ -17,9 +17,6 @@ public class BaseViewModel extends BaseObservable {
     protected DataRepository mDataRepository;
     //数据加载中
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
-
-
-
     //提示信息
     public final ObservableField<String> snackbarText = new ObservableField<>();
     public String getSnackbarText() {
