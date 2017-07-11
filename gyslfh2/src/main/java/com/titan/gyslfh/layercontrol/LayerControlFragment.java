@@ -134,10 +134,10 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
      * 出事图层信息
      */
     private void initLayers() {
-
-        final ArcGISMapImageLayer dad=new ArcGISMapImageLayer(getActivity().getString(R.string.zturl));
-        dad.setVisible(false);
-        dad.addLoadStatusChangedListener(new LoadStatusChangedListener() {
+        //动态图层
+        final ArcGISMapImageLayer dlayer=new ArcGISMapImageLayer(getActivity().getString(R.string.zturl));
+        dlayer.setVisible(false);
+        dlayer.addLoadStatusChangedListener(new LoadStatusChangedListener() {
             @Override
             public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
                 String mapLoadStatus = loadStatusChangedEvent.getNewLoadStatus().name();
@@ -161,8 +161,8 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                         //List<MapServiceLayerIdInfo>  d=  dad.getMapServiceInfo().getLayerInfos();
                         for(int i:layers){
                             String layerurl=getActivity().getString(R.string.gisserverhost)+"/"+i;
-                            String layername=dad.getMapServiceInfo().getLayerInfos().get(i).getName();
-                            int layerid= (int) dad.getMapServiceInfo().getLayerInfos().get(i).getId();
+                            String layername=dlayer.getMapServiceInfo().getLayerInfos().get(i).getName();
+                            int layerid= (int) dlayer.getMapServiceInfo().getLayerInfos().get(i).getId();
                             TitanLayer layer=new TitanLayer();
                             layer.setName(layername);
                             layer.setIndex(layerid);
@@ -185,7 +185,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
             }
         });
-        marcGISMap.getOperationalLayers().add(dad);
+        marcGISMap.getOperationalLayers().add(dlayer);
         mMapView.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
             @Override
             public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
@@ -245,7 +245,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
         }
 
-        //return getActivity().getString(R.string.unknown);
 
     }
 
