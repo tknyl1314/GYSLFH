@@ -37,17 +37,11 @@ public class TitanApplication extends Application{
     public static String SBH, XLH;
     public static String MOBILE_MODEL;
 
-    public LocationService getLocationService() {
-        return locationService;
-    }
-
     /** 百度位置监听服务 */
     public static LocationService locationService;
     /** 震动器（百度定位） */
     Vibrator mVibrator;
     static Context mContext;
-    String dbname="SMLY.sqlite";
-    public  SharedPreferences sharedPreferences=null;
     public  static  TitanApplication singleton;
 
     public static UserModel getmUserModel() {
@@ -104,6 +98,7 @@ public class TitanApplication extends Application{
         //mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         //intiData();
+
         mSharedPreferences=getSharedPreferences(PREFS_NAME,0);
         /** 获取当前网络状态 */
         getNetState();
@@ -121,23 +116,6 @@ public class TitanApplication extends Application{
 
 
 
-
-    /**
-     * 初始化数据
-     */
-    private void intiData() {
-
-        // 用户信息存储
-        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-        //是否记录轨迹
-        sharedPreferences.edit().putBoolean("istrack",false).apply();
-        filePath= mContext.getFilesDir().getAbsolutePath();
-        //检查本地数据库
-        /*if (!DataBaseHelper.checkDataBase(filePath, dbname))
-        {
-            DataBaseHelper.CopyDatabase(mContext,filePath, dbname);
-        }*/
-    }
     /** 获取设备信息 */
     private void getDeviceInfo() {
         XLH = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
