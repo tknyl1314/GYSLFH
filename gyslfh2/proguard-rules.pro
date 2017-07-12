@@ -28,3 +28,12 @@
 -dontwarn com.igexin.**
 -keep class com.igexin.** { *; }
 -keep class org.json.** { *; }
+
+# arcgis
+
+-dontwarn com.esri.arcgisruntime.**
+-keep class com.esri.arcgisruntime.** { *; }
+
+# 百度
+-dontwarn com.baidu.**
+-keep class com.baidu.** { *; }

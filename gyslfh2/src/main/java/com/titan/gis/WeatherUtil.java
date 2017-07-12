@@ -12,19 +12,12 @@ import java.util.List;
 
 /**
  * Created by whs on 2017/5/25
- * 气象数据解析
+ * 气象数据解析工具类
  */
 
 public class WeatherUtil {
-
-    //火险等级样式
-   /* private static SimpleFillSymbol risk1_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.GREEN, null);
-    private static SimpleFillSymbol risk2_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.BLUE, null);
-    private static SimpleFillSymbol risk3_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.YELLOW, null);
-    private static SimpleFillSymbol risk4_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.rgb(255, 165, 58), null);
-    private static SimpleFillSymbol risk5_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.RED, null);
-*/
-
+    //透明度
+    public final  static float OPACITY=0.6f;
 
 
     public static List<Graphic> creatFireRiskGraphicsOverlay(FireRiskModel fireRiskModel) {

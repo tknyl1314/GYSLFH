@@ -311,7 +311,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         List<Graphic> graphics= WeatherUtil.creatFireRiskGraphicsOverlay(fireRiskModel);
         mGraphicsOverlay.getGraphics().addAll(graphics);
         //设置透明度
-        mGraphicsOverlay.setOpacity((float) 0.6);
+        mGraphicsOverlay.setOpacity(WeatherUtil.OPACITY);
         mMapView.setViewpoint(new Viewpoint(mGraphicsOverlay.getExtent()));
     }
 
