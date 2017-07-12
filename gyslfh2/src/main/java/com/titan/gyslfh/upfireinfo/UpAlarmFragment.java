@@ -3,6 +3,7 @@ package com.titan.gyslfh.upfireinfo;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -60,6 +61,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     private int timetype=1;
     //adapter
     private  PhotoAdapter mAdapter;
+    private Context mContext;
 
     SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
 
@@ -93,6 +95,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mContext=getActivity();
 
         setupSnackbar();
 
@@ -205,10 +208,10 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     public void showCountrySelectDialog(final int type) {
 
         if(mCountrysDiallg==null){
-           mCountrysDiallg= new MaterialDialog.Builder(getActivity())
+           mCountrysDiallg= new MaterialDialog.Builder(mContext)
                     .title(getActivity().getString(R.string.countrys))
-                    .items((CharSequence[]) getActivity().getResources().getStringArray(R.array.countrys))
-                    .itemsIds(getActivity().getResources().getIntArray(R.array.countrys_id))
+                    .items((CharSequence[]) mContext.getResources().getStringArray(R.array.countrys))
+                    .itemsIds(mContext.getResources().getIntArray(R.array.countrys_id))
                     .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                         @Override
                         public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -255,7 +258,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     @Override
     public void showProgress(boolean isshow) {
         if (mProgresssDialog == null) {
-            mProgresssDialog = new MaterialDialog.Builder(getActivity())
+            mProgresssDialog = new MaterialDialog.Builder(mContext)
                     //.title(getActivity().getString(R.string.title))
                     .content(getActivity().getString(R.string.content_progress))
                     .progress(true, 0)
@@ -295,7 +298,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     @Override
     public void showOriginDialog() {
 
-        new MaterialDialog.Builder(getActivity())
+        new MaterialDialog.Builder(mContext)
                 .title(getActivity().getString(R.string.origin))
                 .items((CharSequence[]) getActivity().getResources().getStringArray(R.array.alarm_source))
                 .cancelable(true)
@@ -319,7 +322,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
      */
     @Override
     public void showStatusDialog() {
-        new MaterialDialog.Builder(getActivity())
+        new MaterialDialog.Builder(mContext)
                 .title(getActivity().getString(R.string.status))
                 .items((CharSequence[]) getActivity().getResources().getStringArray(R.array.firestatus))
                 .cancelable(false)
@@ -347,8 +350,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     }
 
     @Override
-    public void finish() {
-        getActivity().finish();
+    public void finish() {getActivity().finish();
     }
 
     /**

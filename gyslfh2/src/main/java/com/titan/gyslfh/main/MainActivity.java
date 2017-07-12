@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
+import com.titan.BaseActivity;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
@@ -27,7 +27,7 @@ import com.titan.util.ActivityUtils;
 /**
  * 主界面
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     public static final String MAIN_VIEWMODEL_TAG = "MAIN_VIEWMODEL_TAG";
        //图层控制
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     @NonNull
-    private MainFragment findOrCreateViewFragment() {
+    public MainFragment findOrCreateViewFragment() {
         MainFragment tasksFragment =
                 (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (tasksFragment == null) {
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @NonNull
-    private MainViewModel findOrCreateViewModel() {
+    public MainViewModel findOrCreateViewModel() {
         // In a configuration change we might have a ViewModel present. It's retained using the
         // Fragment Manager.
         @SuppressWarnings("unchecked")

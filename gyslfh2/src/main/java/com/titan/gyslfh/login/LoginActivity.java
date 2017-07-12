@@ -1,7 +1,6 @@
 package com.titan.gyslfh.login;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,10 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.igexin.sdk.PushManager;
+import com.titan.BaseActivity;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gyslfh.TitanApplication;
@@ -22,14 +21,13 @@ import com.titan.push.GeTui;
 import com.titan.push.GeTuiIntentService;
 import com.titan.push.GeTuiPushService;
 import com.titan.util.ActivityUtils;
-import com.titan.util.DeviceUtil;
 import com.titan.util.ToastUtil;
 
 
 /**
  * 登陆界面
  */
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends BaseActivity {
 
     public static final String LOGIN_VIEWMODEL_TAG = "LOGIN_VIEWMODEL_TAG";
 
@@ -51,10 +49,6 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         TitanApplication.getInstance().addActivity(this);
         mContext=this;
-        if(DeviceUtil.isTablet(mContext)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-
 
         setContentView(R.layout.activity_login);
 
@@ -67,7 +61,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     }
 
-    private LoginViewModel findOrCreateViewModel() {
+    public LoginViewModel findOrCreateViewModel() {
         // In a configuration change we might have a ViewModel present. It's retained using the
         // Fragment Manager.
         @SuppressWarnings("unchecked")
@@ -91,7 +85,7 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     @NonNull
-    private LoginFragment findOrCreateViewFragment() {
+    public LoginFragment findOrCreateViewFragment() {
         LoginFragment tasksFragment =
                 (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (tasksFragment == null) {

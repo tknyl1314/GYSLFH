@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import org.json.JSONException;
 
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.text.ParseException;
 
 import retrofit2.adapter.rxjava.HttpException;
@@ -47,7 +48,11 @@ class ExceptionEngine {
                     break;
             }
             return ex;
-        } else if (e instanceof ServerException){    //服务器返回的错误
+        }else if(e instanceof SocketTimeoutException){
+            ex = new ApiException(e, TitanError.NETWORD_ERROR);
+            ex.message = "连接超时，请检查网络连接或稍后重试";  //均视为网络错误
+            return ex;
+        }else if (e instanceof ServerException){    //服务器返回的错误
             ServerException resultException = (ServerException) e;
             ex = new ApiException(resultException, resultException.code);
             ex.message = resultException.message;

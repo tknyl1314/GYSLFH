@@ -45,10 +45,12 @@ public class LoginFragment extends Fragment implements ILogin {
     private static LoginFragment singleton;
 
     private LoginViewModel mViewModel;
-
+    //进度
     private Dialog mProgresssDialog;
 
     private FragLoginBinding mDataBinding;
+
+    private Context mContext;
 
 
     public LoginFragment() {
@@ -107,11 +109,11 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        mContext=getActivity();
         mDataBinding= DataBindingUtil.inflate(inflater, R.layout.frag_login,container,false);
         mDataBinding.setViewmodel(mViewModel);
         //显示版本号
-        mDataBinding.tvAppversion.setText(getActivity().getString(R.string.app_version)+ TitanUtil.getVersionCode(getActivity()));
+        mDataBinding.tvAppversion.setText(mContext.getString(R.string.app_version)+ TitanUtil.getVersionCode(mContext)+"");
         return mDataBinding.getRoot();
         //Inflate the layout for this fragment
         //return inflater.inflate(R.layout.frag_scene, container, false);
@@ -155,16 +157,16 @@ public class LoginFragment extends Fragment implements ILogin {
 
     @Override
     public void onNext() {
-        Intent intent=new Intent(getActivity(),MainActivity.class);
+        Intent intent=new Intent(mContext,MainActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void showProgress() {
         if (mProgresssDialog == null) {
-            mProgresssDialog = new MaterialDialog.Builder(getActivity())
+            mProgresssDialog = new MaterialDialog.Builder(mContext)
                     //.title(getActivity().getString(R.string.title))
-                    .content(getActivity().getString(R.string.logining))
+                    .content(mContext.getString(R.string.logining))
                     .progress(true, 0)
                     .cancelable(false)
                     .build();
@@ -183,6 +185,6 @@ public class LoginFragment extends Fragment implements ILogin {
 
     @Override
     public void showToast(String info, int type) {
-        Toast.makeText(getActivity(), info, type).show();
+        Toast.makeText(mContext, info, type).show();
     }
 }

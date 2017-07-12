@@ -417,6 +417,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 query.setReturnGeometry(true);
 
                 List<ServiceFeatureTable> tt=new ArrayList<>();
+                if(mlayerControlFragment==null||mlayerControlFragment.getmLayerList().isEmpty()){
+                    return false;
+                }
                 int dd=mlayerControlFragment.getmLayerList().size();
                 for (TitanLayer tlayer:mlayerControlFragment.getmLayerList()){
                     if(tlayer.isVisiable()){

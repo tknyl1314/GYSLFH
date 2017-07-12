@@ -68,8 +68,6 @@ public class LoginViewModel extends BaseViewModel {
                     if(isremember.get()){
                         TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
                         TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
-
-
                     }
                     snackbarText.set("登陆成功");
                     mLogin.onNext();

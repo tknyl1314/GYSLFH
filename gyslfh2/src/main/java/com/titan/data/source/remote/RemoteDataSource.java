@@ -344,7 +344,11 @@ public class RemoteDataSource implements DataSource,RemotDataSource {
 
                     @Override
                     protected void onError(ExceptionEngine.ApiException ex) {
-                        callback.onFailure(ex.getMessage());
+                        if(ex.message==null){
+                            callback.onFailure(ex.getMessage());
+                        }else {
+                            callback.onFailure(ex.message);
+                        }
                     }
 
                     @Override
@@ -359,31 +363,6 @@ public class RemoteDataSource implements DataSource,RemotDataSource {
                         }
                     }
                 });
-                /*.subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-
-
-                        Log.e("error",e.toString());
-                        callback.onFailure(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String json) {
-                        Gson gson=new Gson();
-                        ResultModel<MonitorModel1> resultModel=gson.fromJson(json, ResultModel.class);
-                        if(resultModel.getResult()){
-                            callback.onSuccess(new Gson().toJson(resultModel.getData()));
-
-                        }else {
-                            callback.onFailure(resultModel.getMessage());
-                        }
-
-                    }
-                });*/
     }
 }
