@@ -111,14 +111,13 @@
             </intent-filter>
         </receiver>
         <activity
-            android:name="com.titan.gyslfh.login.Loginhttps://github.com/hotchemi/PermissionsDispatcherActivity"
+            android:name="com.titan.gyslfh.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
