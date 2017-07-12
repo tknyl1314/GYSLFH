@@ -34,6 +34,9 @@
 -dontwarn com.esri.arcgisruntime.**
 -keep class com.esri.arcgisruntime.** { *; }
 
+-dontwarn org.simpleframework.xml.stream.**
+
+
 # 百度
 -dontwarn com.baidu.**
 -keep class com.baidu.** { *; }
@@ -46,6 +49,9 @@
 -keep class com.squareup.retrofit2.** {*;}
 -dontwarn rcom.squareup.retrofit2.**
 
+
+-dontwarn com.google.gson.**
+-keep class com.google.gson.** { *;}
 
 #  不混淆个推推送sdk
 -dontwarn com.igexin.**
@@ -67,8 +73,11 @@
 -dontwarn com.facebook.**
 -keep class com.facebook.** { *;}
 
+-dontwarn org.simpleframework.xml.stream.**
 -keep class org.simpleframework.** { *;}
 
+-dontwarn com.simpleframework.xml.stream.**
+-keep class org.simpleframework.** { *;}
 
 -dontwarn cn.finalteam.rxgalleryfinal.**
 -keep class cn.finalteam.rxgalleryfinal.** { *;}
@@ -80,31 +89,53 @@
 -keep public class * extends android.support.v4.view.ActionProvider {
     public <init>(android.content.Context);
 }
-#2.rxjava
--keep class rx.schedulers.Schedulers {
-    public static <methods>;
+
+#2.rx
+#-dontwarn io.reactivex.**
+#-keep io.reactivex.**
+#-keepclassmembers class io.reactivex.** { *; }
+
+#3.retrolambda
+-dontwarn java.lang.invoke.*
+
+#4.support-v4
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.** { *; }
+
+#5.ucrop
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }
+
+#6.photoview
+-keep class uk.co.senab.photoview** { *; }
+-keep interface uk.co.senab.photoview** { *; }
+
+#7.rxgalleryfinal
+-keep class cn.finalteam.rxgalleryfinal.ui.widget** { *; }
+
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
 }
--keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
 }
--keep class rx.schedulers.TestScheduler {
-    public <methods>;
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
 }
--keep class rx.schedulers.Schedulers {
-    public static ** test();
-}
--dontwarn sun.misc.**
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+-keepclassmembers class **.R$* {
+    public static <fields>;
 }
 
+-keepattributes *Annotation*
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
 # Platform used when running on Java 8 VMs. Will not be used at runtime.

@@ -69,6 +69,7 @@
 -dontwarn de.greenrobot.dao.**
 -keep class de.greenrobot.dao.** { *;}
 
+
 -dontwarn org.codehaus.jackson.map.ext.**
 -keep class org.codehaus.jackson.** {*;}
 
