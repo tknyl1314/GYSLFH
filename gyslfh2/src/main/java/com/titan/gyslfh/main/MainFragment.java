@@ -143,7 +143,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiduLoc();
+        MainFragmentPermissionsDispatcher.initBaiduLocWithCheck(this);
+        //initBaiduLoc();
 
 
     }
@@ -152,7 +153,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * 初始化百度定位
      */
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
-    public void initBaiduLoc() {
+    void initBaiduLoc() {
         //定位初始化
         mLocationService = TitanApplication.locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
