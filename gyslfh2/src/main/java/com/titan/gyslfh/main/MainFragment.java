@@ -103,10 +103,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //存储point的集合
     private PointCollection mPointCollection;
 
-    public ArcGISMap getmMap() {
-        return mMap;
-    }
-
     //基础图层
     public static ArcGISMap mMap;
     //专题图层数量
@@ -125,7 +121,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //样式库
     private SymbolUtil mSymbolUtil;
     //专题图层
-    private  List<TitanLayer> mLayerlist=new ArrayList<>();
+    //private  List<TitanLayer> mLayerlist=new ArrayList<>();
     //第一次加载
     private  boolean firstLoad=true;
     //定位客户端
@@ -780,6 +776,11 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     @Override
     public void openScene() {
+        if(mlayerControlFragment==null){
+            mlayerControlFragment= LayerControlFragment.getInstance(mMap,mMainFragBinding.mapview,mGraphicsOverlay);
+            LayerControlViewModel viewModel=new LayerControlViewModel(getActivity(),mlayerControlFragment, Injection.provideDataRepository(getActivity()),mlayerControlFragment.getmLayerList());
+            mlayerControlFragment.setViewModel(viewModel);
+        }
         Intent intent=new Intent(getActivity(), SceneActivity.class);
         Bundle bundle=new Bundle();
         bundle.putSerializable("loc",mMainViewModel.getTitanloc());
@@ -792,7 +793,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public void showLayerControl() {
         if(mlayerControlFragment==null){
             mlayerControlFragment= LayerControlFragment.getInstance(mMap,mMainFragBinding.mapview,mGraphicsOverlay);
-            LayerControlViewModel viewModel=new LayerControlViewModel(getActivity(),mlayerControlFragment, Injection.provideDataRepository(getActivity()),mLayerlist);
+            LayerControlViewModel viewModel=new LayerControlViewModel(getActivity(),mlayerControlFragment, Injection.provideDataRepository(getActivity()),mlayerControlFragment.getmLayerList());
             mlayerControlFragment.setViewModel(viewModel);
         }
         mlayerControlFragment.show(getFragmentManager(),LAYERCONTROL_TAG);

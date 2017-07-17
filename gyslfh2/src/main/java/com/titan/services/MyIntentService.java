@@ -7,6 +7,9 @@ import android.os.IBinder;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 离线轨迹自动上传服务
+ */
 public class MyIntentService extends IntentService {
 	List<Map<String, Object>> list ;
 	String state;

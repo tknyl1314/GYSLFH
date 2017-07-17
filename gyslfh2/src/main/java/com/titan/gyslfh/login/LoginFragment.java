@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -118,24 +117,15 @@ public class LoginFragment extends Fragment implements ILogin {
         //Inflate the layout for this fragment
         //return inflater.inflate(R.layout.frag_scene, container, false);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mViewModel.onStart();
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupSnackbar();
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        /*if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }*/
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.onStart();
     }
 
     @Override
@@ -164,7 +154,7 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public void showProgress() {
         if (mProgresssDialog == null) {
-            mProgresssDialog = new MaterialDialog.Builder(mContext)
+            mProgresssDialog = new MaterialDialog.Builder(getActivity())
                     //.title(getActivity().getString(R.string.title))
                     .content(mContext.getString(R.string.logining))
                     .progress(true, 0)
@@ -185,6 +175,6 @@ public class LoginFragment extends Fragment implements ILogin {
 
     @Override
     public void showToast(String info, int type) {
-        Toast.makeText(mContext, info, type).show();
+        Toast.makeText(getActivity(), info, type).show();
     }
 }

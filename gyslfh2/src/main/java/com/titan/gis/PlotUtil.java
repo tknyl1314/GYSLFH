@@ -33,7 +33,6 @@ import com.esri.arcgisruntime.symbology.MarkerSymbol;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
-import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.util.ListChangedEvent;
 import com.esri.arcgisruntime.util.ListChangedListener;
 import com.titan.newslfh.R;
@@ -43,7 +42,7 @@ import java.util.Collections;
 
 /**
  * 
- *  地图标绘模块
+ *  地图态势标绘模块
  *  Arcgis version:runtime 100
  * 
  */
@@ -52,7 +51,7 @@ public class PlotUtil implements OnClickListener {
     private static LineSymbol plotlineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID ,Color.BLACK, 3);
     //箭头样式
 	private static FillSymbol plotArrowfill = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID,Color.argb(80, 255, 0, 0),plotlineSymbol);
-	static MarkerSymbol plotmarker = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE,Color.BLACK, 16);
+
 
 	// 防火带样式
 	private static LineSymbol plotbreaklineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 20);

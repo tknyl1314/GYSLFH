@@ -328,7 +328,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         switch (position){
             //基础图
             case 0:
-                marcGISMap.setBasemap(Basemap.createStreets());
+                marcGISMap.setBasemap(Basemap.createOpenStreetMap());
                 break;
             //影像图
             case 1:

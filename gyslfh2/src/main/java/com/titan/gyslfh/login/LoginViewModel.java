@@ -50,7 +50,7 @@ public class LoginViewModel extends BaseViewModel {
             mLogin.showProgress();
             //个推ClientId
             String cid= PushManager.getInstance().getClientid(mContext);
-            mDataRepository.checkLogin(username.get(), password.get(), cid, new RemotDataSource.getCallback() {
+            mDataRepository.checkLogin(username.get().trim(), password.get().trim(), cid, new RemotDataSource.getCallback() {
                 @Override
                 public void onFailure(String info) {
                     mLogin.stopProgress();
@@ -69,7 +69,7 @@ public class LoginViewModel extends BaseViewModel {
                         TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
                         TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
                     }
-                    snackbarText.set("登陆成功");
+                    //snackbarText.set("登陆成功");
                     mLogin.onNext();
 
                 }
@@ -103,13 +103,6 @@ public class LoginViewModel extends BaseViewModel {
 
     }
 
-    /**
-     * @return
-     */
-    private String getClientId(){
-        String cid= PushManager.getInstance().getClientid(mContext);
-        return null;
-    }
 
 
     /**
