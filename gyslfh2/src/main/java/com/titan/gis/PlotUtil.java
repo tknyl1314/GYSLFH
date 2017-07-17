@@ -41,18 +41,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * 
- *  地图态势标绘模块
- *  Arcgis version:runtime 100
- * 
+ * 地图态势标绘模块
+ * Arcgis version:runtime 100
+ *
  */
 public class PlotUtil implements OnClickListener {
     //基本线样式
     private static LineSymbol plotlineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID ,Color.BLACK, 3);
     //箭头样式
 	private static FillSymbol plotArrowfill = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID,Color.argb(80, 255, 0, 0),plotlineSymbol);
-
-
 	// 防火带样式
 	private static LineSymbol plotbreaklineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 20);
 	// 火场范围
@@ -74,7 +71,7 @@ public class PlotUtil implements OnClickListener {
 	private Point startPoint;
 	// 地图事件监听
 	public PlotTouchListener plotTouchListener;
-
+    //点集合
     private PointCollection mPtCollection;
     //构造器
     private PolylineBuilder mPolylineBuilder;
@@ -180,7 +177,7 @@ public class PlotUtil implements OnClickListener {
         //create the graphics overlay
         GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
         //add the overlay to the map view
-        boolean isadd=mapview.getGraphicsOverlays().add(graphicsOverlay);
+        mapview.getGraphicsOverlays().add(graphicsOverlay);
         return graphicsOverlay;
     }
 
@@ -195,7 +192,10 @@ public class PlotUtil implements OnClickListener {
 		}
 	}
 
-	public class PlotTouchListener extends DefaultMapViewOnTouchListener {
+    /**
+     * 地图事件监听
+     */
+    public class PlotTouchListener extends DefaultMapViewOnTouchListener {
 		MapView mapview;
 		Context context;
 
@@ -207,8 +207,8 @@ public class PlotUtil implements OnClickListener {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			//Point point = mapview.toMapPoint(event.getX(), event.getY());
-          Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(event.getX()), Math.round(event.getY())));
+            //Point point = mapview.toMapPoint(event.getX(), event.getY());
+            Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(event.getX()), Math.round(event.getY())));
             
 			if (point == null || point.isEmpty()) {
 				return false;
@@ -222,11 +222,12 @@ public class PlotUtil implements OnClickListener {
 						polyline.startPath(point);
 						break;*/
                     case FIREAREA:
+                        //火场范围
                         mPtCollection.add(point);
-
                         //mPolygonBuilder.addPoint(point);
                         break;
                     case FIREBREAK:
+                        //防火带
                         mPtCollection.add(point);
 
 
@@ -250,19 +251,20 @@ public class PlotUtil implements OnClickListener {
             if (active) {
                 switch (mPlotType) {
                     case FIREAREA:
+                        //火场范围
                         mPtCollection.add(point);
-
                         //mPolygonBuilder.addPoint(point);
                         mPolygonBuilder =new PolygonBuilder(mPtCollection);
                         mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolygonBuilder.toGeometry());
                         break;
                     case FIREBREAK:
+                        //防火带
                         mPtCollection.add(point);
                         mPolylineBuilder =new PolylineBuilder(mPtCollection);
                         mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolylineBuilder.toGeometry());
                         break;
                 }
-                return false;
+                return true;
             }
             return super.onFling(from, to, velocityX, velocityY);
         }
@@ -274,36 +276,26 @@ public class PlotUtil implements OnClickListener {
             if (active) {
                 switch (mPlotType) {
                     case FIREPOINT:
+                        //火点
                         plotgarphic = new Graphic(point, firepointSymbol);// hotsymbol);
                         mGraphicsOverlay.getGraphics().add(plotgarphic);
                         break;
                     case FLAG:
+                        //旗帜
                         plotgarphic = new Graphic(point, flagSymbol);// hotsymbol);
                         mGraphicsOverlay.getGraphics().add(plotgarphic);
                         break;
                     case ARROW:
-                        //箭头
-                        if (startPoint == null) {
-                            startPoint = point;
-                            mPtCollection.add(point);
-                            //mPolylineBuilder=new PolylineBuilder(mPtCollection);
-                            //polyline=new Polyline(part);
-                            //polyline.startPath(point);
-                        } else {
+                           //箭头
                             mPtCollection.add(point);
                             /*mPolylineBuilder.addPoint(point);
                             polyline=mPolylineBuilder.toGeometry();*/
                             // 贝塞尔箭头
-                            plotgarphic = plotArrow(point, mPtCollection);
-                            //mGraphicsOverlay.getGraphics().add(plotgarphic);
-                            mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(plotgarphic.getGeometry());
-                            /*if(mGraphicsOverlay.getGraphics().get(plotgraphicID)==null){
-                                mGraphicsOverlay.getGraphics().add(plotgraphicID,plotgarphic);
+                           if(mPtCollection.size()>=2){
+                               plotgarphic = plotArrow(point, mPtCollection);
+                               mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(plotgarphic.getGeometry());
+                           }
 
-                            }else {
-                                mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(plotgarphic.getGeometry());
-                            }*/
-                        }
                         break;
 
                     case JUNGLE:
@@ -327,34 +319,32 @@ public class PlotUtil implements OnClickListener {
                         }*/
 
                         break;
-                }
 
+                }
+                return true;
             }
             return super.onSingleTapConfirmed(event);
 
         }
 
 
-		@Override
+        /**
+         * 双击
+         * @param point
+         * @return
+         */
+        @Override
 		public boolean onDoubleTap(MotionEvent point) {
 			deactivate();//结束标绘
 			return super.onDoubleTap(point);
 		}
 
 
-		/*@Override
-		public void onLongPress(MotionEvent event) {
-			Point point = mapview.toMapPoint(event.getX(), event.getY());
-			//super.onLongPress(point);
-		}
-*/
 
 	}
 
 	@Override
 	public void onClick(View v) {
-        //plotgraphicID++;
-		//MapActivity.actionMode = MapActivity.ActionMode.MODE_PLOT;
 		switch (v.getId()) {
 			case R.id.btn_plot_ARROW:
 				//ToastUtil.setToast(mContext, "你选择了箭头标绘");
@@ -390,26 +380,23 @@ public class PlotUtil implements OnClickListener {
 				break;
 		}
 	}
- /**
-  * 结束标绘
-  * */
-	public void deactivate() {
-		/*if (plotgraphiclayer != null) {
-			this.plotgraphiclayer.removeGraphic(plotgraphicID);
-		}*/
+
+    /**
+     * 结束标绘
+     */
+    public void deactivate() {
 		active = false;
-		/*this.point = null;
-		this.polygon = null;
-		this.polyline = null;
-		this.plotgarphic = null;
-		this.startPoint = null;*/
 	}
 
-	public void activate(PlotType plotType) {
+    /**
+     * 启动标绘
+     * @param plotType
+     */
+    public void activate(PlotType plotType) {
 		if (mapview == null)
 			return;
 
-		//this.deactivate();
+		deactivate();
 		//this.plotType = plotType;
         //plotgraphicID++;
 		mPlotType=plotType;
@@ -436,334 +423,23 @@ public class PlotUtil implements OnClickListener {
                 //polyline = new Polyline(mPtCollection);
 				plotgarphic = new Graphic(mPolygonBuilder.toGeometry(), plotArrowfill);
                 mGraphicsOverlay.getGraphics().add(plotgarphic);
-
                 break;
 
 
 			case JUNGLE:
+			    //集结地
                 mPolygonBuilder=new PolygonBuilder(mPtCollection);
                 //polygon = new Polygon(mPtCollection);
 				plotgarphic = new Graphic(mPolygonBuilder.toGeometry(), plotArrowfill);
                 mGraphicsOverlay.getGraphics().add(plotgarphic);
-
                 break;
             //旗帜
 			case FLAG:
 			//火点
 			case FIREPOINT:
-				/*point = new Point();
-				plotgarphic = new Graphic(point, firepointSymbol);*/
 				break;
 		}
-		//plotgraphicID =mGraphicsOverlay.getGraphics().add(plotgarphic);
 	}
-
-	/*public static Graphic plotArrow(Polyline polyline, MapView mapview) {
-		double px, py, pre_px, pre_py, top_px, top_py;
-		//
-		double slope, bb, cos_number, sin_number;
-		Point cpoint, prepoint;
-		// 定义中轴线离上下两边的距离
-		double dis = mapview.getWidth() / 20.0;
-		// List<Point> points = new ArrayList<>();
-		int pointcount = polyline.getPointCount();
-		Point[] points = new Point[polyline.getPointCount()];
-		// polyline.calculateLength2D();
-
-		// polyline.calculateLength2D()/4
-
-		List<Point> top_points = new ArrayList<Point>();
-		List<Point> bottom_points = new ArrayList<Point>();
-		// Point[] bottom_points = new Point[polyline.getPointCount()];
-
-		// 获取主控制点
-		// getControlPoints();
-		for (int i = 0; i < polyline.getPointCount(); i++) {
-			if (i == 0) {
-				continue;
-			} else {
-				cpoint = polyline.getPoint(i);
-				px = cpoint.getX();
-				py = cpoint.getY();
-				prepoint = polyline.getPoint(i - 1);
-				pre_px = prepoint.getX();
-				pre_py = prepoint.getY();
-
-				slope = (py - pre_py) / (px - pre_px);
-
-				// 上边点确定
-				bb = dis * (1 - i / polyline.getPointCount() * 0.9);
-				cos_number = Math.cos(Math.atan(slope) - Math.PI / 2);
-				sin_number = Math.sin(Math.atan(slope) - Math.PI / 2);
-				top_px = 0.0;
-				top_py = 0.0;
-				// 下面分四种情况画线。
-				if (pre_px <= px && pre_py <= py) {
-					top_px = pre_px
-							- ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					top_py = pre_py
-							+ ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px <= px && pre_py > py) {
-					top_px = pre_px
-							+ ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					top_py = pre_py
-							+ ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px >= px && pre_py >= py) {
-					top_px = pre_px
-							+ ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					top_py = pre_py
-							- ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px >= px && pre_py <= py) {
-					top_px = pre_px
-							- ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					top_py = pre_py
-							- ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				}
-				// double top_point:MapPoint=new MapPoint(top_px, top_py);
-				Point top_point = new Point(top_px, top_py);
-				// clogger.logger.info("上半部分是：" + top_px + "yy:" + top_py);
-				top_points.add(top_point);
-				// 下面来确定下边的曲线
-				*//*
-				 * double bottom_px; double bottom_py;
-				 *//*
-				double bottom_px = 0.0;
-				double bottom_py = 0.0;
-				if (pre_px <= px && pre_py <= py) {
-					bottom_px = pre_px
-							+ ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					bottom_py = pre_py
-							- ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px <= px && pre_py > py) {
-					bottom_px = pre_px
-							- ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					bottom_py = pre_py
-							- ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px >= px && pre_py >= py) {
-					bottom_px = pre_px
-							- ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					bottom_py = pre_py
-							+ ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				} else if (pre_px >= px && pre_py <= py) {
-					bottom_px = pre_px
-							+ ((bb * cos_number) < 0 ? (-bb * cos_number)
-							: (bb * cos_number));
-					bottom_py = pre_py
-							+ ((bb * sin_number) < 0 ? (-bb * sin_number)
-							: (bb * sin_number));
-				}
-				Point bottom_point = new Point(bottom_px, bottom_py);
-				// double bottom_point:MapPoint=new MapPoint(bottom_px, bottom_py);
-				bottom_points.add(bottom_point);
-
-			}
-			// points[i] = polyline.getPoint(i);
-		}
-
-		for (int i = 0; i < top_points.size(); i++) {
-			*//*
-			 * if (i == 0) continue;
-			 *//*
-			Graphic graphic = new Graphic(top_points.get(i), plotmarker);
-			MapActivity.plotgraphiclayer.addGraphic(graphic);
-			// Graphic graphic = new Graphic(polygon, plotArrowfill);
-		}
-		for (int i = 0; i < bottom_points.size(); i++) {
-			*//*
-			 * if (i == 0) continue;
-			 *//*
-			Graphic graphic = new Graphic(bottom_points.get(i), plotmarker);
-			MapActivity.plotgraphiclayer.addGraphic(graphic);
-			// Graphic graphic = new Graphic(polygon, plotArrowfill);
-		}
-		*//*
-		 * *下面是添加军标箭头的程序,因为现在已经得到上下边界的曲线了。*
-		 *//*
-
-		Point end_curvepoint = polyline.getPoint(polyline.getPointCount() - 1);
-		Point end_top_point = top_points.get(top_points.size() - 1);
-		Point end_top_point2 = top_points.get(top_points.size() - 2);
-
-		*//*
-		 * if (pointcount > 2) { Point end_top_point2 =
-		 * top_points.get(top_points.size() - 2); pre_px =
-		 * end_top_point2.getX(); pre_py = end_top_point2.getY(); } else { Point
-		 * end_top_point2 = top_points.get(top_points.size() - 1); pre_px =
-		 * end_top_point2.getX(); pre_py = end_top_point2.getY(); }
-		 *//*
-
-		// 求箭头上方的点
-		double x2 = end_curvepoint.getX();
-		double y2 = end_curvepoint.getY();
-		//px=end_top_point.getX();
-		//py=end_top_point.getY();
-		px = end_curvepoint.getX();
-		py = end_curvepoint.getY();
-
-		pre_px = end_top_point2.getX();
-		pre_py = end_top_point2.getY();
-
-		double end_slope = (pre_py - py) / (pre_px - px);
-		double b = dis;
-		double end_point_x = 0;
-		double end_point_y = 0;
-		cos_number = Math.cos(Math.atan(end_slope) - Math.PI / 2);
-		sin_number = Math.sin(Math.atan(end_slope) - Math.PI / 2);
-		// 下面分四种情况画线。
-		if (pre_px <= px && pre_py <= py) {
-			end_point_x = pre_px - ((b * cos_number) < 0 ? (-b * cos_number) : (b * cos_number));
-			end_point_y = pre_py + ((b * sin_number) < 0 ? (-b * sin_number) : (b * sin_number));
-		} else if (pre_px <= px && pre_py > py) {
-			end_point_x = pre_px + ((b * cos_number) < 0 ? (-b * cos_number) : (b * cos_number));
-			end_point_y = pre_py + ((b * sin_number) < 0 ? (-b * sin_number) : (b * sin_number));
-		} else if (pre_px >= px && pre_py >= py) {
-			end_point_x = pre_px + ((b * cos_number) < 0 ? (-b * cos_number) : (b * cos_number));
-			end_point_y = pre_py - ((b * sin_number) < 0 ? (-b * sin_number) : (b * sin_number));
-		} else if (pre_px >= px && pre_py <= py) {
-			end_point_x = pre_px - ((b * cos_number) < 0 ? (-b * cos_number) : (b * cos_number));
-			end_point_y = pre_py - ((b * sin_number) < 0 ? (-b * sin_number) : (b * sin_number));
-		}
-		// 创建第三个点，然后创建三角形
-		// clogger.logger.info("右上面的点的横坐标点x:" + end_point_x +
-		// "----------右上方点的纵坐标的y:" + end_point_y);
-		// 得到右上方的点
-		Point end_right_point = new Point(end_point_x, end_point_y);
-		top_points.add(end_right_point);
-		// 最右边，箭头顶点的坐标是
-		// clogger.logger.info("顶点的横坐标是x:" + end_curvepoint.getX() +
-		// "---------顶点的纵坐标y:" + end_curvepoint.getY());
-		top_points.add(end_curvepoint);
-		// 下边线
-		Point end_bottom_point = bottom_points.get(bottom_points.size() - 1);
-		Point end_bottom_point2 = bottom_points.get(bottom_points.size() - 2);
-		*//*
-		 * double bx0 = 0.0, by0 = 0.0; if (pointcount > 2) { Point
-		 * end_bottom_point2 = top_points.get(bottom_points.size() - 2); bx0 =
-		 * end_bottom_point2.getX(); by0 = end_bottom_point2.getY(); } else {
-		 * Point end_bottom_point2 = top_points.get(bottom_points.size() - 1);
-		 * bx0 = end_bottom_point2.getX(); by0 = end_bottom_point2.getY(); }
-		 *//*
-		// 求箭头下方向的点
-		double bx1 = end_bottom_point.getX();
-		double by1 = end_bottom_point.getY();
-
-		double bx0 = end_bottom_point2.getX();
-		double by0 = end_bottom_point2.getY();
-
-		double bend_slope = (by1 - by0) / (bx1 - bx0);
-		double bend_point_x = 0;
-		double bend_point_y = 0;
-		double bend_cos_number = Math.cos(Math.atan(bend_slope) - Math.PI / 2);
-		double bend_sin_number = Math.sin(Math.atan(bend_slope) - Math.PI / 2);
-		if (bx0 <= bx1 && by0 <= by1) {
-			bend_point_x = bx0 + ((b * bend_cos_number) < 0 ? (-b * bend_cos_number) : (b * bend_cos_number));
-			bend_point_y = by0 - ((b * bend_sin_number) < 0 ? (-b * bend_sin_number) : (b * bend_sin_number));
-		} else if (bx0 <= bx1 && by0 > by1) {
-			bend_point_x = bx0 - ((b * bend_cos_number) < 0 ? (-b * bend_cos_number) : (b * bend_cos_number));
-			bend_point_y = by0 - ((b * bend_sin_number) < 0 ? (-b * bend_sin_number) : (b * bend_sin_number));
-		} else if (bx0 >= bx1 && by0 >= by1) {
-			bend_point_x = bx0 - ((b * bend_cos_number) < 0 ? (-b * bend_cos_number) : (b * bend_cos_number));
-			bend_point_y = by0 + ((b * bend_sin_number) < 0 ? (-b * bend_sin_number) : (b * bend_sin_number));
-		} else if (bx0 >= bx1 && by0 <= by1) {
-			bend_point_x = bx0 + ((b * bend_cos_number) < 0 ? (-b * bend_cos_number) : (b * bend_cos_number));
-			bend_point_y = by0 + ((b * bend_sin_number) < 0 ? (-b * bend_sin_number) : (b * bend_sin_number));
-		}
-		// clogger.logger.info("下方的点的横坐标x为:" + bend_point_x +
-		// "-------下方的点的纵坐标y为:" + bend_point_y);
-		// 得到右下方的点
-		Point bend_right_point = new Point(bend_point_x, bend_point_y);
-		top_points.add(bend_right_point);
-		for (int k = bottom_points.size() - 1; k >= 0; k--) {
-			// 这个是下半部分
-			// clogger.logger.info("由此开始下半部分:" + bottomcurepoints[k].getX() +
-			// "yyyyy:" + bottomcurepoints[k].getY());
-			top_points.add(bottom_points.get(k));
-		}
-		// 添加尾部的部分,至此完成对军标多边行的算法，
-		top_points.add(polyline.getPoint(1));
-		top_points.add(top_points.get(0));
-		Polygon polygon = new Polygon();
-		polygon.startPath(top_points.get(0));
-		for (int i = 0; i < top_points.size(); i++) {
-			*//*
-			 * if (i == 0) continue;
-			 *//*
-			polygon.lineTo(top_points.get(i));
-			Graphic graphic = new Graphic(top_points.get(i), plotmarker);
-			MapActivity.plotgraphiclayer.addGraphic(graphic);
-			// Graphic graphic = new Graphic(polygon, plotArrowfill);
-		}
-
-		// clogger.logger.info("军标上的点的个数是" + top_points.length);
-		*//*
-		 * double rings:Array=new Array(); rings.add(top_points); return rings;
-		 *//*
-		Graphic graphic = new Graphic(polygon, getPlotArrowfill());
-		return graphic;
-
-	}*/
-
-	/*public static Graphic plotArrow2(Polyline polyline, MapView mapview) {
-		double px, py, pre_px, pre_py, top_px, top_py;
-		Polygon bufferpolygon = GeometryEngine.buffer(polyline,
-				mapview.getSpatialReference(), 20.0,
-				null);
-		Point endpoint = mapview.toScreenPoint(polyline.getPoint(polyline
-				.getPointCount() - 1));
-		Point prepoint = mapview.toScreenPoint(polyline.getPoint(polyline
-				.getPointCount() - 2));
-		px = endpoint.getX();
-		py = endpoint.getY();
-		pre_px = prepoint.getX();
-		pre_py = prepoint.getY();
-		// 斜率
-		double end_slope = (pre_py - py) / (pre_px - px);
-		double x1 = end_slope * (-1) * (py + 50);
-		if (x1 < 0) {
-			x1 = x1 * (-1);
-		}
-		double x2 = end_slope * (-1) * (py - 50);
-		if (x2 < 0) {
-			x2 = x2 * (-1);
-		}
-		Point top_right = new Point(x1, py + 50);
-		Point top_left = new Point(x2, py - 50);
-		double y = end_slope * (px + 45);
-		Point topPoint = new Point(px + 50, y);
-		ArrayList<Point> toppoints = new ArrayList<Point>();
-		toppoints.add(top_left);
-		toppoints.add(topPoint);
-		toppoints.add(top_right);
-		Polygon top_polygon = new Polygon();
-		top_polygon.startPath(toppoints.get(0));
-		for (int i = 0; i < toppoints.size(); i++) {
-			*//*
-			 * if (i == 0) continue;
-			 *//*
-			top_polygon.lineTo(toppoints.get(i));
-			Graphic graphic = new Graphic(toppoints.get(i), plotmarker);
-			MapActivity.plotgraphiclayer.addGraphic(graphic);
-			// Graphic graphic = new Graphic(polygon, plotArrowfill);
-		}
-		Geometry[] geometrys = new Geometry[]{bufferpolygon, top_polygon};
-		GeometryEngine.union(geometrys, mapview.getSpatialReference());
-		Graphic graphic = new Graphic(bufferpolygon, getPlotArrowfill());
-		return graphic;
-	}*/
 
 	/**
 	 * 绘制贝塞尔箭头
@@ -789,6 +465,7 @@ public class PlotUtil implements OnClickListener {
 			slope = (py - pre_py) / (px - pre_px);
 			switch (Calculate.twoPtsRelationShip(prepoint,
 					candidatePoint)) {
+                //判断两点位置关系
 				case "ne":
 					slope += Math.PI / 2;
 					break;
@@ -819,12 +496,6 @@ public class PlotUtil implements OnClickListener {
 					* Math.cos(slope) + prepoint.getX(), (-1)
 					* tailFactor * partiallen * Math.sin(slope)
 					+ prepoint.getY());
-			/*
-			 * ArrayList<Point> ring = new ArrayList<Point>(); ring.add(pt1);
-			 * ring.add(p1);
-			 */
-
-			//PolygonBuilder polygonBuilder=new PolygonBuilder()
             pointCollection.add(pt1);
             pointCollection.add(p1);
 
@@ -835,24 +506,6 @@ public class PlotUtil implements OnClickListener {
             pointCollection.add(pt2);
             pointCollection.add(pt1);
 
-			/*MultiPath path = new Polygon();
-			Polygon polygon = new Polygon();
-			path.startPath(pt1);
-
-
-			path.lineTo(p1);
-			MultiPath arrowheadpath = createArrowHeadPathEx(p1, candidatePoint,
-					p2, plen, headPercentage, 15);
-
-
-			path.add(arrowheadpath, false);
-
-			// ring.push(candidatePoint);
-			path.lineTo(p2);
-			path.lineTo(pt2);
-			path.lineTo(pt1);
-			polygon.add(path, false);
-			resultgraphic = new Graphic(polygon, getPlotArrowfill());*/
             resultgraphic = new Graphic(new PolygonBuilder(pointCollection).toGeometry(), plotArrowfill);
 
 
@@ -862,11 +515,6 @@ public class PlotUtil implements OnClickListener {
 			ArrayList<Point> rightArray = new ArrayList<Point>();
 			for (int i = 0; i < pointcount; i++) {
 				tempArray.add(mPtCollection.get(i));
-				/*
-				 * Graphic graphic = new Graphic(polyline.getPoint(i),
-				 * plotmarker);
-				 * MapActivity.plotgraphiclayer.addGraphic(graphic);
-				 */
 			}
 			angleArray = Calculate.vertexAngle(tempArray);
 			double totalL = Calculate.ptCollectionLen(tempArray, 0);
@@ -894,37 +542,17 @@ public class PlotUtil implements OnClickListener {
 
 			//计算贝塞尔曲线
 			leftArray = Calculate.CreateBezierPathPCOnly(leftArray, 70);
-		/*	  leftArray.splice(Math.floor((1 - this._headPercentage) * 70),
-			  Number.MAX_VALUE);*/
-
 			rightArray = Calculate.CreateBezierPathPCOnly(rightArray, 70);
-			 /* rightArray.splice(Math.floor((1 - this._headPercentage) * 70),
-			  Number.MAX_VALUE);
-			  */
-
-			/*MultiPath arrowheadpath = createArrowHeadPathEx(leftArray.get(leftArray.size() - 1), candidatePoint,
-					rightArray.get(rightArray.size() - 1), Calculate.ptCollectionLen(tempArray, 0), headPercentage, 15);*/
             PointCollection  pc_arrowhead = createArrowHeadPathEx(leftArray.get(leftArray.size() - 1), candidatePoint,
                     rightArray.get(rightArray.size() - 1), Calculate.ptCollectionLen(tempArray, 0), headPercentage, 15);
 
-			//Polygon polygon1 = new Polygon();
 			ArrayList<Point> resultpoints = new ArrayList<Point>();
 			resultpoints.addAll(leftArray);
 			Collections.reverse(rightArray);
 			resultpoints.addAll(rightArray);
 			for (int i = 0; i < resultpoints.size(); i++) {
                 pointCollection.add(resultpoints.get(i));
-				/*if (i == 0) {
-                    pointCollection.add(resultpoints.get(i));
-					polygon1.startPath(resultpoints.get(i));
-
-				} else {
-					polygon1.lineTo(resultpoints.get(i));
-				}*/
 			}
-
-			//Geometry[] geometrys = new Geometry[]{polygon1, arrowheadpath};
-
 			Geometry uniongeo = GeometryEngine.union(new PolygonBuilder(pointCollection).toGeometry(),
 					new PolygonBuilder(pc_arrowhead).toGeometry());
 			resultgraphic = new Graphic(uniongeo, plotArrowfill);
@@ -1100,7 +728,7 @@ public class PlotUtil implements OnClickListener {
 	}*/
 
 	/**
-	 * 绘出箭头
+	 * 绘出箭头头部
 	 */
 	public  PointCollection createArrowHeadPathEx(Point pt1, Point candidatePt,
 												  Point pt2, double totalLen, double headPercentage, int headAngle) {

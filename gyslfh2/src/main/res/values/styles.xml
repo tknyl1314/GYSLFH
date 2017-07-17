@@ -49,6 +49,21 @@
         <item name="android:drawablePadding">2dp</item>
 
     </style>
+    <!--态势标绘-->
+    <style name="rb_plot">
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@drawable/rb_focus_color</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:drawablePadding">2dp</item>
+    </style>
     <!--表单样式-->
     <style name="et_content_line">
         <!-- 设置该属性解决空白部分-->

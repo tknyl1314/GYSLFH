@@ -185,6 +185,11 @@
     <string name="outOfScale">超出范围</string>
     <string name="unknown">未知</string>
     <string name="map_map3d">三维场景</string>
+    <string name="plot_arrow">箭头</string>
+    <string name="plot_firearea">火场范围</string>
+    <string name="plot_firebreak">防火带</string>
+    <string name="plot_firept">火点</string>
+    <string name="plot_flag">旗帜</string>
 
 
 </resources>
