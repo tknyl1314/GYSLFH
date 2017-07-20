@@ -49,6 +49,8 @@ import com.titan.Injection;
 import com.titan.gis.PlotUtil;
 import com.titan.gis.SymbolUtil;
 import com.titan.gis.callout.CalloutInterface;
+import com.titan.gis.plot.PlotDialog;
+import com.titan.gis.plot.PlotViewModel;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
 import com.titan.gyslfh.backalarm.BackAlarmActivity;
@@ -96,6 +98,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public CalloutBinding mCalloutBinding;
     //图层控制
     private LayerControlFragment mlayerControlFragment;
+    //态势标绘
+    private PlotDialog mPlotDialog;
     //当前位置显示
     LocationDisplay mLocationDisplay;
     //绘制图层
@@ -140,9 +144,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainFragmentPermissionsDispatcher.initBaiduLocWithCheck(this);
-        //initBaiduLoc();
-
-
     }
 
     /**
@@ -396,6 +397,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     private  void  setTouchListener(){
         mMainFragBinding.mapview.setOnTouchListener(new DefaultMapViewOnTouchListener(getActivity(),mMainFragBinding.mapview){
+
+
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
 
@@ -716,6 +719,29 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void Plot(boolean isplot) {
+        if(mMainViewModel.isplot.get()){
+            if (mPlotDialog == null) {
+                mPlotDialog=PlotDialog.getInstance(mMainFragBinding.mapview);
+                PlotViewModel viewModel=new PlotViewModel(mPlotDialog,Injection.provideDataRepository(getActivity()));
+                mPlotDialog.setViewmodel(viewModel);
+
+            }
+            mPlotDialog.show(getFragmentManager(), "PlotDialog");
+        }else {
+            setTouchListener();
+        }
+
+
+       /* if (mPlotDialog.isVisible()) {
+            //关闭标绘
+            mPlotDialog.setActive(false);
+            mPlotDialog.dismiss();
+            setTouchListener();
+        } else {
+            //mMainFragBinding.mapview.setOnTouchListener(mPlotDialog.getmPlotTouchLisener());
+        }*/
+
+       /*
          if (isplot) {
              mMainFragBinding.mapview.setOnTouchListener(mPlotUtil.plotTouchListener);
              mPlotUtil.showPlotDialog(mMainFragBinding.ivPlot);
@@ -724,8 +750,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
              setTouchListener();
              mPlotUtil.closePlotDialog();
            // plotUtil.showPlotDialog(v);
-        }
-
+        }*/
 
 
     }
@@ -738,7 +763,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     public void startNavigation(boolean isnav) {
        if(mMainViewModel.isnav.get()){
            if(mBaiduNavi.isHasInitSuccess()){
-               Point spoint=mMainViewModel.currentPoint.get();
+               Point spoint= MainViewModel.currentPoint.get();
                mBaiduNavi.setsNode(new BNRoutePlanNode(spoint.getX(),spoint.getY(),"起点",null, BNRoutePlanNode.CoordinateType.WGS84));
                mMainFragBinding.mapview.setOnTouchListener(mBaiduNavi.mapViewOnTouchListener);
                mMainViewModel.snackbarText.set("请在地图上选择终点");
@@ -799,12 +824,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mlayerControlFragment.show(getFragmentManager(),LAYERCONTROL_TAG);
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainFragmentPermissionsDispatcher.
-    }*/
 
 
     /**

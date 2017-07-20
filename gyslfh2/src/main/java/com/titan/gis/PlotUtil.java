@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -144,7 +143,7 @@ public class PlotUtil implements OnClickListener {
 		// 设置动画效果
 		// pop_plot.setAnimationStyle(R.style);
 		// 这里是位置显示方式,在屏幕的左侧
-		ImageButton plotarrow = (ImageButton) view.findViewById(R.id.btn_plot_ARROW);
+		/*ImageButton plotarrow = (ImageButton) view.findViewById(R.id.btn_plot_ARROW);
 		plotarrow.setOnClickListener(this);
 
 		ImageButton plotpolygon = (ImageButton) view
@@ -161,10 +160,10 @@ public class PlotUtil implements OnClickListener {
 		firearea.setOnClickListener(this);
 
 		ImageButton flag = (ImageButton) view.findViewById(R.id.btn_plot_FLAG);
-		flag.setOnClickListener(this);
+		flag.setOnClickListener(this);*/
 		pop_plot.setFocusable(false);
 		pop_plot.setOutsideTouchable(false);
-		// pop_plot.setAnimationStyle(R.style.AnimationPreview);//设置动画样式
+		//pop_plot.setAnimationStyle(R.style.AnimationPreview);//设置动画样式
 		pop_plot.showAsDropDown(parentview, -view.getMeasuredWidth(),
 				-parentview.getHeight());
 	}
@@ -195,7 +194,7 @@ public class PlotUtil implements OnClickListener {
     /**
      * 地图事件监听
      */
-    public class PlotTouchListener extends DefaultMapViewOnTouchListener {
+    private class PlotTouchListener extends DefaultMapViewOnTouchListener {
 		MapView mapview;
 		Context context;
 
@@ -346,32 +345,32 @@ public class PlotUtil implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.btn_plot_ARROW:
+			case R.id.rb_arrow:
 				//ToastUtil.setToast(mContext, "你选择了箭头标绘");
 				Toast.makeText(mContext, "箭头标绘", Toast.LENGTH_SHORT).show();
 				activate(PlotType.ARROW);
 				break;
-			case R.id.btn_plot_FIREAREA:
+			case R.id.rb_firearea:
 				Toast.makeText(mContext, "火场范围标绘", Toast.LENGTH_SHORT).show();
 				activate(PlotType.FIREAREA);
 				break;
-			case R.id.btn_plot_FIREPOINT:
+			case R.id.rb_firept:
 				Toast.makeText(mContext, "火点标绘", Toast.LENGTH_SHORT).show();
 				//plotType = FIREPOINT;
 				activate(PlotType.FIREPOINT);
 				break;
-			case R.id.btn_plot_JUNGLE:
+			/*case R.id.r=:
 				Toast.makeText(mContext, "集结地标绘", Toast.LENGTH_SHORT).show();
 				//plotType = JUNGLE;
 				activate(PlotType.JUNGLE);
-				break;
-			case R.id.btn_plot_FIREBREAK:
+				break;*/
+			case R.id.rb_firebreak:
 				Toast.makeText(mContext, "防火带标绘", Toast.LENGTH_SHORT).show();
 				//plotType = FIREBREAK;
 				activate(PlotType.FIREBREAK);
 				break;
 			//旗帜
-			case R.id.btn_plot_FLAG:
+			case R.id.rb_flag:
 				Toast.makeText(mContext, "旗帜标绘", Toast.LENGTH_SHORT).show();
 				//plotType = FLAG;
 				activate(PlotType.FLAG);

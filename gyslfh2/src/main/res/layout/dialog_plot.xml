@@ -2,42 +2,57 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--<RadioGroup
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.titan.gis.plot.PlotViewModel" />
+    </data>
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        &lt;!&ndash;箭头标绘&ndash;&gt;
+        <!--箭头标绘-->
         <RadioButton
             android:id="@+id/rb_arrow"
             android:text="@string/plot_arrow"
             style="@style/rb_plot"
+            android:onClick="@{()->viewmodel.onPlot(1)}"
+            android:drawableTop="@drawable/plot_arrow"
             />
-        &lt;!&ndash;火场范围&ndash;&gt;
+        <!--火场范围-->
         <RadioButton
             android:id="@+id/rb_firearea"
             android:text="@string/plot_firearea"
             style="@style/rb_plot"
+            android:onClick="@{()->viewmodel.onPlot(2)}"
+            android:drawableTop="@drawable/plot_firearea"
             />
-        &lt;!&ndash;防火带&ndash;&gt;
+        <!--防火带-->
         <RadioButton
             android:id="@+id/rb_firebreak"
             android:text="@string/plot_firebreak"
             style="@style/rb_plot"
+            android:onClick="@{()->viewmodel.onPlot(3)}"
+            android:drawableTop="@drawable/plot_break"
             />
-        &lt;!&ndash;火点&ndash;&gt;
+        <!--火点-->
         <RadioButton
             android:id="@+id/rb_firept"
             android:text="@string/plot_firept"
             style="@style/rb_plot"
+            android:onClick="@{()->viewmodel.onPlot(4)}"
+            android:drawableTop="@drawable/plot_firept"
             />
-        &lt;!&ndash;旗帜&ndash;&gt;
+        <!--旗帜-->
         <RadioButton
             android:id="@+id/rb_flag"
             android:text="@string/plot_flag"
             style="@style/rb_plot"
+            android:onClick="@{()->viewmodel.onPlot(5)}"
+            android:drawableTop="@drawable/plot_flag"
             />
-    </RadioGroup>-->
-    <LinearLayout
+    </RadioGroup>
+   <!-- <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -91,6 +106,6 @@
             android:src="@drawable/plot_flag"
             android:text="旗帜标绘"
             tools:ignore="ContentDescription,HardcodedText" />
-    </LinearLayout>
+    </LinearLayout>-->
 </layout>
 

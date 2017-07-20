@@ -9,6 +9,7 @@ import com.esri.arcgisruntime.symbology.MarkerSymbol;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.titan.newslfh.R;
 
 /**
@@ -29,8 +30,9 @@ public class SymbolUtil {
 
 
     /**态势标绘样式*/
-    //火点样式
     public static MarkerSymbol firepoint;
+    //节点样式
+    public static MarkerSymbol vertexSymbol =new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE,Color.GREEN,5);
 
     public SymbolUtil(Context mContext) {
         this.mContext = mContext;
