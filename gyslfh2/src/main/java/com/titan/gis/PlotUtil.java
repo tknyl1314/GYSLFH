@@ -46,15 +46,15 @@ import java.util.Collections;
  */
 public class PlotUtil implements OnClickListener {
     //基本线样式
-    private static LineSymbol plotlineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID ,Color.BLACK, 3);
+    public static LineSymbol plotlineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID ,Color.BLACK, 3);
     //箭头样式
-	private static FillSymbol plotArrowfill = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID,Color.argb(80, 255, 0, 0),plotlineSymbol);
+	public static FillSymbol plotArrowfill = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID,Color.argb(80, 255, 0, 0),plotlineSymbol);
 	// 防火带样式
-	private static LineSymbol plotbreaklineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 20);
+	public static LineSymbol plotbreaklineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 20);
 	// 火场范围
-	static FillSymbol plotFireArea = new SimpleFillSymbol(SimpleFillSymbol.Style.FORWARD_DIAGONAL,Color.RED,plotlineSymbol);
+	public static FillSymbol plotFireArea = new SimpleFillSymbol(SimpleFillSymbol.Style.FORWARD_DIAGONAL,Color.RED,plotlineSymbol);
 	// 火点样式
-	public MarkerSymbol firepointSymbol, flagSymbol;
+	public static  MarkerSymbol firepointSymbol, flagSymbol;
 	Context mContext;
 	public PopupWindow pop_plot;
     //标绘图层

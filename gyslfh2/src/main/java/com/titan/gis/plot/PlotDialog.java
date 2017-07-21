@@ -64,7 +64,8 @@ public class PlotDialog extends DialogFragment implements IPlot{
     // 火场范围
     static FillSymbol plotFireArea = new SimpleFillSymbol(SimpleFillSymbol.Style.FORWARD_DIAGONAL,Color.RED,plotlineSymbol);
     // 火点样式
-    public MarkerSymbol firepointSymbol, flagSymbol;
+    public static MarkerSymbol firepointSymbol;
+    public static MarkerSymbol flagSymbol;
 
 
     public void setActive(boolean active) {
@@ -85,7 +86,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
     }
 
     @Override
-    public void test() {
+    public void showLayers() {
 
     }
 
@@ -141,7 +142,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
      * 保存绘制的图形
      * @param plottype
      */
-    private void saveSketchGraphic(PlotType plottype) {
+    private static void saveSketchGraphic(PlotType plottype) {
         Graphic graphic=null;
         switch (plottype){
             case ARROW:
@@ -233,7 +234,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
 
     }
 
-    private PlotType mPlotType;
+    private static PlotType mPlotType;
 
 
     public static PlotDialog Singleton;
@@ -242,7 +243,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
 
     private static MapView mMapView;
     //标绘层
-    private  GraphicsOverlay mPlotOverlay;
+    private static GraphicsOverlay mPlotOverlay;
     //当前标绘的图形id
     private   int plotgraphicID=0;
 
@@ -252,7 +253,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
     //绘制样式
     private SketchStyle sketchStyle;
     //草图编辑器
-    private SketchEditor sketchEditor;
+    private static SketchEditor sketchEditor;
 
     public PlotTouchListener getmPlotTouchLisener() {
         return mPlotTouchLisener;
@@ -260,10 +261,11 @@ public class PlotDialog extends DialogFragment implements IPlot{
 
     private static PlotTouchListener mPlotTouchLisener;
 
-    public static PlotDialog getInstance(MapView mapView){
+    public static PlotDialog getInstance(Context context,MapView mapView){
         if(Singleton==null){
-            //mContext = context;
+            // = context;
             mMapView = mapView;
+            //mPlotTouchLisener=new PlotTouchListener(context,mapView)
             Singleton=new PlotDialog();
         }
         //mPlotTouchLisener=new PlotTouchListener(context,mapView);
@@ -311,9 +313,8 @@ public class PlotDialog extends DialogFragment implements IPlot{
                 Log.e("TItan","plotgraphicID"+plotgraphicID);
             }
         });
-        mMapView.setOnTouchListener(new PlotTouchListener(getActivity(),mMapView));
-        //PlotTouchListener da=new PlotTouchListener(mContext,mMapView);
-        //mMapView.setOnTouchListener(new PlotTouchListener(mContext,mMapView));
+        //PlotTouchListener da=new PlotTouchListener(,mMapView);
+        //mMapView.setOnTouchListener(new PlotTouchListener(,mMapView));
 
         sketchEditor = new SketchEditor();
         sketchStyle=new SketchStyle();
@@ -337,7 +338,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
     /**
      * 地图事件监听
      */
-    public  class PlotTouchListener extends DefaultMapViewOnTouchListener {
+    public static class PlotTouchListener extends DefaultMapViewOnTouchListener {
         MapView mapview;
         Context context;
 
@@ -358,131 +359,6 @@ public class PlotDialog extends DialogFragment implements IPlot{
             return true;
         }
 
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            return super.onSingleTapConfirmed(e);
-        }
-        /*@Override
-        public boolean onTouch(View v, MotionEvent event) {
-            //Point point = mapview.toMapPoint(event.getX(), event.getY());
-            Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(event.getX()), Math.round(event.getY())));
-
-            if (point == null || point.isEmpty()) {
-                return false;
-            }
-            if (active && event.getAction() == MotionEvent.ACTION_DOWN) {
-                switch (mPlotType) {
-					*//*case FIREAREA:
-						polygon.startPath(point);
-						break;
-					case FIREBREAK:
-						polyline.startPath(point);
-						break;*//*
-                    case FIREAREA:
-                        //火场范围
-                        mPtCollection.add(point);
-                        //mPolygonBuilder.addPoint(point);
-                        break;
-                    case FIREBREAK:
-                        //防火带
-                        mPtCollection.add(point);
-
-
-                        // mPolylineBuilder.addPoint(point);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            return super.onTouch(v, event);
-
-        }
-
-        @Override
-        public boolean onFling(MotionEvent from, MotionEvent to, float velocityX, float velocityY) {
-            Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(to.getX()), Math.round(to.getY())));
-            if (point == null || point.isEmpty()) {
-                return false;
-            }
-            if (active) {
-                switch (mPlotType) {
-                    case FIREAREA:
-                        //火场范围
-                        mPtCollection.add(point);
-                        //mPolygonBuilder.addPoint(point);
-                        mPolygonBuilder =new PolygonBuilder(mPtCollection);
-                        mPlotOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolygonBuilder.toGeometry());
-                        break;
-                    case FIREBREAK:
-                        //防火带
-                        mPtCollection.add(point);
-                        mPolylineBuilder =new PolylineBuilder(mPtCollection);
-                        mPlotOverlay.getGraphics().get(plotgraphicID).setGeometry(mPolylineBuilder.toGeometry());
-                        break;
-                }
-                return true;
-            }
-            return super.onFling(from, to, velocityX, velocityY);
-        }
-
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent event) {
-            Point point=mapview.screenToLocation(new android.graphics.Point(Math.round(event.getX()), Math.round(event.getY())));
-            if (active) {
-                switch (mPlotType) {
-                    case FIREPOINT:
-                        //火点
-                        plotgarphic = new Graphic(point, firepointSymbol);// hotsymbol);
-                        mPlotOverlay.getGraphics().add(plotgarphic);
-                        break;
-                    case FLAG:
-                        //旗帜
-                        plotgarphic = new Graphic(point, flagSymbol);// hotsymbol);
-                        mPlotOverlay.getGraphics().add(plotgarphic);
-                        break;
-                    case ARROW:
-                        //箭头
-                        mPtCollection.add(point);
-                            *//*mPolylineBuilder.addPoint(point);
-                            polyline=mPolylineBuilder.toGeometry();*//*
-                        // 贝塞尔箭头
-                        if(mPtCollection.size()>=2){
-                            plotgarphic = plotArrow(point, mPtCollection);
-                            mPlotOverlay.getGraphics().get(plotgraphicID).setGeometry(plotgarphic.getGeometry());
-                        }
-
-                        break;
-
-                    case JUNGLE:
-                        //集结地
-                        *//*if (startPoint == null) {
-                            startPoint = point;
-                            mPtCollection.add(point);
-                            mPolylineBuilder=new PolylineBuilder(mPtCollection);
-                            polygon=mPolygonBuilder.toGeometry();
-
-                            //polygon.startPath(point);
-                        } else {
-                            //polygon.lineTo(point);
-                            mPolygonBuilder.addPoint(point);
-                            polygon=mPolygonBuilder.toGeometry();
-                            //plotgarphic = PlotUtil.plot_BEZIER_POLYGON(point, plotgraphicID);
-
-                            mGraphicsOverlay.getGraphics().get(plotgraphicID).setGeometry(polygon);
-
-                            //plotgraphiclayer.updateGraphic(plotgraphicID, plotgarphic);
-                        }*//*
-
-                        break;
-
-                }
-                return true;
-            }
-            return super.onSingleTapConfirmed(event);
-
-        }*/
 
 
 
@@ -553,7 +429,7 @@ public class PlotDialog extends DialogFragment implements IPlot{
     /**
      * 绘制贝塞尔箭头
      */
-    public  Graphic plotArrow(Point candidatePoint, PointCollection mPtCollection) {
+    public static Graphic plotArrow(Point candidatePoint, PointCollection mPtCollection) {
         double px, py, pre_px, pre_py;
         PointCollection pointCollection=new PointCollection(mMapView.getSpatialReference());
         //Point prepoint = polyline.getPoint(0);
@@ -674,8 +550,8 @@ public class PlotDialog extends DialogFragment implements IPlot{
     /**
      * 绘出箭头头部
      */
-    public  PointCollection createArrowHeadPathEx(Point pt1, Point candidatePt,
-                                                  Point pt2, double totalLen, double headPercentage, int headAngle) {
+    public static PointCollection createArrowHeadPathEx(Point pt1, Point candidatePt,
+                                                        Point pt2, double totalLen, double headPercentage, int headAngle) {
 
         double headSizeBaseRatio = 1.7;// 箭头大小比例
         double addangle = (headAngle / 180.000) * Math.PI;

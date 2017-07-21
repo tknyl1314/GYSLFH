@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -49,7 +50,8 @@ import com.titan.Injection;
 import com.titan.gis.PlotUtil;
 import com.titan.gis.SymbolUtil;
 import com.titan.gis.callout.CalloutInterface;
-import com.titan.gis.plot.PlotDialog;
+import com.titan.gis.plot.IPlot;
+import com.titan.gis.plot.PlotFragment;
 import com.titan.gis.plot.PlotViewModel;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
@@ -99,7 +101,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //图层控制
     private LayerControlFragment mlayerControlFragment;
     //态势标绘
-    private PlotDialog mPlotDialog;
+    //private PlotDialog mPlotDialog;
     //当前位置显示
     LocationDisplay mLocationDisplay;
     //绘制图层
@@ -284,31 +286,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //初始化底图()
         mMap = new ArcGISMap(Basemap.createOpenStreetMap());
         //instantiate an ArcGISMap with OpenStreetMap Basemap
-        // mMap = new ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 34.056295, -117.195800, 10);
-        //loadLyaers();
-
-        /*mMainFragBinding.mapview.addLayerViewStateChangedListener(new LayerViewStateChangedListener() {
-            @Override
-            public void layerViewStateChanged(LayerViewStateChangedEvent layerViewStateChangedEvent) {
-                // get the layer which changed it's state
-                Layer layer = layerViewStateChangedEvent.getLayer();
-
-                // get the View Status of the layer
-                // View status will be either of ACTIVE, ERROR, LOADING, NOT_VISIBLE, OUT_OF_SCALE, UNKNOWN
-                String viewStatus = layerViewStateChangedEvent.getLayerViewStatus().iterator().next().toString();
-
-                final int layerIndex = mMap.getOperationalLayers().indexOf(layer);
-                String name=layerViewStateChangedEvent.getLayer().getName();
-                if(layerIndex>=0){
-                    mLayerlist.get(layerIndex).setName(name);
-                    viewStatusString(layerIndex,viewStatus);
-                }
-
-
-            }
-        });
-*/
-
 
         //添加绘制图层
         mGraphicsOverlay=addGraphicsOverlay(mMainFragBinding.mapview);
@@ -719,18 +696,36 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void Plot(boolean isplot) {
-        if(mMainViewModel.isplot.get()){
-            if (mPlotDialog == null) {
-                mPlotDialog=PlotDialog.getInstance(mMainFragBinding.mapview);
+        PlotFragment plotFragment=PlotFragment.newInstance();
+        PlotViewModel viewModel=new PlotViewModel((IPlot) plotFragment,Injection.provideDataRepository(getActivity()));
+        plotFragment.setmViewModel(viewModel);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, plotFragment);
+        transaction.addToBackStack(null);
+        //设置过度动画
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
+
+        /*if(mMainViewModel.isplot.get()){
+            PlotFragment plotFragment=PlotFragment.newInstance();
+            PlotViewModel viewModel=new PlotViewModel((IPlot) plotFragment,Injection.provideDataRepository(getActivity()));
+            plotFragment.setmViewModel(viewModel);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, plotFragment);
+            transaction.addToBackStack(null);
+            //设置过度动画
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.commit();
+            *//*if (mPlotDialog == null) {
+                mPlotDialog=PlotDialog.getInstance(getActivity(),mMainFragBinding.mapview);
                 PlotViewModel viewModel=new PlotViewModel(mPlotDialog,Injection.provideDataRepository(getActivity()));
                 mPlotDialog.setViewmodel(viewModel);
+                mMainFragBinding.mapview.setOnTouchListener(mPlotDialog.getmPlotTouchLisener());
 
             }
-            mPlotDialog.show(getFragmentManager(), "PlotDialog");
-        }else {
-            setTouchListener();
+            mPlotDialog.show(getFragmentManager(), "PlotDialog");*//*
         }
-
+*/
 
        /* if (mPlotDialog.isVisible()) {
             //关闭标绘
@@ -754,6 +749,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
 
     }
+
+
 
     /**
      * 开启导航

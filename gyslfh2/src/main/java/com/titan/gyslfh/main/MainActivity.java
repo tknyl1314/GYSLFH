@@ -68,6 +68,8 @@ public class MainActivity extends BaseActivity {
     //构建
     PolylineBuilder lineBuilder=null;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,52 +99,7 @@ public class MainActivity extends BaseActivity {
 
 
 
-   /* @TargetApi(23)
-    private void getPersimmions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ArrayList<String> permissions = new ArrayList<String>();
-            *//***
-             * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
-             *//*
-            // 定位精确位置
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
-            if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-            }
-			*//*
-			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
-			 *//*
-            // 读写权限
-            if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //permissionInfo += "Manifest.permission.WRITE_EXTERNAL_STORAGE Deny \n";
-            }
-            // 读取电话状态权限
-            if (addPermission(permissions, Manifest.permission.READ_PHONE_STATE)) {
-                //permissionInfo += "Manifest.permission.READ_PHONE_STATE Deny \n";
-            }
 
-            if (permissions.size() > 0) {
-                requestPermissions(permissions.toArray(new String[permissions.size()]), requestCode);
-            }
-        }
-    }
-
-    @TargetApi(23)
-    private boolean addPermission(ArrayList<String> permissionsList, String permission) {
-        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
-            if (shouldShowRequestPermissionRationale(permission)){
-                return true;
-            }else{
-                permissionsList.add(permission);
-                return false;
-            }
-
-        }else{
-            return true;
-        }
-    }*/
 
     private void initView() {
         mSharedPreferences=mContext.getSharedPreferences(TitanApplication.PREFS_NAME,0);
@@ -251,53 +208,6 @@ public class MainActivity extends BaseActivity {
 
 
 
-   /* @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        // If request is cancelled, the result arrays are empty.
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Location permission was granted. This would have been triggered in response to failing to start the
-            // LocationDisplay, so try starting this again.
-            mainFragment.mLocationDisplay.startAsync();
-            //locationService.start();
-        } else {
-            // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
-            // request permission UX will be shown again, option should be shown to allow never showing the UX again.
-            // Alternative would be to disable functionality so request is not shown again.
-            //Toast.makeText(MainActivity.this, getResources().getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show();
-            // Update UI to reflect that the location display did not actually start
-            // mSpinner.setSelection(0, true);
-        }
-    }*/
-    @Override
-    protected void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
-        // -----------location config ------------
-      /*  //定位初始化
-        locationService = ((TitanApplication) getApplication()).locationService;
-        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(mViewModel);
-        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();*/
-        // 定位SDK
-
-    }
-    /**
-     * Stop location service
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-
-
-
     /**
      * 更改登录
      * @param view
@@ -318,28 +228,27 @@ public class MainActivity extends BaseActivity {
      * 监听回退按钮
      */
     long firstTime = 0;
-    @Override
+   /* @Override
     public void onBackPressed() {
         // exitApp();
         long secondTime = System.currentTimeMillis();
-        if (secondTime - firstTime > 800) { // 如果两次按键时间间隔大于2秒，则不退出
+        int d=getFragmentManager().getBackStackEntryCount();
+        getFragmentManager().popBackStack();
+        if(getFragmentManager().getBackStackEntryCount()>0){
 
-            Toast.makeText(mContext,"再按一次退出程序",Toast.LENGTH_SHORT).show();
-            firstTime = secondTime;// 更新firstTime
+            super.onBackPressed();
+        }else{
+            if (secondTime - firstTime > 800) { // 如果两次按键时间间隔大于2秒，则不退出
 
-        } else {
-            TitanApplication.getInstance().finshAllActivities();
-           // System.exit(0);// 否则退出程序
+                Toast.makeText(mContext,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;// 更新firstTime
+
+            } else {
+                TitanApplication.getInstance().finshAllActivities();
+                // System.exit(0);// 否则退出程序
+            }
         }
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    }*/
 
 }

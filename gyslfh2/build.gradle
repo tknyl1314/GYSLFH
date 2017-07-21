@@ -90,7 +90,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 if (variant.buildType.name.equals('release')) {
-                    variant.outputs.each { output -> def outputFile = output.outputFile
+                    variant.outputs.each { output ->
+                        def outputFile = output.outputFile
                         if (outputFile != null && outputFile.name.endsWith('.apk')) {
                             def fileName = "GYSLFH_${releaseTime()}_${defaultConfig.versionName}_release.apk"
                             output.outputFile = new File(outputFile.parent, fileName)
@@ -146,11 +147,7 @@ dependencies {
     compile files('libs/HCNetSDK.jar')
     compile files('libs/PlayerSDK.jar')
     compile files('libs/jedis-2.8.1.jar')
-    compile 'com.android.support:multidex:1.0.1'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
-    compile 'com.github.wuhongsheng:TitanLib:0.4.1'
     /**测试框架*/
     // Dependencies for Android unit tests
     testCompile "junit:junit:$rootProject.ext.junitVersion"
@@ -163,17 +160,20 @@ dependencies {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:2.4.0"
+    
     /**kotlin*/
     //compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     //kapt 'com.android.databinding:compiler:2.3.2'
 
     //compile 'com.squareup:kotlinpoet:0.3.0'
-
-
     /***/
-}
+compile 'com.android.support:multidex:1.0.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
+    compile 'com.github.wuhongsheng:TitanLib:0.4.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'}
 repositories {
     mavenCentral()
 }
@@ -182,5 +182,5 @@ repositories {
  * @return
  */
 def releaseTime() {
-    return new Date().format("yyyyMMdd",TimeZone.getTimeZone("GMT+08"))
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
 }

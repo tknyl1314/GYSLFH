@@ -26,21 +26,14 @@ public class PlotViewModel extends BaseViewModel {
      */
     public void onPlot(int plottype){
         mView.Plot(plottype);
-       /* switch (plottype){
-            case 1:
-                mView.Plot()
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-        }*/
 
     }
+
+    public void showLayers(){
+        mView.showLayers();
+    }
+
+
 
     /**
      * 撤销

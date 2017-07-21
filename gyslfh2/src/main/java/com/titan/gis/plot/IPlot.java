@@ -5,7 +5,11 @@ package com.titan.gis.plot;
  */
 
 public interface IPlot {
-    void test();
+
+    /**
+     * 图层控制
+     */
+    void showLayers();
 
     /**
      * 标绘
