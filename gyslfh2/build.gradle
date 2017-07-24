@@ -22,6 +22,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+
+
     defaultConfig {
         applicationId "com.titan.newslfh"
         minSdkVersion 18  //Andoird 4.3
