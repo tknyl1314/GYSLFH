@@ -22,9 +22,8 @@ import java.util.List;
 
 public class LayerControlViewModel extends BaseViewModel {
 
-
-   // public ObservableField<LayerList> mLayerList=new ObservableField<>();
-   public ObservableField<List<TitanLayer>> mLayerList=new ObservableField<>();
+    //图层
+    public ObservableField<List<TitanLayer>> mLayerList=new ObservableField<>();
     //选中底图index
     public ObservableInt selectposition=new ObservableInt(0);
     ObservableMap mCheckInfo=new ObservableArrayMap();

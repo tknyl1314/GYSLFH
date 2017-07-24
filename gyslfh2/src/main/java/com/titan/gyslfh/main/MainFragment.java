@@ -30,7 +30,6 @@ import com.esri.arcgisruntime.data.Field;
 import com.esri.arcgisruntime.data.QueryParameters;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.geometry.Envelope;
-import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.layers.FeatureLayer;
@@ -38,20 +37,19 @@ import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
-import com.esri.arcgisruntime.symbology.Symbol;
 import com.google.gson.Gson;
 import com.titan.Injection;
-import com.titan.gis.PlotUtil;
 import com.titan.gis.SymbolUtil;
 import com.titan.gis.callout.CalloutInterface;
-import com.titan.gis.plot.IPlot;
 import com.titan.gis.plot.PlotFragment;
+import com.titan.gis.plot.PlotUtil;
 import com.titan.gis.plot.PlotViewModel;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmInfoActivity;
@@ -218,7 +216,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
         intiMapView();
 
-        initPlot();
+        //initPlot();
 
         initNavi();
 
@@ -260,7 +258,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * 初始化标绘
      */
     private void initPlot() {
-        mPlotUtil=new PlotUtil(getActivity(),mMainFragBinding.mapview);
+        //mPlotUtil=new PlotUtil(getActivity(),mMainFragBinding.mapview);
     }
 
     private void setupSnackbar() {
@@ -588,17 +586,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mapView.getGraphicsOverlays().add(graphicsOverlay);
         return graphicsOverlay;
     }
-    /**
-     * 添加轨迹图形
-     * @param geometry
-     * @param symbol
-     */
-    public void addTrackLineGraphic(Geometry geometry, Symbol symbol) {
-        Graphic polineGraphic = new Graphic(geometry, symbol);
-        mGraphicsOverlay.getGraphics().clear();
-        mGraphicsOverlay.getGraphics().add(polineGraphic);
-    }
-
 
     @Override
     public void calloutClose() {
@@ -696,8 +683,8 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void Plot(boolean isplot) {
-        PlotFragment plotFragment=PlotFragment.newInstance();
-        PlotViewModel viewModel=new PlotViewModel((IPlot) plotFragment,Injection.provideDataRepository(getActivity()));
+        PlotFragment plotFragment=PlotFragment.newInstance(mMainFragBinding.mapview.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE));
+        PlotViewModel viewModel=new PlotViewModel(plotFragment,Injection.provideDataRepository(getActivity()));
         plotFragment.setmViewModel(viewModel);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, plotFragment);
@@ -706,35 +693,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
 
-        /*if(mMainViewModel.isplot.get()){
-            PlotFragment plotFragment=PlotFragment.newInstance();
-            PlotViewModel viewModel=new PlotViewModel((IPlot) plotFragment,Injection.provideDataRepository(getActivity()));
-            plotFragment.setmViewModel(viewModel);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, plotFragment);
-            transaction.addToBackStack(null);
-            //设置过度动画
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            transaction.commit();
-            *//*if (mPlotDialog == null) {
-                mPlotDialog=PlotDialog.getInstance(getActivity(),mMainFragBinding.mapview);
-                PlotViewModel viewModel=new PlotViewModel(mPlotDialog,Injection.provideDataRepository(getActivity()));
-                mPlotDialog.setViewmodel(viewModel);
-                mMainFragBinding.mapview.setOnTouchListener(mPlotDialog.getmPlotTouchLisener());
-
-            }
-            mPlotDialog.show(getFragmentManager(), "PlotDialog");*//*
-        }
-*/
-
-       /* if (mPlotDialog.isVisible()) {
-            //关闭标绘
-            mPlotDialog.setActive(false);
-            mPlotDialog.dismiss();
-            setTouchListener();
-        } else {
-            //mMainFragBinding.mapview.setOnTouchListener(mPlotDialog.getmPlotTouchLisener());
-        }*/
 
        /*
          if (isplot) {

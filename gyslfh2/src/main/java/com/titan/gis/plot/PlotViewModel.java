@@ -13,7 +13,8 @@ import com.titan.data.source.DataRepository;
 public class PlotViewModel extends BaseViewModel {
     private IPlot mView;
     //标绘类型
-    public final ObservableField<PlotDialog.PlotType> mPlotType=new ObservableField<>(PlotDialog.PlotType.FIREPOINT);
+    public final ObservableField<PlotUtil.PlotType> mPlotType=new ObservableField<>(PlotUtil.PlotType.FIREPOINT);
+
 
     public PlotViewModel(IPlot iplot, DataRepository datarepository) {
         mView=iplot;
@@ -47,6 +48,7 @@ public class PlotViewModel extends BaseViewModel {
      * 保存
      */
     public void onSave(){
+        mView.onSave();
 
 
     }
@@ -58,4 +60,43 @@ public class PlotViewModel extends BaseViewModel {
         mView.onShare();
 
     }
+
+
+    /**
+     * 保存绘制的图形
+     * @param plottype
+     */
+    /*private  void saveSketchGraphic(PlotUtil.PlotType plottype) {
+        Graphic graphic=null;
+
+        switch (plottype){
+            case ARROW:
+                Multipoint pts= (Multipoint) sketchEditor.getGeometry();
+                if(pts.getPoints().size()>=2){
+                    PointCollection ptscollection=new PointCollection(pts.getPoints());
+                    graphic = plotArrow(pts.getPoints().get(pts.getPoints().size()), ptscollection);
+                    //mPlotOverlay.getGraphics().add(graphic);
+                }
+                break;
+            case FIREAREA:
+                if(sketchEditor.getGeometry()!=null){
+                    graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.plotFireArea);
+
+                }
+                //mPlotOverlay.getGraphics().add(graphic);
+                break;
+            case FIREBREAK:
+                graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.plotbreaklineSymbol);
+                break;
+            case FIREPOINT:
+                graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.firepointSymbol);
+
+                break;
+            case FLAG:
+                graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.flagSymbol);
+
+                break;
+        }
+        mPlotOverlay.getGraphics().add(graphic);
+    }*/
 }

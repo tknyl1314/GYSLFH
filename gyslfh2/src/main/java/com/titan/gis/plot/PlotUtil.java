@@ -1,4 +1,4 @@
-package com.titan.gis;
+package com.titan.gis.plot;
 
 
 import android.content.Context;
@@ -34,6 +34,7 @@ import com.esri.arcgisruntime.symbology.SimpleFillSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.util.ListChangedEvent;
 import com.esri.arcgisruntime.util.ListChangedListener;
+import com.titan.gis.Calculate;
 import com.titan.newslfh.R;
 
 import java.util.ArrayList;
@@ -57,9 +58,23 @@ public class PlotUtil implements OnClickListener {
 	public static  MarkerSymbol firepointSymbol, flagSymbol;
 	Context mContext;
 	public PopupWindow pop_plot;
-    //标绘图层
+
+	public GraphicsOverlay getmGraphicsOverlay() {
+		return mGraphicsOverlay;
+	}
+
+	public void setmGraphicsOverlay(GraphicsOverlay mGraphicsOverlay) {
+		this.mGraphicsOverlay = mGraphicsOverlay;
+	}
+
+	//标绘图层
     private GraphicsOverlay mGraphicsOverlay;
-    //plotGraphicId 初始为0
+
+	public int getPlotgraphicID() {
+		return plotgraphicID;
+	}
+
+	//plotGraphicId 初始为0
 	public  int plotgraphicID=0, plotType;
 	private MapView mapview;
 	public static boolean active = false;
@@ -68,6 +83,15 @@ public class PlotUtil implements OnClickListener {
 	public Graphic plotgarphic;
 	private Polygon polygon;
 	private Point startPoint;
+
+	public PlotTouchListener getPlotTouchListener() {
+		return plotTouchListener;
+	}
+
+	public void setPlotTouchListener(PlotTouchListener plotTouchListener) {
+		this.plotTouchListener = plotTouchListener;
+	}
+
 	// 地图事件监听
 	public PlotTouchListener plotTouchListener;
     //点集合
@@ -92,7 +116,15 @@ public class PlotUtil implements OnClickListener {
 
     }
 
-    private PlotType mPlotType;
+	public PlotType getmPlotType() {
+		return mPlotType;
+	}
+
+	public void setmPlotType(PlotType mPlotType) {
+		this.mPlotType = mPlotType;
+	}
+
+	private PlotType mPlotType;
 	/**
 	 * 标绘方式及geometry类型
 	 */
@@ -110,10 +142,10 @@ public class PlotUtil implements OnClickListener {
 	public static final int FLAG = 4;
 
 
-	public PlotUtil(Context context, MapView mapview) {
+	public PlotUtil(Context context, MapView mapview,GraphicsOverlay plotOverlay) {
 		this.mContext = context;
         this.mapview = mapview;
-		this.mGraphicsOverlay = addGraphicsOverlay();
+		this.mGraphicsOverlay = plotOverlay;
         mGraphicsOverlay.getGraphics().addListChangedListener(new ListChangedListener<Graphic>() {
             @Override
             public void listChanged(ListChangedEvent<Graphic> listChangedEvent) {
@@ -194,7 +226,7 @@ public class PlotUtil implements OnClickListener {
     /**
      * 地图事件监听
      */
-    private class PlotTouchListener extends DefaultMapViewOnTouchListener {
+    public  class PlotTouchListener extends DefaultMapViewOnTouchListener {
 		MapView mapview;
 		Context context;
 

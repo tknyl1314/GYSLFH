@@ -58,7 +58,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         return mLayerList;
     }
 
-    private static  List<TitanLayer> mLayerList=new ArrayList<>();
+    private static  List<TitanLayer> mLayerList;
     private static ArcGISMap marcGISMap;
     //加载图层的序号
     private int[] layers=new int[]{1,2,3,4,5,6,7,8,9};
@@ -80,25 +80,25 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
 
         //return  new LayerControlFragment();
         if(Singleton==null){
-            Singleton=new LayerControlFragment();
             marcGISMap=arcGISMap;
             mMapView=mapView;
             mGraphicsOverlay=graphicsOverlay;
+            Singleton=new LayerControlFragment();
         }
         return Singleton;
 
     }
-    public static LayerControlFragment getInstance(List<TitanLayer> layerList){
+    /*public static LayerControlFragment getInstance(List<TitanLayer> layerList){
 
 
         //return  new LayerControlFragment();
         if(Singleton==null){
-            Singleton=new LayerControlFragment();
             mLayerList=layerList;
+            Singleton=new LayerControlFragment();
         }
         return Singleton;
 
-    }
+    }*/
 
     public void setViewModel(LayerControlViewModel viewModel) {
         mViewModel = viewModel;
@@ -120,11 +120,13 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         mViewDataBinding.setViewmodel(mViewModel);
         //mLayerList.clear();
 
-        if(mLayerList.isEmpty()){
-            //loadLyaers();
+        if(mLayerList==null||mLayerList.isEmpty()){
+            //loadLyaers(
+            mLayerList=new ArrayList<>();
             initLayers();
             mViewModel.mLayerList.set(mLayerList);
         }else {
+            //mAdapter.notifyDataSetChanged();
             intiRecyclerView();
         }
         return mViewDataBinding.getRoot();
@@ -256,6 +258,10 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
      * 初始化图层控制图层列表
      */
     private void intiRecyclerView() {
+        /*if(mAdapter!=null){
+            mAdapter.replaceData(mLayerList);
+            return;
+        }*/
         mAdapter=new LayersAdapter(getActivity(),mLayerList,this);
         mViewDataBinding.rvLayers.setAdapter(mAdapter);
         mViewDataBinding.rvLayers.setLayoutManager(new LinearLayoutManager(getActivity()));

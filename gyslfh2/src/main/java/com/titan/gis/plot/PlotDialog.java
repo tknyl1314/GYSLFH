@@ -188,6 +188,16 @@ public class PlotDialog extends DialogFragment implements IPlot{
         captureScreenshotAsync();
     }
 
+    @Override
+    public void onSave() {
+
+    }
+
+    @Override
+    public void onConfirm() {
+
+    }
+
     /**
      * capture the map as an image
      */

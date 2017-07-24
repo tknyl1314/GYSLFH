@@ -190,6 +190,7 @@
     <string name="plot_firebreak">防火带</string>
     <string name="plot_firept">火点</string>
     <string name="plot_flag">旗帜</string>
+    <string name="plot_save">保存</string>
 
 
 </resources>

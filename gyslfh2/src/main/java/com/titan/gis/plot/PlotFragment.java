@@ -6,32 +6,25 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
-import com.esri.arcgisruntime.geometry.Multipoint;
-import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
-import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
+import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
-import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.mapping.view.SketchCreationMode;
 import com.esri.arcgisruntime.mapping.view.SketchEditor;
 import com.esri.arcgisruntime.mapping.view.SketchStyle;
 import com.titan.Injection;
 import com.titan.gis.GisUtil;
-import com.titan.gis.PlotUtil;
-import com.titan.gis.SymbolUtil;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
+import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.FragmentPlotBinding;
-
-import static com.titan.gis.plot.PlotDialog.plotArrow;
 
 
 /**
@@ -65,13 +58,18 @@ public class PlotFragment extends Fragment implements IPlot{
     private static SketchEditor sketchEditor;
     //图层控制
     private LayerControlFragment mlayerControlFragment;
-
+    //标绘工具类
+    private PlotUtil mPlotUtil;
 
     public void setmViewModel(PlotViewModel mViewModel) {
         this.mViewModel = mViewModel;
     }
 
     private PlotViewModel mViewModel;
+    //当前位置
+    private TitanLocation mLoc;
+
+    private static Viewpoint mViewpoint;
 
     public PlotFragment() {
         // Required empty public constructor
@@ -84,11 +82,12 @@ public class PlotFragment extends Fragment implements IPlot{
      * @return A new instance of fragment PlotFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlotFragment newInstance() {
+    public static PlotFragment newInstance(Viewpoint viewpoint) {
         PlotFragment fragment = new PlotFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        mViewpoint=viewpoint;
+       /* Bundle args = new Bundle();
+        args.putSerializable(ARG_PARAM1, viewpoint);
+        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);*/
         return fragment;
     }
@@ -96,10 +95,10 @@ public class PlotFragment extends Fragment implements IPlot{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+        if (getArguments() != null) {
+            mLoc = (TitanLocation) getArguments().getSerializable(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
@@ -142,74 +141,46 @@ public class PlotFragment extends Fragment implements IPlot{
         //初始化底图()
         mArcMap = new ArcGISMap(Basemap.createOpenStreetMap());
         //添加绘制图层
-        mPlotOverlay= GisUtil.addGraphicsOverlay(mDataBinding.mapview);
+        mPlotOverlay = GisUtil.addGraphicsOverlay(mDataBinding.mapview);
         mDataBinding.mapview.setMap(mArcMap);
         //去除版权声明
         mDataBinding.mapview.setAttributionTextVisible(false);
 
-        sketchEditor = new SketchEditor();
-        sketchStyle=new SketchStyle();
-        sketchEditor.setSketchStyle(sketchStyle);
+        if(mViewpoint!= null){
+            mDataBinding.mapview.setViewpoint(mViewpoint);
+        }
+
+        //sketchEditor = new SketchEditor();
+        //sketchStyle=new SketchStyle();
+        //initSketchEditor();
+        //sketchEditor.setSketchStyle(sketchStyle);
         //mDataBinding.mapview.setOnTouchListener(new PlotTouchListener(getActivity(),mDataBinding.mapview));
-        mDataBinding.mapview.setSketchEditor(sketchEditor);
+
+
     }
-
-
-    /**
-     * 地图事件监听
-     */
-    public  class PlotTouchListener extends DefaultMapViewOnTouchListener {
-        MapView mapview;
-        Context context;
-
-        public PlotTouchListener(Context context, MapView mapview) {
-            super(context, mapview);
-            this.mapview = mapview;
-            this.context = context;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            super.onLongPress(e);
-        }
-
-        /**
-         * 双击
-         * @param event
-         * @return
-         */
-        @Override
-        public boolean onDoubleTouchDrag(MotionEvent event) {
-            if(mPlotType!=null){
-                saveSketchGraphic(mPlotType);
-
-            }
-            return true;
-        }
-
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            return super.onSingleTapConfirmed(e);
-        }
-    }
-
 
 
     /**
      * 保存绘制的图形
      * @param plottype
      */
-    private  void saveSketchGraphic(PlotUtil.PlotType plottype) {
+    public   void saveSketchGraphic(PlotUtil.PlotType plottype) {
         Graphic graphic=null;
 
         switch (plottype){
             case ARROW:
-                Multipoint pts= (Multipoint) sketchEditor.getGeometry();
+                //mDataBinding.mapview.setOnTouchListener(null);
+                /*if(mPlotUtil!=null){
+                    graphic=mPlotUtil.getmGraphicsOverlay().getGraphics().get(mPlotUtil.getPlotgraphicID());
+                }*/
+
+                /*Multipoint pts= (Multipoint) sketchEditor.getGeometry();
                 if(pts.getPoints().size()>=2){
                     PointCollection ptscollection=new PointCollection(pts.getPoints());
                     graphic = plotArrow(pts.getPoints().get(pts.getPoints().size()), ptscollection);
                     //mPlotOverlay.getGraphics().add(graphic);
-                }
+                }*/
+
                 break;
             case FIREAREA:
                 if(sketchEditor.getGeometry()!=null){
@@ -223,11 +194,9 @@ public class PlotFragment extends Fragment implements IPlot{
                 break;
             case FIREPOINT:
                 graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.firepointSymbol);
-
                 break;
             case FLAG:
                 graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.flagSymbol);
-
                 break;
         }
         mPlotOverlay.getGraphics().add(graphic);
@@ -247,15 +216,22 @@ public class PlotFragment extends Fragment implements IPlot{
 
     @Override
     public void Plot(int plottype) {
-        if( sketchEditor!=null&&sketchEditor.getGeometry()!=null){
+        initSketchEditor();
+        /*if( sketchEditor!=null&&sketchEditor.getGeometry()!=null){
             saveSketchGraphic(mPlotType);
-        }
+        }*/
         //mDataBinding.mapview.setOnTouchListener(new PlotTouchListener(getActivity(),mDataBinding.mapview));
         switch (plottype){
             case 1:
                 mPlotType= PlotUtil.PlotType.ARROW;
-                sketchStyle.setVertexSymbol(SymbolUtil.vertexSymbol);
-                sketchEditor.start(SketchCreationMode.MULTIPOINT);
+                mPlotUtil=new PlotUtil(getActivity(),mDataBinding.mapview,mPlotOverlay);
+                //mPlotUtil.setmPlotType(mPlotType);
+                mPlotUtil.activate(mPlotType);
+                mDataBinding.mapview.setOnTouchListener(mPlotUtil.getPlotTouchListener());
+                //sketchEditor.stop();
+                //mPlotType= PlotUtil.PlotType.ARROW;
+                //sketchStyle.setVertexSymbol(SymbolUtil.vertexSymbol);
+                //sketchEditor.start(SketchCreationMode.MULTIPOINT);
                 mViewModel.snackbarText.set("箭头");
                 //activate(PlotType.ARROW);
                 break;
@@ -291,14 +267,51 @@ public class PlotFragment extends Fragment implements IPlot{
 
     }
 
+    /**
+     * 初始化style
+     */
+    private void initSketchEditor() {
+        if(mDataBinding.mapview.getSketchEditor()==null){
+            sketchEditor=new SketchEditor();
+            mDataBinding.mapview.setSketchEditor(sketchEditor);
+        }
+        sketchStyle=new SketchStyle();
+        sketchEditor.setSketchStyle(sketchStyle);
+
+
+    }
+
+    /**
+     * 撤销
+     */
     @Override
     public void onRevok() {
         //mPlotOverlay.getGraphics().get(0).g
 
     }
 
+    /**
+     * 分享
+     */
     @Override
     public void onShare() {
+
+    }
+
+    /**
+     * 保存
+     */
+    @Override
+    public void onSave() {
+        saveSketchGraphic(mPlotType);
+
+    }
+
+    /**
+     * 确认
+     */
+    @Override
+    public void onConfirm() {
 
     }
 }

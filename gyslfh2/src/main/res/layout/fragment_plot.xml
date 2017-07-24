@@ -85,7 +85,7 @@
                 <!--旗帜-->
                 <RadioButton
                     android:id="@+id/rb_save"
-                    android:text="@string/plot_flag"
+                    android:text="@string/plot_save"
                     style="@style/rb_plot"
                     android:onClick="@{()->viewmodel.onSave()}"
                     android:drawableTop="@drawable/plot_flag"

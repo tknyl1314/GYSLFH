@@ -27,4 +27,14 @@ public interface IPlot {
      * 分享
      */
     void onShare();
+
+    /**
+     * 保存
+     */
+    void onSave();
+
+    /**
+     * 确定
+     */
+    void onConfirm();
 }
