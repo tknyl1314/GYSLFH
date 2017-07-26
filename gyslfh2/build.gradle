@@ -91,6 +91,7 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources false//去除不用的资源文件
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
@@ -106,7 +107,7 @@ android {
             }
         }
         debug {
-            //shrinkResources false//去除不用的资源文件
+            shrinkResources false//去除不用的资源文件
             minifyEnabled false  //是否混淆  Android Studio disables ProGuard when using Instant Run.
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             /*applicationVariants.all { variant ->

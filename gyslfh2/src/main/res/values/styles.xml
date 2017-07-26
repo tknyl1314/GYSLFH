@@ -31,8 +31,6 @@
     </style>
 
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <!--底部radiobutton-->
     <style name="style_RadioButton">
         <item name="android:padding">10dp</item>
