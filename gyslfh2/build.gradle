@@ -24,6 +24,7 @@ android {
 
     aaptOptions {
         cruncherEnabled = false
+        useNewCruncher = false
     }
     //aaptOptions.cruncherEnabled = false
     //aaptOptions.useNewCruncher = false
@@ -32,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId "com.titan.newslfh"
-        minSdkVersion 18  //Andoird 4.3
+        minSdkVersion 18  //18 Andoird 4.3
         targetSdkVersion 23//百度导航要求
         versionCode 1
         versionName "2.0"
@@ -177,15 +178,19 @@ dependencies {
 
     //compile 'com.squareup:kotlinpoet:0.3.0'
     /***/
-compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
     compile 'com.github.wuhongsheng:TitanLib:0.4.1'
     compile 'com.android.support:support-v4:25.3.1'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'}
-repositories {
-    mavenCentral()
+    /**PermissionsDispatcher*/
+    compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
+    }
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }
+
 
 /**
  * @return
