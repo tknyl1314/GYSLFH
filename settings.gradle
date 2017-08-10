@@ -1,4 +1,5 @@
-include  ':gyslfh2', ':BaiduNavi'
+include  ':gyslfh2'
+//, ':BaiduNavi',':mylib',':app'
 //,':app',':mylib'
 //,':app'
         //':app',
