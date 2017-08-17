@@ -165,12 +165,7 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
     testCompile "org.powermock:powermock-module-junit4:$rootProject.ext.powerMockito"
     testCompile "org.powermock:powermock-api-mockito:$rootProject.ext.powerMockito"
-    /**PermissionsDispatcher*/
-    compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
-        // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
-    }
-    
+
     /**kotlin*/
     //compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
@@ -186,7 +181,7 @@ dependencies {
     /**PermissionsDispatcher*/
     compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
         // if you don't use android.app.Fragment you can exclude support for them
-        exclude module: "support-v13"
+        //exclude module: "support-v13"
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }
