@@ -124,6 +124,7 @@
             android:id="@+id/rv_layers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:items="@{viewmodel.mLayerList}"
             >
         </android.support.v7.widget.RecyclerView>

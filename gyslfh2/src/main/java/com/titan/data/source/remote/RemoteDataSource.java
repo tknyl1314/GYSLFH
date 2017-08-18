@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.titan.data.source.DataSource;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmInfoDetailModel;
@@ -17,6 +18,8 @@ import com.titan.model.FireRiskModel;
 import com.titan.model.ResultModel;
 import com.titan.model.TrackPoint;
 import com.titan.newslfh.R;
+
+import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
@@ -170,7 +173,6 @@ public class RemoteDataSource implements DataSource,RemotDataSource {
                     @Override
                     public void onNext(String json) {
                         //callback.onSuccess(json);
-
                         try {
                             ResultModel<AlarmInfoDetailModel> resultModel=new Gson().fromJson(json, ResultModel.class);
                             if(resultModel.getResult()){

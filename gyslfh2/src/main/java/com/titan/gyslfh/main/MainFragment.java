@@ -88,6 +88,7 @@ import permissions.dispatcher.RuntimePermissions;
  */
 @RuntimePermissions
 public class MainFragment extends Fragment implements IMain, CalloutInterface {
+
     //图层控制
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
 
@@ -301,7 +302,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                         break;
 
                     case "FAILED_TO_LOAD":
-
                         mMainViewModel.snackbarText.set("图层加载异常");
                         Log.e("Titan","图层加载异常");
                         break;
@@ -754,6 +754,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //startActivity(new Intent(getActivity(), MonitorActivity.class));
     }
 
+    /**
+     * 三维场景
+     */
     @Override
     public void openScene() {
         if(mlayerControlFragment==null){
@@ -769,6 +772,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         startActivity(intent);
     }
 
+    /**
+     * 图层控制
+     */
     @Override
     public void showLayerControl() {
         if(mlayerControlFragment==null){

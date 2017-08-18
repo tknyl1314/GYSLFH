@@ -118,6 +118,9 @@ public class UpAlarmViewModel extends BaseViewModel {
 
 
         //地区等级 市级3，区县 4
+        if (TitanApplication.mUserModel.getDqLevel()==null){
+            return;
+        }
         userlevel.set(Integer.valueOf(TitanApplication.mUserModel.getDqLevel()));
         //设置地址
         if(titanloc.get()!=null){

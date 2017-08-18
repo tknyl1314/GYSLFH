@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by whs on 2017/5/11
+ * 图层切换
  */
 
 public class LayerControlViewModel extends BaseViewModel {

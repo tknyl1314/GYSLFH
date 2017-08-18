@@ -123,15 +123,15 @@ public class SceneFragment extends Fragment implements SceneView {
      * 加载图层数据
      */
     private void loadData() {
-        for (TitanLayer layer :mLayerList){
-            if(layer.isVisiable()){
-                ServiceFeatureTable serviceFeatureTable=new ServiceFeatureTable(layer.getUrl());
-                FeatureLayer featurelayer=new FeatureLayer(serviceFeatureTable);
-                mScene.getOperationalLayers().add(featurelayer);
-
+        if (mLayerList!=null&&!mLayerList.isEmpty()){
+            for (TitanLayer layer :mLayerList){
+                if(layer.isVisiable()){
+                    ServiceFeatureTable serviceFeatureTable=new ServiceFeatureTable(layer.getUrl());
+                    FeatureLayer featurelayer=new FeatureLayer(serviceFeatureTable);
+                    mScene.getOperationalLayers().add(featurelayer);
+                }
             }
         }
-
     }
 
     /**

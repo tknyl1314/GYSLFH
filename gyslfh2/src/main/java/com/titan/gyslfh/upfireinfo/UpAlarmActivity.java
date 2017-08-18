@@ -103,6 +103,9 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
      */
     @Override
     public void onGetNewAddress(TitanLocation titanLocation) {
+        if (titanLocation==null){
+            return;
+        }
         mViewModel.type.set(type);
         mViewModel.address.set(titanLocation.getAddress());
         mViewModel.titanloc.set(titanLocation);

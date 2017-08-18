@@ -1,6 +1,6 @@
 <resources>
     <!-- System Config-->
-    <string name="app_name">贵阳森林防火</string>
+    <string name="appname">贵阳森林防火</string>
     <string name="appinfo">主办单位：贵阳市生态文明建设委员会\n技术支持：北京航天泰坦科技股份有限公司</string>
     <string name="app_version">版本号：</string>
     <!--提示-->
@@ -101,6 +101,9 @@
     <string name="inputalarm_remark">备注</string>
     <string name="inputalarm_isWork">是否查岗</string>
     <string name="inputalarm_noticeAreaIDs">通知区县</string>
+    <string name="inputalarm_yxz">已选择</string>
+    <string name="inputalarm_gqx">个区县</string>
+    <string name="inputalarm_choice">请选择</string>
     <string name="map_base">基础地图</string>
     <string name="map_img">影像地图</string>
     <string name="map_firerisk">森林火险图</string>
@@ -118,7 +121,11 @@
     <string name="alarminfo_status">火情状态</string>
     <string name="alarminfo_isfire">是否火情</string>
     <string name="alarminfo_type">火情类型</string>
+    <string name="alarminfo_state">状态：</string>
+    <string name="alarminfo_address">火警地址：</string>
+    <string name="alarminfo_orgin">报警来源：</string>
     <string name="backalarm_psrson">核实人员</string>
+    <string name="alarminfo_time">接警时间：</string>
     <string name="backalarm_info">核实情况</string>
     <string name="firetype">火情类型</string>
     <string name="title_route_guide_demo">导航</string>
@@ -133,6 +140,8 @@
     <string name="plot_firept">火点</string>
     <string name="plot_flag">旗帜</string>
     <string name="plot_save">保存</string>
+    <string name="callout_guide">导航</string>
+    <string name="callout_monitor">视频监控</string>
 
 
 </resources>

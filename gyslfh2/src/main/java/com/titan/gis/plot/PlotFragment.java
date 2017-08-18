@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -167,6 +168,10 @@ public class PlotFragment extends Fragment implements IPlot{
     public   void saveSketchGraphic(PlotUtil.PlotType plottype) {
         Graphic graphic=null;
 
+//        if (plottype==null){
+//            Toast.makeText(getActivity(), "没有标绘", Toast.LENGTH_LONG).show();
+//            return;
+//        }
         switch (plottype){
             case ARROW:
                 //mDataBinding.mapview.setOnTouchListener(null);
@@ -198,6 +203,8 @@ public class PlotFragment extends Fragment implements IPlot{
             case FLAG:
                 graphic=new Graphic(sketchEditor.getGeometry(),PlotUtil.flagSymbol);
                 break;
+            default:
+                break;
         }
         mPlotOverlay.getGraphics().add(graphic);
     }
@@ -217,6 +224,7 @@ public class PlotFragment extends Fragment implements IPlot{
     @Override
     public void Plot(int plottype) {
         initSketchEditor();
+        mPlotUtil=new PlotUtil(getActivity(),mDataBinding.mapview,mPlotOverlay);
         /*if( sketchEditor!=null&&sketchEditor.getGeometry()!=null){
             saveSketchGraphic(mPlotType);
         }*/
@@ -224,7 +232,7 @@ public class PlotFragment extends Fragment implements IPlot{
         switch (plottype){
             case 1:
                 mPlotType= PlotUtil.PlotType.ARROW;
-                mPlotUtil=new PlotUtil(getActivity(),mDataBinding.mapview,mPlotOverlay);
+                //mPlotUtil=new PlotUtil(getActivity(),mDataBinding.mapview,mPlotOverlay);
                 //mPlotUtil.setmPlotType(mPlotType);
                 mPlotUtil.activate(mPlotType);
                 mDataBinding.mapview.setOnTouchListener(mPlotUtil.getPlotTouchListener());
@@ -251,14 +259,14 @@ public class PlotFragment extends Fragment implements IPlot{
                 break;
             case 4:
                 mPlotType= PlotUtil.PlotType.FIREPOINT;
-                sketchStyle.setVertexSymbol(PlotUtil.firepointSymbol);
+                sketchStyle.setVertexSymbol(mPlotUtil.firepointSymbol);
                 sketchEditor.start(SketchCreationMode.POINT);
                 mViewModel.snackbarText.set("火点");
                 //activate(PlotType.FIREPOINT);
                 break;
             case 5:
                 mPlotType= PlotUtil.PlotType.FLAG;
-                sketchStyle.setVertexSymbol(PlotUtil.flagSymbol);
+                sketchStyle.setVertexSymbol(mPlotUtil.flagSymbol);
                 sketchEditor.start(SketchCreationMode.POINT);
                 mViewModel.snackbarText.set("旗帜");
                 //activate(PlotType.FLAG);

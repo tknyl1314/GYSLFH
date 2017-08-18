@@ -79,7 +79,6 @@ public class LayersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         viewmodel.mLayerName.set(layer.getName());
         //String layername=layer.getName();
         viewHolder.getBinding().setViewmodel(viewmodel);
-
     }
 
     @Override

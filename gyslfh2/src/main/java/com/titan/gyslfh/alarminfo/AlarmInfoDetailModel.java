@@ -33,8 +33,8 @@ public class AlarmInfoDetailModel {
         this.BackInfo = BackInfo;
     }
 
-    /*public static class AlarmInfoBean {
-        *//**
+    public static class AlarmInfoBean {
+        /**
          * ID : 83
          * DAILYID : gys201706110052
          * UNIONID :
@@ -55,7 +55,7 @@ public class AlarmInfoDetailModel {
          * REMARK : 人都退热贴32543543dsfd
          * REMARK1 :
          * REMARK2 :
-         *//*
+         */
 
         private String ID;
         private String DAILYID;
@@ -237,7 +237,7 @@ public class AlarmInfoDetailModel {
         public void setREMARK2(String REMARK2) {
             this.REMARK2 = REMARK2;
         }
-    }*/
+    }
 
     public static class BackInfoBean {
         /**

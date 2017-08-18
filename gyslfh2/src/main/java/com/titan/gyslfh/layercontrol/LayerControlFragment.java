@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -133,7 +134,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
     }
 
     /**
-     * 出事图层信息
+     * 初始图层信息
      */
     private void initLayers() {
         //动态图层
@@ -150,7 +151,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                         break;
 
                     case "FAILED_TO_LOAD":
-
                         Log.e("Titan","图层加载异常");
                         break;
 
@@ -175,7 +175,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                             FeatureLayer flayer=new FeatureLayer(service);
                             flayer.setVisible(false);
                             marcGISMap.getOperationalLayers().add(flayer);
-
                         }
                         intiRecyclerView();
                         break;
@@ -237,12 +236,16 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
                 //return getActivity().getString(R.string.loading);
 
             case "NOT_VISIBLE":
-                mLayerList.get(layerindex).setVisiable(false);
-                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"已移除");
+                if (mLayerList!=null&&!mLayerList.isEmpty()){
+                    mLayerList.get(layerindex).setVisiable(false);
+                    mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"已移除");
+                }
                 //return getActivity().getString(R.string.notVisible);
 
             case "OUT_OF_SCALE":
-                mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"超出范围");
+                if (mLayerList!=null&&!mLayerList.isEmpty()){
+                    mViewModel.snackbarText.set(mLayerList.get(layerindex).getName()+"超出范围");
+                }
                 //return getActivity().getString(R.string.outOfScale);
 
         }
@@ -262,9 +265,13 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
             mAdapter.replaceData(mLayerList);
             return;
         }*/
-        mAdapter=new LayersAdapter(getActivity(),mLayerList,this);
-        mViewDataBinding.rvLayers.setAdapter(mAdapter);
-        mViewDataBinding.rvLayers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (mLayerList!=null&&!mLayerList.isEmpty()) {
+            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getActivity());
+            linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+            mViewDataBinding.rvLayers.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mAdapter = new LayersAdapter(getActivity(), mLayerList, this);
+            mViewDataBinding.rvLayers.setAdapter(mAdapter);
+        }
     }
 
 
