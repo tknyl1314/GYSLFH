@@ -16,10 +16,13 @@ import com.titan.util.ToastUtil;
 
 /**
  * Created by hanyw on 2017/8/25/025.
+ * 自定义定位服务
  */
 
 public class MyLocationService extends Service {
+    //电源管理类
     private PowerManager pm;
+    //电源管理锁
     private PowerManager.WakeLock wl;
     private final IBinder mBinder = new LocalBinder();
     @Nullable
@@ -32,6 +35,7 @@ public class MyLocationService extends Service {
     public void onCreate() {
         super.onCreate();
         pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        //阻止CPU在屏幕关闭情况下休眠
         wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myservice");
         wl.acquire();
     }
@@ -62,6 +66,7 @@ public class MyLocationService extends Service {
             //设置对电源的需求
             criteria.setPowerRequirement(Criteria.POWER_LOW);
             LocationManager locationManager = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+            //获取定位供应商名称
             String provider = locationManager.getBestProvider(criteria,true);
             Log.e("tag",provider);
             alds.startAsync();

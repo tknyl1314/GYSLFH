@@ -109,19 +109,18 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
      */
     public void switchTrack(int state){
         Log.e("TAG", "switchTrack: "+istrack.get());
-        //istrack.set(!istrack.get());
         if(istrack.get()){
             if (state==ACTIVE_OPEN){
                 snackbarText.set("轨迹跟踪已开启");
+                keepSwitchState(KEYNAME_ISTRACK,istrack.get());
             }
             mMain.initLocationListener();
-            keepSwitchState(KEYNAME_ISTRACK,istrack.get());
         }else {
             if (state==ACTIVE_OPEN){
                 snackbarText.set("轨迹跟踪已关闭");
+                mMain.closeTrackLine();
+                keepSwitchState(KEYNAME_ISTRACK,istrack.get());
             }
-            mMain.closeTrackLine();
-            keepSwitchState(KEYNAME_ISTRACK,istrack.get());
         }
     }
 
@@ -347,7 +346,7 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
 
     /**
      * @param key
-     * @param isChecked 开关状态
+     * @param isChecked 存储开关状态
      */
     public void keepSwitchState(String key,boolean isChecked){
         TitanApplication.mSharedPreferences.edit().putBoolean(key,isChecked).apply();
