@@ -9,6 +9,7 @@ import com.titan.BaseViewModel;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
 import com.titan.gis.selectaddress.SelectAddressFragment;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
@@ -34,6 +35,7 @@ public class UpAlarmActivity extends BaseActivity  implements SelectAddressFragm
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TitanApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_upalarm);
         mContext=this;
         mUpAlarmFragment= (UpAlarmFragment) findOrCreateViewFragment();

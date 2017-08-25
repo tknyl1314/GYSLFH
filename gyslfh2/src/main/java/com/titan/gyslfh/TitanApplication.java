@@ -20,6 +20,7 @@ import com.titan.data.source.local.GreenDaoManager;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.gyslfh.main.MainActivity;
 import com.titan.loction.baiduloc.LocationService;
+import com.titan.loction.baiduloc.MyLocationService;
 import com.titan.model.FireInfo;
 import com.titan.push.PushMsg;
 import com.titan.util.NetUtil;
@@ -39,6 +40,8 @@ public class TitanApplication extends Application{
 
     /** 百度位置监听服务 */
     public static LocationService locationService;
+    /** 自定义位置监听服务 */
+    public static MyLocationService myLocationService;
     /** 震动器（百度定位） */
     Vibrator mVibrator;
     static Context mContext;
@@ -71,6 +74,8 @@ public class TitanApplication extends Application{
     public static final String KEYNAME_REMEMBER = "isremember";
     public static final String KEYNAME_USERNAME = "username";
     public static final String KEYNAME_PSD = "password";
+    public static final String KEYNAME_ISTRACK = "istrack";
+    public static final String KEYNAME_UPTRACKPOINT = "uptrackpoint";
     public static SharedPreferences mSharedPreferences;
 
     public static TitanApplication getInstance() {
@@ -191,8 +196,16 @@ public class TitanApplication extends Application{
 
     //结束所有的Activities
     public void   finshAllActivities() {
-        for (Activity activity : activityLinkedList) {
-            activity.finish();
+        //直接用finish()并不能直接退出，虽然结束了activity但是并没有立即释放内存，遵循android内存管理机制；
+        //exit()、killProcess()结束当前组件并立即释放内存
+        try {
+            for (Activity activity : activityLinkedList) {
+                activity.finish();
+            }
+            //android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

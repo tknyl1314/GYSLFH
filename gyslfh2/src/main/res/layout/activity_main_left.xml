@@ -41,14 +41,15 @@
                     android:gravity="center"
                     android:layout_height="45dp"
                     android:layout_marginLeft="16dp" />
-                <Switch
-                    android:id="@+id/sw_istrack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:checked="@{viewmodel.istrack}"
-                    android:onClick="@{()->viewmodel.switchTrack()}"
-                    android:layout_marginLeft="20dp"/>
+                    <Switch
+                        android:id="@+id/sw_istrack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="20dp"
+                        android:checked="@={viewmodel.istrack}"
+                        android:onClick="@{()->viewmodel.switchTrack(1)}"
+                        android:layout_marginLeft="20dp"/>
+                <!--android:checked="@{viewmodel.istrack}"-->
                 <!-- <Switch
                      android:id="@+id/sw_istrack"
                      android:layout_width="wrap_content"
@@ -75,6 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:checked="@={viewmodel.isuptrack}"
                     android:layout_marginLeft="20dp"/>
                 <!-- <Switch
                      android:id="@+id/sw_istrack"

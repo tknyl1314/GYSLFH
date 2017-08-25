@@ -11,11 +11,11 @@ import android.databinding.ObservableInt;
 import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.titan.BaseViewModel;
 import com.titan.data.source.DataRepository;
 import com.titan.data.source.DataSource;
@@ -28,11 +28,14 @@ import com.titan.util.DateUtil;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import static com.titan.gyslfh.TitanApplication.KEYNAME_ISTRACK;
+import static com.titan.gyslfh.TitanApplication.KEYNAME_UPTRACKPOINT;
+
 
 /**
  * Created by Whs on 2016/12/1 0001
  */
-public class MainViewModel extends BaseViewModel implements BDLocationListener {
+public class MainViewModel extends BaseViewModel implements BDLocationListener,LocationDisplay.LocationChangedListener{
     //是否开启三维场景
     public ObservableBoolean isSceneView=new ObservableBoolean(false);
     //是否开启标绘
@@ -60,11 +63,12 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
     //public final ObservableField<Boolean> istrack = new ObservableField<>();
 
     public ObservableBoolean istrack =new ObservableBoolean(false);
-
+    public ObservableBoolean isuptrack =new ObservableBoolean(true);
 
     public final ObservableList<Point> listpt = new ObservableArrayList<>();
 
-
+    //APP运行中主动点击
+    private static final int ACTIVE_OPEN =1;
 
     //提示信息
     final ObservableField<String> snackbarText = new ObservableField<>();
@@ -80,7 +84,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
     private DataRepository mDataRepository;
 
-
     private int i=0;
 
     /**经纬度格式化*/
@@ -95,8 +98,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
             //地区等级 市级3，区县 4
             userlevel.set(Integer.valueOf(TitanApplication.mUserModel.getDqLevel()));
-            //是否跟踪轨迹
-            istrack.set(TitanApplication.mSharedPreferences.getBoolean("istrack",false));
 
         } catch (Exception e) {
             snackbarText.set("获取用户信息异常"+e.toString());
@@ -109,16 +110,23 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
     /**
      * 轨迹开关
      */
-    public void switchTrack(){
-        Log.e("TAG", "switchTrack: ");
-        istrack.set(!istrack.get());
+    public void switchTrack(int state){
+        Log.e("TAG", "switchTrack: "+istrack.get());
+        //istrack.set(!istrack.get());
         if(istrack.get()){
-            snackbarText.set("已开启");
+            if (state==ACTIVE_OPEN){
+                snackbarText.set("轨迹跟踪已开启");
+            }
+            mMain.initLocationListener();
+            keepSwitchState(KEYNAME_ISTRACK,istrack.get());
         }else {
-            snackbarText.set("已关闭");
+            if (state==ACTIVE_OPEN){
+                snackbarText.set("轨迹跟踪已关闭");
+            }
+            mMain.closeTrackLine();
+            keepSwitchState(KEYNAME_ISTRACK,istrack.get());
         }
     }
-
 
     /**
      * 一键报警
@@ -177,7 +185,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
        if(isplot.get()) {
            snackbarText.set("请先关闭标绘功能");
            return;
-
        }
        if(isnav.get()){
            isnav.set(false);
@@ -203,10 +210,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
         mMain.openScene();
     }
 
-
-
-
-
     /**
      * 百度定位回调
      * @param bdLocation
@@ -216,7 +219,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
         // TODO Auto-generated method stub
         if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
 
-
             //Message locMsg = locHander.obtainMessage();
             Bundle locData;
             locData = TrackUtil.Algorithm(bdLocation);
@@ -224,19 +226,21 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
             TitanLocation titanLocation=new TitanLocation(bdLocation.getLongitude(),bdLocation.getLatitude(),bdLocation.getAddrStr());
             titanloc.set(titanLocation);
             currentPoint.set(pt);
-
-
+//            Point point = new Point(117.228634+0.001*i, 31.794619+0.001*i);
+//            mMain.showTrackLine(point);
+            //Log.e("tag",pt.toString());
+//            i++;
            if (locData != null) {
                 //BDLocation location=locData.getParcelable("loc");
                 int iscalculate=locData.getInt("iscalculate");
                 if(iscalculate==1){
 
-                    uplaodTrackPoint(pt);
+                    uploadTrackPoint(pt);
                     //是否需要跟踪轨迹
                     if(istrack.get()){
                         listpt.add(pt);
                         //展示轨迹
-                        //mMain.showTrackLine(listpt);
+                        //mMain.showTrackLine(pt);
                     }else {
                         listpt.clear();
                         //移除轨迹
@@ -249,7 +253,7 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
         }else {
             Log.e("TITAN",bdLocation.getLocTypeDescription()+bdLocation.getLocType());
-            Toast.makeText(mContext, "定位失败"+bdLocation.getLocTypeDescription(), Toast.LENGTH_SHORT).show();
+            snackbarText.set("定位失败"+bdLocation.getLocTypeDescription());
         }
     }
 
@@ -258,19 +262,48 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
 
     }
 
+    /**
+     * @param locationChangedEvent 定位监听
+     */
+    @Override
+    public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+        Point point=locationChangedEvent.getLocation().getPosition();
+        Bundle locData = TrackUtil.locationSmoothAlgorithm(point);
+        if (locData != null) {
+            //Log.e("tag",point.toString());
+            int iscalculate=locData.getInt("iscalculate");
+            TrackUtil.ArcgisLocationEntity locationEntity = (TrackUtil.ArcgisLocationEntity) locData.getSerializable("location");
+            if (locationEntity==null){
+                return;
+            }
+            if(iscalculate==1){
+                if (isuptrack.get()){
+                    uploadTrackPoint(locationEntity.point);
+                    keepSwitchState(KEYNAME_UPTRACKPOINT,isuptrack.get());
+                    Log.e("tag",String.valueOf(isuptrack.get()));
+                }else {
+                    keepSwitchState(KEYNAME_UPTRACKPOINT,isuptrack.get());
+                    Log.e("tag",String.valueOf(isuptrack.get()));
+                }
+                mMain.showTrackLine(locationEntity.point);
+            }else {
+                mMain.showTrackLine(locationEntity.point);
+            }
+        }
+    }
 
     /**
      * 上传轨迹点
      */
-    private void uplaodTrackPoint (Point point) {
+    public void uploadTrackPoint (Point point) {
         String uptime = DateUtil.dateFormat(new Date());
         //2363 :Xian_1980_3_Degree_GK_Zone_39
         if (point != null) {
             //snackbarText.set("dajk");
             String time = DateUtil.dateFormat(new Date());
             String userid=TitanApplication.mUserModel.getUserID();
-            String lon = locformat.format(point.getX());
-            String lat = locformat.format(point.getY());
+            String lat = locformat.format(point.getX());
+            String lon = locformat.format(point.getY());
             TrackPoint trackPoint=new TrackPoint();
 
             trackPoint.setLat(Double.parseDouble(lat));
@@ -301,16 +334,23 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener {
                     snackbarText.set(data);
                 }
             });
-
         }
-
-
     }
-
 
     /**
-     *
+     * 跟踪轨迹
      */
-    public void showTrackLine() {
+    public void trajectoryTrack() {
+        istrack.set(TitanApplication.mSharedPreferences.getBoolean(KEYNAME_ISTRACK,false));
+        switchTrack(0);
     }
+
+    /**
+     * @param key
+     * @param isChecked 开关状态
+     */
+    public void keepSwitchState(String key,boolean isChecked){
+        TitanApplication.mSharedPreferences.edit().putBoolean(key,isChecked).apply();
+    }
+
 }

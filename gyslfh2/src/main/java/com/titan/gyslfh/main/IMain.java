@@ -2,8 +2,6 @@ package com.titan.gyslfh.main;
 
 import com.esri.arcgisruntime.geometry.Point;
 
-import java.util.List;
-
 /**
  * Created by whs on 2017/4/23
  */
@@ -35,7 +33,7 @@ public interface IMain {
 
      void  showToast(String info, int type);
 
-     void showTrackLine(List<Point> pointList);
+     void showTrackLine(Point point);
 
      /**
       * 标绘
@@ -62,6 +60,15 @@ public interface IMain {
       */
      void showLayerControl();
 
+     /**
+      * 轨迹跟踪
+      */
+     void initLocationListener();
+
+     /**
+      * 关闭轨迹
+      */
+     void closeTrackLine();
 
     //void removeTrackLine();
 }

@@ -9,6 +9,7 @@ import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.alarminfo.AlarmDetailFragment;
 import com.titan.gyslfh.alarminfo.AlarmDetailViewModel;
 import com.titan.newslfh.R;

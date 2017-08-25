@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity {
             return retainedViewModel.getViewmodel();
         } else {
             // There is no ViewModel yet, create it.
-            LoginViewModel viewModel = new LoginViewModel(getApplicationContext(), mFragment, Injection.provideDataRepository(mContext));
+            LoginViewModel viewModel = new LoginViewModel(mContext, mFragment, Injection.provideDataRepository(mContext));
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(),

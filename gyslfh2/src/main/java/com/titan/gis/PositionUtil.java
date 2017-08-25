@@ -1,6 +1,8 @@
 package com.titan.gis;
 
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.titan.model.TitanLocation;
 
 /**
@@ -123,8 +125,8 @@ public class PositionUtil {
 
 	/**
 	 * (BD-09)-->84
-	 * @param bd_lat
-	 * @param bd_lon
+	 * @param
+	 * @param
 	 * @return
 	 */
 	/*public static Gps bd09_To_Gps84(double bd_lat, double bd_lon) {
@@ -178,6 +180,14 @@ public class PositionUtil {
 		ret += (150.0 * Math.sin(x / 12.0 * pi) + 300.0 * Math.sin(x / 30.0
 				* pi)) * 2.0 / 3.0;
 		return ret;
+	}
+
+	public static LatLng gpsToBd09(double lat,double lon){
+		LatLng latLng = new LatLng(lat,lon);
+		CoordinateConverter converter  = new CoordinateConverter();
+		converter.from(CoordinateConverter.CoordType.GPS);
+		converter.coord(latLng);
+		return converter.convert();
 	}
 	/**
 	 * wgs84 转 西安80

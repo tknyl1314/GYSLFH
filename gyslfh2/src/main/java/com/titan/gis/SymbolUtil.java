@@ -26,8 +26,7 @@ public class SymbolUtil {
     public static SimpleFillSymbol risk5_Symbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.RED, null);
 
     //轨迹线样式
-    public static SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.parseColor("#1266E6"), 4);
-
+    public static SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID , Color.parseColor("#1266E6"), 8);
 
     /**态势标绘样式*/
     public static MarkerSymbol firepoint;

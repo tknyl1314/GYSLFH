@@ -47,6 +47,7 @@ public  abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TitanApplication.getInstance().addActivity(this);
         mContext=this;
         //如果是平板使用横屏模式
         if(DeviceUtil.isTablet(mContext)){

@@ -1,9 +1,16 @@
 package com.titan.gyslfh.main;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.databinding.Observable;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -32,9 +39,13 @@ import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.geometry.Envelope;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
+import com.esri.arcgisruntime.geometry.PolylineBuilder;
+import com.esri.arcgisruntime.geometry.SpatialReference;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
+import com.esri.arcgisruntime.location.AndroidLocationDataSource;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.Viewpoint;
@@ -44,6 +55,7 @@ import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.gis.SymbolUtil;
@@ -61,6 +73,7 @@ import com.titan.gyslfh.monitor.MonitorModel;
 import com.titan.gyslfh.sceneview.SceneActivity;
 import com.titan.gyslfh.upfireinfo.UpAlarmActivity;
 import com.titan.loction.baiduloc.LocationService;
+import com.titan.loction.baiduloc.MyLocationService;
 import com.titan.model.FireInfo;
 import com.titan.model.TitanLayer;
 import com.titan.navi.BaiduNavi;
@@ -69,6 +82,7 @@ import com.titan.newslfh.databinding.CalloutBinding;
 import com.titan.newslfh.databinding.MainFragBinding;
 import com.titan.util.DateUtil;
 import com.titan.util.SnackbarUtils;
+import com.titan.util.ToastUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -81,6 +95,8 @@ import java.util.Set;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
+
+import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * Created by whs on 2017/4/28
@@ -102,7 +118,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //态势标绘
     //private PlotDialog mPlotDialog;
     //当前位置显示
-    LocationDisplay mLocationDisplay;
+    public LocationDisplay mLocationDisplay;
     //绘制图层
     public GraphicsOverlay mGraphicsOverlay;
     //存储point的集合
@@ -111,9 +127,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //基础图层
     public static ArcGISMap mMap;
     //专题图层数量
-    private final  int layers=9;
+    private final int layers = 9;
 
-    private List<FeatureLayer> featurelayers=new ArrayList<>();
+    private List<FeatureLayer> featurelayers = new ArrayList<>();
 
     //地图查询callout
     private Callout mCallout;
@@ -128,9 +144,33 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //专题图层
     //private  List<TitanLayer> mLayerlist=new ArrayList<>();
     //第一次加载
-    private  boolean firstLoad=true;
+    private boolean firstLoad = true;
     //定位客户端
     private LocationService mLocationService;
+    //自定义定位服务
+    private MyLocationService myLocationService;
+    private AndroidLocationDataSource source;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyLocationService.LocalBinder localBinder = (MyLocationService.LocalBinder) service;
+            //myLocationService = localBinder.getMyLocationService();
+            source = localBinder.getMyLocationService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            myLocationService=null;
+        }
+    };
+    //
+    SharedPreferences mSharedPreferences;
+    //控件参考系
+    SpatialReference sp = SpatialReferences.getWgs84();
+    //点集合
+    PointCollection points = new PointCollection(sp);
+    PolylineBuilder polyline;
+    Graphic graphic;
 
 
     public MainFragment() {
@@ -150,7 +190,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     /**
      * 初始化百度定位
      */
-    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void initBaiduLoc() {
         //定位初始化
         mLocationService = TitanApplication.locationService;
@@ -169,18 +209,17 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     /**
      * 未获取定位权限
      */
-    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void showDeniedForLoc() {
         mMainViewModel.snackbarText.set(getActivity().getString(R.string.location_permission_denied));
     }
-
 
 
     @Override
     public void onResume() {
         super.onResume();
         mMainFragBinding.mapview.resume();
-        //mMainViewModel.start();
+        mMainViewModel.trajectoryTrack();
     }
 
     @Override
@@ -199,6 +238,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
         //mMainFragBinding.setView(this);
         mMainFragBinding.setViewmodel(mMainViewModel);
+        mMainFragBinding.drawerLayoutMenu.setViewmodel(mMainViewModel);
 
         setHasOptionsMenu(true);
 
@@ -227,30 +267,28 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * 导航初始化
      */
     private void initNavi() {
-        mBaiduNavi=new BaiduNavi(getActivity(),mMainFragBinding.mapview,mMainViewModel);
+        mBaiduNavi = new BaiduNavi(getActivity(), mMainFragBinding.mapview, mMainViewModel);
         BNOuterTTSPlayerCallback ttsCallback = null;
         // 申请权限
         if (android.os.Build.VERSION.SDK_INT >= 23) {
 
             if (!mBaiduNavi.hasBasePhoneAuth(getActivity())) {
 
-                ActivityCompat.requestPermissions(getActivity(),BaiduNavi.authBaseArr, BaiduNavi.authBaseRequestCode);
+                ActivityCompat.requestPermissions(getActivity(), BaiduNavi.authBaseArr, BaiduNavi.authBaseRequestCode);
                 mMainViewModel.snackbarText.set("没有获取权限");
                 return;
 
             }
-            if(!mBaiduNavi.hasCompletePhoneAuth(getActivity())){
-                ActivityCompat.requestPermissions(getActivity(),BaiduNavi.authComArr, BaiduNavi.authComRequestCode);
+            if (!mBaiduNavi.hasCompletePhoneAuth(getActivity())) {
+                ActivityCompat.requestPermissions(getActivity(), BaiduNavi.authComArr, BaiduNavi.authComRequestCode);
                 mMainViewModel.snackbarText.set("没有获取权限");
                 return;
             }
         }
         BNOuterLogUtil.setLogSwitcher(true);
-        if(mBaiduNavi.initDirs()){
+        if (mBaiduNavi.initDirs()) {
             mBaiduNavi.initNavi();
         }
-
-
 
 
     }
@@ -274,8 +312,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     }
 
 
-
-
     /**
      * 初始化地图
      */
@@ -287,7 +323,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //instantiate an ArcGISMap with OpenStreetMap Basemap
 
         //添加绘制图层
-        mGraphicsOverlay=addGraphicsOverlay(mMainFragBinding.mapview);
+        mGraphicsOverlay = addGraphicsOverlay(mMainFragBinding.mapview);
         mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
             @Override
             public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
@@ -298,28 +334,28 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 // set the status in the TextView accordingly
                 switch (mapLoadStatus) {
                     case "LOADING":
-                        Log.e("Titan","LOADING");
+                        Log.e("Titan", "LOADING");
                         break;
 
                     case "FAILED_TO_LOAD":
                         mMainViewModel.snackbarText.set("图层加载异常");
-                        Log.e("Titan","图层加载异常");
+                        Log.e("Titan", "图层加载异常");
                         break;
 
                     case "NOT_LOADED":
-                        Log.e("Titan","NOT_LOADED");
+                        Log.e("Titan", "NOT_LOADED");
 
                         break;
 
                     case "LOADED":
                         //loadLyaers();
-                        firstLoad=false;
+                        firstLoad = false;
                         setTouchListener();
-                        Log.e("Titan","图层加载完成");
-                        Log.e("TItan","WKID"+mMainFragBinding.mapview.getSpatialReference().getWKText());
+                        Log.e("Titan", "图层加载完成");
+                        Log.e("TItan", "WKID" + mMainFragBinding.mapview.getSpatialReference().getWKText());
                         break;
 
-                    default :
+                    default:
                         break;
                 }
 
@@ -337,14 +373,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
         // get the callout that shows attributes
         mCallout = mMainFragBinding.mapview.getCallout();
-        mCallout.setStyle(new Callout.Style(getActivity(),R.xml.calloutstyle));
+        mCallout.setStyle(new Callout.Style(getActivity(), R.xml.calloutstyle));
 
         mPointCollection = new PointCollection(mMainFragBinding.mapview.getSpatialReference());
 
         //去除版权声明
         mMainFragBinding.mapview.setAttributionTextVisible(false);
-
-
 
 
         mLocationDisplay = mMainFragBinding.mapview.getLocationDisplay();
@@ -353,32 +387,31 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.RECENTER);
         //适合徒步
         //mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.NAVIGATION);
-
         //定位显示
-        if(!mLocationDisplay.isStarted()){
+        if (!mLocationDisplay.isStarted()) {
             mLocationDisplay.startAsync();
         }
 
-
-        //检查更新
+       //检查更新
         /*if(TitanApplication.IntetnetISVisible){
             UpdateUtil updateUtil=new UpdateUtil(getActivity());
             updateUtil.executeUpdate();
         }*/
 
     }
+
+
     /**
      * 设置地图点击监听事件
      */
-    private  void  setTouchListener(){
-        mMainFragBinding.mapview.setOnTouchListener(new DefaultMapViewOnTouchListener(getActivity(),mMainFragBinding.mapview){
+    private void setTouchListener() {
+        mMainFragBinding.mapview.setOnTouchListener(new DefaultMapViewOnTouchListener(getActivity(), mMainFragBinding.mapview) {
 
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
 
-
-                if(mCallout.isShowing()){
+                if (mCallout.isShowing()) {
                     mCallout.dismiss();
                 }
                 // get the point that was clicked and convert it to a point in map coordinates
@@ -391,13 +424,13 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 query.setGeometry(envelope);
                 query.setReturnGeometry(true);
 
-                List<ServiceFeatureTable> tt=new ArrayList<>();
-                if(mlayerControlFragment==null||mlayerControlFragment.getmLayerList().isEmpty()){
+                List<ServiceFeatureTable> tt = new ArrayList<>();
+                if (mlayerControlFragment == null || mlayerControlFragment.getmLayerList().isEmpty()) {
                     return false;
                 }
-                int dd=mlayerControlFragment.getmLayerList().size();
-                for (TitanLayer tlayer:mlayerControlFragment.getmLayerList()){
-                    if(tlayer.isVisiable()){
+                int dd = mlayerControlFragment.getmLayerList().size();
+                for (TitanLayer tlayer : mlayerControlFragment.getmLayerList()) {
+                    if (tlayer.isVisiable()) {
                         tt.add(new ServiceFeatureTable(tlayer.getUrl()));
                     }
                 }
@@ -407,13 +440,13 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                         tt.add(mlayerControlFragment.getFeaturetables().get(i));
                     }
                 }*/
-                if(tt.size()>0){
-                    for (ServiceFeatureTable featureTable:tt){
+                if (tt.size() > 0) {
+                    for (ServiceFeatureTable featureTable : tt) {
                         //featureTable.get
                         //FeatureLayer featureLayer = new FeatureLayer(featureTable);
 
                         // call select features
-                        final ListenableFuture<FeatureQueryResult> future =featureTable.queryFeaturesAsync(query, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
+                        final ListenableFuture<FeatureQueryResult> future = featureTable.queryFeaturesAsync(query, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
                       /* if(future.isDone()){
                             //第二次查询
                             break;
@@ -434,7 +467,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                                     Feature feature = null;
                                     // cycle through selections
                                     int counter = 0;
-                                    while (iterator.hasNext()){
+                                    while (iterator.hasNext()) {
                                         feature = iterator.next();
 
 
@@ -449,7 +482,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                                         mMapView.setViewpointGeometryAsync(envelope, 200);
                                         mCallout.setLocation(clickPoint);
                                         //mCallout.setContent(createCallView(feature.getAttributes()));
-                                        mCallout.setContent(createCallView(result.getFields(),feature.getAttributes()));
+                                        mCallout.setContent(createCallView(result.getFields(), feature.getAttributes()));
                                         mCallout.show();
                                     }
 
@@ -461,7 +494,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
 
                                 } catch (Exception e) {
-                                    mMainViewModel.snackbarText.set("查询异常"+e.toString());
+                                    mMainViewModel.snackbarText.set("查询异常" + e.toString());
                                     Log.e(getResources().getString(R.string.app_name), "Select feature failed: " + e.getMessage());
                                 }
                             }
@@ -472,8 +505,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
             }
 
 
-
-
         });
     }
 
@@ -482,30 +513,30 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * 创建callout
      * @return
      */
-    public View createCallView(List<Field> fields,Map<String, Object> attr){
+    public View createCallView(List<Field> fields, Map<String, Object> attr) {
 
-        final MonitorModel monitorModel=new MonitorModel("","","","","","");
+        final MonitorModel monitorModel = new MonitorModel("", "", "", "", "", "");
 
-        View view =LayoutInflater.from(getActivity()).inflate(R.layout.callout,null);
-        TextView tv_attr= (TextView) view.findViewById(R.id.tv_content);
-        Button btn_monitor= (Button) view.findViewById(R.id.btn_monitor);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.callout, null);
+        TextView tv_attr = (TextView) view.findViewById(R.id.tv_content);
+        Button btn_monitor = (Button) view.findViewById(R.id.btn_monitor);
         btn_monitor.setVisibility(View.GONE);
-        ImageView iv_close= (ImageView) view.findViewById(R.id.iv_close);
-        StringBuffer calloutcontent=new StringBuffer();
+        ImageView iv_close = (ImageView) view.findViewById(R.id.iv_close);
+        StringBuffer calloutcontent = new StringBuffer();
         calloutcontent.append("");
         try {
 
 
             final Set<String> keys = attr.keySet();
-            if(keys.contains("MONITORIP")){
+            if (keys.contains("MONITORIP")) {
                 btn_monitor.setVisibility(View.VISIBLE);
                 //alloutViewModel.ismonitor.set(true);
 
             }
 
-            for (Field field :fields){
-                String alias=field.getAlias();
-                Object value=  attr.get(field.getName());
+            for (Field field : fields) {
+                String alias = field.getAlias();
+                Object value = attr.get(field.getName());
 
                 // format observed field value as date
                 if (value instanceof GregorianCalendar) {
@@ -513,27 +544,27 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                     //DateUtil.getYMD(((GregorianCalendar) value).getTime());
                     value = DateUtil.getYMD(((GregorianCalendar) value).getTime());
                 }
-                if(field.getName().equals("MONITORIP")&& value!=null){
+                if (field.getName().equals("MONITORIP") && value != null) {
                     monitorModel.setMONITORIP((String) value);
 
                 }
 
-                if(field.getName().equals("NTITHEFTIP")&& value!=null){
+                if (field.getName().equals("NTITHEFTIP") && value != null) {
                     monitorModel.setANTITHEFTIP((String) value);
 
                 }
-                if(field.getName().equals("INFRAREDIP")&& value!=null){
+                if (field.getName().equals("INFRAREDIP") && value != null) {
                     monitorModel.setINFRAREDIP((String) value);
 
                 }
-                if(field.getName().equals("MONITORDVR")&& value!=null){
+                if (field.getName().equals("MONITORDVR") && value != null) {
 
-                    monitorModel.setMONITORDVR((String) value );
+                    monitorModel.setMONITORDVR((String) value);
                 }
-                if(field.getName().equals("INFRAREDDVR")&& value!=null){
+                if (field.getName().equals("INFRAREDDVR") && value != null) {
                     monitorModel.setINFRAREDDVR((String) value);
                 }
-                if(field.getName().equals("ANTITHEFTDVR")&& value!=null){
+                if (field.getName().equals("ANTITHEFTDVR") && value != null) {
                     monitorModel.setANTITHEFTDVR((String) value);
                 }
                 calloutcontent.append(alias + " | " + value + "\n");
@@ -542,7 +573,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
 
         } catch (Exception e) {
-            Toast.makeText(getActivity(),"获取属性信息异常"+e,Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "获取属性信息异常" + e, Toast.LENGTH_LONG).show();
 
         }
         //如果是监控点显示视频监控
@@ -552,9 +583,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
             @Override
             public void onClick(View v) {
                 calloutClose();
-                Intent intent=new Intent();
-                String json=new Gson().toJson(monitorModel);
-                intent.putExtra("data",json);
+                Intent intent = new Intent();
+                String json = new Gson().toJson(monitorModel);
+                intent.putExtra("data", json);
                 intent.setClass(getActivity(), MonitorActivity.class);
                 startActivity(intent);
             }
@@ -562,7 +593,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCallout.isShowing()){
+                if (mCallout.isShowing()) {
                     mCallout.dismiss();
                 }
             }
@@ -570,7 +601,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         return view;
 
     }
-
 
 
 
@@ -590,7 +620,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     @Override
     public void calloutClose() {
 
-        if(mCallout.isShowing()){
+        if (mCallout.isShowing()) {
             mCallout.dismiss();
         }
     }
@@ -603,21 +633,19 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     }
 
 
-
-
     /**
      * 1:火警上报
      * 2:接警录入
      */
     @Override
     public void onAlarm(int type) {
-        Intent intent =new Intent();
-        intent.putExtra("type",type);
+        Intent intent = new Intent();
+        intent.putExtra("type", type);
         mMainViewModel.getTitanloc();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("loc",mMainViewModel.getTitanloc());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("loc", mMainViewModel.getTitanloc());
         intent.putExtras(bundle);
-        intent.setClass(getActivity(),UpAlarmActivity.class);
+        intent.setClass(getActivity(), UpAlarmActivity.class);
         startActivity(intent);
 
     }
@@ -627,7 +655,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void onAlarmInfo() {
-        startActivity(new Intent(getActivity(),AlarmInfoActivity.class));
+        startActivity(new Intent(getActivity(), AlarmInfoActivity.class));
 
     }
 
@@ -636,7 +664,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void onBackAlarm() {
-        startActivity(new Intent(getActivity(),BackAlarmActivity.class));
+        startActivity(new Intent(getActivity(), BackAlarmActivity.class));
 
     }
 
@@ -649,32 +677,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     @Override
     public void showToast(String info, int type) {
         Toast.makeText(getActivity(), info, type).show();
-
-    }
-
-    /**
-     * 展示实时轨迹
-     * @param pointList
-     */
-    @Override
-    public void showTrackLine(List<Point> pointList) {
-
-        /*if(pointList.size()==1){
-            try{
-
-                PointCollection pointCollection=new PointCollection((Iterable<Point>) pointList.iterator());
-                lineBuilder = new PolylineBuilder(pointCollection);
-
-            }catch(Exception e) {
-                Log.e("TITAN",e.toString());
-                ToastUtil.setToast(getActivity(),"轨迹异常："+e);
-            }
-        }else {
-            lineBuilder.addPoint(pointList.get(pointList.size()-1));
-        }
-        if(lineBuilder!=null){
-            addTrackLineGraphic(lineBuilder.toGeometry(),lineSymbol);
-        }*/
     }
 
     /**
@@ -785,7 +787,90 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         mlayerControlFragment.show(getFragmentManager(),LAYERCONTROL_TAG);
     }
 
+    @Override
+    public void initLocationListener() {
+        points.clear();
+        mLocationDisplay.addLocationChangedListener(mMainViewModel);
+        try {
+            AndroidLocationDataSource alds = new AndroidLocationDataSource(getActivity());
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            //设置是否需要海拔信息
+            criteria.setAltitudeRequired(false);
+            //设置是否需要方位信息
+            criteria.setBearingRequired(false);
+            //设置是否允许运营商收费
+            criteria.setCostAllowed(true);
+            //设置对电源的需求
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            String provider = locationManager.getBestProvider(criteria,true);
+            Log.e("tag",provider);
+            alds.startAsync();
+            alds.requestLocationUpdates(provider,(long)1000,0.0f);
+            mLocationDisplay.setLocationDataSource(alds);
+        }catch (Exception e){
+            ToastUtil.setToast(getActivity(),"定位错误："+e.getMessage());
+        }
 
+        Intent startIntent = new Intent(getActivity(), MyLocationService.class);
+        getActivity().startService(startIntent);
+        Intent bindIntent = new Intent(getActivity(),MyLocationService.class);
+        getActivity().bindService(bindIntent,connection,BIND_AUTO_CREATE);
+        //mLocationDisplay.setLocationDataSource(source);
+    }
+
+    /**
+     * 关闭轨迹
+     */
+    @Override
+    public void closeTrackLine() {
+        if (mMainViewModel==null){
+            return;
+        }
+        mGraphicsOverlay.getGraphics().clear();
+        mLocationDisplay.removeLocationChangedListener(mMainViewModel);
+        Intent stopIntent = new Intent(getActivity(),MyLocationService.class);
+        getActivity().unbindService(connection);
+        getActivity().stopService(stopIntent);
+    }
+
+    /**
+     * 展示实时轨迹
+     * @param point 当前位置点
+     */
+    @Override
+    public void showTrackLine(Point point) {
+        if (mGraphicsOverlay == null) {
+            return;
+        }
+        //ToastUtil.setToast(getActivity(),point.toString());
+        points.add(point);
+        polyline = new PolylineBuilder(points);
+        SimpleLineSymbol symbol = SymbolUtil.lineSymbol;
+        symbol.setAntiAlias(true);
+        graphic= new Graphic(polyline.toGeometry(), symbol);
+        mGraphicsOverlay.getGraphics().add(graphic);
+        //Boolean isChecked = mMainViewModel.istrack.get();
+        //drawTrajectory();
+        //mSharedPreferences.edit().putBoolean("istrack",isChecked).apply();
+        /*if(pointList.size()==1){
+            try{
+
+                PointCollection pointCollection=new PointCollection((Iterable<Point>) pointList.iterator());
+                lineBuilder = new PolylineBuilder(pointCollection);
+
+            }catch(Exception e) {
+                Log.e("TITAN",e.toString());
+                ToastUtil.setToast(getActivity(),"轨迹异常："+e);
+            }
+        }else {
+            lineBuilder.addPoint(pointList.get(pointList.size()-1));
+        }
+        if(lineBuilder!=null){
+            addTrackLineGraphic(lineBuilder.toGeometry(),lineSymbol);
+        }*/
+    }
 
     /**
      * 展示推送火情信息
@@ -799,6 +884,5 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //mMapView.setViewpointGeometryAsync(envelope, 200);
 
     }
-
 
 }

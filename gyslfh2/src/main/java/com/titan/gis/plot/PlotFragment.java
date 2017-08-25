@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -168,10 +167,10 @@ public class PlotFragment extends Fragment implements IPlot{
     public   void saveSketchGraphic(PlotUtil.PlotType plottype) {
         Graphic graphic=null;
 
-//        if (plottype==null){
-//            Toast.makeText(getActivity(), "没有标绘", Toast.LENGTH_LONG).show();
-//            return;
-//        }
+        if (plottype==null){
+            //Toast.makeText(getActivity(), "没有标绘", Toast.LENGTH_LONG).show();
+            return;
+        }
         switch (plottype){
             case ARROW:
                 //mDataBinding.mapview.setOnTouchListener(null);

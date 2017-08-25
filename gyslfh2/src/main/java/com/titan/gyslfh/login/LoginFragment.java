@@ -153,14 +153,14 @@ public class LoginFragment extends Fragment implements ILogin {
 
     @Override
     public void showProgress() {
-        if (mProgresssDialog == null) {
+        //if (mProgresssDialog == null) {
             mProgresssDialog = new MaterialDialog.Builder(getActivity())
                     //.title(getActivity().getString(R.string.title))
                     .content(mContext.getString(R.string.logining))
                     .progress(true, 0)
                     .cancelable(false)
                     .build();
-        }
+        //}
         mProgresssDialog.show();
 
     }

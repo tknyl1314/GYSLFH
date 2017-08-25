@@ -5,7 +5,9 @@ import android.os.Bundle;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
+import com.esri.arcgisruntime.geometry.Point;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -35,6 +37,7 @@ public class TrackUtil {
      */
     // 存放历史定位结果的链表，最大存放当前结果的前5次定位结果
     private static LinkedList<LocationEntity> locationList = new LinkedList<LocationEntity>();
+    private static LinkedList<ArcgisLocationEntity> arcgisLocationList = new LinkedList<ArcgisLocationEntity>();
 
     public static float[] EARTH_WEIGHT = {0.1f,0.2f,0.4f,0.6f,0.8f}; // 推算计算权重_地球
     //public static float[] MOON_WEIGHT = {0.0167f,0.033f,0.067f,0.1f,0.133f};
@@ -87,10 +90,51 @@ public class TrackUtil {
             newLocation.location = location;
             newLocation.time = System.currentTimeMillis();
             locationList.add(newLocation);
-
         }
         return locData;
     }
+
+    /**
+     * @param point 定位点
+     * @return
+     */
+    public static Bundle locationSmoothAlgorithm(Point point) {
+        Bundle locData = new Bundle();
+        double curSpeed = 0;
+        if (arcgisLocationList.isEmpty() || arcgisLocationList.size() < 2) {
+            ArcgisLocationEntity temp = new ArcgisLocationEntity();
+            temp.point = point;
+            temp.time = System.currentTimeMillis();
+            locData.putInt("iscalculate", 0);
+            arcgisLocationList.add(temp);
+        } else {
+            if (arcgisLocationList.size() > 5)
+                arcgisLocationList.removeFirst();
+            double score = 0;
+            for (int i = 0; i < arcgisLocationList.size(); ++i) {
+                LatLng lastPoint = new LatLng(arcgisLocationList.get(i).point.getX(),
+                        arcgisLocationList.get(i).point.getY());
+                LatLng curPoint = new LatLng(point.getX(), point.getY());
+                double distance = DistanceUtil.getDistance(lastPoint, curPoint);
+                curSpeed = distance / (System.currentTimeMillis() - arcgisLocationList.get(i).time) / 1000;
+                score += curSpeed * EARTH_WEIGHT[i];
+            }
+            if (score > 0.00000999 && score < 0.00005) { // 经验值,开发者可根据业务自行调整，也可以不使用这种算法
+                point=new Point((arcgisLocationList.get(arcgisLocationList.size() - 1).point.getX() + point.getX())/ 2,
+                                (arcgisLocationList.get(arcgisLocationList.size() - 1).point.getY() + point.getY())/ 2);
+                locData.putInt("iscalculate", 1);
+            } else {
+                locData.putInt("iscalculate", 0);
+            }
+            ArcgisLocationEntity newLocation = new ArcgisLocationEntity();
+            newLocation.point = point;
+            newLocation.time = System.currentTimeMillis();
+            arcgisLocationList.add(newLocation);
+            locData.putSerializable("location",newLocation);
+        }
+        return locData;
+    }
+
     /**
      * 封装定位结果和时间的实体类
      *
@@ -99,6 +143,14 @@ public class TrackUtil {
      */
     public  static class LocationEntity {
        public BDLocation location;
+        public long time;
+    }
+
+    /**
+     * 封装Arcgis定位结果和时间的实体类
+     */
+    public  static class ArcgisLocationEntity implements Serializable {
+        public Point point;
         public long time;
     }
 }

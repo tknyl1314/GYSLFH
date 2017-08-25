@@ -12,6 +12,7 @@ import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
@@ -74,6 +75,7 @@ public class MonitorActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		//TitanApplication.getInstance().addActivity(this);
 		setContentView(R.layout.activity_mointor);
 		mContext=this;
 		mHikVisionUtil=new HikVisionUtil();

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import com.titan.BaseActivity;
 import com.titan.BaseViewModel;
 import com.titan.ViewModelHolder;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.model.TitanLayer;
 import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
@@ -33,6 +34,7 @@ public class SceneActivity extends BaseActivity  {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TitanApplication.getInstance().addActivity(this);
         setContentView(R.layout.activity_scene);
         //位置信息
         titanLocation= (TitanLocation) getIntent().getExtras().getSerializable("loc");

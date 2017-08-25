@@ -11,7 +11,13 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.PointCollection;
+import com.esri.arcgisruntime.geometry.Polyline;
 import com.esri.arcgisruntime.geometry.PolylineBuilder;
+import com.esri.arcgisruntime.geometry.SpatialReference;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.titan.BaseActivity;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
@@ -23,6 +29,10 @@ import com.titan.loction.baiduloc.LocationService;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
+
+import java.util.List;
+
+import static com.titan.gis.SymbolUtil.lineSymbol;
 
 /**
  * 主界面
@@ -100,7 +110,6 @@ public class MainActivity extends BaseActivity {
 
 
 
-
     private void initView() {
         mSharedPreferences=mContext.getSharedPreferences(TitanApplication.PREFS_NAME,0);
         sw_istrack = (Switch) findViewById(R.id.sw_istrack);
@@ -110,7 +119,21 @@ public class MainActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     Toast.makeText(mContext, "轨迹跟踪开启", Toast.LENGTH_SHORT).show();
+                    List<Graphic> gcList=mainFragment.mGraphicsOverlay.getGraphics();
+                    Point point = mainFragment.mMainFragBinding.mapview.getLocationDisplay().getLocation().getPosition();
                     //mViewModel.showTrackLine();
+                    SpatialReference sp2= SpatialReferences.getWgs84();
+                    PointCollection points = new PointCollection(sp2);
+//                    points.add(new Point(13051280.084232, 3714230.644090));
+//                    points.add(new Point(13052280.084232, 3714230.644090));
+                   //points.add((Point) GeometryEngine.project(new Point(117.234089, 31.792675),sp3));
+//                    points.add((Point) GeometryEngine.project(new Point(117.235089, 31.792675),sp3));
+//                    points.add((Point) GeometryEngine.project(new Point(117.236089, 31.792675),sp3));
+                    points.add(point);
+//                    points.add(new Point(117.234125, 31.792717));
+                    Polyline polyline = new Polyline(points);
+                    Graphic graphic = new Graphic(polyline, lineSymbol);
+                    mainFragment.mGraphicsOverlay.getGraphics().add(graphic);
                 }else {
                     mainFragment.mGraphicsOverlay.getGraphics().clear();
                     Toast.makeText(mContext, "轨迹跟踪关闭", Toast.LENGTH_SHORT).show();
@@ -228,7 +251,7 @@ public class MainActivity extends BaseActivity {
      * 监听回退按钮
      */
     long firstTime = 0;
-   /* @Override
+    @Override
     public void onBackPressed() {
         // exitApp();
         long secondTime = System.currentTimeMillis();
@@ -249,6 +272,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-    }*/
+    }
 
 }

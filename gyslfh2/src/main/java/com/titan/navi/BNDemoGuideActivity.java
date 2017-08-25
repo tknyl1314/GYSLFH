@@ -17,6 +17,7 @@ import com.baidu.navisdk.adapter.BNaviBaseCallbackModel;
 import com.baidu.navisdk.adapter.BaiduNaviCommonModule;
 import com.baidu.navisdk.adapter.NaviModuleFactory;
 import com.baidu.navisdk.adapter.NaviModuleImpl;
+import com.titan.gyslfh.TitanApplication;
 import com.titan.newslfh.R;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class BNDemoGuideActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//TitanApplication.getInstance().addActivity(this);
 		//BNDemoMainActivity.activityList.add(this);
 		createHandler();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

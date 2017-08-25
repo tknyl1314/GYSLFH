@@ -84,6 +84,8 @@
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice"/>
+        <!--自定义定位服务-->
+        <service android:name="com.titan.loction.baiduloc.MyLocationService"/>
 
         <!-- 注册监听网络变化的广播 -->
         <receiver
