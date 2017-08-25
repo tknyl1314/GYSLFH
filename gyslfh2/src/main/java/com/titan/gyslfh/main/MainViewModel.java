@@ -103,9 +103,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
             snackbarText.set("获取用户信息异常"+e.toString());
 
         }
-
-
-
     }
     /**
      * 轨迹开关
@@ -128,6 +125,12 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
         }
     }
 
+//    /**
+//     * 是否上传轨迹
+//     */
+//    public void isUpTrack(){
+//
+//    }
     /**
      * 一键报警
      */
@@ -279,9 +282,6 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
             if(iscalculate==1){
                 if (isuptrack.get()){
                     uploadTrackPoint(locationEntity.point);
-                    keepSwitchState(KEYNAME_UPTRACKPOINT,isuptrack.get());
-                    Log.e("tag",String.valueOf(isuptrack.get()));
-                }else {
                     keepSwitchState(KEYNAME_UPTRACKPOINT,isuptrack.get());
                     Log.e("tag",String.valueOf(isuptrack.get()));
                 }

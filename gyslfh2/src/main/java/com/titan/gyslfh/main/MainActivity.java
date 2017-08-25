@@ -21,6 +21,7 @@ import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.titan.BaseActivity;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
+import com.titan.gis.SymbolUtil;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
@@ -31,8 +32,6 @@ import com.titan.newslfh.R;
 import com.titan.util.ActivityUtils;
 
 import java.util.List;
-
-import static com.titan.gis.SymbolUtil.lineSymbol;
 
 /**
  * 主界面
@@ -132,7 +131,7 @@ public class MainActivity extends BaseActivity {
                     points.add(point);
 //                    points.add(new Point(117.234125, 31.792717));
                     Polyline polyline = new Polyline(points);
-                    Graphic graphic = new Graphic(polyline, lineSymbol);
+                    Graphic graphic = new Graphic(polyline, SymbolUtil.getLineSymbol());
                     mainFragment.mGraphicsOverlay.getGraphics().add(graphic);
                 }else {
                     mainFragment.mGraphicsOverlay.getGraphics().clear();

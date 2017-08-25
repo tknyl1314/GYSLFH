@@ -55,7 +55,6 @@ import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
-import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.google.gson.Gson;
 import com.titan.Injection;
 import com.titan.gis.SymbolUtil;
@@ -168,7 +167,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     //控件参考系
     SpatialReference sp = SpatialReferences.getWgs84();
     //点集合
-    PointCollection points = new PointCollection(sp);
+    PointCollection points;
     PolylineBuilder polyline;
     Graphic graphic;
 
@@ -789,7 +788,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     @Override
     public void initLocationListener() {
-        points.clear();
+        if (points!=null){
+            points.clear();
+        }
         mLocationDisplay.addLocationChangedListener(mMainViewModel);
         try {
             AndroidLocationDataSource alds = new AndroidLocationDataSource(getActivity());
@@ -825,10 +826,9 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void closeTrackLine() {
-        if (mMainViewModel==null){
-            return;
-        }
         mGraphicsOverlay.getGraphics().clear();
+        graphic = null;
+        points = null;
         mLocationDisplay.removeLocationChangedListener(mMainViewModel);
         Intent stopIntent = new Intent(getActivity(),MyLocationService.class);
         getActivity().unbindService(connection);
@@ -841,16 +841,18 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      */
     @Override
     public void showTrackLine(Point point) {
-        if (mGraphicsOverlay == null) {
-            return;
-        }
         //ToastUtil.setToast(getActivity(),point.toString());
+        if (points==null){
+            points = new PointCollection(sp);
+        }
         points.add(point);
         polyline = new PolylineBuilder(points);
-        SimpleLineSymbol symbol = SymbolUtil.lineSymbol;
-        symbol.setAntiAlias(true);
-        graphic= new Graphic(polyline.toGeometry(), symbol);
-        mGraphicsOverlay.getGraphics().add(graphic);
+        if (graphic==null){
+            graphic= new Graphic(polyline.toGeometry(), SymbolUtil.getLineSymbol());
+            mGraphicsOverlay.getGraphics().add(0,graphic);
+        }else {
+            mGraphicsOverlay.getGraphics().get(0).setGeometry(polyline.toGeometry());
+        }
         //Boolean isChecked = mMainViewModel.istrack.get();
         //drawTrajectory();
         //mSharedPreferences.edit().putBoolean("istrack",isChecked).apply();

@@ -123,7 +123,7 @@
                             android:layout_width="match_parent"
                             android:hint="@string/inputalarm_lon"
                             android:inputType="number"
-                            android:text='@={""+viewmodel.lon}' />
+                            android:text="@={viewmodel.lon}" />
 
                     </LinearLayout>
 
@@ -143,7 +143,7 @@
                             style="@style/et_content_line"
                             android:layout_width="match_parent"
                             android:hint="@string/inputalarm_lat"
-                            android:text='@={""+viewmodel.lat}' />
+                            android:text="@={viewmodel.lat}" />
 
                     </LinearLayout>
 
@@ -241,7 +241,7 @@
                             android:id="@+id/btn_region"
                             style="@style/btn_select"
                             android:onClick="@{()->viewmodel.showCountrySelectDialog(1)}"
-                            android:text='@{viewmodel.noticeAreaIDs.size>0?@string/inputalarm_yxz+viewmodel.noticeAreaIDs.size+@string/inputalarm_gqx:@string/inputalarm_choice}' />
+                            android:text="@{viewmodel.noticeAreaIDs.size>0?@string/inputalarm_yxz+viewmodel.noticeAreaIDs.size+@string/inputalarm_gqx:@string/inputalarm_choice}" />
 
 
                     </LinearLayout>
@@ -334,7 +334,7 @@
                             android:id="@+id/btn_noticeareaids"
                             style="@style/btn_select"
                             android:onClick="@{()->viewmodel.showCountrySelectDialog(2)}"
-                            android:text='@{viewmodel.noticeAreaIDs.size>0?@string/inputalarm_yxz+viewmodel.noticeAreaIDs.size+@string/inputalarm_gqx:@string/inputalarm_choice}' />
+                            android:text="@{viewmodel.noticeAreaIDs.size>0?@string/inputalarm_yxz+viewmodel.noticeAreaIDs.size+@string/inputalarm_gqx:@string/inputalarm_choice}" />
                     </LinearLayout>
 
 
@@ -359,7 +359,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@color/bg_gray"
-                            app:photos="@{viewmodel.imgs}"></android.support.v7.widget.RecyclerView>
+                            app:photos="@{viewmodel.imgs}">
+                        </android.support.v7.widget.RecyclerView>
                         <!-- <com.facebook.drawee.view.SimpleDraweeView
                              android:id="@+id/adv_test"
                              android:layout_width="80dp"

@@ -314,7 +314,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@color/bg_gray"
-                        app:photos="@{viewmodel.imgs}"></android.support.v7.widget.RecyclerView>
+                        app:photos="@{viewmodel.imgs}">
+                    </android.support.v7.widget.RecyclerView>
                     <!-- <com.facebook.drawee.view.SimpleDraweeView
                          android:id="@+id/adv_test"
                          android:layout_width="80dp"

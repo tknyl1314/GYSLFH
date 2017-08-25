@@ -60,9 +60,9 @@ public class UpAlarmViewModel extends BaseViewModel {
     //火警地址
     public ObservableField<String> address=new ObservableField<>();
     //经度
-    public ObservableField<Double> lon=new ObservableField<>(117.4242);
+    public ObservableField<String> lon=new ObservableField<>("117.4242");
     //纬度
-    public ObservableField<Double> lat=new ObservableField<>(28.424);
+    public ObservableField<String> lat=new ObservableField<>("28.424");
     //出警情况
     public ObservableField<String> policeCase=new ObservableField<>();
     //出警时间
