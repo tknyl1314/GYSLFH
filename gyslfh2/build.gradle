@@ -30,10 +30,9 @@ android {
     //aaptOptions.useNewCruncher = false
 
 
-
     defaultConfig {
         applicationId "com.titan.newslfh"
-        minSdkVersion 18  //18 Andoird 4.3
+        minSdkVersion 19  //18 Andoird 4.3 野狗要求4.4以上
         targetSdkVersion 23//百度导航要求
         versionCode 1
         versionName "2.0"
@@ -71,6 +70,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
+            res.srcDirs = ['src/main/res', 'src/main/res/menu']
         }
     }
     repositories {
@@ -81,8 +81,13 @@ android {
         enabled = true
     }
     packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/notice'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/rxjava.properties'
     }
     signingConfigs {
         //签名的配置
@@ -172,11 +177,11 @@ dependencies {
     //kapt 'com.android.databinding:compiler:2.3.2'
 
     //compile 'com.squareup:kotlinpoet:0.3.0'
-    /***/
+    /** */
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
-    compile 'com.github.wuhongsheng:TitanLib:0.4.1'
+    compile 'com.github.wuhongsheng:TitanLib:0.4.3'
     compile 'com.android.support:support-v4:25.3.1'
     /**PermissionsDispatcher*/
     compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
@@ -184,8 +189,15 @@ dependencies {
         //exclude module: "support-v13"
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-}
+    /**野狗视频通话*/
+    //compile 'com.wilddog.client:wilddog-video-call-android:2.2.0'
+    compile('com.wilddog.client:wilddog-video-room-android:2.1.0-beta') {
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+    }
+    compile 'com.wilddog.client:wilddog-auth-android:2.0.6'
 
+
+}
 
 /**
  * @return

@@ -9,11 +9,9 @@ import android.databinding.ObservableField;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.igexin.sdk.PushManager;
 import com.titan.BaseViewModel;
 import com.titan.data.source.DataRepository;
-import com.titan.data.source.remote.RemotDataSource;
 import com.titan.gyslfh.TitanApplication;
 import com.titan.newslfh.R;
 import com.titan.util.NetUtil;
@@ -24,9 +22,9 @@ import com.titan.util.NetUtil;
  */
 public class LoginViewModel extends BaseViewModel {
     //用户名
-    public final ObservableField<String> username = new ObservableField<>();
+    public final ObservableField<String> username = new ObservableField<>("admin");
     //密码
-    public final ObservableField<String> password = new ObservableField<>();
+    public final ObservableField<String> password = new ObservableField<>("admin");
     //是否记住用户
     public final ObservableBoolean isremember=new ObservableBoolean(true);
 
@@ -50,7 +48,14 @@ public class LoginViewModel extends BaseViewModel {
             mLogin.showProgress();
             //个推ClientId
             String cid= PushManager.getInstance().getClientid(mContext);
-            mDataRepository.checkLogin(username.get().trim(), password.get().trim(), cid, new RemotDataSource.getCallback() {
+            //TitanApplication.setmUserModel(new Gson().fromJson(data,UserModel.class));
+            if(isremember.get()){
+                TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
+                TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
+            }
+            mLogin.onNext();
+
+            /*mDataRepository.checkLogin(username.get().trim(), password.get().trim(), cid, new RemotDataSource.getCallback() {
                 @Override
                 public void onFailure(String info) {
                     mLogin.stopProgress();
@@ -73,7 +78,7 @@ public class LoginViewModel extends BaseViewModel {
                     mLogin.onNext();
 
                 }
-            });
+            });*/
 
         }
     }

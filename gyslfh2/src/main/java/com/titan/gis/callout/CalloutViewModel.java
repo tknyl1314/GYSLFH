@@ -8,6 +8,7 @@ import com.titan.BaseViewModel;
 
 /**
  * Created by whs on 2017/6/1
+ *
  */
 
 public class CalloutViewModel extends BaseViewModel {

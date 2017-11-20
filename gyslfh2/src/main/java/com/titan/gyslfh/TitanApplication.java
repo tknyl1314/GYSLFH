@@ -2,7 +2,6 @@ package com.titan.gyslfh;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
@@ -11,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -24,6 +24,8 @@ import com.titan.loction.baiduloc.MyLocationService;
 import com.titan.model.FireInfo;
 import com.titan.push.PushMsg;
 import com.titan.util.NetUtil;
+import com.wilddog.wilddogcore.WilddogApp;
+import com.wilddog.wilddogcore.WilddogOptions;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -31,7 +33,10 @@ import java.util.LinkedList;
 /**
  * Created by Whs on 2016/12/9 0009
  */
-public class TitanApplication extends Application{
+public class TitanApplication extends MultiDexApplication{
+
+    //野狗视频id
+    public static final String WILDDOG_VIDEO_ID = "wd0634562361hwiiyl";
     /** 是否有网络 */
     public static boolean IntetnetISVisible = false;
     /** 获取设备号序列号信息 */
@@ -58,8 +63,6 @@ public class TitanApplication extends Application{
     public static UserModel mUserModel;
     /** 数据存储路径 */
     static  String filePath = null;
-    /** 是否首次定位 */
-    boolean isfirstlogin=true;
     private LinkedList<Activity> activityLinkedList = new LinkedList<Activity>();
     public static ActivityManager instance;
     /** 推送*/
@@ -102,8 +105,10 @@ public class TitanApplication extends Application{
         locationService = new LocationService(getApplicationContext());
         //mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
+        /**野狗视频会议*/
+        WilddogOptions options = new WilddogOptions.Builder().setSyncUrl("https://"+WILDDOG_VIDEO_ID+".wilddogio.com").build();
+        WilddogApp.initializeApp(this,options);
         //intiData();
-
         mSharedPreferences=getSharedPreferences(PREFS_NAME,0);
         /** 获取当前网络状态 */
         getNetState();
@@ -149,33 +154,6 @@ public class TitanApplication extends Application{
 
     }
 
-    /** 注册用户设备信息*/
-    public void registerDevice()
-    {
-         MOBILE_MODEL = android.os.Build.MODEL;// SM-P601 型号
-        // MOBILE_MANUFACTURER = android.os.Build.MANUFACTURER;// samsung 厂商
-        MOBILE_MODEL = android.os.Build.MODEL + "-"
-                + android.os.Build.MANUFACTURER;
-        //WebService websUtil = new WebService(mContext);
-        /*String result = websUtil.addMacAddress(SBH, XLH, MOBILE_MODEL);
-        if (result.equals(WebService.netException))
-        {
-            // 网络异常
-            //sharedPreferences.edit().putBoolean(SBH, false).commit();
-        } else if (result.equals("已录入"))
-        {
-            // 设备信息已经录入
-            //sharedPreferences.edit().putBoolean(SBH, true).commit();
-        } else if (result.equals("录入成功"))
-        {
-           // sharedPreferences.edit().putBoolean(SBH, true).commit();
-            // 设备信息录入成功
-        } else if (result.equals("录入失败"))
-        {
-            // 设备信息录入失败
-          //  sharedPreferences.edit().putBoolean(SBH, false).commit();
-        }*/
-    }
 
     /**
      * 获取网络状态

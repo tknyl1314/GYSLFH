@@ -231,6 +231,7 @@
                     android:layout_weight="1"
                     android:text="@string/userinfo"
                     style="@style/style_RadioButton"
+                    android:onClick="@{()->viewmodel.videoRoom()}"
                     android:drawableTop="@drawable/rb_user_selector"/>
             </RadioGroup>
         </RelativeLayout>

@@ -122,9 +122,9 @@ public class TrackUtil {
             if (score > 0.00000999 && score < 0.00005) { // 经验值,开发者可根据业务自行调整，也可以不使用这种算法
                 point=new Point((arcgisLocationList.get(arcgisLocationList.size() - 1).point.getX() + point.getX())/ 2,
                                 (arcgisLocationList.get(arcgisLocationList.size() - 1).point.getY() + point.getY())/ 2);
-                locData.putInt("iscalculate", 1);
+                locData.putInt("iscalculate", 1);//计算结果
             } else {
-                locData.putInt("iscalculate", 0);
+                locData.putInt("iscalculate", 0);//非计算结果
             }
             ArcgisLocationEntity newLocation = new ArcgisLocationEntity();
             newLocation.point = point;

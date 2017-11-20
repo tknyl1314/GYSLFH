@@ -166,6 +166,14 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
     }
 
     /**
+     * 视频会议
+     */
+    public void videoRoom(){
+        mMain.videoRoom();
+        //mMain.onLocation(currentPoint.get());
+    }
+
+    /**
      * 开启态势标绘
      */
     public void startPlot(){

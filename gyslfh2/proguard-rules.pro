@@ -53,6 +53,9 @@
 -dontwarn com.google.gson.**
 -keep class com.google.gson.** { *;}
 
+#  不混淆实体类
+-keep class com.titan.model.**{*;}
+
 #  不混淆个推推送sdk
 -dontwarn com.igexin.**
 -keep class com.igexin.**{*;}

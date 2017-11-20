@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.titan.gyslfh.videoroom.VideoRoomViewModel" />
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="20dp"
+        android:background="@color/white"
+       >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_roomId"
+            android:hint="输入房间号"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@={viewmodel.roomid}"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="加入"
+            android:textColor="@color/white"
+            android:background="@android:color/holo_blue_light"
+            android:onClick="@{()->viewmodel.checkRoomID()}"
+            android:id="@+id/btn_addroom"
+            />
+    </LinearLayout>
+
+</layout>

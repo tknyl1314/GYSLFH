@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.esri.arcgisruntime.arcgisservices.ArcGISMapServiceInfo;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.ArcGISMapImageLayer;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.layers.Layer;
+import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -35,7 +37,6 @@ import com.titan.model.TitanLayer;
 import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.LayercontrolFragBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
     public  List<TitanLayer> getmLayerList() {
         return mLayerList;
     }
-
+    //图层数据
     private static  List<TitanLayer> mLayerList;
     private static ArcGISMap marcGISMap;
     //加载图层的序号
@@ -89,17 +90,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         return Singleton;
 
     }
-    /*public static LayerControlFragment getInstance(List<TitanLayer> layerList){
 
-
-        //return  new LayerControlFragment();
-        if(Singleton==null){
-            mLayerList=layerList;
-            Singleton=new LayerControlFragment();
-        }
-        return Singleton;
-
-    }*/
 
     public void setViewModel(LayerControlViewModel viewModel) {
         mViewModel = viewModel;
@@ -121,7 +112,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         mViewDataBinding.setViewmodel(mViewModel);
         //mLayerList.clear();
 
-        if(mLayerList==null||mLayerList.isEmpty()){
+        /*if(mLayerList==null||mLayerList.isEmpty()){
             //loadLyaers(
             mLayerList=new ArrayList<>();
             initLayers();
@@ -129,7 +120,7 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
         }else {
             //mAdapter.notifyDataSetChanged();
             intiRecyclerView();
-        }
+        }*/
         return mViewDataBinding.getRoot();
     }
 
@@ -137,9 +128,19 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
      * 初始图层信息
      */
     private void initLayers() {
+
         //动态图层
         final ArcGISMapImageLayer dlayer=new ArcGISMapImageLayer(getActivity().getString(R.string.zturl));
         dlayer.setVisible(false);
+        dlayer.addDoneLoadingListener(new Runnable() {
+            @Override
+            public void run() {
+                if(dlayer.getLoadStatus()== LoadStatus.LOADED){
+                    ArcGISMapServiceInfo mapServiceInfo=dlayer.getMapServiceInfo();
+                    // work with map service info here
+                }
+            }
+        });
         dlayer.addLoadStatusChangedListener(new LoadStatusChangedListener() {
             @Override
             public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {

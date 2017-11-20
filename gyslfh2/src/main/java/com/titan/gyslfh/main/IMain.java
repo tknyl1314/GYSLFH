@@ -70,5 +70,10 @@ public interface IMain {
       */
      void closeTrackLine();
 
+     /**
+      * 视频会议
+      */
+    void videoRoom();
+
     //void removeTrackLine();
 }

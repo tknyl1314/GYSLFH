@@ -186,10 +186,9 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
                     .setMinMillseconds(System.currentTimeMillis()-fiveYears)
                     .setMaxMillseconds(System.currentTimeMillis()+tenYears)
                     .setCurrentMillseconds(System.currentTimeMillis())
-                    .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
                     .setType(Type.ALL)
                     .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
-                    .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
+                    .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorAccent))
                     .setWheelItemTextSize(12)
                     .build();
 
@@ -343,9 +342,6 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     @Override
     public void showSelectAddress() {
         replaceFragment(mViewModel.titanloc.get());
-
-        //replaceFragment();
-
 
     }
 

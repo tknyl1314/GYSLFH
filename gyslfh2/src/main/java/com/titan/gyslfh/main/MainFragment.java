@@ -71,6 +71,7 @@ import com.titan.gyslfh.monitor.MonitorActivity;
 import com.titan.gyslfh.monitor.MonitorModel;
 import com.titan.gyslfh.sceneview.SceneActivity;
 import com.titan.gyslfh.upfireinfo.UpAlarmActivity;
+import com.titan.gyslfh.videoroom.VideoRoomActivity;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.loction.baiduloc.MyLocationService;
 import com.titan.model.FireInfo;
@@ -155,6 +156,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
             MyLocationService.LocalBinder localBinder = (MyLocationService.LocalBinder) service;
             //myLocationService = localBinder.getMyLocationService();
             source = localBinder.getMyLocationService();
+            mLocationDisplay.setLocationDataSource(source);
         }
 
         @Override
@@ -315,12 +317,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
      * 初始化地图
      */
     private void intiMapView() {
+        //去除水印
         //ArcGISRuntime.setClientId("qwvvlkN4jCDmbEAO");//去除水印的
         ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud8065403504,none,RP5X0H4AH7CLJ9HSX018");
         //初始化底图()
-        mMap = new ArcGISMap(Basemap.createOpenStreetMap());
+        mMap = new ArcGISMap(Basemap.createImagery());
         //instantiate an ArcGISMap with OpenStreetMap Basemap
-
         //添加绘制图层
         mGraphicsOverlay = addGraphicsOverlay(mMainFragBinding.mapview);
         mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
@@ -329,7 +331,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
                 String mapLoadStatus;
                 mapLoadStatus = loadStatusChangedEvent.getNewLoadStatus().name();
                 // map load status can be any of LOADING, FAILED_TO_LOAD, NOT_LOADED or LOADED
-
                 // set the status in the TextView accordingly
                 switch (mapLoadStatus) {
                     case "LOADING":
@@ -390,12 +391,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         if (!mLocationDisplay.isStarted()) {
             mLocationDisplay.startAsync();
         }
-
-       //检查更新
-        /*if(TitanApplication.IntetnetISVisible){
-            UpdateUtil updateUtil=new UpdateUtil(getActivity());
-            updateUtil.executeUpdate();
-        }*/
 
     }
 
@@ -524,15 +519,12 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         StringBuffer calloutcontent = new StringBuffer();
         calloutcontent.append("");
         try {
-
-
             final Set<String> keys = attr.keySet();
             if (keys.contains("MONITORIP")) {
                 btn_monitor.setVisibility(View.VISIBLE);
                 //alloutViewModel.ismonitor.set(true);
 
             }
-
             for (Field field : fields) {
                 String alias = field.getAlias();
                 Object value = attr.get(field.getName());
@@ -736,23 +728,6 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     @Override
     public void test() {
-
-
-
-        /*FragmentManager manager =getFragmentManager();
-
-        SceneFragment sceneFragment =  SceneFragment.newInstance(mMainViewModel.getTitanloc(),mLayerlist);
-        SceneViewModel viewModel= new SceneViewModel(getActivity(),sceneFragment);
-        sceneFragment.setViewModel(viewModel);
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.content_frame, sceneFragment);
-        transaction.addToBackStack(null);
-        //设置过度动画
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.commit();*/
-
-        //SceneFragment sceneFragment = getActivity().findOrCreateSceneViewFragment();
-        //startActivity(new Intent(getActivity(), MonitorActivity.class));
     }
 
     /**
@@ -818,7 +793,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         getActivity().startService(startIntent);
         Intent bindIntent = new Intent(getActivity(),MyLocationService.class);
         getActivity().bindService(bindIntent,connection,BIND_AUTO_CREATE);
-        //mLocationDisplay.setLocationDataSource(source);
+
     }
 
     /**
@@ -831,8 +806,14 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         points = null;
         mLocationDisplay.removeLocationChangedListener(mMainViewModel);
         Intent stopIntent = new Intent(getActivity(),MyLocationService.class);
+
         getActivity().unbindService(connection);
         getActivity().stopService(stopIntent);
+    }
+
+    @Override
+    public void videoRoom() {
+        startActivity(new Intent(getActivity(),VideoRoomActivity.class));
     }
 
     /**

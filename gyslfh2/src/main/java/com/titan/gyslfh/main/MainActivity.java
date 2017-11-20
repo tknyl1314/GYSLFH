@@ -18,6 +18,7 @@ import com.esri.arcgisruntime.geometry.PolylineBuilder;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.Graphic;
+import com.google.gson.Gson;
 import com.titan.BaseActivity;
 import com.titan.Injection;
 import com.titan.ViewModelHolder;
@@ -26,6 +27,7 @@ import com.titan.gyslfh.TitanApplication;
 import com.titan.gyslfh.layercontrol.LayerControlFragment;
 import com.titan.gyslfh.layercontrol.LayerControlViewModel;
 import com.titan.gyslfh.login.LoginActivity;
+import com.titan.gyslfh.login.UserModel;
 import com.titan.loction.baiduloc.LocationService;
 import com.titan.navi.BaiduNavi;
 import com.titan.newslfh.R;
@@ -85,11 +87,11 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         TitanApplication.getInstance().addActivity(this);
         //测试市级用户
-        //String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
+        String user= "{\"dqid\":\"1470\",\"dqName\":\"贵阳市\",\"role\":\"超级管理员\",\"accountStatus\":\"1\",\"clientID\":\"cbe72c90a5468581fe8ca983521e55eb\",\"userID\":\"1\",\"dqLevel\":\"3\"}";
         //区县用户
         //String byquser="{\"dqid\":\"1459\",\"dqName\":\"白云区\",\"role\":\"区县用户\",\"accountStatus\":\"1\",\"clientID\":\"231431\",\"userID\":\"10\",\"dqLevel\":\"4\"}";
 
-        //TitanApplication.setmUserModel(new Gson().fromJson(byquser,UserModel.class));
+        TitanApplication.setmUserModel(new Gson().fromJson(user,UserModel.class));
         //推送回调
         TitanApplication.mainActivity=this;
         mContext=this;

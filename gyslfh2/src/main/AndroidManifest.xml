@@ -24,11 +24,14 @@
 
     <!-- 来电消音 -->
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- 摄影机 -->
+    <!--相机权限-->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+
+    <!--麦克风权限-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
     <!-- iBeancon功能所需权限 -->
     <!--
@@ -57,9 +60,10 @@
             </intent-filter>
         </service>
 
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Db3IiXVY3ainFopO7vBXGIdtKPQILjPE" />
+            android:value="RuLTPsGKfWBHH85U9lyN4UDScID43MwW" />
         <!-- 注册后台服务 上传历史轨迹信息 -->
         <service android:name="com.titan.services.MyIntentService">
             <intent-filter>
@@ -150,6 +154,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--视频会议登陆-->
+        <activity android:name="com.titan.gyslfh.videoroom.VideoRoomActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboardHidden|orientation"/>
+
+        <!--视频会议-->
+        <activity android:name="com.titan.gyslfh.videoroom.VideoChartActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboardHidden|orientation"/>
+
+        <activity android:name="com.titan.gyslfh.videoroom.RoomActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboardHidden|orientation"/>
     </application>
 
 </manifest>

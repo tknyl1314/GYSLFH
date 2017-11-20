@@ -21,15 +21,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
+    //数据库版本
     public static final int DATABASE_VERSION = 1;
-
-    public static final String DATABASE_NAME = "Titan_SLFH.db";
+    //数据库名称
+    public static final String DATABASE_NAME = "db_pest.sqlite";
 
     private static final String TEXT_TYPE = " TEXT";
 
     private static final String BOOLEAN_TYPE = " INTEGER";
 
     private static final String COMMA_SEP = ",";
+
+    /**
+     * 数据库句柄
+     */
+    private SQLiteDatabase mDatabase;
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TasksPersistenceContract.TaskEntry.TABLE_NAME + " (" +
@@ -42,6 +48,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        return super.getWritableDatabase();
     }
 
     public void onCreate(SQLiteDatabase db) {
