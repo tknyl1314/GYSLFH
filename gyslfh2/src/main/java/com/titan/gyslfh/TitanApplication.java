@@ -71,6 +71,8 @@ public class TitanApplication extends MultiDexApplication{
     public static MainActivity mainActivity;
     //透传数据
     public static String  payloadData;
+    //推送ID
+    public static String clientid;
     /** 用户信息 */
     public static final String PREFS_NAME = "MyPrefsFile";
     //是否记住用户信息
@@ -209,7 +211,7 @@ public class TitanApplication extends MultiDexApplication{
         return mContext;
     }
 
-    /**
+    /**¥
      * 个推Handler
      */
     public static class GTHandler extends Handler {
@@ -237,12 +239,8 @@ public class TitanApplication extends MultiDexApplication{
                     break;
                 //获取clientid
                 case 1:
-                    if (mainActivity != null) {
-                       /* if (GetuiSdkDemoActivity.tLogView != null) {
-                            GetuiSdkDemoActivity.tView.setText((String) msg.obj);
-                        }*/
-                        //MainActivity.tv_msg.append(msg.obj + "1\n");
-                    }
+                    //透传数据
+                    clientid=msg.obj.toString().trim();
                     break;
             }
         }

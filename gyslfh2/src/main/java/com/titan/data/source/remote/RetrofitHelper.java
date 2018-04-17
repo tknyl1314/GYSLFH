@@ -11,7 +11,6 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**
  * Created by whs on 2017/2/17
@@ -55,8 +54,8 @@ public class RetrofitHelper {
                 //设置OKHttpClient
                 .client(okHttpClientBuilder.build())
                 //Xml转换器
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create())
+                //.addConverterFactory(SimpleXmlConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 //Rx
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

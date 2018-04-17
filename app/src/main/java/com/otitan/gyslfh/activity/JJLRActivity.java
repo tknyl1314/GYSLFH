@@ -1,5 +1,6 @@
 package com.otitan.gyslfh.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,6 +28,7 @@ import com.otitan.entity.DateDialog;
 import com.otitan.gyslfh.R;
 import com.otitan.util.DateTool;
 import com.otitan.util.PadUtil;
+import com.otitan.util.ToastUtil;
 import com.otitan.util.WebServiceUtil;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +46,7 @@ public class JJLRActivity extends Activity {
     private Spinner huojing_resource;
     private ImageButton imgBtn_return, imgBtn_upSure;
     private TextView jiejing_time, shichujingTime, jiejing_bianhao;
-    private CheckBox yyq, nmq, byq, xfx, wdq, qzs, xwx, kyx, hxq, gshq, gaxq;
+    private CheckBox yyq, nmq, byq, xfx, wdq, qzs, xwx, kyx, hxq, gshq, gaxq,shunhai,changpoling;
     private ArrayAdapter<String> resourceAdapter;
     private String username, userID, DQLEVEL, UNITID, jjbh;
     private WebServiceUtil websUtil;
@@ -52,6 +54,7 @@ public class JJLRActivity extends Activity {
     //通知区县
     private String quxianValue = "";
     Context mContext;
+    @SuppressLint("HandlerLeak")
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -75,8 +78,7 @@ public class JJLRActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mContext=this;
-        PadUtil padUtil = new PadUtil();
-        if (padUtil.isPad(this)) {
+        if (PadUtil.isPad(this)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
         setContentView(R.layout.activity_jie_jing);
@@ -104,7 +106,12 @@ public class JJLRActivity extends Activity {
         jjbh = websUtil.getJieJingBainHao(username);
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddhhmm");
-        jiejing_bianhao.setText(jjbh);
+        if(jjbh==null||jjbh.equals("网络异常")){
+            ToastUtil.setToast(mContext,"获取接警编号异常");
+        }else {
+            jiejing_bianhao.setText(jjbh);
+
+        }
 
         huojing_resource = (Spinner) findViewById(R.id.huojing_resource);
         final String[] resourceDate = getResources().getStringArray(R.array.huojingresource);
@@ -147,63 +154,14 @@ public class JJLRActivity extends Activity {
         gshq = (CheckBox) findViewById(R.id.gshq);
         //贵安新区
         gaxq = (CheckBox) findViewById(R.id.cb_gaxq);
+        //顺海林场
+        shunhai= (CheckBox) findViewById(R.id.cb_shunhai);
+        //长坡岭林场
+        changpoling= (CheckBox) findViewById(R.id.cb_changpoling);
 
         //jkq = (CheckBox) findViewById(R.id.jkq);
     }
 
-    /*@OnClick({R.id.yyq, R.id.nmq, R.id.byq, R.id.xfx, R.id.wdq, R.id.cb_gaxq, R.id.qzs, R.id.xwx, R.id.kyx, R.id.hxq, R.id.gshq})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            //云岩区
-            case R.id.yyq:
-                quxianValue = yyq.getText().toString() + ",";
-                break;
-            //南明区
-            case R.id.nmq:
-                quxianValue = quxianValue + nmq.getText().toString() + ",";
-                break;
-            //白云区
-            case R.id.byq:
-                quxianValue = quxianValue + byq.getText().toString() + ",";
-                break;
-            //息烽县
-            case R.id.xfx:
-                quxianValue = quxianValue + xfx.getText().toString() + ",";
-                break;
-            //乌当区
-            case R.id.wdq:
-                quxianValue = quxianValue + wdq.getText().toString() + ",";
-                break;
-            //贵安新区
-            case R.id.cb_gaxq:
-                quxianValue = quxianValue + cbGaxq.getText().toString() + ",";
-
-                break;
-            //清镇市
-            case R.id.qzs:
-                quxianValue = quxianValue + qzs.getText().toString() + ",";
-
-                break;
-            //修文县
-            case R.id.xwx:
-                quxianValue = quxianValue + xwx.getText().toString() + ",";
-
-                break;
-            //开阳县
-            case R.id.kyx:
-                quxianValue = quxianValue + kyx.getText().toString() + ",";
-                break;
-            //花溪区
-            case R.id.hxq:
-                quxianValue = quxianValue + hxq.getText().toString() + ",";
-                break;
-            //观山湖区
-            case R.id.gshq:
-                quxianValue = quxianValue + gshq.getText().toString() + ",";
-                break;
-        }
-    }
-*/
     public class MyListener implements OnClickListener {
 
         @Override
@@ -256,48 +214,14 @@ public class JJLRActivity extends Activity {
                     if(gaxq.isChecked()){
                         quxianValue = quxianValue +gaxq.getText().toString()+",";
                     }
+                    if(shunhai.isChecked()){
+                        quxianValue = quxianValue +shunhai.getText().toString()+",";
+                    }
+                    if(changpoling.isChecked()){
+                        quxianValue = quxianValue +changpoling.getText().toString()+",";
+                    }
                     upLoadInfo();
-                    /*if(checkContent()) {
-                        quxianValue = quxianValue.substring(0, quxianValue.length() - 1);
-                        boolean result = websUtil.addJieJing(username, DQLEVEL, ORIGIN,
-                                jiejingTimeStr, ADRESS, TEL_ONE, POLICECASE,
-                                shichujingTimeStr, userID, quxianValue, jjbh);
-                        if (result) {
-                            ToastUtil.setToast(JJLRActivity.this, "接警录入成功");
-                            JJLRActivity.this.finish();
-                        } else {
-                            ToastUtil.setToast(JJLRActivity.this, "接警录入失败");
-                        }
-                    }*/
-                   /* String ORIGIN = resourceValue;
-                    String ADRESS = jiejing_huojingaddress.getText().toString();
-                    String TEL_ONE = jiejing_tel.getText().toString();
-                    String POLICECASE = chujingqingkuang.getText().toString();
-                    String jiejingTimeStr = jiejing_time.getText().toString();
-                    String shichujingTimeStr = shichujingTime.getText().toString();*/
 
-                /*if(quxianValue.subSequence(quxianValue.length()-1, quxianValue.length()).equals(",")){
-					quxianValue=quxianValue.substring(0, quxianValue.length()-1);
-				}*/
-                    /*if (!quxianValue.equals("")) {
-                        quxianValue = quxianValue.substring(0, quxianValue.length() - 1);
-                    }*/
-
-                    //经开区
-				/*if(jkq.isChecked()){
-					quxianValue = quxianValue +","+jkq.getText().toString();
-				}*/
-                    /*if (resourceValue.equals("")) {
-                        ToastUtil.setToast(JJLRActivity.this, "报警来源不能为空");
-                    } else if (ADRESS.equals("")) {
-                        ToastUtil.setToast(JJLRActivity.this, "报警地址不能为空");
-                    } else if (TEL_ONE.equals("")) {
-                        ToastUtil.setToast(JJLRActivity.this, "报警电话不能为空");
-                    } else if (quxianValue.equals("")) {
-                        ToastUtil.setToast(JJLRActivity.this, "ͨ通知区县不能为空");
-                    } else {
-
-                    }*/
                     break;
 
                 default:
@@ -355,7 +279,7 @@ public class JJLRActivity extends Activity {
                     boolean result = websUtil.addJieJing(username, DQLEVEL, ORIGIN,
                             jiejingTimeStr, ADRESS, TEL_ONE, POLICECASE,
                             shichujingTimeStr, userID, quxianValue, jjbh);
-                    Message msg =new Message();
+                    Message msg =new Message();//
 
                     if (result) {
                         msg.what=1;

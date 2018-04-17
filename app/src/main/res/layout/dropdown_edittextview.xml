@@ -15,8 +15,8 @@
         android:dropDownVerticalOffset="2dp"
         android:focusable="true"
         android:textColor="@color/balck"
-        android:textSize="24sp"
         android:lines="1"
+        android:hint="@string/hint_username"
         android:textCursorDrawable="@drawable/test_cursor"
        />
     <ImageView

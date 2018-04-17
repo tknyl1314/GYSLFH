@@ -69,5 +69,10 @@
     <string name="version">版本号</string>
     <!--通知区县-->
     <string name="gaxq">贵安新区</string>
+    <!--登录-->
+    <string name="hint_username">请输入用户名</string>
+    <string name="hint_password">请输入密码</string>
+    <string name="shunhai">顺海林场</string>
+    <string name="changpoling">长坡岭林场</string>
 
 </resources>

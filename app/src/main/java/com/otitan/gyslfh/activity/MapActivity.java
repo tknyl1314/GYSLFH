@@ -505,6 +505,10 @@ public class MapActivity extends AppCompatActivity {
                 for (Integer i : layerid) {
                     ArcGISFeatureLayer layer = new ArcGISFeatureLayer(featureurl + "/" + i, ArcGISFeatureLayer.MODE.SNAPSHOT);
                     layer.setVisible(true);
+                    /*if(i==7){
+
+                    	layer.setVisible(false);
+					}*/
                     mapView.addLayer(layer);
                 }
 				dynamiclayerurl = context.getResources().getString(R.string.dynamiclayerurl);
@@ -771,10 +775,10 @@ public class MapActivity extends AppCompatActivity {
 		低功耗定位模式：这种定位模式下，不会使用GPS进行定位，只会使用网络定位（WiFi定位和基站定位）；
 		仅用设备定位模式：这种定位模式下，不需要连接网络，只使用GPS进行定位，这种模式下不支持室内环境的定位。*/
 		option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式 默认高精度（低功耗、仅设备）
-		option.setOpenGps(true); //可选，默认false,设置是否使用gps
+		//option.setOpenGps(false); //可选，默认false,设置是否使用gps
 		option.setCoorType("GCJ-02"); // 设置坐标类型 GCJ-02 bd0911
 		option.setScanSpan(loctime);
-		option.setNeedDeviceDirect(true);        // 返回的定位结果包含手机机头的方向
+		option.setNeedDeviceDirect(true); // 返回的定位结果包含手机机头的方向
 		//mLocClient.setLocOption(option);
         mlocationservice.setLocationOption(option);
 	}
@@ -1268,7 +1272,8 @@ public class MapActivity extends AppCompatActivity {
 
 
 	// handler
-	private Handler handler = new Handler() {
+	@SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 
 			switch (msg.what) {
@@ -1925,7 +1930,13 @@ public class MapActivity extends AppCompatActivity {
 				// 图层控制
 				case R.id.btn_tcControl:
 					tcontrolView.setVisibility(View.VISIBLE);
-					showTcDialog();
+					try{
+						showTcDialog();
+
+					}catch(Exception e) {
+					     ToastUtil.setToast(mContext,"图层控制异常");
+					}
+
 					break;
 				// 轨迹回放开始时间
 				case R.id.guiji_startTime:
@@ -2038,11 +2049,13 @@ public class MapActivity extends AppCompatActivity {
 
 				// 接警录入
 				case R.id.btn_jiejing:
-
-					msg.what = R.id.btn_jiejing;
-					msg.obj = true;
-					handler.sendMessage(msg);
-
+					if(MyApplication.IntetnetISVisible){
+						msg.what = R.id.btn_jiejing;
+						msg.obj = true;
+						handler.sendMessage(msg);
+					}else {
+						ToastUtil.setToast(MapActivity.this, "网络异常，请检查网络");
+					}
 					break;
 				// 回警
 				case R.id.btn_huijing:
@@ -2259,7 +2272,7 @@ public class MapActivity extends AppCompatActivity {
 	 */
 	public class MyLocationListenner implements BDLocationListener {
 		public void onReceiveLocation(BDLocation location) {
-
+            int code = location.getLocType();
 			if (null != location && location.getLocType() != BDLocation.TypeServerError) {
 				//安顺林业局：105.9479815  	26.2492988
 				//Point point1= GpsUtil.getInstance(context).getGPSpoint(location);//获取gps坐标或者gcj02坐标
@@ -2607,7 +2620,7 @@ public class MapActivity extends AppCompatActivity {
             });
         }
 
-		if (DQLEVEL.equals("1")) {
+		/*if (DQLEVEL.equals("1")) {
 			// 市级用户可以查看所有数据
 			loginNOshi("");
 		} else {
@@ -2615,7 +2628,7 @@ public class MapActivity extends AppCompatActivity {
 			String str = sharedPreferences.getString("REALNAME", "");
 			str = str.substring(0, str.length() - 2);
 			loginNOshi(str);
-		}
+		}*/
 	}
 
 	List<File> groups = null;

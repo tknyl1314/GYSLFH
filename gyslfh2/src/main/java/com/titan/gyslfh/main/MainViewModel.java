@@ -78,7 +78,7 @@ public class MainViewModel extends BaseViewModel implements BDLocationListener,L
         return snackbarText.get();
     }
 
-    private Context mContext;
+    //private Context mContext;
     private IMain mMain;
     //private ILayerControl mLayerControl;
 

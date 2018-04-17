@@ -41,7 +41,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
 
     public static final String MAIN_VIEWMODEL_TAG = "MAIN_VIEWMODEL_TAG";
-       //图层控制
+    //图层控制
     public static final String LAYERCONTROL_TAG = "LAYERCONTROL_TAG";
 
     //定位服务

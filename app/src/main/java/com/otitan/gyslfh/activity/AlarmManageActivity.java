@@ -1,6 +1,5 @@
 package com.otitan.gyslfh.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -53,7 +52,6 @@ import java.util.List;
 import tablefixheaders.MatrixTableAdapter;
 import tablefixheaders.TableFixHeaders;
 
-@SuppressLint("ShowToast")
 public class AlarmManageActivity extends Activity implements OnClickListener, MatrixTableAdapter.IMatrixTableListener {
 
    Context mcontext;
@@ -80,7 +78,7 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
     private int flag=0;//1表示通过查询按钮查询
     
     //查询总页数
-    private String totalpage="",totalnum="";
+    private String totalpage="1",totalnum="0";
     private int currentpage=1;//使用pulltorefresh时初始为1
     private int ischagang=0;//是否查岗
     //查询参数
@@ -579,20 +577,22 @@ public class AlarmManageActivity extends Activity implements OnClickListener, Ma
 		try {
 			//获取查询结果的总数
 			totalnum = new JSONObject(result).getString("totalnum");
+			searchStrings=new String[]{username,"","","","","","","","","",ischagang+""};//初始化查询数组
+		    orsearchStrings=new String[]{username,"","","","--请选择--","","--请选择--","","","--请选择--",ischagang+""};//初始化上一次查询数组
+		    headerstring=new String[]{"序号","当日编号","相同警号","报警地址","报警电话","通知区县","是否火灾","火灾类型","市局出警","接警时间"};
+		    tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
+		    tableData[0]=headerstring;
+		    receiveAlarmInfos =getresultformjson(result);//解析服务端查询数据
+		    //获取服务接口
+		    webService=new WebServiceUtil(getApplicationContext());
+		    //初始化控件
+		    intiview();
 		} catch (JSONException e) {
 			e.printStackTrace();
+
 		}
 		
-		searchStrings=new String[]{username,"","","","","","","","","",ischagang+""};//初始化查询数组
-		orsearchStrings=new String[]{username,"","","","--请选择--","","--请选择--","","","--请选择--",ischagang+""};//初始化上一次查询数组
-		headerstring=new String[]{"序号","当日编号","相同警号","报警地址","报警电话","通知区县","是否火灾","火灾类型","市局出警","接警时间"};
-		tableData=new String[Integer.parseInt(totalnum)][headerstring.length];
-		tableData[0]=headerstring;
-		receiveAlarmInfos =getresultformjson(result);//解析服务端查询数据
-		//获取服务接口
-		webService=new WebServiceUtil(getApplicationContext());
-		//初始化控件
-		intiview();
+
 		
 	}
 

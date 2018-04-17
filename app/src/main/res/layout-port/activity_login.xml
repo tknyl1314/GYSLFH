@@ -28,35 +28,42 @@
         android:layout_weight="1"
         android:gravity="center" >
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/loginText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:background="@drawable/login_text_large" >
-            <com.otitan.customui.DropdownEdittext
-                android:id="@+id/login_name"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_alignLeft="@+id/login_password"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp" />
+                android:divider="@drawable/divider_horizontal"
+                android:showDividers="middle"
+                android:orientation="vertical"
+                android:background="@drawable/bg_loginform" >
+
+                <com.otitan.customui.DropdownEdittext
+                    android:id="@+id/login_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_alignLeft="@+id/login_password"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp" />
+
                 <EditText
                     android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/login_name"
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:gravity="left|center"
+                    android:hint="@string/hint_password"
                     android:inputType="textPassword"
-                    android:textColor="@color/balck"
-                    android:layout_below="@+id/login_name"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true">
-                </EditText>
+                    android:textColor="@color/balck"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/linearLayout_cb"

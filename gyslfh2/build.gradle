@@ -119,7 +119,7 @@ android {
             shrinkResources false//去除不用的资源文件
             minifyEnabled false  //是否混淆  Android Studio disables ProGuard when using Instant Run.
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            /*applicationVariants.all { variant ->
+            applicationVariants.all { variant ->
                 if (variant.buildType.name.equals('debug')) {
                     variant.outputs.each { output -> def outputFile = output.outputFile
                         if (outputFile != null && outputFile.name.endsWith('.apk')) {
@@ -128,7 +128,7 @@ android {
                         }
                     }
                 }
-            }*/
+            }
 
         }
     }
@@ -178,10 +178,14 @@ dependencies {
 
     //compile 'com.squareup:kotlinpoet:0.3.0'
     /** */
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
+    androidTestCompile 'com.android.support:multidex:1.0.2'
+    androidTestCompile 'com.android.support:multidex-instrumentation:1.0.2'
+    testCompile 'com.android.support:multidex:1.0.2'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
     compile 'com.github.wuhongsheng:TitanLib:0.4.3'
+    //noinspection GradleCompatible
     compile 'com.android.support:support-v4:25.3.1'
     /**PermissionsDispatcher*/
     compile("com.github.hotchemi:permissionsdispatcher:2.4.0") {
@@ -194,6 +198,7 @@ dependencies {
     compile('com.wilddog.client:wilddog-video-room-android:2.1.0-beta') {
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
+    configurations{compile.exclude group:"org.json",module:"json"}
     compile 'com.wilddog.client:wilddog-auth-android:2.0.6'
 
 

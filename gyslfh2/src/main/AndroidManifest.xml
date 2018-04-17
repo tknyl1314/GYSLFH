@@ -70,11 +70,11 @@
                 <action android:name="com.titan.myintentservice" />
             </intent-filter>
         </service>
+        <!-- 个推配置-->
         <!-- 用户自定义服务继承自GTIntentService,作为SDK与APP桥梁服务,用来接收各种消息和命令回复 -->
         <service android:name="com.titan.push.GeTuiIntentService" />
         <!-- 第三方应用配置 -->
-        <meta-data
-            android:name="PUSH_APPID"
+        <meta-data android:name="PUSH_APPID"
             android:value="${GETUI_APP_ID}" />
         <meta-data
             android:name="PUSH_APPKEY"
@@ -90,7 +90,6 @@
             android:process=":pushservice"/>
         <!--自定义定位服务-->
         <service android:name="com.titan.loction.baiduloc.MyLocationService"/>
-
         <!-- 注册监听网络变化的广播 -->
         <receiver
             android:name="com.titan.broadcastreceiver.ConnectionChangeReceiver"

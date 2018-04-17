@@ -2,6 +2,7 @@ package com.otitan.customui;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,17 +57,19 @@ public class DropdownEdittext extends LinearLayout {
 						   }
 					}
 				});
-				
-				tv.setOnDismissListener(new OnDismissListener() {
 
-					@Override
-					public void onDismiss() {
-						//btn.setBackgroundResource(R.drawable.btn_up);
-						 btn.setImageResource(R.drawable.btn_up);
-						dismissTime=System.currentTimeMillis(); 
-				
-					}
-				});
+			 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				 tv.setOnDismissListener(new OnDismissListener() {
+
+                     @Override
+                     public void onDismiss() {
+                         //btn.setBackgroundResource(R.drawable.btn_up);
+                          btn.setImageResource(R.drawable.btn_up);
+                         dismissTime=System.currentTimeMillis();
+
+                     }
+                 });
+			 }
 		 }
 		
 		//

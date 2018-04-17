@@ -128,7 +128,6 @@ public class LayerControlFragment extends DialogFragment implements ILayerContro
      * 初始图层信息
      */
     private void initLayers() {
-
         //动态图层
         final ArcGISMapImageLayer dlayer=new ArcGISMapImageLayer(getActivity().getString(R.string.zturl));
         dlayer.setVisible(false);

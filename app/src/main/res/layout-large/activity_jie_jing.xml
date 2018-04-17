@@ -295,8 +295,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="55dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp" >
 
             <TextView
@@ -316,7 +316,7 @@
             
             <LinearLayout 
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:orientation="horizontal"
                 android:background="@drawable/edittextstyle">
@@ -398,6 +398,18 @@
                     android:text="@string/gaxq"
                     android:textColor="#282828"
                     />
+                <CheckBox
+                    android:id="@+id/cb_shunhai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shunhai"
+                    android:textColor="#282828" />
+                <CheckBox
+                    android:id="@+id/cb_changpoling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/changpoling"
+                    android:textColor="#282828" />
                 <!-- <CheckBox 
                     android:id="@+id/jkq"
                     android:layout_width="wrap_content"

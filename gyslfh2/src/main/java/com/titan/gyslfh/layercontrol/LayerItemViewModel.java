@@ -50,6 +50,5 @@ public class LayerItemViewModel extends LayerControlViewModel {
     public void onLayerCheck(){
         ischeck.set(!ischeck.get());
         mILayerControl.onCheckLayer(layerindex.get(),ischeck.get());
-
     }
 }

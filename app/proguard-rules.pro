@@ -66,6 +66,7 @@
 -dontwarn com.google.gson.**
 -keep class com.google.gson.** { *;}
 
+
 -dontwarn de.greenrobot.dao.**
 -keep class de.greenrobot.dao.** { *;}
 
@@ -207,9 +208,9 @@
 }
 
 #2.rx
--dontwarn io.reactivex.**
--keep io.reactivex.**
--keepclassmembers class io.reactivex.** { *; }
+#-dontwarn io.reactivex.**
+#-keep io.reactivex.**
+#-keepclassmembers class io.reactivex.** { *; }
 
 #3.retrolambda
 -dontwarn java.lang.invoke.*
@@ -252,6 +253,10 @@
    void set*(***);
    *** get*();
 }
+
+-dontwarn javax.xml.**
+-dontwarn javax.xml.stream.events.**
+-dontwarn com.fasterxml.jackson.databind.**
 #}
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface

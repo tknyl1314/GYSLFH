@@ -16,8 +16,6 @@
         android:paddingLeft="10dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:onClick="@{()->viewmodel.onLayerCheck()}">
-        
-        
         <CheckedTextView
             android:checked="@{viewmodel.ischeck}"
             android:paddingLeft="10dp"

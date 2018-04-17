@@ -3,3 +3,5 @@
 /Users/whs/AS_workspace/GYSLFH/app/build/outputs/mapping/release/app-mapping.txt --> 8bc056e865c74faae5f53de15194e154d65bb98b
 /Users/whs/AS_workspace/GYSLFH/app/build/outputs/mapping/release/app-mapping.txt --> f58fda65fe84add649d09dda19c725ac6864d4de
 /Users/whs/AS_workspace/GYSLFH/app/build/outputs/mapping/release/app-mapping.txt --> 663945071f75565ee2bb3519391337b555ac713b
+/Users/whs/AS_workspace/GYSLFH/app/build/outputs/mapping/release/app-mapping.txt --> ec814afd5d2cdf6ec813be944331ed0a9c676e9c
+/Users/whs/AS_workspace/GYSLFH/app/build/outputs/mapping/release/app-mapping.txt --> 8f97d9eaf393f9970f3fef4bcb60b293a3f09768

@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GYSLFH.iml" filepath="$PROJECT_DIR$/GYSLFH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/gyslfh2/gyslfh2.iml" filepath="$PROJECT_DIR$/gyslfh2/gyslfh2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylib/mylib.iml" filepath="$PROJECT_DIR$/mylib/mylib.iml" />
     </modules>
   </component>
 </project>

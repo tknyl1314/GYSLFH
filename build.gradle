@@ -7,6 +7,10 @@ buildscript {
         jcenter()
         mavenCentral() // add repository GreenDao
 
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 
 
@@ -46,6 +50,10 @@ allprojects {
         //permission
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 }
 //　task clean声明了一个任务，任务名叫clean（也可以改为其它），任务类型是Delete（也可以是Copy），就是每当修改settings.gradle文件后点击同步，就会删除rootProject.buildDir下的文件(实际上我看到的效果是清除了External Libraries里的包，然后又添加了一次)。

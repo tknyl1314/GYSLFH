@@ -147,10 +147,23 @@ public class LoginActivity extends Activity
 
 		//getUserList();
 		login_password = (EditText) findViewById(R.id.login_password);
+		//记住密码
 		pwdRemember = (CheckBox) findViewById(R.id.checkBoxPass);
+		//自动登录
 		zidongLogin = (CheckBox) findViewById(R.id.checkBoxlogin);
 
-		if (!MyApplication.IntetnetISVisible)
+		if (MyApplication.IntetnetISVisible)
+		{
+			//检查更新
+			update=new UpdateUtil(mcontext);
+			update.executeUpdate();
+			initView();
+			// 跳到网络连接设置
+			/*startActivityForResult(new Intent(
+					android.provider.Settings.ACTION_WIRELESS_SETTINGS), 1);
+			Toast.makeText(LoginActivity.this, "进行网络连接设置", Toast.LENGTH_SHORT)
+					.show();*/
+		} else
 		{
 			// 无网络时跳转手机网络设置界面
 			ToastUtil.setToast(mcontext, "网络异常,请检查网络连接");
@@ -161,17 +174,6 @@ public class LoginActivity extends Activity
 					false));
 			zidongLogin.setChecked(sharedPreferences
 					.getBoolean("zidong", false));
-			// 跳到网络连接设置
-			/*startActivityForResult(new Intent(
-					android.provider.Settings.ACTION_WIRELESS_SETTINGS), 1);
-			Toast.makeText(LoginActivity.this, "进行网络连接设置", Toast.LENGTH_SHORT)
-					.show();*/
-		} else
-		{
-			//检查更新
-             update=new UpdateUtil(mcontext);
-            update.executeUpdate();
-			initView();
 			// 有网络
 			//init();
 
@@ -336,21 +338,21 @@ public class LoginActivity extends Activity
 					.show();
 			return;
 		}
-		if(!MyApplication.IntetnetISVisible){
+		if(MyApplication.IntetnetISVisible){
+			//progressDialog.show();
+			ProgressDialogUtil.startProgressDialog(mcontext,"登录中....");
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					checkLogin(loginName, loginPassword);
+				}
+			}).start();
+		}else{
 			Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT)
 					.show();
-			return;
 		}
-		//progressDialog.show();
-		ProgressDialogUtil.startProgressDialog(mcontext,"登录中....");
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				checkLogin(loginName, loginPassword);
-			}
-		}).start();
-		return;
 	}
 
     /**

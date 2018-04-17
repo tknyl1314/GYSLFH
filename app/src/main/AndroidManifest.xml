@@ -94,6 +94,7 @@
             android:label="@string/title_activity_frame"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustUnspecified|stateHidden">
+
         </activity>
         <!-- 火警上报 -->
         <activity
