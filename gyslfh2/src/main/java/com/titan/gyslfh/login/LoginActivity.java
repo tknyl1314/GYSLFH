@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.igexin.sdk.PushManager;
 import com.titan.BaseActivity;
@@ -21,7 +22,6 @@ import com.titan.push.GeTui;
 import com.titan.push.GeTuiIntentService;
 import com.titan.push.GeTuiPushService;
 import com.titan.util.ActivityUtils;
-import com.titan.util.ToastUtil;
 
 
 /**
@@ -205,7 +205,8 @@ public class LoginActivity extends BaseActivity {
                 appkey = appInfo.metaData.getString("PUSH_APPKEY");
             }
         } catch (Exception e) {
-            ToastUtil.showToast(mContext,"获取个推配置信息失败:"+e,1);
+            //ToastUtil.showToast(mContext,"获取个推配置信息失败:"+e,1);
+            Toast.makeText(mContext,"获取个推配置信息失败:"+e,Toast.LENGTH_LONG).show();
             //e.printStackTrace();
         }
     }

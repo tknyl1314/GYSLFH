@@ -1,36 +1,32 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.3-2'
-    repositories {
+    ext.kotlin_version = '1.2.41'
+    ext.gradle_version = '3.1.2'
 
+
+    repositories {
+        //google()
         jcenter()
         mavenCentral() // add repository GreenDao
 
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+        google()
     }
-
-
-
     dependencies {
-       //classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath "com.android.tools.build:gradle:3.1.2"
 
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         /*bugly*/
         // 配置自动上传符号表插件，注：为了能快速并准确地定位用户APP发生Crash的代码位置，Bugly使用符号表对APP发生Crash的程序堆栈进行解析和还原
-        classpath 'com.tencent.bugly:symtabfileuploader:1.3.9'
+        //classpath 'com.tencent.bugly:symtabfileuploader:1.3.9'
         /*GreenDao*/
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // add plugin
-        /*依赖注解*/
-        //classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        //classpath 'com.android.tools.build:gradle:2.1.3'
-        // classpath 'com.android.tools.build:gradle:1.5.0'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.google.gms:google-services:3.1.0'
     }
 
 }
@@ -39,21 +35,14 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            //url'http://dl.bintray.com/esri/arcgis'
             url 'https://esri.bintray.com/arcgis'
         }
         maven {
             url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/'
-
         }
         maven { url 'https://jitpack.io' }
-        //permission
-        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+        google()
     }
 }
 //　task clean声明了一个任务，任务名叫clean（也可以改为其它），任务类型是Delete（也可以是Copy），就是每当修改settings.gradle文件后点击同步，就会删除rootProject.buildDir下的文件(实际上我看到的效果是清除了External Libraries里的包，然后又添加了一次)。
@@ -64,12 +53,24 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     minSdkVersion = 18
-    targetSdkVersion = 23
-    compileSdkVersion = 25
-    buildToolsVersion = '25.0.3'
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '27.0.1'
+
+
+
+    versionCode =2
+    versionName = '2.1.0'
+
+    V7_APPCOMPAT_VERSION ="26.1.0"
+    RECYCLER_VIEW_SUPPORT_VERSION="26.1.0"
+    DESIGIN_SUPPORT_VERSION="26.1.0"
+    //CONSTRAIT_SUPPORT_VERSION="1.1.0"
+
 
     // App dependencies
-    supportLibraryVersion = '25.3.1'
+    //supportLibraryVersion = '25.3.1'
+    supportLibraryVersion ='26.1.0'
     guavaVersion = '18.0'
     glideVersion = '3.6.1'
     junitVersion = '4.12'

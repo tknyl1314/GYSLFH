@@ -1,3 +1,4 @@
+/*
 package com.titan.gyslfh.videoroom;
 
 import android.databinding.Observable;
@@ -33,10 +34,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 
+*/
 /**
- * Created by whs on 2017/4/28
+ * Created by whs on 2017/4/28.
  * 视频会议界面
- */
+ *//*
+
 public class VideoChartFragment extends Fragment implements VideoChart  {
 
     private VideoChartViewModel mViewModel;
@@ -166,9 +169,11 @@ public class VideoChartFragment extends Fragment implements VideoChart  {
                 });
     }
 
-    /**
+    */
+/**
      *
-     */
+     *//*
+
     private void initRoomSDK() {
         LogUtil.setLogLevel(Logger.Level.DEBUG);
         WilddogVideoInitializer.initialize(getActivity(), WILDDOG_VIDEO_ID, WilddogAuth.getInstance().getCurrentUser().getToken(false).getResult().getToken());
@@ -180,9 +185,11 @@ public class VideoChartFragment extends Fragment implements VideoChart  {
             }
         });
     }
-    /**
+    */
+/**
      * 将本地媒体流绑定到WilddogVideoView中
-     */
+     *//*
+
     private void createLocalStream() {
         LocalStreamOptions options = new LocalStreamOptions.Builder().build();
         localStream = LocalStream.create(options);
@@ -256,27 +263,33 @@ public class VideoChartFragment extends Fragment implements VideoChart  {
         room.connect();
     }
 
-    /**
+    */
+/**
      * 释放流
-     */
+     *//*
+
     private void deteachAll(){
         for(StreamHolder streamHolder:remoteStreamHolders){
             streamHolder.getStream().detach();
         }
     }
 
-    /**
+    */
+/**
      * 显示
-     */
+     *//*
+
     private void showRemoteViews(){
         for(int i = 0;i<remoteStreamHolders.size();i++){
             remoteStreamHolders.get(i).getStream().attach(remoteVideoViews.get(i));
         }
     }
 
-    /**
+    */
+/**
      * 离开
-     */
+     *//*
+
 
     public void leaveRoom(){
         if(room!=null){
@@ -313,3 +326,4 @@ public class VideoChartFragment extends Fragment implements VideoChart  {
 
 
 }
+*/

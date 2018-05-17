@@ -20,6 +20,8 @@ import com.titan.newslfh.databinding.FragLoginBinding;
 import com.titan.util.SnackbarUtils;
 import com.titan.util.TitanUtil;
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -49,7 +51,7 @@ public class LoginFragment extends Fragment implements ILogin {
 
     private FragLoginBinding mDataBinding;
 
-    private Context mContext;
+    ///private Context mContext;
 
 
     public LoginFragment() {
@@ -108,11 +110,11 @@ public class LoginFragment extends Fragment implements ILogin {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mContext=getActivity();
+        //mContext=getActivity();
         mDataBinding= DataBindingUtil.inflate(inflater, R.layout.frag_login,container,false);
         mDataBinding.setViewmodel(mViewModel);
         //显示版本号
-        mDataBinding.tvAppversion.setText(mContext.getString(R.string.app_version)+ TitanUtil.getVersionCode(mContext)+"");
+        mDataBinding.tvAppversion.setText(getActivity().getResources().getString(R.string.app_version)+ TitanUtil.getVersionCode(getActivity())+"");
         return mDataBinding.getRoot();
         //Inflate the layout for this fragment
         //return inflater.inflate(R.layout.frag_scene, container, false);
@@ -147,7 +149,7 @@ public class LoginFragment extends Fragment implements ILogin {
 
     @Override
     public void onNext() {
-        Intent intent=new Intent(mContext,MainActivity.class);
+        Intent intent=new Intent(getActivity(),MainActivity.class);
         startActivity(intent);
     }
 
@@ -156,7 +158,7 @@ public class LoginFragment extends Fragment implements ILogin {
         //if (mProgresssDialog == null) {
             mProgresssDialog = new MaterialDialog.Builder(getActivity())
                     //.title(getActivity().getString(R.string.title))
-                    .content(mContext.getString(R.string.logining))
+                    .content(getActivity().getResources().getString(R.string.logining))
                     .progress(true, 0)
                     .cancelable(false)
                     .build();

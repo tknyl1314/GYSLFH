@@ -67,7 +67,6 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/bg_loginform"
             android:divider="@drawable/divider"
-            android:elevation="2dp"
             android:orientation="vertical"
             android:showDividers="middle">
 
@@ -80,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:drawableLeft="@drawable/ic_username"
+                android:drawableStart="@drawable/ic_username"
                 android:drawablePadding="10dp"
                 android:hint="@string/username"
                 android:paddingBottom="10dp"
@@ -96,7 +95,6 @@
                 android:drawableLeft="@drawable/ic_pwd"
                 android:drawablePadding="10dp"
                 android:hint="@string/password"
-                android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"

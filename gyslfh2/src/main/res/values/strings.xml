@@ -148,9 +148,11 @@
     <string name="flip_camera">切换摄像头</string>
     <string name="openaudio">打开麦克风</string>
     <string name="closeaudio">关闭麦克风</string>
-
-
-
+    <!--网易云信配置信息-->
+    <string name="account">664116298@qq.com</string>
+    <string name="appkey">8b60c86e62ce20422a9942162586375f</string>
+    <string name="error_imlogin">视频服务器登录失败</string>
+    <string name="error_im_creatroom">创建房间失败</string>
 
 
 </resources>

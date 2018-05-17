@@ -1,10 +1,12 @@
 package com.titan.gyslfh.videoroom;
 
+import com.titan.base.BaseView;
+
 /**
  * Created by whs on 2017/10/16
  */
 
-public interface VideoRoom {
+public interface VideoRoom extends BaseView{
     //加入房间
     //void addRoom(String roomid);
     /**
@@ -12,5 +14,6 @@ public interface VideoRoom {
      * @param strRoomId
      */
     void loginWithAnonymous(String strRoomId);
+
 
 }

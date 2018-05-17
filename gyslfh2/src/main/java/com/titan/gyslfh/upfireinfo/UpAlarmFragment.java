@@ -31,7 +31,7 @@ import com.titan.gis.selectaddress.SelectAddressViewModel;
 import com.titan.model.Image;
 import com.titan.model.TitanLocation;
 import com.titan.newslfh.R;
-import com.titan.newslfh.databinding.UpalarmFragBinding;
+import com.titan.newslfh.databinding.FragUpalarmBinding;
 import com.titan.util.SnackbarUtils;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +50,7 @@ import java.util.Map;
 public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetListener {
     private UpAlarmViewModel mViewModel;
 
-    private UpalarmFragBinding mDataBinding;
+    private FragUpalarmBinding mDataBinding;
     //上传进度
     private Dialog mProgresssDialog;
     //通知区县选择
@@ -85,7 +85,7 @@ public class UpAlarmFragment extends Fragment implements IUpAlarm ,OnDateSetList
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Fresco.initialize(getActivity());
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.upalarm_frag, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.frag_upalarm, container, false);
         mDataBinding.setViewmodel(mViewModel);
         return mDataBinding.getRoot();
 

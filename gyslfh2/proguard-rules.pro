@@ -114,8 +114,18 @@
 -keep class uk.co.senab.photoview** { *; }
 -keep interface uk.co.senab.photoview** { *; }
 
+
+
 #7.rxgalleryfinal
 -keep class cn.finalteam.rxgalleryfinal.ui.widget** { *; }
+#8 野狗视频会议
+-keep class com.wilddog.wilddogauth**{*;}
+#9 网易云信
+-dontwarn com.netease.**
+-keep class com.netease.** {*;}
+#如果你使用全文检索插件，需要加入
+-dontwarn org.apache.lucene.**
+-keep class org.apache.lucene.** {*;}
 
 -keepclassmembers class * extends android.app.Activity {
    public void *(android.view.View);
@@ -168,4 +178,7 @@ public static java.lang.String TABLENAME;
 }
 -keepnames class com.fasterxml.jackson.** { *; }
 -dontwarn com.fasterxml.jackson.databind.**
+
+# 声网SDK
+-keep class io.agora.**{*;}
 

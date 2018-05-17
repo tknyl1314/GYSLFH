@@ -1,4 +1,8 @@
-include  ':gyslfh2',':app',':mylib'
+include  ':gyslfh2',':agoralibrary',':library'
+//':app',':mylib',
+//网易云信':avchatkit',':faceunity',
+//融云
+//':CallLib',':CallKit','IMKit',':IMLib
 //, ':BaiduNavi',':mylib',':app'
 //,':app',':mylib'
 //,':app'

@@ -123,6 +123,22 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="FetionTheme.Dialog.Toast" parent="@style/FetionTheme.Dialog">
+        <item name="android:background">@drawable/toast_bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="FetionTheme.Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:textColor">#ff747474</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:scrollbarSize">3dp</item>
+        <item name="android:windowFrame">@null</item>
+    </style>
+
 
 
 </resources>

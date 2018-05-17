@@ -1,3 +1,4 @@
+/*
 package com.titan.gyslfh.videoroom;
 
 import android.os.Bundle;
@@ -6,14 +7,15 @@ import android.support.annotation.Nullable;
 
 import com.titan.BaseActivity;
 import com.titan.ViewModelHolder;
+import com.titan.base.ActivityUtils;
 import com.titan.newslfh.R;
-import com.titan.util.ActivityUtils;
-import com.wilddog.video.base.WilddogVideoInitializer;
 
+*/
 /**
  * Created by whs on 2017/5/17
  * 视频通话Activity
- */
+ *//*
+
 
 public  class VideoChartActivity extends BaseActivity {
 
@@ -25,7 +27,7 @@ public  class VideoChartActivity extends BaseActivity {
     private String roomid;
 
 
-    private  WilddogVideoInitializer initializer;
+    //private  WilddogVideoInitializer initializer;
 
 
 
@@ -96,3 +98,4 @@ public  class VideoChartActivity extends BaseActivity {
 
 
 }
+*/

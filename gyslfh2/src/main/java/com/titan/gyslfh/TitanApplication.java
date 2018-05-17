@@ -2,20 +2,17 @@ package com.titan.gyslfh;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.support.multidex.MultiDexApplication;
-import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.google.gson.Gson;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.titan.data.source.local.GreenDaoManager;
 import com.titan.gyslfh.login.UserModel;
 import com.titan.gyslfh.main.MainActivity;
@@ -23,17 +20,17 @@ import com.titan.loction.baiduloc.LocationService;
 import com.titan.loction.baiduloc.MyLocationService;
 import com.titan.model.FireInfo;
 import com.titan.push.PushMsg;
+import com.titan.util.DeviceUtil;
 import com.titan.util.NetUtil;
-import com.wilddog.wilddogcore.WilddogApp;
-import com.wilddog.wilddogcore.WilddogOptions;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
  * Created by Whs on 2016/12/9 0009
  */
-public class TitanApplication extends MultiDexApplication{
+public class TitanApplication extends Application{
 
     //野狗视频id
     public static final String WILDDOG_VIDEO_ID = "wd0634562361hwiiyl";
@@ -81,6 +78,12 @@ public class TitanApplication extends MultiDexApplication{
     public static final String KEYNAME_PSD = "password";
     public static final String KEYNAME_ISTRACK = "istrack";
     public static final String KEYNAME_UPTRACKPOINT = "uptrackpoint";
+    //网易云信账号
+    public static final String IM_ACCOUNT = "imaccount";
+    //网易云信登录token
+    public static final String IM_TOKEN = "imtoken";
+
+
     public static SharedPreferences mSharedPreferences;
 
     public static TitanApplication getInstance() {
@@ -102,26 +105,33 @@ public class TitanApplication extends MultiDexApplication{
          * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
          * 发布新版本时需要修改以及bugly isbug需要改成false等部分
          */
-        CrashReport.initCrashReport(getApplicationContext(), "900039321", false);
+        //CrashReport.initCrashReport(getApplicationContext(), "900039321", false);
         /** 百度定位初始化 */
         locationService = new LocationService(getApplicationContext());
         //mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         /**野狗视频会议*/
-        WilddogOptions options = new WilddogOptions.Builder().setSyncUrl("https://"+WILDDOG_VIDEO_ID+".wilddogio.com").build();
-        WilddogApp.initializeApp(this,options);
+        /*WilddogOptions options = new WilddogOptions.Builder().setSyncUrl("https://"+WILDDOG_VIDEO_ID+".wilddogio.com").build();
+        WilddogApp.initializeApp(this,options);*/
+        /**融云**/
+        //RongIM.init(this);
+        //RongCallKit.i
+
+
         //intiData();
-        mSharedPreferences=getSharedPreferences(PREFS_NAME,0);
+        mSharedPreferences = getSharedPreferences("userinfo", MODE_PRIVATE);
         /** 获取当前网络状态 */
         getNetState();
+
         getDeviceInfo();
         //数据库初始化
-        GreenDaoManager.getInstance(this);
+        GreenDaoManager.getInstance(mContext);
 
         //registerDevice();
         if (handler == null) {
             handler = new GTHandler();
         }
+
     }
 
 
@@ -130,30 +140,9 @@ public class TitanApplication extends MultiDexApplication{
 
     /** 获取设备信息 */
     private void getDeviceInfo() {
-        XLH = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-         TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        //SBH= tm.getDeviceId();
-        //phoneNumber = tm.getLine1Number();//获取本机号码
-        //sharedPreferences.edit().putString("phonenumber",phoneNumber).apply();
-        // 用户信息存储
-        //sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
-        // 获取唯一识表示 mac地址
-        WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        if (!wifiMgr.isWifiEnabled())
-        {
-            wifiMgr.setWifiEnabled(true);
-        }
-        WifiInfo info = (null == wifiMgr ? null : wifiMgr.getConnectionInfo());
-        if (null != info)
-        {
-            SBH = info.getMacAddress();
-            //sharedPreferences.edit().putString("SBH", SBH).commit();
-        }
-        MOBILE_MODEL = android.os.Build.MODEL;// SM-P601 型号
-        // MOBILE_MANUFACTURER = android.os.Build.MANUFACTURER;// samsung 厂商
-        MOBILE_MODEL = android.os.Build.MODEL + "-"
-                + android.os.Build.MANUFACTURER;
-
+        //设备号
+        //华为p9:1dab2c6cdf044ee2538d46d629a6c4a4
+        SBH= DeviceUtil.getUniqueId(mContext);
     }
 
 
@@ -162,7 +151,7 @@ public class TitanApplication extends MultiDexApplication{
      * @return
      */
     public boolean getNetState () {
-        if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE)
+        if (NetUtil.getNetworkState(mContext) == NetUtil.NETWORN_NONE)
         {
             IntetnetISVisible = false;
         } else
@@ -244,5 +233,106 @@ public class TitanApplication extends MultiDexApplication{
                     break;
             }
         }
+    }
+
+    /**
+     * 网易云信
+     * @return
+     *//*
+    // 如果返回值为 null，则全部使用默认参数。
+    private SDKOptions options() {
+        SDKOptions options = new SDKOptions();
+        // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
+        StatusBarNotificationConfig config = new StatusBarNotificationConfig();
+        config.notificationEntrance = MainActivity.class; // 点击通知栏跳转到该Activity
+        //config.notificationSmallIconId = R.drawable.ic_stat_notify_msg;
+        // 呼吸灯配置
+        config.ledARGB = Color.GREEN;
+        config.ledOnMs = 1000;
+        config.ledOffMs = 1500;
+        // 通知铃声的uri字符串
+        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
+        options.statusBarNotificationConfig = config;
+
+        // 配置保存图片，文件，log 等数据的目录
+        // 如果 options 中没有设置这个值，SDK 会使用采用默认路径作为 SDK 的数据目录。
+        // 该目录目前包含 log, file, image, audio, video, thumb 这6个目录。
+        String sdkPath = getAppCacheDir(context) + "/nim"; // 可以不设置，那么将采用默认路径
+        // 如果第三方 APP 需要缓存清理功能， 清理这个目录下面个子目录的内容即可。
+        options.sdkStorageRootPath = sdkPath;
+
+        // 配置是否需要预下载附件缩略图，默认为 true
+        options.preloadAttach = true;
+
+        // 配置附件缩略图的尺寸大小。表示向服务器请求缩略图文件的大小
+        // 该值一般应根据屏幕尺寸来确定， 默认值为 Screen.width / 2
+        //options.thumbnailSize = ${Screen.width} / 2;
+
+        // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
+        *//*options.userInfoProvider = new UserInfoProvider() {
+            @Override
+            public UserInfo getUserInfo(String account) {
+                return null;
+            }
+
+            @Override
+            public int getDefaultIconResId() {
+                return R.drawable.avatar_def;
+            }
+
+            @Override
+            public Bitmap getTeamIcon(String tid) {
+                return null;
+            }
+
+            @Override
+            public Bitmap getAvatarForMessageNotifier(String account) {
+                return null;
+            }
+
+            @Override
+            public String getDisplayNameForMessageNotifier(String account, String sessionId,
+                                                           SessionTypeEnum sessionType) {
+                return null;
+            }
+        };*//*
+        return options;
+    }
+
+    // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
+    private LoginInfo loginInfo() {
+        // 从本地读取上次登录成功时保存的用户登录信息
+        String account =mSharedPreferences.getString(IM_ACCOUNT,"");
+        String token = mSharedPreferences.getString(IM_TOKEN,"");
+
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+            //DemoCache.setAccount(account.toLowerCase());
+            return new LoginInfo(account, token);
+        } else {
+            return null;
+        }
+    }*/
+
+    /**
+     * 配置 APP 保存图片/语音/文件/log等数据的目录
+     * 这里示例用SD卡的应用扩展存储目录
+     */
+    static String getAppCacheDir(Context context) {
+        String storageRootPath = null;
+        try {
+            // SD卡应用扩展存储区(APP卸载后，该目录下被清除，用户也可以在设置界面中手动清除)，请根据APP对数据缓存的重要性及生命周期来决定是否采用此缓存目录.
+            // 该存储区在API 19以上不需要写权限，即可配置 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
+            if (context.getExternalCacheDir() != null) {
+                storageRootPath = context.getExternalCacheDir().getCanonicalPath();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (TextUtils.isEmpty(storageRootPath)) {
+            // SD卡应用公共存储区(APP卸载后，该目录不会被清除，下载安装APP后，缓存数据依然可以被加载。SDK默认使用此目录)，该存储区域需要写权限!
+            storageRootPath = Environment.getExternalStorageDirectory() + "/" + mContext.getPackageName();
+        }
+
+        return storageRootPath;
     }
 }

@@ -2,14 +2,11 @@ package com.titan;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import com.titan.util.DeviceUtil;
 
 /**
  * Created by whs on 2017/5/17
@@ -50,11 +47,11 @@ public  abstract class BaseActivity extends AppCompatActivity {
         //TitanApplication.getInstance().addActivity(this);
         mContext=this;
         //如果是平板使用横屏模式
-        if(DeviceUtil.isTablet(mContext)){
+        /*if(DeviceUtil.isTablet(mContext)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
 
     }
 

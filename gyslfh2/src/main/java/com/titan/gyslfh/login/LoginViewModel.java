@@ -53,6 +53,9 @@ public class LoginViewModel extends BaseViewModel {
                 TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_USERNAME,username.get()).apply();
                 TitanApplication.mSharedPreferences.edit().putString(TitanApplication.KEYNAME_PSD,password.get()).apply();
             }
+            //网易云信手动登录
+            //IMLogin();
+
             mLogin.onNext();
 
             /*mDataRepository.checkLogin(username.get().trim(), password.get().trim(), cid, new RemotDataSource.getCallback() {
@@ -82,6 +85,37 @@ public class LoginViewModel extends BaseViewModel {
 
         }
     }
+
+    /**
+     * 网易云信登录
+     */
+   /* private void IMLogin() {
+        //account 用户帐号 登录token
+        final String account=mContext.getString(R.string.account);
+        final String token=TitanApplication.SBH;
+        LoginInfo info = new LoginInfo(account,token); // config...
+        RequestCallback<LoginInfo> callback =
+                new RequestCallback<LoginInfo>() {
+                    @Override
+                    public void onSuccess(LoginInfo param) {
+                        TitanApplication.mSharedPreferences.edit().putString(TitanApplication.IM_ACCOUNT,account).apply();
+                        TitanApplication.mSharedPreferences.edit().putString(TitanApplication.IM_TOKEN,token).apply();
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        mLogin.showToast(mContext.getString(R.string.error_imlogin)+code,1);
+
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+                        mLogin.showToast(mContext.getString(R.string.error_imlogin)+exception.getMessage(),1);
+                    }
+                    // 可以在此保存LoginInfo到本地，下次启动APP做自动登录用
+                };
+        NIMClient.getService(AuthService.class).login(info).setCallback(callback);
+    }*/
 
     /**
      * 记住用户

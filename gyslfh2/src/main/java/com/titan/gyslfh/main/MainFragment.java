@@ -1,11 +1,12 @@
 package com.titan.gyslfh.main;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.databinding.Observable;
 import android.location.Criteria;
 import android.location.LocationManager;
@@ -81,6 +82,7 @@ import com.titan.newslfh.R;
 import com.titan.newslfh.databinding.CalloutBinding;
 import com.titan.newslfh.databinding.MainFragBinding;
 import com.titan.util.DateUtil;
+import com.titan.util.PermissionUtil;
 import com.titan.util.SnackbarUtils;
 import com.titan.util.ToastUtil;
 
@@ -92,17 +94,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnPermissionDenied;
-import permissions.dispatcher.RuntimePermissions;
-
 import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * Created by whs on 2017/4/28
  * 主界面
  */
-@RuntimePermissions
 public class MainFragment extends Fragment implements IMain, CalloutInterface {
 
     //图层控制
@@ -185,13 +182,14 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainFragmentPermissionsDispatcher.initBaiduLocWithCheck(this);
+        //MainFragmentPermissionsDispatcher.initBaiduLocWithCheck(this);
     }
+
 
     /**
      * 初始化百度定位
      */
-    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    //@NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void initBaiduLoc() {
         //定位初始化
         mLocationService = TitanApplication.locationService;
@@ -204,16 +202,26 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        switch (requestCode){
+            case PermissionUtil.loctionRequestCode:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //initData()
+                    initBaiduLoc();
+                } else {
+                    this.requestPermissions(PermissionUtil.LoctionPermissions,PermissionUtil.loctionRequestCode);
+                }
+                break;
+        }
+       // MainFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     /**
      * 未获取定位权限
      */
-    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    /*@OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void showDeniedForLoc() {
         mMainViewModel.snackbarText.set(getActivity().getString(R.string.location_permission_denied));
-    }
+    }*/
 
 
     @Override
@@ -261,6 +269,14 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
         //initPlot();
 
         initNavi();
+
+        if(PermissionUtil.checkLoctionPermission(getActivity())){
+            //initData()
+            //onlogin();
+            initBaiduLoc();
+        }else{
+            this.requestPermissions(PermissionUtil.LoctionPermissions,PermissionUtil.loctionRequestCode);
+        }
 
     }
 
@@ -398,6 +414,7 @@ public class MainFragment extends Fragment implements IMain, CalloutInterface {
     /**
      * 设置地图点击监听事件
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void setTouchListener() {
         mMainFragBinding.mapview.setOnTouchListener(new DefaultMapViewOnTouchListener(getActivity(), mMainFragBinding.mapview) {
 

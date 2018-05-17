@@ -1,11 +1,14 @@
+/*
 package com.titan.gyslfh.videoroom;
 
 
 import com.wilddog.video.base.core.Stream;
 
+*/
 /**
  * Created by fly on 17-9-13.
- */
+ *//*
+
 
 public class StreamHolder {
     private Long timeStamp;
@@ -32,3 +35,4 @@ public class StreamHolder {
         this.stream = stream;
     }
 }
+*/
